@@ -1,0 +1,35 @@
+<!--
+ * @Author: InsHomePgup
+ * @Date: 2022-05-15 09:35:01
+ * @LastEditors: InsHomePgup
+ * @LastEditTime: 2022-05-30 15:49:44
+ * @FilePath: \sport-planing\src\pages\template\nvuePage.nvue
+ * @Description: 
+ * 
+ * 
+-->
+<template>
+	<div>
+		<!-- 地图 -->
+		<gaode-map :map-height="mapHeight" :center="center" @onLoc="getLocation()" />
+	</div>
+</template>
+
+<script>
+import gaodeMap from '@/components/gaode-map/zz-gaode-map.nvue';
+export default {
+	onLoad() {},
+	onReady() {},
+	data() {
+		return {
+			mapHeight: 350,
+			center: [121, 30]
+		};
+	},
+	methods: {
+		getLocation() {}
+	}
+};
+</script>
+
+<style lang="scss" scoped></style>

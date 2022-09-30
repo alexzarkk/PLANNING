@@ -1,0 +1,257 @@
+<!--
+ * @Author: InsHomePgup
+ * @Date: 2022-05-15 09:35:01
+ * @LastEditors: InsHomePgup
+ * @LastEditTime: 2022-05-30 15:49:44
+ * @FilePath: \sport-planing\src\pages\template\nvuePage.nvue
+ * @Description: 	
+ * 人气打卡点
+ * 
+-->
+<template>
+	<view>
+		<view class="status-bar" :style="{ height: statusBarHeight + 'rpx' }"></view>
+		<view class="header-bar" :style="{ height: headerBarHeight + 'rpx' }"><text class="header-bar-title">人气打卡点</text></view>
+		<!-- 地图 -->
+		<gaode-map :point="list" :line="polygon" :map-height="mapHeight" :center="center" @onLoc="getLocation()" />
+		<view v-if="isMapReady" class="point-list-swiper">
+			<swiper class="swiper" :current="currentSwiper" @change="swiperChange">
+				<swiper-item v-for="(item, index) in list" :key="index">
+					<view class="line-swiper-item-wrapper">
+						<view class="left-box">
+							<image class="left-box-image" mode="aspectFill" :src="item.cover"></image>
+							<view class="left-box-distance">
+								<text class="left-box-distance-title">热度</text>
+								<text class="left-box-distance-value">5128</text>
+							</view>
+						</view>
+						<view class="right-box">
+							<view class="line-title-name-box">
+								<text class="line-title text-cut margin-bottom-xs">{{ item.name }}</text>
+								<text class="line-name">{{ item.desc }}...</text>
+							</view>
+							<view class="line-info">
+								<view class="line-info-wrapper">
+									<text class="line-info-wrapper-title">已打卡</text>
+									<text class="line-info-wrapper-value">513</text>
+								</view>
+								<view class="line-info-wrapper">
+									<text class="line-info-wrapper-title">距离</text>
+									<text class="line-info-wrapper-value">1.78km</text>
+								</view>
+							</view>
+							<view class="clock-btn" :style="isAndroid?'right:50rpx':'right:80rpx'" @click="openClock">
+								<view class="clock-btn-wrapper"><text class="clock-btn-text">去打卡</text></view>
+							</view>
+						</view>
+					</view>
+				</swiper-item>
+			</swiper>
+		</view>
+	</view>
+</template>
+
+<script>
+import gaodeMap from '@/components/gaode-map/zz-gaode-map.nvue';
+import nvueTools from '@/utils/nvueTools.js';
+export default {
+	components: {
+		gaodeMap
+	},
+	async onLoad() {
+		// console.log('point-----onload-------');
+		const sysInfo = uni.getStorageSync('sysInfo');
+		this.isAndroid = sysInfo.platform === 'android'  // 指定平台
+		this.statusBarHeight = sysInfo.statusBarHeight * 2;
+		this.mapHeight = sysInfo.windowHeight - this.statusBarHeight + 3;
+		// code: '330213',
+		let area = uni.getStorageSync('areaGon'); // 边界信息
+		if (!area) {
+			area = await nvueTools.req({ $url: 'public/zz/geoGon', code: '330213' }, true);
+			uni.setStorageSync('areaGon', area);
+		} else {
+			// console.log('使用了缓存的边界信息');
+		}
+		this.center = area.center; // 使用边界的center
+		this.polygon = area.children; // 用线模拟边界
+		this.list = await nvueTools.req({ $url: 'public/poi/list', deptId: '330213', type: [4042, 4044, 4046, 4048, 4048, 4004, 4006] }); // 打卡点列表
+		this.isMapReady = true;
+	},
+	onReady() {
+		// console.log('point----------nvue');
+	},
+	data() {
+		return {
+			isAndroid:false,
+			isMapReady: false,
+			list: [], // 打卡点列表
+			polygon: [], // 多边形数据
+			statusBarHeight: 0, // 状态栏高度
+			headerBarHeight: 90, // 导航栏高度
+			mapHeight: 350, // 地图高度
+			center: [121, 30] // 地图center
+		};
+	},
+	methods: {
+		getLocation() {},
+		openClock() {
+			uni.navigateTo({
+				url: '/pages/event/clockDetails'
+			});
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+.safe-area {
+	padding-bottom: 30rpx;
+	// padding-bottom: constant(safe-area-inset-bottom);
+	// padding-bottom: env(safe-area-inset-bottom);
+}
+.status-bar {
+	background-color: $zts-blue;
+}
+.header-bar {
+	background-color: $zts-blue;
+
+	&-title {
+		color: #ffffff;
+		text-align: center;
+		line-height: 90rpx;
+	}
+}
+
+.point-list-swiper {
+	z-index: 999;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 750rpx;
+	height: 290rpx;
+	background-color: #ffffff;
+
+	.swiper {
+		height: 290rpx;
+		&-item {
+			height: 290rpx;
+			//    background-color: aqua;
+		}
+	}
+}
+
+.line-swiper-item-wrapper {
+	width: 750rpx;
+	height: 290rpx;
+	// width: 375px;
+	background-color: #ffffff;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 20rpx;
+	display: flex;
+	flex-direction: row;
+	// align-items: center;
+	.left-box {
+		display: flex;
+		flex-direction: column;
+		margin-right: 10px;
+		// align-items: center;
+		&-image {
+			width: 150px;
+			height: 75px;
+			// background-color: aqua;x
+		}
+
+		&-distance {
+			padding-top: 5px;
+			display: flex;
+			flex-direction: column;
+			&-title {
+				color: #828282;
+				font-size: 12px;
+			}
+
+			&-value {
+				color: #252525;
+				font-size: 16px;
+			}
+		}
+	}
+
+	.right-box {
+		.line-title-name-box {
+			height: 130rpx;
+			display: flex;
+			flex-direction: column;
+			// justify-content: space-between;
+			border-bottom: 1px solid #eeeeee;
+			padding-bottom: 5px;
+			// margin-bottom: 10rpx;
+			.line-title {
+				width: 320rpx;
+				color: #222222;
+				font-size: 16px;
+				overflow: hidden;
+				text-overflow: ellipsis; /* 超出部分省略号 */
+				lines: 1; //NVUE下要用这个属性，来让文字超出隐藏变省略号L
+				margin-bottom: 10rpx;
+			}
+
+			.line-name {
+				color: #555555;
+				font-size: 14px;
+				width: 420rpx;
+				overflow: hidden;
+				// word-break: break-all; /* break-all(允许在单词内换行。) */
+				text-overflow: ellipsis; /* 超出部分省略号 */
+				// display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+				// -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+				// -webkit-line-clamp: 2; /** 显示的行数 **/
+				lines: 2; //NVUE下要用这个属性，来让文字超出隐藏变省略号
+			}
+		}
+
+		.line-info {
+			padding-top: 5px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			// justify-content: space-between;
+			&-wrapper {
+				width: 120px;
+				display: flex;
+				flex-direction: column;
+				&-title {
+					color: #828282;
+					font-size: 12px;
+				}
+
+				&-value {
+					color: #252525;
+					font-size: 16px;
+				}
+			}
+		}
+		.clock-btn {
+			position: absolute;
+			
+			right: 50rpx;
+			top: 0;
+			z-index: 10;
+			&-wrapper {
+				width: 100rpx;
+				background-color: $color-orange;
+				border-radius: 25rpx;
+				padding: 5rpx 0;
+			}
+
+			&-text {
+				text-align: center;
+				font-size: 24rpx;
+				color: #ffffff;
+			}
+		}
+	}
+}
+</style>

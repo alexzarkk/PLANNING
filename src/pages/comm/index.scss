@@ -1,0 +1,43 @@
+.login {
+	background: #2f3447;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+}
+.content {
+	text-align: center;
+	width: calc(100vw - 40rpx);
+	padding: 0 24rpx;
+}
+.logo {
+	height: 80rpx;
+}
+.describe {
+	color: #ccc;
+	margin-top: 20rpx;
+}
+
+.login-form {
+	margin-top: 40rpx;
+}
+.u-form-item__body,
+.u-input__input,
+.u-form-item,
+.uni-input-wrapper,
+.u-input {
+	color: #ccc !important;
+}
+
+.btn {
+	margin-top: 120rpx;
+}
+
+.item-row {
+	border-bottom: 1px solid #fff;
+	display: flex;
+	align-items: center;
+}

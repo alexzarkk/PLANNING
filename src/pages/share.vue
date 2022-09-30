@@ -1,0 +1,63 @@
+<template>
+	<view>
+		<block v-if="loading">
+			<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
+		</block>
+		<block v-else>
+			<tui-no-data :fixed="true" :imgUrl="bd.imgs.nodata"  btnText="重新加载" @tap="reload">点击重试~</tui-no-data>
+		</block>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				bd: this.bd,
+				loading:true,
+				task : null,
+				login: false,
+				path : ''
+			}
+		},
+		
+		// 	https://zts.5618.co/h5/index.html#/pages/share?path=/pages/planning/article&id=62b9409268cebc00011fdb23
+		//	https://zts.5618.co/h5/#/pages/share?path=/pages/planning/article&id=5eb7b88343f165004c6d2d52
+		//	https://zts.5618.co/h5/#/pages/share?path=/pages/comm/kml&_id=62b9409268cebc00011fdb23
+		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/poi&id=629497c49b54e30001d3e4eb
+		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/detail&id=60312b1fedb62e0001beeeac
+		   
+		onLoad ({path='/pages/index/index', id ='', _id='', sn='', coord='', login=false}=q) {
+			path += '?id='+id
+			if(_id) path += '&_id='+_id
+			if(sn) path += '&sn='+sn
+			if(coord) path += '&coord='+coord
+			
+			this.path = path
+			this.login = login
+			this.init()
+		},
+		methods: {
+			init(t=0){
+				if(!uni.getStorageSync('sys_dict') || (this.login&&uni.getStorageSync('token')=='')){
+					t++
+					if(t<100){
+						return this.task = setTimeout(()=> { this.init(t) }, 100)
+					}else{
+						this.loading = false
+						this.zz.toast('网络故障，请稍候重试')
+					}
+				}
+				clearTimeout(this.task)
+				this.zz.href(this.path,0,this.login,'zoom-out','redirectTo')
+			},
+			reload(){
+				this.loading = true
+				this.init()
+			}
+		}
+	}
+</script>
+
+<style>
+</style>

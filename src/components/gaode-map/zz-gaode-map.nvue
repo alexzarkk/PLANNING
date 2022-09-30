@@ -1,0 +1,213 @@
+<template>
+	<!-- 
+			@name:高德地图组件
+			@desc：
+			@import:
+			@date：2021-11-01
+			@author: 
+	 -->
+	<div><map style="width: 750rpx" :style="{ height: mapHeight + 'px' }" :longitude="center[0]" :latitude="center[1]" :scale="scale" :min-scale="3" :max-scale="30" :controls="controls" :enable-satellite="mapStyle" :enable-rotate="false" :enable-overlooking="true" :show-location="true" :include-points="includePoints" :polyline="_polylines" :polygons="_polygon" :markers="_markers" @markertap="markertap" @controltap="controltap" @tap="mapTap"></map></div>
+</template>
+
+<script>
+export default {
+	props: {
+		mapHeight: {
+			type: Number,
+			default: 360
+		},
+		line: {
+			type: Array,
+			default: () => {
+				return [];
+			}
+		},
+		point: {
+			type: Array,
+			default: () => {
+				return [];
+			}
+		},
+		gon: {
+			type: Array,
+			default: () => {
+				return [];
+			}
+		},
+		scale: {
+			type: Number,
+			default: 14
+		},
+		center: {
+			type: Array,
+			default: () => {
+				return [121, 30];
+			}
+		}
+	},
+	data() {
+		return {
+			includePoints: [], // 包含的坐标点集合
+			mapStyle: true, // 地图图层变化, 是否开启卫星图
+			markers: [], // 标记点集合
+			polyline: [], //	轨迹集合
+			polygon: [],
+			controls: [
+				// 控件，点击定位到当前的位置
+				{
+					id: 3,
+					position: {
+						left: 10,
+						top: 260,
+						width: 42,
+						height: 42
+					},
+					iconPath: 'https://zts.5618.co/static/icon/map/position.png',
+					clickable: true
+				},
+				{
+					id: 4,
+					position: {
+						left: 10,
+						top: 50,
+						width: 42,
+						height: 42
+					},
+					iconPath: 'https://zts.5618.co/static/icon/map/layers-2x.png',
+					clickable: true
+				}
+			]
+		};
+	},
+	computed: {
+		_polylines() {
+			// 展示的线路信息
+			return [...this.polyline];
+		},
+		_markers() {
+			// 展示的坐标点
+			return [...this.markers];
+		},
+		_polygon() {
+			// 展示的多边形
+			return [...this.polygon];
+		}
+	},
+	watch: {
+		point: {
+			deep: true,
+			handler(val) {
+				if (val) this.init();
+			}
+		},
+		line: {
+			deep: true,
+			handler(val) {
+				if (val) this.init();
+			}
+		}
+	},
+	mounted() {
+		// console.log("引入高德地图=========")
+		// console.log("gaode map===============")
+		this.init();
+	},
+	methods: {
+		init() {
+			try{
+				this.markers = [];
+				this.polyline = [];
+				this.polygon = [];
+				let pointsList = [];
+				// 线路数据=============
+				for (let s of this.line) {
+					let points = s.coord.map(e => {
+						return {
+							latitude: e[1],
+							longitude: e[0]
+						};
+					});
+					pointsList = pointsList.concat(points);
+					s.prop = {
+						color: '#ff8000 ',
+						weight: 4
+					};
+					this.polyline.push({
+						// 加载线路
+						points,
+						color: s.prop.color,
+						width: s.prop.weight,
+						dottedLine: s.prop.dottedLine || false
+					});
+				}
+				this.includePoints = pointsList; // 缩放地图
+				
+				// 坐标点数据============
+				for (let i = 0; i < this.point.length; i++) {
+					let point = this.point[i];
+					if (point) {
+						let obj = {
+							id: i,
+							title: point.sn || point.name || point._id,
+							longitude: point.coord[0],
+							latitude: point.coord[1],
+							iconPath: 'https://zts.5618.co/static/icon/map/t' + (point.t2 || 200) + '.png',
+							width: 25,
+							height: 30,
+							label: {
+								content: point.sn || point.name || point._id,
+								bgColor: '#ffffff'
+							},
+							point
+						};
+						this.markers.push(obj);
+					}
+				}
+				
+				// 多边形数据===============
+				
+				for (let i = 0, len = this.gon.length; i < len; i++) {
+					let points = this.gon[i].coord.map((e, index) => {
+						if (index !== len - 1) {
+							return {
+								latitude: e[1],
+								longitude: e[0]
+							};
+						}
+					});
+					// let obj = {
+					// 	points:points,
+					// 	strokeWidth:4,
+					// 	strokeColor:'#8dc63f'
+					// }
+					this.includePoints = points; // 缩放地图
+					let obj = {
+						points: points,
+						color: '#8dc63f',
+						width: 4,
+						dottedLine: false
+					};
+					this.polyline.push(obj);
+				}
+			}catch(error){
+				console.error("map init fail========",error)
+			}
+		},
+		async controltap({ detail: { controlId: id } }) {
+			// 定位选择
+			if (id == 3) {
+				this.$emit('onLoc');
+			}
+			if (id === 4) {
+				this.mapStyle = !this.mapStyle;
+			}
+		},
+		mapTap(event) {},
+		markertap(e) {
+			this.$emit('markerClick', this.markers.find(x => x.id == e.detail.markerId));
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped></style>

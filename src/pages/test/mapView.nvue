@@ -1,0 +1,59 @@
+<!--
+ * @Author: InsHomePgup
+ * @Date: 2022-05-15 09:35:01
+ * @LastEditors: InsHomePgup
+ * @LastEditTime: 2022-05-30 15:49:51
+ * @FilePath: \sport-planing\src\pages\event\mapView.nvue
+ * @Description: 
+ * 
+ * 
+-->
+<template>
+	<div>
+		<gaodeMap v-if="trail.kml.lines" :map-height="350" :line="trail.kml.lines" :point="trail.kml.points" :center="center" @onLoc="getLocation()"></gaodeMap>
+	</div>
+</template>
+
+<script>
+import gaodeMap from '@/components/gaode-map/zz-gaode-map.nvue';
+const locationModule = uni.requireNativePlugin('XM_Alive_Location')
+const modal = uni.requireNativePlugin('modal');
+
+export default {
+	components: { gaodeMap },
+	onLoad() {
+		let trail = uni.getStorageSync('clockResultTrail');
+		if (trail) {
+			this.trail = trail;
+			console.log("获取到的线路信息",this.trail)
+		}
+	},
+	onReady() {},
+	data() {
+		return {
+			trail:null,
+			center:[121,30]
+		};
+	},
+	methods: {
+		async getLocation(){
+			console.log("getLocation===")
+				await locationModule.getOnceLocation({
+					locationMode: 'Device_Sensors'
+				}, (xiaoming) => {
+					console.log('原生插件定位 ------------------->',xiaoming);
+					if (xiaoming.success) {
+						return this.center = [xiaoming.data.longitude, xiaoming.data.latitude]
+					} else {
+						modal.toast({
+							message: '定位获取失败，GPS信号弱！',
+							duration: 3
+						});
+					}
+				});
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped></style>

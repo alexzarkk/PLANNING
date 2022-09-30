@@ -1,0 +1,1099 @@
+<template>
+	<view class="container" :style="{ height: windowHeight }">
+		<!-- 
+		 
+		 :markers="getMarker"
+		 :polyline="polyline"
+		 
+		 :include-points="includePoints"
+		 @controltap="controltap"
+		 @markertap="markertap"
+		 
+		 -->
+
+		<view id="headerBar" class="header-bar" :style="headerBarStyle">
+			<view class="header-bar-location" :style="isPause ? pauseBg : unpauseBg">
+				<view class="header-bar-location-wrapper"><text class="header-bar-location-text">共享实时位置</text></view>
+				<view v-if="isInRecord" class="header-bar-record-wrapper">
+					<text v-if="!isPause" class="record-text">正在记录</text>
+					<text v-else class="record-text">已暂停</text>
+					<text class="record-time">{{ timeCount.hour }}:{{ timeCount.minute }}:{{ timeCount.second }}</text>
+				</view>
+				<view v-if="isInRecord" class="header-bar-info">
+					<view v-if="!isInInfo" class="header-bar-info-wrapper"><text @click="changeSwiper(1)" class="header-bar-info-text">统计信息</text></view>
+					<view v-else class="header-bar-info-wrapper"><text @click="changeSwiper(0)" class="header-bar-info-text">地图</text></view>
+				</view>
+				<view v-if="!isInRecord"></view>
+				<view v-if="!isInRecord"></view>
+			</view>
+		</view>
+
+		<swiper :current="swiperCurrent" :style="{ height: mapHeight }" :disable-touch="true" @change="swiperChange">
+			<swiper-item>
+				<map
+					v-if="isMapReady"
+					id="myMap"
+					ref="myMap"
+					:style="{ height: mapHeight, width: '750rpx' }"
+					class="my-map"
+					:longitude="longitude"
+					:latitude="latitude"
+					:scale="scale"
+					:enable3D="true"
+					:enable-satellite="true"
+					:controls="controls"
+					:show-compass="true"
+					:show-location="true"
+					:enable-overlooking="false"
+					:enable-rotate="true"
+					:polyline="polyline"
+					:markers="markers"
+					@controltap="controltap"
+				></map>
+			</swiper-item>
+			<swiper-item>
+				<view class="distance-box">
+					<swiper :current="itemCurrent1" :indicator-dots="false" @change="item1Change">
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">里程</text></view>
+								<view class="distance-wrapper-value">
+									<text class="distance-wrapper-value-left">0.00</text>
+									<text class="distance-wrapper-value-right">公里</text>
+								</view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">均速</text></view>
+								<view class="distance-wrapper-value">
+									<text class="distance-wrapper-value-left">0.00</text>
+									<text class="distance-wrapper-value-right">公里</text>
+								</view>
+							</view>
+						</swiper-item>
+					</swiper>
+					<view class="view-indicator">
+						<view class="view-indicator-item" :class="itemCurrent1 === 0 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent1 === 1 ? 'active' : ''"></view>
+					</view>
+				</view>
+
+				<view class="distance-box">
+					<swiper :current="itemCurrent2" :indicator-dots="false" @change="item2Change">
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">当前海拔</text></view>
+								<view class="distance-wrapper-value"><text class="distance-wrapper-value-2">32m</text></view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">累积爬升下降</text></view>
+								<view class="distance-wrapper-value"><text class="distance-wrapper-value-2">948m</text></view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">最高海拔最低海拔</text></view>
+								<!-- <view class="distance-wrapper-value"><text>↑100↓100m</text></view> -->
+								<view class="distance-wrapper-value"><text class="distance-wrapper-value-2">↑100↓100m</text></view>
+							</view>
+						</swiper-item>
+					</swiper>
+					<view class="view-indicator">
+						<view class="view-indicator-item" :class="itemCurrent2 === 0 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent2 === 1 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent2 === 2 ? 'active' : ''"></view>
+					</view>
+				</view>
+
+				<view class="distance-box">
+					<swiper :current="itemCurrent3" :indicator-dots="false" @change="item3Change">
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">总时间</text></view>
+								<view class="distance-wrapper-value">
+									<text class="distance-wrapper-value-3">{{ timeCount.hour }}:{{ timeCount.minute }}:{{ timeCount.second }}</text>
+									<!-- <text class="distance-wrapper-value-right">公里</text> -->
+								</view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">活动时间</text></view>
+								<view class="distance-wrapper-value"><text class="distance-wrapper-value-2">00:00:02</text></view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">暂停时间</text></view>
+								<view class="distance-wrapper-value"><text class="distance-wrapper-value-2">00:00:02</text></view>
+							</view>
+						</swiper-item>
+					</swiper>
+					<view class="view-indicator">
+						<view class="view-indicator-item" :class="itemCurrent3 === 0 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent3 === 1 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent3 === 2 ? 'active' : ''"></view>
+					</view>
+				</view>
+				<view class="distance-box">
+					<swiper :current="itemCurrent4" :indicator-dots="false" @change="item4Change">
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">坐标(gcj02)</text></view>
+								<view class="distance-wrapper-value" @click="copyLocation">
+									<text class="distance-wrapper-value-location">121.12,30.32</text>
+									<text class="distance-wrapper-value-copy zzIcon">&#xe662;</text>
+								</view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">照片点</text></view>
+								<view class="distance-wrapper-value">
+									<text class="distance-wrapper-value-left">20</text>
+									<text class="distance-wrapper-value-right">个</text>
+								</view>
+							</view>
+						</swiper-item>
+						<swiper-item>
+							<view class="distance-wrapper">
+								<view class="distance-wrapper-title"><text class="distance-wrapper-title-text">注记</text></view>
+								<view class="distance-wrapper-value">
+									<text class="distance-wrapper-value-left">20</text>
+									<text class="distance-wrapper-value-right">个</text>
+								</view>
+							</view>
+						</swiper-item>
+					</swiper>
+					<view class="view-indicator">
+						<view class="view-indicator-item" :class="itemCurrent4 === 0 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent4 === 1 ? 'active' : ''"></view>
+						<view class="view-indicator-item" :class="itemCurrent4 === 2 ? 'active' : ''"></view>
+					</view>
+				</view>
+			</swiper-item>
+		</swiper>
+
+		<view v-if="!isInRecord" class="footer-bar">
+			<view class="type-box" @click="selectSportType">
+				<text class="type-text">{{ currentSportType }}</text>
+				<uni-icons type="bottom" size="16" />
+			</view>
+			<view class="start-box">
+				<view class="start-box-btn" @click="startRecord">
+					<view class="start-icon"></view>
+					<text class="start-text">开始记录</text>
+				</view>
+			</view>
+		</view>
+		<!-- <image class="camera-icon" src="/static/planning/camera.png"></image> -->
+		<uni-fab
+			v-if="isInRecord"
+			ref="fab"
+			:pattern="pattern"
+			:content="content"
+			:icon="'circle-filled'"
+			@trigger="handleFab"
+			@fabStartTouch="onStartTouch"
+			@fabEndTouch="onEndTouch"
+			@fabClick="fabClick"
+		></uni-fab>
+		<!-- style="position:absolute; top:200rpx;left:100rpx; z-index:10;" -->
+		<view class="mask" :style="{ height: windowHeight + 'px' }" v-if="isTouched">
+			<huihui-progress
+				:originalColor="process > 0 ? '#EEEEEE' : 'rgba(103,63,63,0)'"
+				:processColor="process > 0 ? '#42b983' : 'rgba(103,63,63,0)'"
+				innerbgColor="#2d3038"
+				:process="process"
+				:startPosDegree="0"
+				:radius="80"
+				:barWidth="20"
+			>
+				<!-- @touchend="onEndTouch" @touchstart="onStartTouch" -->
+				<view class="statistical-end"><view class="statistical-end-before"></view></view>
+			</huihui-progress>
+		</view>
+	</view>
+</template>
+
+<script>
+import store from '../../store/index.js';
+
+import { mapState } from 'vuex';
+
+import huihuiProgress from '@/components/huihui-progress/huihui-progress';
+
+const dom = weex.requireModule('dom');
+dom.addRule('fontFace', {
+	fontFamily: 'zzIcon',
+	src: "url('https://at.alicdn.com/t/font_3351452_yzcbd2l1loq.ttf?t=1653371059893')"
+});
+
+export default {
+	components: {
+		huihuiProgress
+	},
+	computed: {
+		...mapState({
+			// polyline: state => {
+			// 	console.log("获取到的轨迹的信息",state.lineTrack.polyline)
+			// 	return state.lineTrack.polyline;
+			// },
+			markers: state => {
+				return state.lineTrack.markers;
+			},
+			timeCount: state => {
+				return state.lineTrack.timeCount;
+			},
+			seconds: state => {
+				state.lineTrack.seconds;
+			},
+			isInRecord: state => {
+				// 记录状态
+				return state.lineTrack.isInRecord;
+			}
+		})
+	},
+	watch: {
+		isInRecord(val) {},
+		polyline: {
+			handler(newValue, oldValue) {},
+			deep: true
+		}
+	},
+	onShow() {
+		if (this.platform === 'android') {
+			plus.navigator.setFullscreen(true);
+			plus.navigator.hideSystemNavigation();
+		}
+		// console.log('onShow==========全面屏显示===',plus.navigator.isFullscreen());
+		// if(!plus.navigator.isFullscreen()){
+		// plus.navigator.setFullscreen(true);
+		// }else{
+		// plus.navigator.setFullscreen(true);
+		// }
+		let sportType = uni.getStorageSync('currentSportType'); // 获取当前的运动类型
+		if (sportType) {
+			this.currentSportType = sportType;
+		}
+	},
+	onLoad(option) {
+		// plus.navigator.setFullscreen(true);
+		// plus.navigator.hideSystemNavigation();
+
+		// console.log('是否加载路线=======', option.isNeedLine);
+		//  起点  https://zts.5618.co/static/png/blu-blank.png
+		// 终点   https://zts.5618.co/static/png/pink-blank.png
+		// console.log('vuex中的坐标点数据===', this.markers);
+		// console.log('vuex中的线路的数据===', this.polyline);
+		const lineTrack = uni.getStorageSync('lineTrack'); // 当前使用的线路
+		if (lineTrack && lineTrack.length > 0 && option.isNeedLine) {
+			let markerList = [],
+				lineList = [],
+				isGetCenter = false;
+			lineTrack.forEach(geo => {
+				if (geo.t1 === 1) {
+					if (!isGetCenter) {
+						if (geo.coord[0]) {
+							this.longitude = geo.coord[0][0];
+							this.latitude = geo.coord[0][1];
+							isGetCenter = true;
+						}
+					}
+					// line
+					lineList.push(geo);
+				}
+				if (geo.t1 === 2) {
+					if (!isGetCenter) {
+						if (geo.coord[0]) {
+							this.longitude = geo.coord[0];
+							this.latitude = geo.coord[1];
+							isGetCenter = true;
+						}
+					}
+					// marker
+					markerList.push(geo);
+				}
+			});
+			// console.log('线路坐标点信息', lineList);
+			let markers = [];
+			let polyline = lineList.map((line, index) => {
+				// console.log('线路的起终点', line.coord[0], line.coord[line.coord.length - 1]);
+				let startCoord = line.coord[0];
+				let endCoord = line.coord[line.coord.length - 1];
+				let startMarker = {
+					id: 'startMarker' + index,
+					longitude: startCoord[0],
+					latitude: startCoord[1],
+					title: '起点',
+					iconPath: 'https://zts.5618.co/static/png/blu-blank.png',
+					width: 32,
+					height: 32
+				};
+
+				let endMarker = {
+					id: 'endMarker' + index,
+					longitude: endCoord[0],
+					latitude: endCoord[1],
+					title: '终点',
+					iconPath: 'https://zts.5618.co/static/png/pink-blank.png',
+					width: 32,
+					height: 32
+				};
+				markers.push(startMarker);
+				markers.push(endMarker);
+				// console.log('坐标点列表=====', markers);
+
+				let coord = line.coord.map(res => {
+					return {
+						longitude: res[0],
+						latitude: res[1]
+					};
+				});
+				let obj = {
+					points: coord,
+					width: 4,
+					color: '#ffaa00'
+				};
+				return obj;
+			});
+			this.polyline = polyline;
+			store.commit('setMarkers', { markers: markers }); // 把坐标点提交到vuex
+			// store.commit('setPolyline', { polyline: polyline });  // 把线路提交到vuex
+		}
+	},
+	onUnload() {
+		// console.log("关闭了全面屏显示")
+		plus.navigator.setFullscreen(false);
+		plus.navigator.showSystemNavigation();
+	},
+	async onReady() {
+		// #ifdef APP-PLUS
+		// this.createDragButton();
+		// this.getGpsLocation();
+
+		// #endif
+
+		let windowHeight = 0,
+			statusHeight = 0,
+			platform = '';
+		uni.getSystemInfo({
+			success: res => {
+				console.log('系统信息====', res);
+				windowHeight = res.windowHeight;
+				statusHeight = res.safeArea.top;
+				platform = res.platform;
+			}
+		});
+
+		// const windowInfo = uni.getWindowInfo()
+		// console.log("获取到的设备窗口信息",windowInfo)
+
+		this.windowHeight = windowHeight;
+
+		this.platform = platform;
+		let headerBarHeight = statusHeight * 2 + 110; // 因为单位是rpx 所以需要*2-0
+		this.statusHeight = statusHeight; // 状态 栏的高度
+		let headerBarPx = 0;
+
+		this.headerBarStyle = {
+			height: headerBarHeight + 'rpx',
+			'padding-top': statusHeight * 2 + 'rpx'
+		};
+		if (this.isInRecord) {
+			// this.mapHeight = windowHeight - headerBarHeight / 2;
+		} else {
+			// this.mapHeight = windowHeight - statusHeight - 45 - 150;
+			// this.mapHeight = windowHeight - statusHeight - 45 - 150;
+			// this.mapHeight = windowHeight - statusHeight - 20;
+			// - statusHeight - 40 - 150;
+		}
+
+		await uni
+			.createSelectorQuery()
+			.select('#headerBar')
+			.boundingClientRect(e => {
+				// console.log('获取到的高度=================', e.height);
+				headerBarPx = e.height;
+				// this.searchBarHeight = e.height;
+				// this.mapHeight = windowHeight - statusHeight;
+				if (platform === 'ios') {
+					this.mapHeight = windowHeight - statusHeight - 18; // IOS
+				}
+				if (platform === 'android') {
+					// this.mapHeight = (windowHeight * 2) - (statusHeight * 2) + 'rpx'; // Android
+					// this.mapHeight = windowHeight - statusHeight * 2 - 25; // Android
+					// this.mapHeight =windowHeight - (headerBarHeight/2); // Android
+					// console.log('windowHeight', windowHeight);
+					// console.log('headerBarHeight', headerBarPx);
+					// console.log('statusHeight', statusHeight);
+					this.mapHeight = windowHeight - headerBarPx - statusHeight + 30; // Android
+					// console.log('计算后的高度', this.mapHeight);
+					// this.mapHeight = windowHeight - statusHeight * 2 ; // Android
+				}
+			})
+			.exec();
+		this.mapContext = uni.createMapContext('myMap', this);
+		// this.refreshLocation()    // 定位到当前
+		const iconWidth = 45,
+			iconHeight = 45;
+		this.controls = [
+			// 控件
+			{
+				// 返回
+				id: 0,
+				position: {
+					top: 70,
+					left: 10,
+					width: 50,
+					height: 50
+				},
+				iconPath: '../../static/back.png',
+				clickable: true
+			},
+			{
+				// 定位到当前
+				id: 1,
+				position: {
+					top: 410,
+					left: 10,
+					width: iconWidth,
+					height: iconHeight
+				},
+				iconPath: '../../static/position.png',
+				clickable: true
+			},
+			{
+				// 相机icon
+				id: 2,
+				position: {
+					top: 340,
+					left: 10,
+					width: iconWidth,
+					height: iconHeight
+				},
+				iconPath: '../../static/camera.png',
+				clickable: true
+			},
+			{
+				// 添加标记点
+				id: 3,
+				position: {
+					top: 270,
+					left: 10,
+					width: iconWidth,
+					height: iconHeight
+				},
+				iconPath: '../../static/dis.png',
+				clickable: true
+			}
+		];
+	},
+	data() {
+		return {
+			windowHeight: 0, // 窗口高度，也是遮罩高度
+			isTouched: false, // 是否在长按当中
+			touch: null, //长按的时候的interval对象
+			process: 0, // 长按结束 的进度
+			platform: '', // 当前的平台
+			pauseBg: { backgroundColor: '#f7921c' }, // 暂停记录时的背景色
+			unpauseBg: { backgroundColor: '#8fc42f' }, // 正在记录时的背景色
+			isPause: false, // 当前是否暂停
+			currentSportType: '健走', // 当前展示的运动类型
+			recordTimer: null, // 轨迹记录的interval
+			polyline: [], // 当前的轨迹对象
+			// markers: [], //
+			// 统计信息
+			itemCurrent1: 0,
+			itemCurrent2: 0,
+			itemCurrent3: 0,
+			itemCurrent4: 0,
+			second: 0, // 计时器的秒
+			timer: null, // 计时器对象
+			isInInfo: false, // 是否展示统计信息
+			swiperCurrent: 1, // 当前 swiper的位置  0:地图 1:统计信息
+			pattern: {
+				// 悬浮按钮样式    用来结束轨迹记录
+				color: '#ff0000',
+				backgroundColor: '#fff',
+				selectedColor: '#ff0000',
+				buttonColor: '#ffffff',
+				iconColor: '#f9081f'
+			},
+			content: [
+				// {
+				// 	iconPath: '/static/image.png',
+				// 	selectedIconPath: '/static/image-active.png',
+				// 	text: '数据 ',
+				// 	active: false,
+				// 	type: 'info'
+				// },
+				{},
+				{
+					iconPath: 'https://s1.ax1x.com/2022/06/10/XyOdc6.png',
+					selectedIconPath: 'https://s1.ax1x.com/2022/06/10/XyOdc6.png',
+					text: '继续',
+					textColor:'#8fc42f',
+					active: false,
+					type: 'continue'
+				},
+				
+				{},
+				{
+					iconPath: 'https://s1.ax1x.com/2022/06/10/XyOa1x.png',
+					selectedIconPath: 'https://s1.ax1x.com/2022/06/10/XyOa1x.png',
+					text: '长按结束',
+					textColor:'#f9081f',
+					active: false,
+					type: 'end'
+				}
+			],
+			// isInRecord: false, // 当前进入轨迹记录状态
+			headerBarStyle: {}, // 顶部hearderBar计算高度
+			isMapReady: true, // 地图加载完成
+			mapContext: null, // 地图对象，用来操作地图
+			scale: 16, // 缩放等级
+			includePoints: [], // 视图包含的坐标点列表
+			longitude: 121.427002, // 地图center经度
+			latitude: 29.675428, // 地图center纬度
+			mapHeight: 0, // 地图高度，计算获取
+			statusHeight: 0, // 状态栏高度
+			controls: [] // 地图控件
+		};
+	},
+	methods: {
+		getGpsLocation() {
+			// plus.geolocation.getCurrentPosition((res)=>{
+			// 	console.log("success获取位置信息成功==========",res)
+			// },(error)=>{
+			// 	console.log("fail获取位置信息失败======",error)
+			// },{
+			// 	enableHighAccuracy:true,
+			// 	provider:"system"
+			// })
+
+			const geoWatch = plus.geolocation.watchPosition(
+				res => {
+					console.log('success获取位置信息成功==========', res);
+				},
+				error => {
+					console.log('fail获取位置信息失败======', error);
+				},
+				{
+					enableHighAccuracy: true,
+					provider: 'system'
+				}
+			);
+			console.log('持续定位的返回值', geoWatch);
+			setTimeout(() => {
+				plus.geolocation.clearWatch(geoWatch); // 清除定位
+			}, 2000);
+		},
+
+		// 开始记录
+		startRecord() {
+			uni.showToast({
+				icon: 'none',
+				title: '正在记录'
+			});
+			// this.mapHeight = this.mapHeight + this.statusHeight * 2 + 52; // 改变地图高度，
+			uni.$emit('startLocation');
+
+			// locationModule.startLocation(
+			// 	{
+			// 		intervalTime: 4000, //3秒 只对安卓有效
+			// 		distanceFilter: 5, //5m 只对ios有效
+			// 		notifyTip: '持续定位中',
+			// 		notifyTitle: '环浙采集',
+			// 		sysName: 'sysName'
+			// 	},(location)=>{
+			// 		console.log("持续定位===========",location)
+			// 	})
+		},
+		// 暂停记录
+		pauseTimeCount() {
+			// console.log("暂停记录=============pauseTimeCount===========")
+			uni.$emit('pauseRecord');
+			// store.commit('cleanTimeCount')
+			// store.dispatch('pauseTimeCount')
+		},
+		// 恢复记录
+		continueTimeCount() {
+			uni.$emit('continueRecord');
+			// uni.$emit('startLocation');
+			// console.log("回复记录=============continueTimeCount===========")
+			// store.dispatch('startTimeCount')
+		},
+		// 结束记录
+		handleFab(event) {
+			// locationModule.stopLocation();
+			if (event.item.type === 'continue') {
+				// 继续
+				this.$refs.fab._onClick();
+				// this.fabClick()
+			}
+
+			if (event.item.type === 'info') {
+				// 数据信息
+				this.changeSwiper(0);
+			}
+
+			if (event.item.type === 'end') {
+				// 添加遮罩
+				// 结束
+				// this.mapHeight = this.mapHeight - (this.statusHeight * 2 + 52);
+				// this.isPause = false;
+				// uni.$emit('endLocation');
+				// if (this.swiperCurrent === 0) {
+				// 	this.swiperCurrent = 1;
+				// }
+				// uni.navigateTo({
+				// 	url: '/pages/planning/saveLineTrack'
+				// });
+			}
+		},
+		// 悬浮按钮点击事件
+		fabClick(event) {
+			this.isPause = !this.isPause; // 切换暂停
+
+			if (this.isPause) {
+				this.pauseTimeCount();
+			} else {
+				this.continueTimeCount();
+			}
+		},
+		// 控件点击
+		controltap(event) {
+			// console.log('控件点击', event);
+			if (event.detail.controlId === 0) {
+				// 返回上一级
+				uni.navigateBack();
+			}
+
+			if (event.detail.controlId === 1) {
+				// 刷新到当前的定位
+				this.refreshLocation();
+			}
+
+			if (event.detail.controlId === 2) {
+				// 相机
+
+				uni.chooseImage({
+					count: 6, //默认9
+					sizeType: ['original'], //只能选择原图
+					sourceType: ['album', 'camera'], //相册  +拍摄
+					success: function(res) {
+						console.log(JSON.stringify(res.tempFilePaths));
+					}
+				});
+			}
+
+			if (event.detail.controlId === 3) {
+				// 标记点
+			}
+		},
+		// startTime() {
+		// 	this.timer = setInterval(() => {
+		// 		this.second++;
+		// 		this.formatTime(this.second);
+		// 	}, 1000);
+		// },
+		// clearTime() {
+		// 	if (this.timer) {
+		// 		// 清除定时器
+		// 		clearInterval(this.timer);
+		// 		this.timer = null;
+		// 	}
+		// 	this.second = 0;
+		// },
+		// 选择运动类型
+		selectSportType() {
+			uni.navigateTo({
+				url: '/pages/planning/sportType',
+				animationType: 'slide-in-bottom'
+			});
+		},
+		// 数据统计的swiper变化
+		item1Change(event) {
+			this.itemCurrent1 = event.detail.current;
+		},
+		item2Change(event) {
+			this.itemCurrent2 = event.detail.current;
+		},
+		item3Change(event) {
+			this.itemCurrent3 = event.detail.current;
+		},
+		item4Change(event) {
+			this.itemCurrent4 = event.detail.current;
+		},
+		swiperChange(event) {
+			this.swiperCurrent = event.detail.current;
+			if (event.detail.current === 1) {
+				this.isInInfo = true;
+			} else {
+				this.isInInfo = false;
+			}
+		},
+		changeSwiper(index) {
+			this.swiperCurrent = index;
+		},
+		// 定位到当前的位置
+		refreshLocation() {
+			uni.getLocation({
+				type: 'gcj02',
+				success: location => {
+					this.mapContext.moveToLocation({
+						longitude: location.longitude,
+						latitude: location.latitude,
+						success: res => {},
+						fail: error => {
+							console.error('move  fail=====', error);
+						}
+					});
+				},
+				fail: error => {
+					console.error('获取位置信息失败', error);
+				}
+			});
+		},
+		copyLocation() {
+			// 复制当前的经纬度
+			uni.setClipboardData({
+				data: '经纬度',
+				showToast: false,
+				success: function() {
+					console.log('成功设置经纬度到剪贴板');
+					uni.showToast({
+						icon: 'none',
+						title: '复制成功'
+					});
+				}
+			});
+		},
+		onStartTouch({ index, item }) {
+			if (item.type === 'end') {
+				this.isTouched = true;
+				this.process = 2;
+				this.touch = setInterval(() => {
+					this.process += 2;
+					// 长按结束本次采集事件
+					if (this.process >= 100) {
+						this.process = 0;
+						// this.onEndThe();
+						this.isPause = false;
+						uni.$emit('endLocation');
+						if (this.swiperCurrent === 1) {
+							this.swiperCurrent = 0;
+						}
+						uni.navigateTo({
+							url: '/pages/planning/saveLineTrack'
+						});
+						this.isTouched = false;
+						clearInterval(this.touch);
+					}
+				}, 33);
+			}
+		},
+		onEndTouch({ index, item }) {
+			if (item.type === 'end') {
+				this.isTouched = false;
+				this.process = 0;
+				clearInterval(this.touch);
+			}
+		}
+	},
+	onBackPress() {
+		if (this.isInRecord) {
+			uni.$emit('showBackBtn');
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+// .camera-icon{
+// 	position:absolute;
+// 	bottom:100rpx;
+// 	right:50rpx;
+// 	width:100rpx;
+// 	height: 100rpx;
+// 	// background-color:aqua;
+// 	z-index:10;
+// }
+
+.container {
+	position: relative;
+	overflow: hidden;
+}
+
+.my-map {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.zzIcon {
+	font-family: zzIcon !important;
+	font-size: 32px;
+}
+
+.header-bar {
+	// background-color: $zts-green;
+	// flex-direction: column-reverse;
+	// justify-content: flex-start;
+	// align-items: flex-start;
+	
+	opacity: 0;
+	
+	background-color: #35611f;
+
+	&-location {
+		opacity: 0.6;
+		height: 110rpx;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-around;
+		background-color: #8fc42f;
+
+		// background-color: #f7921c;
+
+		&-wrapper {
+			padding-top: 30rpx;
+			padding-bottom: 30rpx;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			width: 220rpx;
+			height: 50rpx;
+			background-color: #35611f;
+			border-radius: 10rpx;
+		}
+
+		&-text {
+			color: #fff;
+			font-size: 16px;
+			// text-align: center;
+		}
+	}
+
+	&-record-wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.record-text {
+			color: #fff;
+			font-size: 14px;
+		}
+
+		.record-time {
+			color: #fff;
+			font-size: 20px;
+			font-weight: bold;
+		}
+	}
+
+	&-info {
+		&-wrapper {
+			padding-top: 30rpx;
+			padding-bottom: 30rpx;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			width: 220rpx;
+			height: 50rpx;
+			background-color: #35611f;
+			border-radius: 10rpx;
+		}
+
+		&-text {
+			color: #fff;
+			font-size: 16px;
+			// text-align: center;
+		}
+	}
+}
+
+.footer-bar {
+	// height: 480rpx;
+	width: 750rpx;
+	background-color: #ffffff;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding-bottom: 80rpx;
+	// display: flex;
+	// flex-direction: column;
+	.type-box {
+		height: 90rpx;
+		background-color: rgba($color: #fff, $alpha: 0.5);
+		// background-color: rgba(255, 255, 255, 0.05);
+		// background-color: #fff;
+		// opacity: 0.1;
+		// background-color: aqua;
+		border-bottom: 1px solid #e2e2e2;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		// position: relative;
+		// top: -30px;
+		// z-index: 1000;
+
+		.type-text {
+			font-size: 16px;
+			color: #222222;
+		}
+
+		.type-icon {
+		}
+	}
+
+	.start-box {
+		height: 140rpx;
+		// background-color: #fff;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+
+		&-btn {
+			width: 720rpx;
+			height: 100rpx;
+			border-radius: 100rpx;
+			background-color: $zts-green;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+
+			.start-icon {
+				width: 50rpx;
+				height: 50rpx;
+				background-color: #f90c20;
+				border-radius: 5000rpx;
+				margin-right: 10rpx;
+			}
+
+			.start-text {
+				color: #fff;
+			}
+		}
+	}
+}
+
+.distance-box {
+	position: relative;
+	margin-bottom: 50rpx;
+	.distance-wrapper {
+		padding-top: 20rpx;
+		flex-direction: column;
+		align-items: center;
+		&-title {
+			&-text {
+				font-size: 16px;
+				color: #222222;
+			}
+		}
+
+		&-value {
+			flex-direction: row;
+			// justify-content: flex-end;
+			align-items: flex-end;
+
+			&-location {
+				height: 200rpx;
+				line-height: 200rpx;
+				font-size: 48rpx;
+				font-weight: bold;
+			}
+			&-copy {
+				height: 200rpx;
+				line-height: 200rpx;
+			}
+
+			&-left {
+				height: 200rpx;
+				line-height: 200rpx;
+				font-size: 144rpx;
+				font-weight: bold;
+			}
+
+			&-right {
+				height: 170rpx;
+				line-height: 170rpx;
+				font-size: 72rpx;
+			}
+
+			&-2 {
+				height: 200rpx;
+				line-height: 200rpx;
+				font-size: 96rpx;
+				font-weight: bold;
+			}
+
+			&-3 {
+				height: 200rpx;
+				line-height: 200rpx;
+				font-size: 120rpx;
+				font-weight: bold;
+			}
+		}
+	}
+}
+
+.view-indicator {
+	flex-direction: row;
+	justify-content: center;
+	position: absolute;
+	width: 750rpx;
+	bottom: 0;
+	z-index: 1;
+	&-item {
+		width: 26rpx;
+		height: 8rpx;
+		margin: 0 6rpx;
+		background-color: rgba(0, 0, 0, 0.3);
+		border-radius: 15rpx;
+	}
+
+	.active {
+		background-color: $zts-green;
+	}
+}
+
+.statistical-end {
+	width: 120rpx;
+	height: 120rpx;
+	background-color: #ffffff;
+	box-shadow: 0px 0px 14rpx 0px rgba(6, 127, 116, 0.15);
+	border-radius: 50%;
+	align-items: center;
+	justify-content: center;
+}
+
+.statistical-end-before {
+	width: 42rpx;
+	height: 42rpx;
+	background-color: #ee3c3c;
+	border-radius: 8rpx;
+}
+
+.mask {
+	width: 750rpx;
+	height: 890px;
+	background-color: rgba(0, 0, 0, 0.3);
+	position: absolute;
+	top: 0;
+	left: 0;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+</style>

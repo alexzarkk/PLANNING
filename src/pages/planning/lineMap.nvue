@@ -1,0 +1,1069 @@
+<template>
+	<!-- Name: 行程 - 地图 -->
+	<!-- Desc：展示地图线路 -->
+	<div class="my-map-container">
+		<div class="status-bar" :style="{ height: statusHeight }" />
+		<div class="header-bar">
+<text class="header-bar-title">
+行程推荐
+</text>
+</div>
+		<div class="search-bar">
+			<text class="cuIcon-search" />
+
+			<input class="search-bar-input" :adjust-position="false" type="text" placeholder="搜索线路" confirm-type="search">
+		</div>
+		<!-- 使用图标 -->
+<!-- 		<div style="height:100rpx;">
+			<text class="zzIcon">&#xe662;</text>
+		</div> -->
+		<div class="filter-bar">
+			<div class="planing-search-btn" @click="filter">
+<text class="planing-search-btn-text">
+筛选条件
+</text>
+</div>
+			<text class="road-text">
+1000路线
+</text>
+			<div class="planing-search-btn" @click="backToList">
+<text class="planing-search-btn-text">
+列表
+</text>
+</div>
+		</div>
+
+		<map
+			v-if="isMapReady"
+			id="myMap"
+			ref="myMap"
+			:style="{ height: mapHeight }"
+			class="my-map"
+			:longitude="longitude"
+			:latitude="latitude"
+			:scale="scale"
+			:markers="getMarker"
+			:polyline="polyline"
+			:enable3D="true"
+			:enable-satellite="true"
+			:controls="controls"
+			:show-compass="true"
+			:show-location="true"
+			:enable-overlooking="true"
+			:enable-rotate="true"
+			:include-points="includePoints"
+			@controltap="controltap"
+			@markertap="markertap"
+		/>
+		<view class="line-track-wrapper">
+			<view class="line-track-btn" @click="gotoRecord">
+<text class="line-track-btn-text">
+去记录
+</text>
+</view>
+		</view>
+		<!-- 		<esc-swiper
+			mode="3d"
+			:autoplay="false"
+			:scale="1.2"
+			:circular="circular"
+			:current.sync="current"
+			:size="normalList.length"
+			:plus="plus"
+			:width="750"
+			:height="340"
+			:itemWidth="590"
+			:itemHeight="270"
+			:space="40">
+			<esc-swiper-item @click="itemClick(item)" v-for="(item, idx) in normalList" :index="idx" :key="idx">
+				<esc-bg-view src="/static/case/swiper_bg.png" :width="590" :height="267">
+					<view class="item">
+						<view>
+							<text class="title">{{ item.title }}</text>
+						</view>
+						<view>
+							<text class="subtitle">{{ item.subTitle }}</text>
+						</view>
+					</view>
+				</esc-bg-view>
+			</esc-swiper-item>
+		</esc-swiper> -->
+
+		<swiper :current="currentLineIndex" :circular="true" class="line-swiper" @change="swiperChange">
+			<swiper-item v-for="(item, index) in swiperList" :key="index" class="line-swiper-item">
+				<div class="line-swiper-item-wrapper" @click="openLineDetails(item)">
+					<div class="left-box">
+						<image class="left-box-image" mode="aspectFit" :src="item.pic" />
+						<div class="left-box-distance">
+							<text class="left-box-distance-title">
+里程
+</text>
+							<text class="left-box-distance-value">
+{{ item.distance }}米
+</text>
+						</div>
+					</div>
+					<div class="right-box">
+						<div class="line-title-name-box">
+							<text class="line-title">
+{{ item.name || '路线' }}
+</text>
+							<text class="line-name">
+由{{ item.user }}
+</text>
+						</div>
+						<div class="line-info">
+							<div class="line-info-wrapper">
+								<text class="line-info-wrapper-title">
+累积上下
+</text>
+								<text class="line-info-wrapper-value">
+↑{{ item.up }} ↓{{ item.down }} m
+</text>
+							</div>
+							<div class="line-info-wrapper">
+								<text class="line-info-wrapper-title">
+预计耗时
+</text>
+								<text class="line-info-wrapper-value">
+{{ formatDuring(item.time*1000) }}
+</text>
+							</div>
+						</div>
+					</div>
+				</div>
+			</swiper-item>
+		</swiper>
+
+		<!-- style="position:absolute;bottom:0;left:0; width:750rpx;" -->
+		<!-- 		<view style="position:absolute;bottom:0;left:0; width:750rpx;">
+			<esc-swiper
+				:scale="1"
+				:autoplay="false"
+				:circular="circular"
+				:current.sync="current"
+				:size="swiperList.length"
+				:plus="plus"
+				:width="750"
+				:height="340"
+				:itemWidth="670"
+				:itemHeight="300"
+				:space="1"
+			>
+				<esc-swiper-item @click="openLineDetails(item)" v-for="(item, idx) in swiperList" :index="idx" :key="idx">
+						<div class="line-swiper-item-wrapper">
+							<div class="left-box">
+								<image class="left-box-image" mode="aspectFill" :src="item.pic"></image>
+								<div class="left-box-distance">
+									<text class="left-box-distance-title">里程</text>
+									<text class="left-box-distance-value">{{ item.distance }}米</text>
+								</div>
+							</div>
+							<div class="right-box">
+								<div class="line-title-name-box">
+									<text class="line-title">{{ item.name || '路线' }}</text>
+									<text class="line-name">由{{ item.user }}</text>
+								</div>
+								<div class="line-info">
+									<div class="line-info-wrapper">
+										<text class="line-info-wrapper-title">累积上下</text>
+										<text class="line-info-wrapper-value">↑{{ item.up }} ↓{{ item.down }} m</text>
+									</div>
+									<div class="line-info-wrapper">
+										<text class="line-info-wrapper-title">预计耗时</text>
+										<text class="line-info-wrapper-value">{{ minute2str(item.time) }}</text>
+									</div>
+								</div>
+							</div>
+						</div>
+				</esc-swiper-item>
+			</esc-swiper>
+		</view> -->
+	</div>
+</template>
+
+<script>
+import geo3 from '@/comm/test/json/geo3.json';
+
+const dom = weex.requireModule('dom');
+dom.addRule('fontFace', {
+    fontFamily: 'zzIcon',
+    src: "url('https://at.alicdn.com/t/font_3351452_yzcbd2l1loq.ttf?t=1653371059893')"
+});
+
+// const dom = weex.requireModule('dom');
+// dom.addRule('fontFace', {
+// 	fontFamily: 'cuIcon',
+// 	src: "url('https://at.alicdn.com/t/font_533566_yfq2d9wdij.ttf?t=1545239985831')"
+// });
+
+// @font-face {
+//   font-family: 'zzIcon';  /* Project id 3351452 */
+//   src: url('//at.alicdn.com/t/font_3351452_qc3g5av45sk.woff2?t=1652531692569') format('woff2'),
+//        url('//at.alicdn.com/t/font_3351452_qc3g5av45sk.woff?t=1652531692569') format('woff'),
+//        url('//at.alicdn.com/t/font_3351452_qc3g5av45sk.ttf?t=1652531692569') format('truetype');
+// }
+
+//https://s1.ax1x.com/2022/05/16/OW3LRI.png  激活的marker
+// https://s1.ax1x.com/2022/05/16/OWnHgS.png 未激活的marker
+export default {
+    onLoad() {
+        try {
+            const trailData = uni.getStorageSync('trailData');
+            let trailList = trailData.trailData; // 展示的附近的路线信息
+            let startList = [];
+            trailList.forEach(lineInfo => {
+                if (lineInfo.kml && lineInfo.kml.start) {
+                    let lineObj = {
+                        startCoord: lineInfo.kml.start,
+                        _id: lineInfo.kmlId,
+                        lineId: lineInfo._id,
+                        name: lineInfo.name,
+                        pic: lineInfo.cover,
+                        user: lineInfo.user,
+                        distance: lineInfo.kml.len, // 长度
+                        drop: lineInfo.kml.top - lineInfo.kml.bottom, // 海拔落差
+                        up: lineInfo.kml.up,
+                        down: lineInfo.kml.down,
+                        time: lineInfo.kml.time
+                    };
+                    startList.push(lineObj);
+                }
+            });
+            this.swiperList = startList;
+            let markerList = [];
+            this.markers = startList.map((marker, index) => {
+                let obj = {
+                    // 'marker' +
+                    id: index,
+                    longitude: marker.startCoord[0],
+                    latitude: marker.startCoord[1],
+                    title: marker.name,
+                    _id: marker._id,
+                    iconPath: 'https://s1.ax1x.com/2022/05/16/OWnHgS.png',
+                    width: 24,
+                    height: 24
+                };
+                return obj;
+            });
+        } catch (e) {
+            console.error(e);
+        }
+
+        this.refreshLocation();
+
+        // let markerList = [],
+        // 	lineList = [],
+        // 	isGetCenter = false;
+        // geo3.forEach(geo => {
+        // 	if (geo.t1 === 1) {
+        // 		if (!isGetCenter) {
+        // 			if (geo.coord[0]) {
+        // 				this.longitude = geo.coord[0][0];
+        // 				this.latitude = geo.coord[0][1];
+        // 				isGetCenter = true;
+        // 			}
+        // 		}
+
+        // 		// line
+        // 		lineList.push(geo);
+        // 	}
+
+        // 	if (geo.t1 === 2) {
+        // 		if (!isGetCenter) {
+        // 			if (geo.coord[0]) {
+        // 				this.longitude = geo.coord[0];
+        // 				this.latitude = geo.coord[1];
+        // 				isGetCenter = true;
+        // 			}
+        // 		}
+        // 		// marker
+        // 		markerList.push(geo);
+        // 	}
+        // });
+
+        // let startList = [];
+        // lineList.forEach(line => {
+        // 	startList.push({
+        // 		name: line.name,
+        // 		startPoint: line.coord[0],
+        // 		line: line
+        // 	});
+        // });
+
+        // this.swiperList = lineList;
+        // this.markers = startList.map((marker, index) => {
+        // 	let obj = {
+        // 		id: 'marker' + index,
+        // 		longitude: marker.startPoint[0],
+        // 		latitude: marker.startPoint[1],
+        // 		title: marker.name,
+        // 		line: marker.line  // 线路信息，用于点击事件的处理
+        // 	};
+        // 	return obj;
+        // });
+
+        // console.log("初始化的坐标点信息",this.markers)
+
+        // this.markers = markerList.map((marker, index) => {
+        // 	let obj = {
+        // 		id: 'marker' + index,
+        // 		longitude: marker.coord[0],
+        // 		latitude: marker.coord[1],
+        // 		title: marker.name
+        // 	};
+        // 	return obj;
+        // });
+
+        // this.polyline =
+        // console.log('轨迹列表====', lineList);
+
+        // this.polyline = lineList.map((line, index) => {
+        // 	let coord = line.coord.map(res => {
+        // 		return {
+        // 			longitude: res[0],
+        // 			latitude: res[1]
+        // 		};
+        // 	});
+        // 	// console.log('坐标点======', coord);
+
+        // 	let obj = {
+        // 		points: coord,
+        // 		width: 4,
+        // 		color: '#ffaa00'
+        // 	};
+        // 	return obj;
+        // });
+
+        // this.isMapReady = true
+
+        // 		setTimeout(() => {
+        // 			this.isMapReady = false
+        // 		}, 2000);
+
+        // 		setTimeout(() => {
+        // 			// this.isMapReady = false
+        // 			this.polyline.splice(0, 3);
+        // 			console.log('去掉了一条线路', this.polyline);
+        // 			this.isMapReady = true
+        // 			this.$refs.myMap.attr.polyline = this.polyline;
+        // 			console.log('地图组件=======', this.$refs.myMap);
+
+        // 		}, 2001);
+
+        // console.log("坐标点列表",markerList)
+        // this.markers = markerList
+        // this.lin
+    },
+    onReady() {
+        // console.log('plus调用========', plus.runtime.appid);
+
+        // this.mapHeight = mapTrueHeight + 'px';
+        // this.controls[0].position.top = mapTrueHeight - 400
+        // console.log('控件列表', this.controls);
+        let windowHeight = 0,
+            statusHeight = 0;
+        uni.getSystemInfo({
+            success: res => {
+                // console.log("系统信息====",res)
+                windowHeight = res.windowHeight;
+                statusHeight = res.safeArea.top;
+                this.controls = [
+                    {
+                        id: 'location',
+                        position: {
+                            top: windowHeight - 550,
+                            left: 10,
+                            width: 45,
+                            height: 45
+                        },
+                        iconPath: '../../static/position.png',
+                        clickable: true
+                    }
+                ];
+            }
+        });
+        this.mapContext = uni.createMapContext('myMap', this);
+        // setTimeout(()=>{
+
+        // this.controls[0].position.top = 100
+        // this.$set(this.controls[0].position,'top',100)
+        // console.log("修改了控件 的高度",this.controls)
+        // },2000)
+        // this.mapContext.getCenterLocation({
+        // 	success: res => {
+        // 		// console.log('地图center========', res);
+        // 	}
+        // });
+    },
+    computed: {
+        normalList() {
+            let swiperList = this.getSwiperList(this.swiperList, {
+                circular: this.circular,
+                plus: this.plus
+            });
+            // console.log('获取到的滑动列表', swiperList);
+            return swiperList;
+        },
+        getMarker() {
+            return this.markers.slice(0);
+        },
+        mapHeight() {
+            let windowHeight = 0,
+                statusHeight = 0;
+            uni.getSystemInfo({
+                success: res => {
+                    // console.log('获取到的设备信息', res);
+                    windowHeight = res.windowHeight;
+                    statusHeight = res.safeArea.top;
+                }
+            });
+
+            this.statusHeight = statusHeight + 5 + 'px';
+
+            if (this.isLineActive) {
+                this.mapTrueHeight = windowHeight - statusHeight - 45 - 45 - 70;
+            } else {
+                this.mapTrueHeight = windowHeight - statusHeight - 45 - 45;
+            }
+            return this.mapTrueHeight + 'px';
+        }
+    },
+    data() {
+        return {
+            currentActiveMarkerId: '', // 当前激活的markerId
+            plus: 2, // swiper参数，暂未启用
+            circular: false, // swiper参数，暂未启用
+            current: 0, // swiper参数，暂未启用
+            swiperList: [
+                // swiper参数，暂未启用
+                {
+                    title: '主标题0',
+                    subTitle: '副标题0'
+                },
+                {
+                    title: '主标题1',
+                    subTitle: '副标题1'
+                },
+                {
+                    title: '主标题2',
+                    subTitle: '副标题2'
+                }
+            ],
+            isLineActive: true, // 是否有线路激活，改变时，地图的高度变化
+            isMapReady: true, // 地图加载完成
+            mapContext: null, // 地图对象，用来操作地图
+            scale: 16, // 缩放等级
+            includePoints: [], // 视图包含的坐标点列表
+            longitude: 120, // 地图center经度
+            latitude: 30, // 地图center纬度
+            // mapHeight: 0, // 地图高度，计算获取
+            statusHeight: 0, // 状态栏高度
+            mapTrueHeight: 0, // 地图高度
+            controls: [
+                // 控件列表
+                // {
+                // 	id: 'back',
+                // 	position: {
+                // 		top: 80,
+                // 		left: 10,
+                // 		width: 34,
+                // 		height: 34
+                // 	},
+                // 	iconPath: '../../static/back.png',
+                // 	clickable: true
+                // },
+                // {
+                // 	id: 'location',
+                // 	position: {
+                // 		top: 350,
+                // 		left: 10,
+                // 		width: 50,
+                // 		height: 50
+                // 	},
+                // 	iconPath: '../../static/position.png',
+                // 	clickable: true
+                // }
+            ],
+            // swiperList: [], // 地图选择线路
+            currentLineIndex: 0, // 当前的线路在swiperList里的索引
+            markers: [], // 坐标点列表
+            polyline: [] // 线路列表
+        };
+    },
+    methods: {
+		  filter(){
+            uni.showToast({
+                title: '功能暂未启用',
+                icon:'none',
+                duration: 1000
+		  });
+        },
+        gotoRecord() {
+            // console.log('跳转的URL', '/pages/planning/lineTrack?isNeedLine=false');
+            uni.navigateTo({
+                url: '/pages/planning/lineTrack',
+                fail: fail => {
+                    console.log('跳转失败===', fail);
+                }
+            });
+        },
+        getSwiperList(
+            list,
+            options = {
+                circular: true,
+                plus: 2
+            }
+        ) {
+            if (!options.circular) {
+                return list;
+            }
+            const plus = options.plus || 2;
+            const leftPlusList = [...list]
+                .reverse()
+                .slice(0, plus)
+                .reverse();
+            const rightPlusList = [...list].slice(0, plus);
+            return []
+                .concat(leftPlusList)
+                .concat(list)
+                .concat(rightPlusList);
+        },
+        minute2str(str, format) {
+            if (str !== '0' && str !== '' && str !== null) {
+                if (format) {
+                    return Math.floor(str / 60).toString() + '小时' + (str % 60 == 0 ? '' : (str % 60).toString() + '分');
+                }
+                return (
+                    (Math.floor(str / 60).toString().length < 2 ? '0' + Math.floor(str / 60).toString() : Math.floor(str / 60).toString()) +
+					':' +
+					((str % 60).toString().length < 2 ? '0' + (str % 60).toString() : (str % 60).toString())
+                );
+            } else {
+                return '';
+            }
+        },
+        // 打开线路详情
+        openLineDetails(line) {
+            // console.log('点击打开详情的线路', line._id);
+            uni.navigateTo({
+                url: '/pages/planning/detail?id=' + line.lineId
+            });
+        },
+        backToList() {
+            uni.navigateBack({
+                delta: 1,
+                animationType: 'slide-out-bottom'
+            });
+        },
+
+        // 定位到当前的位置
+        refreshLocation() {
+            uni.getLocation({
+                type: 'gcj02',
+                success: location => {
+                    this.mapContext.moveToLocation({
+                        longitude: location.longitude,
+                        latitude: location.latitude,
+                        success: res => {},
+                        fail: error => {
+                            console.error('move  fail=====', error);
+                        }
+                    });
+                },
+                fail: error => {
+                    console.error('获取位置信息失败', error);
+                }
+            });
+        },
+
+        controltap(event) {
+            // this.polyline = [this.polyline[0]];
+            // console.log("地图========",this.mapContext)
+            console.info('控件被点击=====', event);
+            // console.log("线路=====",this.polyline)
+            this.refreshLocation();
+        },
+        // swiper切换change
+        swiperChange(event) {
+            let current = event.detail.current;
+            let source = event.detail.source;
+            // console.log('swiperChange========', event);
+            // this.swiperList[current]._id
+            console.log('激活的线路', this.swiperList[current]._id);
+            console.log('this.markers=========', this.markers);
+
+            if (source === 'touch') {
+                let marker = this.markers.find(marker => {
+                    return marker._id === this.swiperList[current]._id;
+                });
+                this.activeMarker(marker.id, false);
+                this.changeCurrentKml(this.swiperList[current]._id, false, true);
+            }
+            // this.polyline = [];
+            // let coord = this.swiperList[current].coord.map(res => {
+            // 	return {
+            // 		longitude: res[0],
+            // 		latitude: res[1]
+            // 	};
+            // });
+            // this.includePoints = coord;ZZ
+            // setTimeout(() => {
+            // 	this.mapContext.getScale({
+            // 		success: ({ scale }) => {
+            // 			if (scale) {
+            // 				// this.scale = scale - 0.5
+            // 			}
+            // 		}
+            // 	});
+            // }, 300);
+            // let obj = {
+            // 	points: coord,
+            // 	width: 4,
+            // 	color: '#ffaa00'
+            // };
+            // this.polyline.push(obj);
+        },
+        async markertap(event) {
+            // console.log("markerTap========",event)
+            let markerId = event.detail.markerId;
+            this.activeMarker(markerId); // 激活marker
+        },
+        // 激活marker并且 取消其他marker的激活状态
+        activeMarker(markerId, isChange = true) {
+            if (markerId === this.currentActiveMarkerId) {
+                return;
+            }
+            if (this.currentActiveMarkerId) {
+                let oldMarker = this.markers.find(res => {
+                    return res.id === this.currentActiveMarkerId;
+                });
+                let markerIndex = this.markers.findIndex(res => {
+                    return res.id === this.currentActiveMarkerId;
+                });
+                oldMarker.iconPath = 'https://s1.ax1x.com/2022/05/16/OWnHgS.png'; // 替换成未激活的
+                oldMarker.height = 24;
+                oldMarker.width = 24;
+                this.markers.splice(markerIndex, 1); // 删除元素
+                this.markers.splice(markerIndex, 0, oldMarker);
+                // this.markers.push(oldMarker); // 新增元素
+            }
+            this.currentActiveMarkerId = markerId; // 激活新的marker
+            let marker = this.markers.find(res => {
+                return res.id === markerId;
+            });
+
+            let markerIndex = this.markers.findIndex(res => {
+                return res.id === markerId;
+            });
+            marker.iconPath = 'https://s1.ax1x.com/2022/05/16/OW3LRI.png';
+            marker.height = 50;
+            marker.width = 34;
+            this.markers.splice(markerIndex, 1);
+            this.markers.splice(markerIndex, 0, marker);
+            if (marker.id === 'endPoint') {
+                return;
+            }
+            if (isChange) {
+                this.changeCurrentKml(marker._id, true, false);
+            }
+        },
+        /**
+		 * @param {Object} kmlId  要切换的线路id
+		 * @param {Object} isChangeSwiper   是否同时切换swiper
+		 * @param {Object} focus  是否聚焦到指定位置
+		 */
+        changeCurrentKml(kmlId, isChangeSwiper, focus) {
+            this.polyline = [];
+            let newPolyline = [];
+            let coordCount = [];
+            let lineInfo = null;
+            const token = uni.getStorageSync('token');
+            const platform = uni.getSystemInfoSync().platform.toLocaleLowerCase();
+            uni.request({
+                url: 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/app',
+                header: {
+                    'content-type': 'application/json',
+                    authorization: token,
+                    platform: platform
+                },
+                data: {
+                    $url: 'public/kml/info',
+                    _id: kmlId,
+                    plain: true,
+                    trans: 'gcj02'
+                },
+                method: 'POST',
+                success: res => {
+                    if (res.data.code === 1000) {
+                        lineInfo = res.data.data;
+                        lineInfo.children.forEach(geo => {
+                            if (geo.t1 === 1) {
+                                if (isChangeSwiper) {
+                                    this.currentLineIndex = this.swiperList.findIndex((res, index) => {
+                                        return res._id == kmlId;
+                                    });
+                                }
+
+                                let coord = geo.coord.map(res => {
+                                    return {
+                                        longitude: res[0],
+                                        latitude: res[1]
+                                    };
+                                });
+
+                                coordCount = coordCount.concat(coord);
+
+                                let obj = {
+                                    points: coord,
+                                    width: 4,
+                                    color: '#ffaa00'
+                                };
+                                newPolyline.push(obj);
+
+                                let len = coord.length;
+                                if (focus) {
+                                    this.includePoints = coordCount;
+                                    setTimeout(() => {
+                                        this.mapContext.getScale({
+                                            success: ({ scale }) => {
+                                                if (scale) {
+                                                    // this.scale = scale - 0.5
+                                                }
+                                            }
+                                        });
+                                    }, 300);
+                                }
+                                // let endMarker = {
+                                // 	id: 'endPoint',
+                                // 	longitude: coord[len - 1].longitude,
+                                // 	latitude: coord[len - 1].latitude,
+                                // 	title: '终点'
+                                // };
+                                // let newMarkers = [];
+                                // newMarkers = this.markers;
+                                // newMarkers.push(endMarker);
+                                // this.markers = [];
+                                // this.markers = newMarkers;
+                                this.isLineActive = true;
+                            }
+                        });
+
+                        // this.polyline.push(obj);
+                        this.polyline = newPolyline;
+                    }
+                },
+                fail: err => {
+                    console.error('获取kmlInfo error=====', err);
+                }
+            });
+        }
+    }
+};
+</script>
+
+<style lang="scss" scoped>
+.zzIcon {
+	font-family: zzIcon !important;
+	font-size: 32px;
+}
+
+.my-map-container {
+	.status-bar {
+		background-color: $zts-blue;
+	}
+
+	.header-bar {
+		height: 45px;
+		background-color: $zts-blue;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&-title {
+			color: #fff;
+			font-size: 32rpx;
+		}
+	}
+
+	.search-bar {
+		padding-top: 5px;
+		height: 45px;
+		background-color: $bg-blue-light;
+		color: $text-blue-light;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		&-input {
+			border-radius: 100rpx;
+			width: 700rpx;
+			font-size: 28rpx;
+			height: 35px;
+			line-height: 32px;
+			text-align: center;
+			background-color: #fff;
+		}
+	}
+
+	.filter-bar {
+		margin-top: -5px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		padding-top: 10px;
+		height: 70px;
+		background-color: $bg-blue-light;
+
+		.planing-search-btn {
+			border-radius: 15rpx;
+			background-color: $zts-blue;
+			padding-top: 10rpx;
+			padding-bottom: 10rpx;
+			padding-left: 20rpx;
+			padding-right: 20rpx;
+			&-text {
+				font-size: 30rpx;
+				color: #fff;
+			}
+		}
+
+		.road-text {
+			font-size: 32rpx;
+			color: $text-blue-light;
+		}
+	}
+
+	.my-map {
+		width: 750rpx;
+	}
+
+	// .line-swiper .uni-swiper-item {
+	//     width: 610rpx !important;
+	//     left: 70rpx;
+	//     box-sizing: border-box;
+	//     padding: 40rpx 0rpx 70rpx;
+	//     overflow: initial;
+	// }
+
+	// .line-swiper-item-wrapper {
+	// 	width: 650rpx;
+	// 	height: 300rpx;
+	// 	// width: 375px;
+	// 	background-color: #ffffff;
+	// 	padding-top: 10px;
+	// 	padding-left: 10px;
+	// 	padding-right: 10px;
+	// 	display: flex;
+	// 	flex-direction: row;
+	// 	// align-items: center;
+	// 	.left-box {
+	// 		display: flex;
+	// 		flex-direction: column;
+	// 		margin-right: 10px;
+	// 		// align-items: center;
+	// 		&-image {
+	// 			width: 150px;
+	// 			height: 75px;
+	// 			// background-color: aqua;x
+	// 		}
+
+	// 		&-distance {
+	// 			padding-top: 5px;
+	// 			display: flex;
+	// 			flex-direction: column;
+	// 			&-title {
+	// 				color: #828282;
+	// 				font-size: 12px;
+	// 			}
+
+	// 			&-value {
+	// 				color: #252525;
+	// 				font-size: 16px;
+	// 			}
+	// 		}
+	// 	}
+
+	// 	.right-box {
+	// 		.line-title-name-box {
+	// 			height: 75px;
+	// 			display: flex;
+	// 			flex-direction: column;
+	// 			justify-content: space-between;
+	// 			border-bottom: 1px solid #eeeeee;
+	// 			padding-bottom: 5px;
+
+	// 			.line-title {
+	// 				width: 170px;
+	// 				// word-wrap:normal;
+	// 				color: #222222;
+	// 				font-size: 16px;
+	// 				overflow: hidden;
+	// 				// word-break: break-all; /* break-all(允许在单词内换行。) */
+	// 				text-overflow: ellipsis; /* 超出部分省略号 */
+	// 				// display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+	// 				// -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+	// 				// -webkit-line-clamp: 1; /** 显示的行数 **/
+	// 				lines: 1; //NVUE下要用这个属性，来让文字超出隐藏变省略号L
+	// 			}
+
+	// 			.line-name {
+	// 				color: #555555;
+	// 				font-size: 14px;
+	// 			}
+	// 		}
+
+	// 		.line-info {
+	// 			padding-top: 5px;
+	// 			display: flex;
+	// 			flex-direction: row;
+	// 			align-items: center;
+	// 			justify-content: space-between;
+	// 			&-wrapper {
+	// 				width: 120px;
+	// 				display: flex;
+	// 				flex-direction: column;
+	// 				&-title {
+	// 					color: #828282;
+	// 					font-size: 12px;
+	// 				}
+
+	// 				&-value {
+	// 					color: #252525;
+	// 					font-size: 16px;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	.line-swiper {
+		width: 750rpx;
+		padding-right: 50rpx;
+		// width: 750rpx;
+		height: 150px;
+		background-color: #fff;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+
+		&-item {
+			width: 750rpx;
+			&-wrapper {
+				// width: 600rpx;
+				// width: 375px;
+				// background-color: aqua;
+				padding-top: 10px;
+				padding-left: 10px;
+				padding-right: 10px;
+				display: flex;
+				flex-direction: row;
+				// align-items: center;
+				.left-box {
+					display: flex;
+					flex-direction: column;
+					margin-right: 10px;
+					// align-items: center;
+					&-image {
+						width: 150px;
+						height: 75px;
+						// background-color: aqua;x
+					}
+
+					&-distance {
+						padding-top: 5px;
+						display: flex;
+						flex-direction: column;
+						&-title {
+							color: #828282;
+							font-size: 12px;
+						}
+
+						&-value {
+							color: #252525;
+							font-size: 20px;
+						}
+					}
+				}
+
+				.right-box {
+					.line-title-name-box {
+						height: 75px;
+						display: flex;
+						flex-direction: column;
+						justify-content: space-between;
+						border-bottom: 1px solid #eeeeee;
+						padding-bottom: 5px;
+
+						.line-title {
+							width: 220px;
+							// word-wrap:normal;
+							color: #222222;
+							font-size: 20px;
+							overflow: hidden;
+							// word-break: break-all; /* break-all(允许在单词内换行。) */
+							text-overflow: ellipsis; /* 超出部分省略号 */
+							// display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+							// -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+							// -webkit-line-clamp: 1; /** 显示的行数 **/
+							lines: 1; //NVUE下要用这个属性，来让文字超出隐藏变省略号L
+						}
+
+						.line-name {
+							color: #555555;
+							font-size: 14px;
+						}
+					}
+
+					.line-info {
+						padding-top: 5px;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+						&-wrapper {
+							width: 170px;
+							display: flex;
+							flex-direction: column;
+							&-title {
+								color: #828282;
+								font-size: 12px;
+							}
+
+							&-value {
+								color: #252525;
+								font-size: 20px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.line-track-wrapper {
+		width: 750rpx;
+		position: absolute;
+		bottom: 400rpx;
+		left: 0rpx;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+
+		.line-track-btn {
+			background-color: $zts-green;
+			width: 400rpx;
+			height: 80rpx;
+			border-radius: 50rpx;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+
+			&-text {
+				text-align: center;
+				color: #ffffff;
+			}
+		}
+	}
+}
+</style>

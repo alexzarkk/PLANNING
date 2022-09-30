@@ -1,0 +1,215 @@
+<!--
+ * @Author: InsHomePgup
+ * @Date: 2022-05-15 09:35:01
+ * @LastEditors: InsHomePgup
+ * @LastEditTime: 2022-05-30 15:49:44
+ * @FilePath: \sport-planing\src\pages\template\nvuePage.nvue
+ * @Description: 
+ * 
+ * 
+-->
+<template>
+	<view>
+		<!-- 顶部地图 -->
+		<gaode-map v-if="trail.kml.lines" :line="trail.kml.lines" :point="trail.kml.points" :map-height="mapHeight" :center="center" @onLoc="getLocation()" />
+		<scroll-view scroll-y="true" :style="{ height: scrollHeight + 'rpx' }">
+			<view v-if="isMapReady" class="clock-list">
+				<view v-for="(item, index) in trail.kml.points" :key="index" class="clock-item" @click="gotoClock(item)">
+					<image class="complete-image" src="https://s1.ax1x.com/2022/05/27/Xehzbn.png" mode="aspectFit" />
+					<view class="wrapper">
+						<view class="image-wrapper">
+							<image v-if="item._id === 'startPoint'" class="image" src="https://s1.ax1x.com/2022/05/27/XecTAO.png" mode="aspectFit" />
+							<image v-if="item._id === 'endPoint'" class="image" src="https://s1.ax1x.com/2022/05/27/Xecq9H.png" mode="aspectFit" />
+							<view v-if="item._id.length > 12" class="order-wrapper">
+								<text class="text-white">{{ index + 1 }}</text>
+							</view>
+						</view>
+						<view class="info-wrapper">
+							<text class="main-title">{{ item.name }}</text>
+							<text class="sub-title text-gray">耗时 00:{{ index + 2 }}:{{ 14 }}</text>
+						</view>
+					</view>
+					<view><uni-icons type="right" size="16" /></view>
+				</view>
+			</view>
+		</scroll-view>
+		<view class="footer-wrapper" :style="{ paddingBottom: safeArea +'px',height:100 + (safeArea/2) + 'rpx' }">
+			<view class="left-box" :style="{height:100 + (safeArea/2) + 'rpx'}">
+				<uni-icons color="#aaaaaa" type="help-filled" size="24" />
+				<text class="left-box-title">帮助</text>
+			</view>
+			<view class="right-box" :style="{height:100 + (safeArea/2) + 'rpx'}" @click="gotoResult()">
+				<uni-icons color="#ffffff" type="checkmarkempty" size="16" />
+				<text class="right-box-title">查看成绩</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+import gaodeMap from '@/components/gaode-map/zz-gaode-map.nvue';
+export default {
+	components: {
+		gaodeMap
+	},
+	onReady() {},
+	onLoad() {
+		let tounList = uni.getStorageSync('tounamentList');
+		this.trail = tounList[0];
+		this.isMapReady = true;
+		this.loadData();
+		const sysInfo = uni.getStorageSync('sysInfo');
+		// console.log('获取到的设备信息', sysInfo);
+		this.safeArea = sysInfo.safeAreaInsets.bottom + 10;
+		this.scrollHeight = (sysInfo.windowHeight - 350 - 50) * 2;
+	},
+	data() {
+		return {
+			safeArea: 0,
+			scrollHeight: 500,
+			mapHeight: 350,
+			isMapReady: false,
+			trail: null,
+			center: [121, 30]
+		};
+	},
+	methods: {
+		loadData() {},
+		getLocation() {},
+		gotoClock() {
+			uni.navigateTo({
+				url: '/pages/event/selfClockDetails?id=' + this.trail._id
+			});
+		},
+		gotoResult() {
+			uni.navigateTo({
+				url: '/pages/event/clockResult',
+				success: res => {
+					// console.log('跳转成功了==', res);
+				},
+				fail: error => {
+					console.error('跳转失败===', error);
+				}
+			});
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+.footer-wrapper {
+	position: fixed;
+	bottom: -2px;
+	left: 0;
+	width: 750rpx;
+	height: 100rpx;
+	background-color: $zts-blue;
+	flex-direction: row;
+	// padding-bottom: 30rpx;
+	.left-box {
+		width: 140rpx;
+		height: 100rpx;
+		background-color: #ffffff;
+		align-items: center;
+		padding-top: 5rpx;
+		&-title {
+			color: $color-gray;
+			font-size: 24rpx;
+		}
+	}
+
+	.right-box {
+		width: 610rpx;
+		height: 100rpx;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		&-title {
+			margin-left: 20rpx;
+			color: #ffffff;
+			font-size: 28rpx;
+		}
+	}
+}
+
+.clock-list {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 40rpx;
+	// margin-bottom: 120rpx;
+	.clock-item {
+		width: 690rpx;
+		height: 120rpx;
+		border-radius: 20rpx;
+		background-color: #ffffff;
+		margin-bottom: 30rpx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 20rpx;
+		position: relative;
+
+		.complete-image {
+			position: absolute;
+			left: 520rpx;
+			top: 10rpx;
+			// top: -20rpx;
+			// right: -400rpx;
+			// bottom: -10rpx;
+			width: 100rpx;
+			height: 100rpx;
+		}
+
+		.wrapper {
+			display: flex;
+			flex-direction: row;
+			.image-wrapper {
+				width: 100rpx;
+				height: 100rpx;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				border: 1px solid #e2e2e2;
+				border-radius: 20rpx;
+				margin-right: 20rpx;
+				.image {
+					width: 80rpx;
+					height: 60rpx;
+				}
+
+				.order-wrapper {
+					width: 60rpx;
+					height: 60rpx;
+					background-color: #cf1900;
+					border-radius: 50%;
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+					.text-white {
+						font-size: 36rpx;
+						color: #ffffff;
+					}
+				}
+			}
+			.info-wrapper {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				padding: 10rpx 0;
+				.main-title {
+					font-size: 36rpx;
+					font-weight: bold;
+				}
+				.sub-title {
+					font-size: 24rpx;
+					color: $color-gray;
+				}
+			}
+		}
+	}
+}
+</style>
