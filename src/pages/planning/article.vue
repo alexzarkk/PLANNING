@@ -37,7 +37,7 @@
             <view v-if="article.video && article.video.url" id="tvideo">
                 <view class="cu-card case no-card">
                     <view class="padding-top-xs shadow">
-                        <view class="bg-video flex align-center" style="height: 340rpx">
+                        <view class="bg-video flex align-center" style="height: 400rpx">
                             <video
                                 id="myVideo" loop :src="article.video.url" :autoplay="true" :muted="false"
                                 :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover"

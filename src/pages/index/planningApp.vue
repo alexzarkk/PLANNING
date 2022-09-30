@@ -75,7 +75,7 @@ export default {
 			// #endif
 		},
 		mapView(){
-			
+			this.zz.href('/pages/planning/z')
 		},
         openSearch() {
             this.cur = index

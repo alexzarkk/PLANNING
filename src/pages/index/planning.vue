@@ -97,12 +97,8 @@
 <script>
 import tabsData from '@/comm/test/json/line.json';
 
-import backToLineTrack from '@/components/backToLineTrack.vue';
 
 export default {
-    components: {
-        backToLineTrack
-    },
 
     data() {
         return {
