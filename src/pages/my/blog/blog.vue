@@ -1,8 +1,8 @@
 <template>
     <view>
-        <cu-custom bgColor="bg-ztsblue" :isBack="true" :home="true">
+        <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="backText"></block>
-            <block slot="content">帖子评论</block>
+            <block slot="content">评论</block>
         </cu-custom>
         <!-- <view class="padding bg-white  segmented-view" :style="{top:CustomBar+'px'}">
             <tui-segmented-control :values="titleList" activeColor="#8fc42f" @click="modeChange"></tui-segmented-control>
@@ -10,7 +10,7 @@
         <!-- <view style="height:140rpx;width:750rpx;"></view> -->
         <view>
             <view v-if="curTab === 1">
-                <view v-for="(item,index) in tabList[1].list" :key="index" class="padding bg-white flex justify-between margin-bottom-sm" style="position: relative">
+                <view v-for="(item,index) in tabList[1].list" :key="index" class="padding bg-white flex justify-between margin-bottom-sm solid-bottom" style="position: relative">
                     <view class="flex">
                         <view class="margin-right">
                             <view class="cu-avatar round lg" :style="'background-image:url(' + userInfo.headImg + ')'"></view>

@@ -9,46 +9,46 @@
  * 
 -->
 <template>
-    <view>
-        <!-- <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">个人主页</block></cu-custom> -->
-        <view class="container">
-            <!-- 顶部 -->
-            <view class="header-box">
-                <view class="background-image">
-                    <!-- 导航栏 -->
-                    <view class="nav-bar" :style="{ paddingTop: statusBar * 2 + 'rpx', height: statusBar * 2 + 100 + 'rpx' }" :class="isNavActive ? 'bg-ztsblue' : ''">
-                        <view class="flex align-center" @click="backPage">
-                            <text class="cuIcon-back"></text>
-                            <view v-if="userInfo&&isNavActive" class="margin-left">{{ userInfo.nickName }}</view>
-                        </view>
-                        <view v-if="isMy" @click="editProfile">编辑</view>
-                        <!-- <view v-else @click="showMore">
+    <!-- <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">个人主页</block></cu-custom> -->
+    <view class="container">
+        <!-- 顶部 -->
+        <view class="header-box">
+            <view class="background-image">
+                <!-- 导航栏 -->
+                <view class="nav-bar" :style="{ paddingTop: statusBar * 2 + 'rpx', height: statusBar * 2 + 100 + 'rpx' }" :class="isNavActive ? 'bg-ztsblue' : ''">
+                    <view class="flex align-center" @click="backPage">
+                        <text class="cuIcon-back"></text>
+                        <view v-if="userInfo&&isNavActive" class="margin-left">{{ userInfo.nickName }}</view>
+                    </view>
+                    <view v-if="isMy" @click="editProfile">编辑</view>
+                    <!-- <view v-else @click="showMore">
                             更多
                         </view> -->
 
-                        <zz-z-popups
-                            v-model="isPopShow" :pop-data="morePopList" :x="348" :y="35" placement="top-end"
-                            @tapPopup="tapPopup"
-                        ></zz-z-popups>
-                    </view>
-                    <!-- 左下角昵称 -->
-                    <view v-if="userInfo" class="name-box">{{ userInfo.nickName }}</view>
-                    <!-- 右下角头像 -->
-                    <view class="avatar-box">
-                        <view v-if="userInfo" class="cu-avatar round lg margin-left" :style="[{ backgroundImage: 'url(' + userInfo.headImg + ')' }]">
-                            <!-- :class="index % 2 == 0 ? 'cuIcon-female bg-pink' : 'cuIcon-male bg-blue'" -->
-                            <view class="cu-tag badge cuIcon-male bg-blue"></view>
-                        </view>
+                    <zz-z-popups
+                        v-model="isPopShow" :pop-data="morePopList" :x="348" :y="35" placement="top-end"
+                        @tapPopup="tapPopup"
+                    ></zz-z-popups>
+                </view>
+                <!-- 左下角昵称 -->
+                <view v-if="userInfo" class="name-box">{{ userInfo.nickName }}</view>
+                <!-- 右下角头像 -->
+                <view class="avatar-box">
+                    <view v-if="userInfo" class="cu-avatar round lg margin-left" :style="[{ backgroundImage: 'url(' + userInfo.headImg + ')' }]">
+                        <!-- :class="index % 2 == 0 ? 'cuIcon-female bg-pink' : 'cuIcon-male bg-blue'" -->
+                        <view class="cu-tag badge cuIcon-male bg-blue"></view>
                     </view>
                 </view>
-                <!-- 关注/粉丝   +  个性签名 -->
-                <view class="info-box padding-bottom">
-                    <view class="follow-fans-box flex margin-tb">
-                        <view class="follow flex" @click="openPage('/pages/my/social/follow')">
+            </view>
+            <!-- 关注/粉丝   +  个性签名 -->
+            <view class="info-box padding-tb flex justify-between align-center">
+                <view class="flex flex-direction align-center">
+                    <view class="flex align-center margin-tb">
+                        <view class="flex align-center" @click="openPage('/pages/my/social/follow')">
                             <view class="text-df margin-lr">关注</view>
                             <view class="text-xl text-bold">{{ person.follow||0 }}</view>
                         </view>
-                        <view class="fans flex" @click="openPage('/pages/my/social/fans')">
+                        <view class="flex align-center" @click="openPage('/pages/my/social/fans')">
                             <view class="text-df margin-lr">粉丝</view>
                             <view class="text-xl text-bold">{{ fans }}</view>
                         </view>
@@ -60,25 +60,37 @@
                         </view>
                     </view>
                 </view>
-            </view>
-            <!-- 发布数据统计 -->
-            <view class="flex align-center justify-between padding bg-white margin-top-sm">
-                <view v-for="(item, index) in countList" :key="index" class="flex flex-direction align-center">
-                    <view class="text-black text-df margin-bottom-xs">{{ item.title }}</view>
-                    <view class="text-green text-xl text-bold">{{ item.value }}</view>
+                <!-- v-if="!isMy" -->
+                <view v-if="!isMy" class="flex justify-center padding-lr padding-right">
+                    <button v-if="followObj.isFollow" style="width:350rpx;height:50rpx;" class="cu-btn radius response bg-gray bottom-btn" @click="followUser()">
+                        <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>取消关注
+                    </button>
+                    <button v-else style="width:350rpx; height:50rpx;" class="cu-btn radius response bg-green bottom-btn" @click="followUser()">
+                        <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>
+                        <text class="cuIcon-add"></text>
+                        关注
+                    </button>
                 </view>
             </view>
-            <!-- 动态 -->
-
-            <view class="margin-top">
-                <!-- <view class="title-bar text-xxl padding-left bg-white padding-tb">动态（3）</view> -->
-                <view class="title-bar text-xxl padding-left bg-white padding-tb">动态</view>
+        </view>
+        <!-- 发布数据统计 -->
+        <view class="flex align-center justify-between padding bg-white margin-top-sm">
+            <view v-for="(item, index) in countList" :key="index" class="flex flex-direction align-center">
+                <view class="text-black text-df margin-bottom-xs">{{ item.title }}</view>
+                <view class="text-green text-xl text-bold">{{ item.value }}</view>
             </view>
-            <view v-if="userInfo">
-                <push :user-id="userInfo._id"></push>
-            </view>
+        </view>
+        <!-- 动态 -->
 
-            <!-- <view class="bg-white solid-bottom" @click="openPage('/pages/my/social/pushDetails')">
+        <view class="margin-top">
+            <!-- <view class="title-bar text-xxl padding-left bg-white padding-tb">动态（3）</view> -->
+            <view class="title-bar text-xxl padding-left bg-white padding-tb">动态</view>
+        </view>
+        <view v-if="userInfo">
+            <push :user-id="userInfo._id"></push>
+        </view>
+
+        <!-- <view class="bg-white solid-bottom" @click="openPage('/pages/my/social/pushDetails')">
                 <view class="flex align-end padding-left">
                     <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">28</text>
                     <text>2月</text>
@@ -120,19 +132,9 @@
                     </view>
                 </view>
             </view> -->
-            <view v-if="!isMy" class="bottom-bar response flex justify-center padding-lr">
-                <!-- justify-around -->
-                <button v-if="followObj.isFollow" class="cu-btn round response bg-green bottom-btn" @click="followUser()">
-                    <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>取消关注
-                </button>
-                <button v-else class="cu-btn round response bg-green bottom-btn" @click="followUser()">
-                    <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>关注
-                </button>
-                <!-- <button class="cu-btn round bg-white bottom-btn send text-gray">发消息</button> -->
-            </view>
-            <!-- <tui-nomore text="没有更多了"></tui-nomore> -->
-            <view style="height: 100rpx; width: 750rpx"></view>
-        </view>
+
+        <!-- <tui-nomore text="没有更多了"></tui-nomore> -->
+        <view style="height: 100rpx; width: 750rpx"></view>
     </view>
 </template>
 
@@ -351,6 +353,7 @@ body {
 }
 
 .container {
+    max-width: 750rpx;
     .header-box {
         background-color: #ffffff;
         .background-image {
@@ -394,6 +397,7 @@ body {
 .line-info-box {
     display: flex;
     flex-direction: row;
+    // justify-content: flex-end;
     margin-top: 20rpx;
     // 轨迹信息
     border: 1px solid #e2e2e2;
@@ -410,9 +414,10 @@ body {
     z-index: 10;
     bottom: 0;
     width: 750rpx;
-    height: 100rpx;
+    height: calc(100rpx + env(safe-area-inset-bottom));
     background-color: #ffffff;
     align-items: center;
+    padding-bottom: env(safe-area-inset-bottom);
     .bottom-btn {
         // width: 300rpx;
         font-size: 36rpx;

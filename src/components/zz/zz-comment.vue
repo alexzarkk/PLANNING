@@ -49,7 +49,7 @@
                     <!-- 主评论 -->
                     <view class="flex justify-between response">
                         <view class="text-grey text-bold" @click="openProfile(item)">{{ item.userInfo.nickName }}</view>
-                        <view @click="moreAction(item)">
+                        <view v-if="item.isMy" @click="moreAction(item)">
                             <text class="cuIcon-moreandroid"></text>
                         </view>
                     </view>
@@ -163,6 +163,7 @@ export default {
     },
     data() {
         return {
+            isMy:false,
             bd: this.bd,
             isLoginShow: false, // 登录modal提示
             isLogin: false,
@@ -260,7 +261,16 @@ export default {
                 tid: this.tid
             };
             this.zz.req(requestParams).then((res) => {
-                this.commentList = res;
+                this.commentList = res.map(comment=>{
+                    if (comment.userId === this.userInfo._id){
+                        comment.isMy = true
+                    }else{
+                        comment.isMy = false
+                    }
+                    return comment
+                });
+
+                
                 this.total = this.commentList.length
             }).catch((err) => {
                 console.error("评论 fail=======", err)
@@ -315,7 +325,8 @@ export default {
                         tid: this.tid,
                         userId: this.userInfo._id,  // 前端参数使用
                         userInfo: this.userInfo,
-                        createTime: now
+                        createTime: now,
+                        isMy:true
                     };
                     this.commentList.unshift(comment);  // 前端插入列表
                 }

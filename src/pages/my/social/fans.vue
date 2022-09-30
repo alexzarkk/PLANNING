@@ -84,24 +84,28 @@ export default {
         },
         openProfile(user) {
             // console.log('user=========', user);
-            this.zz.href(`/pages/my/profile/profile?id=${user._id}`)
+            this.zz.profile(user._id)
+            // this.zz.href(`/pages/my/profile/profile?id=${user._id}`)
         },
         handleSearch(event) {
             console.log("处理搜索", event)
         },
-        async followUser() {
-            // const ueRes = await this.zz.userEvent(60, 60, this.details, 'userId');  // 这里修改isFollow
-            // try {
-            //     if (this.details.isFollow) {
-            //         this.zz.toast('关注成功~', 1000);
-            //     } else {
-
-            //         this.zz.toast('已取消关注', 1000);
-            //     }
-            // } catch (error) {
-            //     console.error('取消关注失败==', error);
-            // }
+        followUser(item, index) {  // 关注或者取消关注
+            this.userList[index].isLink = !this.userList[index].isLink
         },
+        // async followUser() {
+        // const ueRes = await this.zz.userEvent(60, 60, this.details, 'userId');  // 这里修改isFollow
+        // try {
+        //     if (this.details.isFollow) {
+        //         this.zz.toast('关注成功~', 1000);
+        //     } else {
+
+        //         this.zz.toast('已取消关注', 1000);
+        //     }
+        // } catch (error) {
+        //     console.error('取消关注失败==', error);
+        // }
+        // },
     },
     onPullDownRefresh() {
         this.loadData('init', true)
@@ -122,11 +126,11 @@ body {
 </style>
 <style lang="scss" scoped>
 .container {
-    // padding-top: 12rpx;
+    padding-top: 24rpx;
     // padding-bottom: 24rpx;
     background-color: #ffffff;
     .follow-box {
-        padding: 0 24rpx 24rpx 24rpx;
+        padding: 0rpx 24rpx 24rpx 24rpx;
         .follow-section {
             border-bottom: 1px solid #e2e2e2;
             display: flex;

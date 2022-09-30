@@ -26,22 +26,14 @@
                             <view v-if="item.desc" class="desc">{{ item.desc }}</view>
                         </view>
                     </view>
-                    <view class="right-box" @click.stop="followUser">
+                    <view class="right-box" @click.stop="followUser(item,index)">
                         <view v-if="!item.isLink" class="foolow-btn">关注</view>
                         <view v-else class="foolow-btn">正在关注</view>
                     </view>
                 </view>
             </view>
-
-            <!-- <view style="height: 100rpx; width: 750rpx"></view> -->
         </view>
         <zz-page-status :loading="loading" :length="userList.length" :is-center="true" :total="total" @open="goHome"></zz-page-status>
-        <!-- <tui-no-data v-if="isEmpty" imgUrl="https://s1.ax1x.com/2022/07/19/jT9EWt.png" btnText="去广场" @click="openPage">
-                <text class="tui-color__black">暂时还没有关注的人，去广场逛逛吧~</text>
-            </tui-no-data>
-            <tui-loadmore v-if="loadStatus === 'loading'" :index="2"></tui-loadmore>
-            <tui-divider v-if="loadStatus === 'loadmore'"><view class="tui-nomore-text">上滑或点击加载</view></tui-divider>
-            <tui-nomore v-if="loadStatus === 'nomore'" text="没有更多了"></tui-nomore> -->
     </view>
 </template>
 
@@ -94,7 +86,7 @@ export default {
                 size: this.pageSize
             }
             this.zz.req(req1).then(({ pagination, list }) => {
-				console.log(list);
+                console.log(list);
                 this.total = pagination.total; // 赋值total
                 this.pageNum++;
                 this.userList = this.userList.concat(list)
@@ -107,8 +99,9 @@ export default {
         },
         // 打开个人主页
         openProfile(user) {
+            this.zz.profile(user._id)
             // console.log('user=========', user);
-            this.zz.href(`/pages/my/profile/profile?id=${user._id}`)
+            // this.zz.href(`/pages/my/profile/sysProfile?id=${user._id}`)
         },
         handleSearch() {
 
@@ -118,8 +111,8 @@ export default {
                 url: '/pages/index/index'
             });
         },
-        followUser(){  // 关注或者取消关注
-
+        followUser(item, index) {  // 关注或者取消关注
+            this.userList[index].isLink = !this.userList[index].isLink
         }
     },
     onPullDownRefresh() {
@@ -142,7 +135,7 @@ body {
 </style>
 <style lang="scss" scoped>
 .container {
-    // padding-top: 12rpx;
+    padding-top: 24rpx;
     // padding-bottom: 24rpx;
     background-color: #ffffff;
     // min-height: calc(100vh - 200rpx);
