@@ -51,7 +51,10 @@ export default {
     methods: {
         doSearch: function (e) {
             let key = e ? e : this.searchKey
-            if (key == '') return
+            if (key == ''){
+                this.list = this.td
+                return;
+            }
             try { this.$refs.top.goTop() } catch (e) { }
             this.list = []
             let td = []

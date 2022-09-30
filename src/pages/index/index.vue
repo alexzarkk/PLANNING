@@ -14,9 +14,10 @@
 				<text class="margin-left-xxs cuIcon-triangledownfill"></text>
 				<!-- </button> -->
 			</view>
-			<view class="search-form round" @click="href('/pages/comm/search')">
+			<view class="search-form round" @click="href('/pages/planning/list?key=1')">
+			<!-- <view class="search-form round" @click="href('/pages/comm/search')"> -->
 				<text class="cuIcon-search" />
-				<input type="text" placeholder="搜索地名/路线 …" :disabled="true" confirm-type="search"/>
+				<input type="text" placeholder="搜索地名/路线 …" :focus="focus" :disabled="true" confirm-type="search"/>
 			</view>
 			<view class="action text-white text-df" @click="href('/pages/my/social/writeTopic',0,1)">
 				<text class="cuIcon-add"></text>
@@ -158,7 +159,7 @@
 		</template>
 		
 		<tui-divider :gradual="true" :gradualColor="['red', '#4a67d6']">环浙动态</tui-divider>
-		<news-home v-if="dict" :stickyHeight="getStickyHeight" :scrollTop="scrollTop" :showMore="true"></news-home>
+		<news-home v-if="dict" ref="newsHome" :stickyHeight="getStickyHeight" :scrollTop="scrollTop" :showMore="true"></news-home>
 		<tui-scroll-top :scrollTop="scrollTop"></tui-scroll-top>
 			
 		<!-- </template>
@@ -214,6 +215,7 @@ export default {
     },
     data() {
         return {
+			focus:true,
 			dict: uni.getStorageSync('sys_dict'),
             deptId: '330000',
             scrolled: 0,
@@ -312,6 +314,7 @@ export default {
 	},
     onShow() {
         this.loadData()
+		this.$refs.newsHome.resetHeight()
     },
     methods: {
 		

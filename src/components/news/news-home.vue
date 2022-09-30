@@ -21,10 +21,7 @@
         <scroll-view id="tabNav" scroll-x class="bg-white nav news-sticky-box" :style="showMore?{ top: stickyHeight,height:'100rpx' }:{position:'fixed'}">
             <view v-if="articleTabs && articleTabs.length > 0" class="flex text-center">
                 <!--  -->
-                <view
-                    v-for="(item, index) in articleTabs" :key="index" class="cu-item flex-sub" :class="index == currentTab ? 'text-orange cur text-bold' : ''" :data-id="index"
-                    @tap="tabSelect"
-                >
+                <view v-for="(item, index) in articleTabs" :key="index" class="cu-item flex-sub" :class="index == currentTab ? 'text-orange cur text-bold' : ''" :data-id="index" @tap="tabSelect">
                     {{ item.label }}
                 </view>
             </view>
@@ -169,31 +166,31 @@ export default {
         },
         stickyHeight: {
             type: String,
-            default:'0'
+            default: '0'
         },
         scrollTop: {
             type: Number,
-            default:0
+            default: 0
         }
     },
-	data() { 
-	    return {
-			dict: uni.getStorageSync('sys_dict'),
-	        stickyHeightNumber: 0,
-	        scrollTimer: null,
-	        swiperTouch: false,
-	        customBar: this.CustomBar,
-	        statusBar: this.StatusBar,
-	        loading: false,  // 加载状态
-	        // dict_tag: [],  // 文章标签
-	        currentTab: 0,  // 激活的tab
-	        swiperCurrent: 0, // 激活的swiper
-	        articleTabs: [],  // tabs 列表
-	        momentList: [],
-	        topHeight: 0,  // 吸顶tab栏 与顶部的距离
-	        isCanScroll: false
-	    };
-	},
+    data() {
+        return {
+            dict: uni.getStorageSync('sys_dict'),
+            stickyHeightNumber: 0,
+            scrollTimer: null,
+            swiperTouch: false,
+            customBar: this.CustomBar,
+            statusBar: this.StatusBar,
+            loading: false,  // 加载状态
+            // dict_tag: [],  // 文章标签
+            currentTab: 0,  // 激活的tab
+            swiperCurrent: 0, // 激活的swiper
+            articleTabs: [],  // tabs 列表
+            momentList: [],
+            topHeight: 0,  // 吸顶tab栏 与顶部的距离
+            isCanScroll: false
+        };
+    },
     computed: {
         // 列表scroll-view的高度
         listHeight() {
@@ -228,37 +225,41 @@ export default {
         }
     },
     async mounted() {
-		this.articleTabs = this.zz.toArr(this.dict.article).filter(e=>e.tab).map(item => {
-		    return Object.assign(item, {
-		        size: 5,
-		        page: 1,
-		        list: [],
-		        total: -1,
-		    })
-		})
+        this.articleTabs = this.zz.toArr(this.dict.article).filter(e => e.tab).map(item => {
+            return Object.assign(item, {
+                size: 5,
+                page: 1,
+                list: [],
+                total: -1,
+            })
+        })
         this.loadData('init');
-		
-        if (this.showMore) {
-            const len = this.stickyHeight.length
-            this.stickyHeightNumber = Number(this.stickyHeight.slice(0, len - 2))
-            const sysInfo = uni.getStorageSync('sysInfo')
-            uni.createSelectorQuery()
-                .select('#tabNav')
-                .boundingClientRect((data) => {
-                    this.topHeight = data.top - this.stickyHeightNumber - sysInfo.statusBarHeight
-                })
-                .exec();
-        }
+
+        this.resetHeight()
+
 
         // const timestamp = this.zz.date2Time("2022-08-15 14:57:15")
         // const time = this.zz.timeFrom(timestamp)  // 个性化显示时间
     },
     methods: {
+        resetHeight() {
+            if (this.showMore) {
+                const len = this.stickyHeight.length
+                this.stickyHeightNumber = Number(this.stickyHeight.slice(0, len - 2))
+                const sysInfo = uni.getStorageSync('sysInfo')
+                uni.createSelectorQuery()
+                    .select('#tabNav')
+                    .boundingClientRect((data) => {
+                        this.topHeight = data.top - this.stickyHeightNumber - sysInfo.statusBarHeight
+                    })
+                    .exec();
+            }
+        },
         async loadData(type) {
             // if (!this.articleTabs.length) {
-				// this.dict = uni.getStorageSync('sys_dict')
-				
-				// return setTimeout(()=> { this.loadData(type) }, 120)
+            // this.dict = uni.getStorageSync('sys_dict')
+
+            // return setTimeout(()=> { this.loadData(type) }, 120)
             // }
             if (type === 'init') {
                 this.articleTabs[this.currentTab].list = []
@@ -281,8 +282,8 @@ export default {
                 // console.log(pagination)
                 cur.total = pagination.total
                 list = list.map((item) => {
-					item.isAdmin = this.dict.sysUser[item.userId||item.uid]
-					
+                    item.isAdmin = this.dict.sysUser[item.userId || item.uid]
+
                     if (item.type && item.type.length > 0) {
                         item.tagList = []
                         item.tagList = item.type.map(tag => {

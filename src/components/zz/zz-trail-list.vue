@@ -5,7 +5,7 @@
 			<view class="cu-item shadow">
 				<view class="cu-list menu-avatar ">
 					<view class="cu-item">
-						<view class="cu-avatar round lg" :style="'background-image:url(' + t1.avatar + ');'"></view>
+						<view class="cu-avatar round lg" :style="'background-image:url(' +t1.userInfo.headImg + ');'"></view>
 						<view class="content flex-sub">
 							<view class="title" :id="t1._id" @tap="trailDetail">
 								<view class="text-cut text-lg">{{ t1.name }}</view>
@@ -96,7 +96,7 @@ export default {
 	},
 	mounted(){
 		// console.log("dict==========",this.dict)
-		// console.log("dataList---item",this.dataList[0])
+		console.log("dataList---item",this.dataList[0])
 		// console.log("show==========",this.show)
 	},
 	methods: {
