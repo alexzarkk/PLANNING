@@ -1,6 +1,6 @@
 <template>
     <view>
-        <cu-custom bgColor="bg-ztsblue" :isBack="true">
+        <cu-custom bgColor="bg-ztsblue" :isBack="true" :home="true">
             <block slot="backText"></block>
             <block slot="content">帖子评论</block>
         </cu-custom>

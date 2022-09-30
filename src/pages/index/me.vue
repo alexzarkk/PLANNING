@@ -75,7 +75,7 @@
             </view> -->
             <view class="flex flex-sub flex-direction solid-right" @tap="href('/pages/my/favor/favor')">
                 <view class="text-xxl text-orange">
-                    <view class="cuIcon-favorfill"></view>
+                    <view class="cuIcon-favor"></view>
                 </view>
                 <view class="margin-top-sm">
                     收藏|喜欢
