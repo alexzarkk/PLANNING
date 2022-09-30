@@ -308,116 +308,101 @@ export default {
         }, 1000)
     },
 	onReady(){
-		uni.createSelectorQuery().select('#searchBar').boundingClientRect((e) => {
-			this.searchBarHeight = e.height
-		}).exec()
-			
-		uni.createSelectorQuery().select('#tvideo').boundingClientRect((e) => {
-			this.videoBottom = e.bottom - this.customBar
-			this.videoTop = e.top - this.customBar
-		}).exec()
-			
-		this.videoContext = uni.createVideoContext('myVideo')
-		
-		// uni.createSelectorQuery().select('#stickBar').boundingClientRect((e) => {
-		// 	this.stickBarHeight = this.height
-		// 	this.stickBarPosition = this.top - this.stickBarHeight - this.searchBarHeight - this.statusBar
-		// }).exec()
-			
-		this.mainHeight = this.WinHeight - this.customBar - this.statusBar - this.stickBarHeight - 80
+		this.cal()
 	},
     onShow() {
         this.loadData()
     },
     methods: {
+		
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
 				dict = uni.getStorageSync('sys_dict')
 			
             if (!region || !dict) return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
 			this.dict = dict
-			if(deptId == '330213') {
-				this.cuIconList = [
-				    {
-				        cuIcon: 'footprint',
-				        color: 'mauve',
-				        id: '5eb7998ce260f0004ce01c83',
-				        name: '建设历史'
-				    },
-				    {
-				        cuIcon: 'creativefill',
-				        color: 'purple',
-				        id: '5eb7a2cd33bd17004e01bb49',
-				        name: '设计概述'
-				    },
-				    {
-				        cuIcon: 'all',
-				        color: 'mauve',
-				        id: '5eb7ad06bae6ba004d1c754f',
-				        name: '路况构成'
-				    },
-				    {
-				        cuIcon: 'discoverfill',
-				        color: 'mauve',
-				        id: '5eb7b6d543f165004c6d2d4f',
-				        name: '风格特色'
-				    },
-				    {
-				        cuIcon: 'circlefill',
-				        color: 'purple',
-				        id: '5eb7b88343f165004c6d2d52',
-				        name: '节点元素'
-				    },
-				    {
-				        cuIcon: 'formfill',
-				        color: 'mauve',
-				        id: '5eb7bf2cbb3e5e004c4cb663',
-				        name: '步道标识'
-				    }
-				]
-			}else{
-				this.cuIconList = [
+			if(this.deptId != deptId) {
+				this.deptId = deptId
+				if(deptId == '330213') {
+					this.cuIconList = [
 					    {
 					        cuIcon: 'footprint',
 					        color: 'mauve',
-					        id: '62fd977f0575480001b9a9d6',
-					        name: '建设目标'
+					        id: '5eb7998ce260f0004ce01c83',
+					        name: '建设历史'
 					    },
 					    {
 					        cuIcon: 'creativefill',
 					        color: 'purple',
-					        id: '62fdf07de3e39a00019cef86',
-					        name: '设计理念'
+					        id: '5eb7a2cd33bd17004e01bb49',
+					        name: '设计概述'
 					    },
 					    {
 					        cuIcon: 'all',
 					        color: 'mauve',
-					        id: '62feddf743000a0001ab0625',
-					        name: '步道系统'
+					        id: '5eb7ad06bae6ba004d1c754f',
+					        name: '路况构成'
 					    },
 					    {
 					        cuIcon: 'discoverfill',
 					        color: 'mauve',
-					        id: '62ff3b43a68f4a00019b154a',
-					        name: '选线定线'
+					        id: '5eb7b6d543f165004c6d2d4f',
+					        name: '风格特色'
 					    },
 					    {
 					        cuIcon: 'circlefill',
 					        color: 'purple',
-					        id: '62ff4a35f866a70001bf8bb4',
-					        name: '生态工法'
+					        id: '5eb7b88343f165004c6d2d52',
+					        name: '节点元素'
 					    },
 					    {
 					        cuIcon: 'formfill',
 					        color: 'mauve',
-					        id: '630471a7612f70000143f586',
+					        id: '5eb7bf2cbb3e5e004c4cb663',
 					        name: '步道标识'
 					    }
 					]
-			}
-			
-			if(this.deptId != deptId) {
-				this.deptId = deptId
+				}else{
+					this.cuIconList = [
+						    {
+						        cuIcon: 'footprint',
+						        color: 'mauve',
+						        id: '62fd977f0575480001b9a9d6',
+						        name: '建设目标'
+						    },
+						    {
+						        cuIcon: 'creativefill',
+						        color: 'purple',
+						        id: '62fdf07de3e39a00019cef86',
+						        name: '设计理念'
+						    },
+						    {
+						        cuIcon: 'all',
+						        color: 'mauve',
+						        id: '62feddf743000a0001ab0625',
+						        name: '步道系统'
+						    },
+						    {
+						        cuIcon: 'discoverfill',
+						        color: 'mauve',
+						        id: '62ff3b43a68f4a00019b154a',
+						        name: '选线定线'
+						    },
+						    {
+						        cuIcon: 'circlefill',
+						        color: 'purple',
+						        id: '62ff4a35f866a70001bf8bb4',
+						        name: '生态工法'
+						    },
+						    {
+						        cuIcon: 'formfill',
+						        color: 'mauve',
+						        id: '630471a7612f70000143f586',
+						        name: '步道标识'
+						    }
+						]
+				}
+				
 				let hots = [
 						{ _id: '627911aac2b3040001747310', name: '环浙样板线' },
 						{ _id: '609805434c73e7000189c405', name: '奉城屋基' },
@@ -461,10 +446,30 @@ export default {
 
 				    this.trailData = { trailData: list, regionData, hotList, tStyle }
 				    uni.setStorageSync('trailData', this.trailData)
+					
+					setTimeout(() => { this.cal() }, 100)
 				})
 			}
         },
-		
+		cal(){
+			uni.createSelectorQuery().select('#searchBar').boundingClientRect((e) => {
+				this.searchBarHeight = e.height
+			}).exec()
+				
+			uni.createSelectorQuery().select('#tvideo').boundingClientRect((e) => {
+				this.videoBottom = e.bottom - this.customBar
+				this.videoTop = e.top - this.customBar
+			}).exec()
+				
+			this.videoContext = uni.createVideoContext('myVideo')
+			
+			// uni.createSelectorQuery().select('#stickBar').boundingClientRect((e) => {
+			// 	this.stickBarHeight = this.height
+			// 	this.stickBarPosition = this.top - this.stickBarHeight - this.searchBarHeight - this.statusBar
+			// }).exec()
+				
+			this.mainHeight = this.WinHeight - this.customBar - this.statusBar - this.stickBarHeight - 80
+		},
         scrollToTop() {
             console.log('top====================')
             uni.pageScrollTo({

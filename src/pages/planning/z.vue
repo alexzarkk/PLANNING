@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<web-view :webview-styles="webviewStyles" src="https://fhty.976m.org/z.html?t=f&o=000"></web-view>
+		<web-view :webview-styles="webviewStyles" src="https://z.szs.run/z.html?o=W0000"></web-view>
 	</view>
 </template>
 
