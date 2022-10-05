@@ -25,13 +25,29 @@
 			</view>
 		</view>
 		
-		<view id="tvideo" class="cu-tabbar-height">
-			
+		<view class="cu-tabbar-height"></view>
+		
+		<view id="tvideo" v-show="!hotList.length">
+			<!-- #ifndef APP-PLUS -->
+			<view class="cu-card case no-card">
+				<view class="bg-video flex align-center" style="height: 400upx;">
+					<video id="myVideo"
+						src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v"
+						:autoplay="true"
+						:muted="false"
+						:show-fullscreen-btn="true"
+						:show-mute-btn="true"
+						:show-play-btn="true"
+						object-fit="cover">
+					</video>
+				</view>
+			</view>
+			<!-- #endif -->
 		</view>
 		
-		<template v-if="trailData.hotList.length">
-			<swiper class="screen-swiper square-dot" style="height:340rpx;" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="600">
-				<swiper-item v-for="(item, index) in trailData.hotList" :key="index" @tap="href('/pages/planning/detail?id=' + item._id)">
+		<template v-if="hotList.length">
+			<swiper class="screen-swiper square-dot" style="height:360rpx;" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="600">
+				<swiper-item v-for="(item, index) in hotList" :key="index" @click="href('/pages/planning/detail?id=' + item._id)">
 					<image :src="item.cover" mode="aspectFill"></image>
 				</swiper-item>
 			</swiper>
@@ -39,7 +55,7 @@
 			
 		<!-- 关于奉化健身步道 -->
 		<template v-if="deptId=='330213'">
-			<view class="cu-bar bg-white solid-bottom" @tap="href('/pages/planning/article?id=' + '5eb69f446f49e7004daf7b67')">
+			<view class="cu-bar bg-white solid-bottom" @click="href('/pages/planning/article?id=' + '5eb69f446f49e7004daf7b67')">
 				<view class="action">
 					<text class="cuIcon-titles text-blue text-lg"></text>
 					关于奉化健身步道
@@ -51,26 +67,26 @@
 		</template>
 	
 		<view class="cu-list grid col-3">
-			<view class="cu-item" v-for="(item, index) in cuIconList" :key="index" @tap="href('/pages/planning/article?id=' + item.id)">
+			<view class="cu-item" v-for="(item, index) in list" :key="index" @click="href('/pages/planning/article?id=' + item.id)">
 				<view :class="['cuIcon-' + item.cuIcon, 'text-' + item.color]"></view>
 				<text>{{ item.name }}</text>
 			</view>
 		</view>
-		<template v-if="trailData.hotList.length">
+		<template v-if="hotList.length">
 			<view class="radius">
 				<view class="margin-top-xs cu-bar bg-white solid-bottom">
 					<view class="action">
 						<text class="cuIcon-titles text-orange"></text>
 						人气路线
 					</view>
-					<view class="action" @tap="href('/pages/planning/list?key=1')">
+					<view class="action" @click="href('/pages/planning/list?key=1')">
 						<text class="text-gray text-sm">更多</text>
 						<text class="cuIcon-right text-gray"></text>
 					</view>
 				</view>
 				<scroll-view scroll-x class="bg-white nav text-center" scroll-with-animation>
 					<view class="flex">
-						<block v-for="(t1, index) in trailData.hotList" :key="index">
+						<block v-for="(t1, index) in hotList" :key="index">
 							<view class="flex flex-direction">
 								<view class="nav-li" :style="[{ backgroundImage: 'url(' + t1.cover + ')' }]" @click="href('/pages/planning/detail?id=' + t1._id)">
 									<view class="flex flex-direction text-left text-white text-sm" :style="[{ width: winW * 0.35 + 'px' }, { height: '42px' }]">
@@ -110,7 +126,7 @@
 				</view>
 			</view>
 			<swiper class="card-swiper" interval="5000" duration="800" indicator-color="#8799a3" indicator-active-color="#0081ff" :indicator-dots="true" :circular="true" :autoplay="true">
-				<swiper-item v-for="(item, index) in swiperList" :key="index" :class="cardCur == index ? 'cur' : ''" @tap="href('/pages/event/detail/detail')">
+				<swiper-item v-for="(item, index) in swiperList" :key="index" :class="cardCur == index ? 'cur' : ''" @click="href('/pages/event/detail/detail')">
 					<view class="swiper-item" style="height: 600rpx">
 						<view class="cu-card dynamic no-card">
 							<view class="cu-item shadow">
@@ -147,7 +163,7 @@
 		</view>
 		
 		<template v-if="deptId=='330213'">
-			<view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333upx" @tap="href('/pages/mall/special')">
+			<view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333upx" @click="href('/pages/mall/special')">
 				<view class="flex justify-end padding-top">
 					<view class="cu-tag bg-pink text-right">当季热销</view>
 				</view>
@@ -172,7 +188,7 @@
 			<view class="cu-dialog bg-gray">
 				<view class="cu-bar bg-white justify-end">
 					<view class="content">环浙步道提示</view>
-					<view class="action" @tap="showTips = false">
+					<view class="action" @click="showTips = false">
 						<text class="cuIcon-close text-red"></text>
 					</view>
 				</view>
@@ -186,7 +202,7 @@
 					</view>
 				</view>
 				<view class="cu-bar bg-white flex justify-center">
-					<button class="cu-btn xs lines-green round" @tap="showTips = false">
+					<button class="cu-btn xs lines-green round" @click="showTips = false">
 						<text class="text-sm">知道了</text>
 					</button>
 				</view>
@@ -211,13 +227,90 @@ export default {
     computed: {
         getStickyHeight() {
             return (this.customBar || 0) + (this.searchBarHeight || 0) + 'px'; 
-        }
+        },
+		list(){
+			return this.deptId == '330213'? [
+				{
+					cuIcon: 'footprint',
+					color: 'mauve',
+					id: '5eb7998ce260f0004ce01c83',
+					name: '建设历史'
+				},
+				{
+					cuIcon: 'creativefill',
+					color: 'purple',
+					id: '5eb7a2cd33bd17004e01bb49',
+					name: '设计概述'
+				},
+				{
+					cuIcon: 'all',
+					color: 'mauve',
+					id: '5eb7ad06bae6ba004d1c754f',
+					name: '路况构成'
+				},
+				{
+					cuIcon: 'discoverfill',
+					color: 'mauve',
+					id: '5eb7b6d543f165004c6d2d4f',
+					name: '风格特色'
+				},
+				{
+					cuIcon: 'circlefill',
+					color: 'purple',
+					id: '5eb7b88343f165004c6d2d52',
+					name: '节点元素'
+				},
+				{
+					cuIcon: 'formfill',
+					color: 'mauve',
+					id: '5eb7bf2cbb3e5e004c4cb663',
+					name: '步道标识'
+				}
+			]:[
+				{
+					cuIcon: 'footprint',
+					color: 'mauve',
+					id: '62fd977f0575480001b9a9d6',
+					name: '建设目标'
+				},
+				{
+					cuIcon: 'creativefill',
+					color: 'purple',
+					id: '62fdf07de3e39a00019cef86',
+					name: '设计理念'
+				},
+				{
+					cuIcon: 'all',
+					color: 'mauve',
+					id: '62feddf743000a0001ab0625',
+					name: '步道系统'
+				},
+				{
+					cuIcon: 'discoverfill',
+					color: 'mauve',
+					id: '62ff3b43a68f4a00019b154a',
+					name: '选线定线'
+				},
+				{
+					cuIcon: 'circlefill',
+					color: 'purple',
+					id: '62ff4a35f866a70001bf8bb4',
+					name: '生态工法'
+				},
+				{
+					cuIcon: 'formfill',
+					color: 'mauve',
+					id: '630471a7612f70000143f586',
+					name: '步道标识'
+				}
+			]
+		}
     },
     data() {
         return {
-			focus:true,
+			focus: false,
 			dict: uni.getStorageSync('sys_dict'),
-            deptId: '330000',
+            deptId: '',
             scrolled: 0,
             customBar: this.CustomBar,
             statusBar: this.StatusBar,
@@ -238,8 +331,7 @@ export default {
 
             ismute: false,
 			
-            cuIconList: [],
-			trailData: { regionData: [], hotList: [] },
+			hotList: [],
 
             cardCur: 0,
             
@@ -314,7 +406,6 @@ export default {
 	},
     onShow() {
         this.loadData()
-		this.$refs.newsHome.resetHeight()
     },
     methods: {
 		
@@ -326,85 +417,6 @@ export default {
 			this.dict = dict
 			if(this.deptId != deptId) {
 				this.deptId = deptId
-				if(deptId == '330213') {
-					this.cuIconList = [
-					    {
-					        cuIcon: 'footprint',
-					        color: 'mauve',
-					        id: '5eb7998ce260f0004ce01c83',
-					        name: '建设历史'
-					    },
-					    {
-					        cuIcon: 'creativefill',
-					        color: 'purple',
-					        id: '5eb7a2cd33bd17004e01bb49',
-					        name: '设计概述'
-					    },
-					    {
-					        cuIcon: 'all',
-					        color: 'mauve',
-					        id: '5eb7ad06bae6ba004d1c754f',
-					        name: '路况构成'
-					    },
-					    {
-					        cuIcon: 'discoverfill',
-					        color: 'mauve',
-					        id: '5eb7b6d543f165004c6d2d4f',
-					        name: '风格特色'
-					    },
-					    {
-					        cuIcon: 'circlefill',
-					        color: 'purple',
-					        id: '5eb7b88343f165004c6d2d52',
-					        name: '节点元素'
-					    },
-					    {
-					        cuIcon: 'formfill',
-					        color: 'mauve',
-					        id: '5eb7bf2cbb3e5e004c4cb663',
-					        name: '步道标识'
-					    }
-					]
-				}else{
-					this.cuIconList = [
-						    {
-						        cuIcon: 'footprint',
-						        color: 'mauve',
-						        id: '62fd977f0575480001b9a9d6',
-						        name: '建设目标'
-						    },
-						    {
-						        cuIcon: 'creativefill',
-						        color: 'purple',
-						        id: '62fdf07de3e39a00019cef86',
-						        name: '设计理念'
-						    },
-						    {
-						        cuIcon: 'all',
-						        color: 'mauve',
-						        id: '62feddf743000a0001ab0625',
-						        name: '步道系统'
-						    },
-						    {
-						        cuIcon: 'discoverfill',
-						        color: 'mauve',
-						        id: '62ff3b43a68f4a00019b154a',
-						        name: '选线定线'
-						    },
-						    {
-						        cuIcon: 'circlefill',
-						        color: 'purple',
-						        id: '62ff4a35f866a70001bf8bb4',
-						        name: '生态工法'
-						    },
-						    {
-						        cuIcon: 'formfill',
-						        color: 'mauve',
-						        id: '630471a7612f70000143f586',
-						        name: '步道标识'
-						    }
-						]
-				}
 				
 				let hots = [
 						{ _id: '627911aac2b3040001747310', name: '环浙样板线' },
@@ -426,7 +438,7 @@ export default {
 					hotList = [],
 					tabIndex = 0
 				
-				// this.trailData = { regionData, hotList }
+				
 				await this.zz.req({ $url: 'public/trail/list', deptId: [deptId], status: 10, type: 60 }).then(list => {
 				    for (let s of tStyle) { s.list = [] }
 				    for (let k in region) {
@@ -446,11 +458,10 @@ export default {
 				            if (s.tStyle && s.tStyle.includes(t.value)) t.list.push(s)
 				        }
 				    }
-
-				    this.trailData = { trailData: list, regionData, hotList, tStyle }
-				    uni.setStorageSync('trailData', this.trailData)
 					
-					setTimeout(() => { this.cal() }, 100)
+					this.hotList = hotList
+				    uni.setStorageSync('trailData', { trailData: list, regionData, hotList, tStyle })
+					setTimeout(() => { this.$refs.newsHome.resetHeight() }, 100)
 				})
 			}
         },
@@ -458,14 +469,14 @@ export default {
 			uni.createSelectorQuery().select('#searchBar').boundingClientRect((e) => {
 				this.searchBarHeight = e.height
 			}).exec()
-				
+			
+			// #ifndef APP-PLUS
 			uni.createSelectorQuery().select('#tvideo').boundingClientRect((e) => {
 				this.videoBottom = e.bottom - this.customBar
 				this.videoTop = e.top - this.customBar
 			}).exec()
-				
 			this.videoContext = uni.createVideoContext('myVideo')
-			
+			// #endif
 			// uni.createSelectorQuery().select('#stickBar').boundingClientRect((e) => {
 			// 	this.stickBarHeight = this.height
 			// 	this.stickBarPosition = this.top - this.stickBarHeight - this.searchBarHeight - this.statusBar
@@ -480,8 +491,11 @@ export default {
                 duration: 300
             });
         },
-        href(u,e,v) { this.zz.href(u,e,v) }
+        href(u,e,v) {console.log(u); this.zz.href(u,e,v) }
     },
+	// #ifndef APP-PLUS
+	onHide() { this.videoContext.pause() },
+	// #endif
 	onBackPress() { return true },
     onPageScroll: function (e) {
         this.scrollTop = e.scrollTop;

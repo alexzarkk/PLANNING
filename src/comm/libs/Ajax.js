@@ -1,5 +1,5 @@
+import { cloud } from '@/comm/zz'
 export default function Ajax({u = 'app', data = {}, t = 9999 }) {
-	const cloud = 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/'
 	const api = {
 		app: cloud + 'app',
 		zz: cloud + 'http/zz'

@@ -1,11 +1,4 @@
 <template>
-	<!-- 
-			@name:高德地图组件
-			@desc：
-			@import:
-			@date：2021-11-01
-			@author: 
-	 -->
 	<div><map style="width: 750rpx" :style="{ height: mapHeight + 'px' }" :longitude="center[0]" :latitude="center[1]" :scale="scale" :min-scale="3" :max-scale="30" :controls="controls" :enable-satellite="mapStyle" :enable-rotate="false" :enable-overlooking="true" :show-location="true" :include-points="includePoints" :polyline="_polylines" :polygons="_polygon" :markers="_markers" @markertap="markertap" @controltap="controltap" @tap="mapTap"></map></div>
 </template>
 

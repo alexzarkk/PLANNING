@@ -395,7 +395,7 @@ export default {
         },
         // 跳转到线路编辑
         openEdit() {
-			this.zz.href('/pages/nav/edit',{kml:this.rec, line:this.line, point:this.point},1)
+			this.zz.href('/pages/nav/rec/edit',{kml:this.rec, line:this.line, point:this.point},1)
         },
 		
         // 显示分享的弹窗

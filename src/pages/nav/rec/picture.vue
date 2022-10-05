@@ -47,7 +47,7 @@ export default {
             }
             this.loading = true;
             const req1 = {
-                $url: 'public/rec/point',
+                $url: '/user/rec/pagePoint',
                 page: this.pageNum,
                 size: this.pageSize
             }

@@ -440,9 +440,7 @@ export default {
 		},
 		
         async close() {
-			const [_, e] = await uni.showModal({
-				title: "确定要放弃保存？"
-			})
+			const [_, e] = await uni.showModal({ title: "确定要放弃保存？" })
         	if(e.confirm) {
         		this.pageLock = false
         		this.zz.href('/pages/index/event')
@@ -495,7 +493,7 @@ export default {
 			uni.removeStorageSync('nav_rec'+this.tmt)
 			
         	this.pageLock = false
-        	// this.zz.href('/pages/my/outdoor/line',{kml:this.kml}, 1, null, 'redirectTo')
+        	// this.zz.href('/pages/nav/rec/line',{kml:this.kml}, 1, null, 'redirectTo')
         	this.zz.href('/pages/index/event')
         }
         

@@ -30,7 +30,7 @@
 			
 			<!-- 采集员/绘制人信息-->
 			<block v-if="kml.user">
-				<view class="solid-bottom padding-tb-xs">
+				<view class=" padding-tb-xs">
 					<view class="flex align-center">
 						<view class="basis-xs">
 							<view class="padding-lr" @click="userInfo">
@@ -59,7 +59,7 @@
 			</block>
 			
 			<!-- 线路的基本信息 -->
-			<view class="bg-gray solid-bottom flex flex-direction padding-top">
+			<view class="bg-white solid-top solid-bottom flex flex-direction padding-top">
 				<view class="text-xl padding-top">
 					<block v-if="kml.type==9">
 						<view class="bg-blue mybadge-left">{{ dict.kmlType[kml.type].label +'-'+ dict.kmlSt[kml.status].label }}</view>
@@ -74,14 +74,13 @@
 				
 				<!-- <tui-divider width="60%" :height="40" :gradual="true"></tui-divider> -->
 				
-				<view class=" padding-tb-sm text-gray text-right flex justify-between align-center">
+				<view class="padding-tb-xs bg-white text-gray text-right flex justify-between align-center">
 					<text class="margin-left text-sm text-gray">{{ kml.type==99? dict.kmlGrade[kml.grade].label : zz.time2Date(kml.createTime,'Y-M-D h:m') }}</text>
-					
-					<zz-user-event :tar="kml._id" :view="kml.view" :like="kml.like" :favor="kml.favor"></zz-user-event>
+					<zz-user-event :ui="false" :obj="kml" @act="userEvent"></zz-user-event>
 				</view>
 			</view>
 			<block v-if="kml.type == 99">
-				<view class="bg-gray padding-sm flex flex-wrap justify-center">
+				<view class="bg-white padding-sm flex flex-wrap justify-center">
 					<view class="basis-sub">
 						<button class="cu-btn round block lines-orange lg" @click="href('/pages/comm/kml?_id='+kml.kmlId)">原始采集数据</button>
 					</view>
@@ -385,7 +384,9 @@ export default {
 			// this.current = this.current == e.index ? -1 : e.index
 			setTimeout(()=> {this.current = (this.current == e.index ? -1 : e.index)}, 10);
 		},
-		
+		userEvent(t){
+			this.zz.userEvent(t,this.kml.type==99?99:100,this.kml)
+		},
 		userInfo(){
 			console.log('userInfo', this.kml.userId)
 			this.zz.toast('功能尚未启用！')

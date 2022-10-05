@@ -58,7 +58,7 @@
 		</view>
         <!-- <zz-map ref="zmap" :pms="trail._kml.children"></zz-map> -->
             <view class="padding flex align-end text-center text-grey bg-white shadow-warp">
-                <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/my/outdoor/foots',null,1)">
+                <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/nav/rec/foots',null,1)">
                     <view class="flex align-end justify-center">
                         <view class="text-xxl">{{num.poi}}</view>
                         <view class="text-df text-gray">/</view>
@@ -131,22 +131,22 @@ export default {
 			recInfoList: [
 			    {
 			        title: '轨迹',
-					path:'/pages/my/outdoor/line',
+					path:'/pages/nav/rec/line',
 			        k: 'rec'
 			    },
 			    {
 			        title: '兴趣点',
-					path:'/pages/my/outdoor/point',
+					path:'/pages/nav/rec/point',
 			        k: 'poi'
 			    },
 			    {
 			        title: '照片',
-					path:'/pages/my/outdoor/picture',
+					path:'/pages/nav/rec/picture',
 			        k: 'imgs'
 			    },
 			    {
 			        title: '视频',
-					path:'/pages/my/outdoor/video',
+					path:'/pages/nav/rec/video',
 			        k: 'video'
 			    }
 			],
@@ -164,13 +164,15 @@ export default {
                 },
                 {
                     name: '自助赛',
-                    url: '/pages/event/tounament',
+                    // url: '/pages/event/tounament',
+                    url: '/pages/comm/nodata?title=自助赛',
                     icon: 'cuIcon-selection',
                     text: '打卡特定柱号路线'
                 },
                 {
                     name: '登顶打卡',
-                    url: '/pages/event/point',
+                    // url: '/pages/event/point',
+					url: '/pages/comm/nodata?title=登顶打卡',
                     icon: 'cuIcon-calendar',
                     text: '打卡人气山峰/兴趣点'
                 },
@@ -185,7 +187,7 @@ export default {
         }
     },
     onShow() {
-       this.loadData(!this.num.tCount)
+		this.loadData(!this.num.tCount)
     },
     methods: {
 		async loadData(init) {

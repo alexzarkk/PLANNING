@@ -3,8 +3,8 @@ import { clone, math, isArray } from '@/comm/geotools.js'
 import comm from '@/comm/comm'
 
 const amapKey = 'daffb83c14428939221e09ebc785c89c',
-	cloud = 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/',
-	api = { app: cloud + 'app', zz: cloud + 'http/zz' },
+	cloud = 'https://996909cb-e5ca-4be8-8150-b60ae2422186.bspapp.com/',  // dev
+	// cloud = 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/',  // prod
 
 	toArr = (o) => {
 		let a = []
@@ -13,7 +13,11 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		}
 		return a
 	},
+	
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
+		// #ifdef APP-PLUS
+		authCemera()
+		// #endif
 		return new Promise((resolve, reject) => {
 			uni.scanCode({
 				onlyFromCamera,
@@ -27,7 +31,9 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 			})
 		})
 	},
-
+	// #ifdef APP-PLUS
+	authCemera=()=>{ if(uni.getAppAuthorizeSetting().cameraAuthorized=='denied') zz.modal("请开启手机相机权限！") },
+	// #endif
 	checkNet = async () => {
 		return await comm.hadNet()
 	},
@@ -93,9 +99,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		})
 	},
 	chooseImage = async ({ sourceType = ['album', 'camera'], sizeType = ['compressed'], count = 1 }, save = false) => {
-
 		const [_, e] = await uni.chooseImage({ sourceType, sizeType, count })
-		
 		if (e) {
 			uni.showLoading({ mask: true })
 			for (let i = 0; i < e.tempFilePaths.length; i++) {
@@ -112,6 +116,10 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 			uni.hideLoading()
 			
 			return e.tempFilePaths
+		}else{
+			// #ifdef APP-PLUS
+			authCemera()
+			// #endif
 		}
 	},
 	chooseVideo = async ({ sourceType = ['camera'], compressed = false, camera = 'back', maxDuration = 10 }, save = false) => {
@@ -122,15 +130,20 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		// #endif
 
 		const [_, e] = await uni.chooseVideo({ sourceType, compressed, camera, maxDuration })
-		if (!e) return null
-
-		uni.showLoading({ mask: true })
-		e.tempFilePath = await saveFile(e.tempFilePath)
-		if (save) e.tempFilePath = await upload(e.tempFilePath)
+		if(e) {
+			uni.showLoading({ mask: true })
+			e.tempFilePath = await saveFile(e.tempFilePath)
+			if (save) e.tempFilePath = await upload(e.tempFilePath)
+			
+			delete e.errMsg
+			uni.hideLoading()
+			return e
+		}else{
+			// #ifdef APP-PLUS
+			authCemera()
+			// #endif
+		}
 		
-		delete e.errMsg
-		uni.hideLoading()
-		return e
 	},
 	/**
 	 * time:
@@ -368,7 +381,6 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 			})
 		})
 	}
-	// https://restapi.amap.com/v3/weather/weatherInfo?s=rsv3&city=330110&key=daffb83c14428939221e09ebc785c89c&output=json&callback=jsonp_433432_&platform=JS&logversion=2.0&appname=https://z.szs.run/z.html&csid=EADC0F21-3E5F-438F-843D-20966DA8B11B&sdkversion=1.4.20
 
 async function init() {
 	let dict = uni.getStorageSync('sys_dict') || {}
@@ -400,8 +412,9 @@ async function init() {
  * @param boolean veri 是否验证登录
  * return data
  */
-async function req(params = {}, loading = false) {
-	let fn = params.$fn || 'app',
+async function req(params = {}, loading = false, t=9999) {
+	let tim,
+		fn = params.$fn || 'app',
 		veri = params.$veri || false,
 		url = params.$url,
 		token = zz.getToken(),
@@ -425,7 +438,6 @@ async function req(params = {}, loading = false) {
 		return new Promise((resolve, reject) => {
 
 			const success = (e) => {
-				// console.log('success',e);
 				const { code, data, message } = e.data || e.result
 				switch (code) {
 					// 成功
@@ -447,20 +459,23 @@ async function req(params = {}, loading = false) {
 				}
 			},
 				fail = (e) => {
-					// zz.toast("请求失败，没有网络！")
-					zz.toast(e.message || e.data.message)
+					console.error(e);
+					// zz.toast("服务器连接超时~")
+					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
 					reject(e.message || e.data.message)
 				},
-				complete = () => {
+				complete = (e) => {
 					params.$fn = fn
 					params.$url = url
 					if (loading) uni.hideLoading()
+					// clearTimeout(tim)
 				}
 
 			// uni.request({
-			//     url: api[fn],
+			//     url: cloud + fn,
+				// timeout:10000,
 			//     header: {
 			//         'content-type': 'application/json',
 			//         authorization: token,
@@ -485,6 +500,10 @@ async function req(params = {}, loading = false) {
 				fail,
 				complete
 			})
+			// tim = setTimeout(()=>{
+			// 	reject('服务器连接超时~')
+			// 	clearTimeout(tim)
+			// },t)
 		})
 	} else {
 		let data = comm.getStorage(comm.key(fn + url + JSON.stringify(params)))
@@ -527,7 +546,7 @@ function userEvent(t, tt, o, ref = '_id') {
 		});
 	}
 	let e = {
-		$url: t == 20 ? 'public/zz/view' : 'user/ue/action',
+		$url: 'user/ue/action',
 		t,
 		tt,
 		tid: o[ref]
@@ -594,6 +613,7 @@ function userEvent(t, tt, o, ref = '_id') {
 }
 
 const zz = {
+	cloud,
 	amapKey,
 	math,
 	clone,

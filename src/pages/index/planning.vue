@@ -39,9 +39,9 @@
             </view>
             <!-- 筛选条件+线路统计+切换到地图按钮 -->
             <view class="flex justify-around title-search-bar bg-blue light">
-                <view class="planing-search-btn" @click="filter">筛选条件</view>
-                <view class="text-blue light">1000路线</view>
-                <view class="planing-search-btn" @click="openMap">地图</view>
+                <view class="planing-search-btn" @click="kmls">轨迹</view>
+                <view class="text-blue light">{{trailData.length}}路线</view>
+                <view class="planing-search-btn" @click="pub">广场</view>
             </view>
         </view>
         <view class="nav-list bg-white" style="padding-top: 30rpx">
@@ -97,12 +97,8 @@
 <script>
 import tabsData from '@/comm/test/json/line.json';
 
-import backToLineTrack from '@/components/backToLineTrack.vue';
 
 export default {
-    components: {
-        backToLineTrack
-    },
 
     data() {
         return {
@@ -186,18 +182,18 @@ export default {
 		// },300)
   //   },
     methods: {
-        filter(){
-            this.zz.toast("功能暂未启用",1000)
-        },
+        kmls(){ this.zz.href('/pages/comm/kmlPage') },
         onCollect() {
 			// #ifdef APP-PLUS
 			this.zz.href('/pages/nav/navApp',0,1,'slide-in-bottom')
 			// #endif
-			
         },
         openMap() {
             this.zz.href('/pages/planning/lineMap',0,0,'slide-in-bottom');
         },
+		pub(){
+			uni.navigateTo({ url:'/pages/index/planningPub' })
+		},
         doSearch: function (e) {
             let key = e ? e : this.searchKey;
             if (key == '') return;

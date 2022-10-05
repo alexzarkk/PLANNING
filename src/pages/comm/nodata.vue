@@ -1,11 +1,12 @@
 <template>
 	<view>
-		<cu-custom bgColor="bg-ztsblue" :isBack="true" >
+		<cu-custom bgColor="bg-dark" :isBack="true">
+			<block slot="backText"></block>
 			<block slot="content">{{title}}</block>
 		</cu-custom>
 		
 		<view class="cu-bar"></view>
-		<tui-no-data :fixed="false" :imgUrl="bd.imgs.nodata">暂无数据</tui-no-data>
+		<tui-no-data :imgWidth="300" :imgHeight="300" :fixed="true" :imgUrl="bd.imgs.nodata" />
 	</view>
 </template>
 
@@ -19,7 +20,7 @@
 			}
 		},
 		onLoad(option) {
-			this.title = option.title
+			this.title = option.title||''
 		},
 		methods: {
 			
@@ -28,5 +29,8 @@
 </script>
 
 <style>
+page {
+    background-color: #ffffff;
+}
 
 </style>

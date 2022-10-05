@@ -13,7 +13,7 @@
 				<view class="cu-item shadow">
 					<view class="cu-list menu-avatar ">
 						<view class="cu-item">
-							<view class="bg-white solid cu-avatar round lg" :style="'background-image:url('+bd.sys.logo+');'" @tap="imgView(bd.sys.logo)"></view>
+							<view class="bg-white solid cu-avatar round lg" :style="'background-image:url('+poi.userInfo.headImg+');'" @tap="imgView(poi.userInfo.headImg)"></view>
 							
 							<view class="content flex-sub" >
 								<view class="title" :id="poi._id">
@@ -34,32 +34,11 @@
 							</view>
 						</view>
 					</view>
-					<view class="flex justify-between align-center bg-white text-gray solid-bottom">
-						<view class="padding-lr text-sm">
-							<text class="margin-left-sm cuIcon-attention"></text>
-							<text class="margin-left-sm text-gray">{{poi.view}}</text>
-						</view>
-						<view class="padding-lr-xs flex justify-end align-center">
-							<view @tap="userEvent(30,20,poi)">
-								<text class="cuIcon-appreciatefill margin-lr-xs" :class="poi.isLike?'text-red':''"></text>
-								<text class="text-sm text-gray">{{poi.like}}</text>
-							</view>
-							<view @tap="userEvent(40,20,poi)">
-								<text class="cuIcon-favorfill margin-lr-xs" :class="poi.isFavor?'text-red':''"></text>
-								<text class="text-sm text-gray">{{poi.favor}}</text>
-							</view>
-							<view>
-								<button open-type="share" class="cu-btn xs bg-white">
-									<text class="cuIcon-share"></text>
-									<text class="text-sm text-green"></text>
-								</button>
-							</view>
-						</view>
-					</view>
+					<zz-user-event :obj="poi" @act="userEvent"></zz-user-event>
 				</view>
 				<view id="tvideo" v-if="poi.video&&poi.video.url">
 					<view class="cu-card case no-card">
-						<view class="padding-top-xs shadow">
+						<view class="shadow">
 							<view class="bg-video flex align-center" style="height: 420upx;" >
 								<video id="myVideo" loop
 									:src="poi.video.url"
@@ -167,11 +146,10 @@ export default {
 	methods: {
 		async init(){
 			this.loading = true
-			let poi = await this.zz.req({$url: 'public/poi/info', _id: this.qr.id })
+			let poi = await this.zz.req({$url: 'public/poi/info', _id: this.qr.id, ue:1 , ui:1 })
 			this.loading = false
 			this.poi = poi
 			this.reffers = await this.zz.req({ $url: 'public/zz/near', coord: poi.coord, tar:'trail', dist: 3000 });
-			// console.log(poi, this.reffers);
 			this.title = this.dict['poi_'+poi.level][poi.type[0]].text
 		},
 		goLocation: function(e){
@@ -193,8 +171,9 @@ export default {
 				phoneNumber: this.poi.contact.mobile
 			})
 		},
-		userEvent(t,p,o){
-			// this.zz.userEvent(t,p,o)
+		userEvent(t){
+			console.log(this.poi);
+			this.zz.userEvent(t,20,this.poi)
 		},
 		imgView: function(img){this.zz.viewIMG([img], 0)}
 	},

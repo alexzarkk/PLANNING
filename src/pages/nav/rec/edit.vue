@@ -259,7 +259,7 @@ export default {
     data() {
         return {
 			icon,
-			dict:{},
+			dict: uni.getStorageSync('sys_dict'),
 			kml: {info:{}},
 			point:[],
 			line:null,
@@ -294,12 +294,11 @@ export default {
     },
 	onLoad({ v }) {
 		let { kml, line, point } = this.zz.getParam(v),
-			dict = uni.getStorageSync('sys_dict')
+			dict = this.dict
 			
 		this.kml = kml
 		this.line = line
 		this.point = point
-		this.dict = dict
 		
 		this.ele = this.zz.toArr(dict.trail_element)
 		this.ip = this.zz.toArr(dict.trail_ip)

@@ -116,7 +116,11 @@ export default {
 				
 				t++
 				if(t>20) {
-					alert('网络连接失败，请稍后重试')
+					// alert('网络连接失败，请稍后重试')
+					uni.showToast({
+						icon:"error",
+						title:'网络连接失败，请稍后重试'
+					})
 				} else {
 					console.log('超时重载！！！！')
 					setTimeout(()=>{
@@ -318,6 +322,7 @@ export default {
             if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'setKml', e} }
         },
         winH(e, o) {
+			this.exec({m:'resize'})
             this.setProp()
         }
     },

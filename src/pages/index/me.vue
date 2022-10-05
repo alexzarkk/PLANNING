@@ -102,7 +102,7 @@
                 </view>
             </view> -->
 
-            <view class="cu-item" @tap="href('/pages/my/outdoor/line')">
+            <view class="cu-item" @tap="href('/pages/nav/rec/line')">
                 <view class="content">
                     <text class="cuIcon-fork"></text>
                     <text class="text-grey">
@@ -110,7 +110,7 @@
                     </text>
                 </view>
             </view>
-            <view class="cu-item" @tap="href('/pages/my/outdoor/point')">
+            <view class="cu-item" @tap="href('/pages/nav/rec/point')">
                 <view class="content">
                     <text class="cuIcon-footprint"></text>
                     <text class="text-grey">
@@ -118,7 +118,7 @@
                     </text>
                 </view>
             </view>
-            <!-- <view class="cu-item" @tap="href('/pages/my/outdoor/picture')">
+            <!-- <view class="cu-item" @tap="href('/pages/nav/rec/picture')">
                 <view class="content">
                     <text class="cuIcon-pic"></text>
                     <text class="text-grey">我的相册</text>
