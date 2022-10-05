@@ -308,7 +308,7 @@ export default {
 			user = this.zz.getAcc()
 			
         if (option.id) {
-            await this.zz.req({ $url: '/user/rec/info', _id: option.id }).then(res => {
+            await this.zz.req({ $url: '/user/rec/info', _id: option.id,ui:1}).then(res => {
                 obj = res
             })
         }

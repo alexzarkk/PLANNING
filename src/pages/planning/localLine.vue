@@ -35,7 +35,7 @@
 						<view v-if="item.list.length ===0">
 							<view :style="'height:' + mainHeight + 'px'" :class="index == currentTab ? '' : 'hide'">
 								<view class="cu-tabbar-height"></view>
-								<tui-no-data :fixed="true">暂无数据</tui-no-data>
+								<tui-no-data :fixed="true" :imgUrl="'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/5acf9550-9e74-11ea-b244-a9f5e5565f30.png'">暂无数据</tui-no-data>
 							</view>
 						</view>
 						<view v-else>

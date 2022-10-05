@@ -37,6 +37,7 @@ export default {
                 size: 10,
                 total: -1,
                 type: null,
+				ui: 1,
                 name: ''
             }
         };

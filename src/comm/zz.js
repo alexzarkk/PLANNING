@@ -1,5 +1,5 @@
 import { async } from 'regenerator-runtime';
-import { clone, math, isArray } from '@/comm/geotools.js'
+import { isSame, clone, math, isArray } from '@/comm/geotools.js'
 import comm from '@/comm/comm'
 
 const amapKey = 'daffb83c14428939221e09ebc785c89c',
@@ -616,6 +616,7 @@ const zz = {
 	cloud,
 	amapKey,
 	math,
+	isSame,
 	clone,
 	toArr,
 	isArray,

@@ -7,66 +7,46 @@
 					<text class="text-sm">去记录</text>
 				</button>
 			</block>
-            <block slot="content">
-				<!-- <view class="search-form round">
-				    <text class="cuIcon-search" />
-				    <input type="text" placeholder="搜索地名/路线 …" :disabled="true" confirm-type="search" @click="openSearch" v-model="searchKey" />
-				</view> -->
-				
-				行程广场
-		</block>     
-		   <block slot="left">
+            <block slot="content">行程广场</block>     
+			<block slot="left">
 			   	<button class="cu-btn xs line-white round shadow margin-right-sm" @tap="mapView">
 			   		<text class="zzIcon-maplocation margin-right-xs"></text>
 			   		<text class="text-sm">地图</text>
 			   	</button>
-		   </block>
+			</block>
 		</cu-custom>
-        <view>
-			<zz-line-track v-for="(item,index) in list[0]" :key="index" :details="item" />
-			<zz-page-status :loading="loading" :length="list[0].length" :total="page.total" />
-        </view>
+        <zz-search :areaPick="false" @search="search"></zz-search>
+		<zz-line-track v-for="(item,index) in list" :key="index" :details="item" />
+		<zz-page-status :loading="loading" :length="list.length" :total="page.total" />
     </view>
 </template>
 
 <script>
-import sync from '@/comm/sync'
 export default {
     data() {
         return {
             loading: false,
-            page: {},
-			list:[[]]
+            page: {total:-1, size: 10, pub:1, ui:1, ue:1, keyWord:null},
+			list:[]
         };
     },
-    onLoad() {
-        console.log('onLoad.planningApp')
-		this.loadData('init')
-    },
+    onLoad() { },
     mounted() { },
-    // onShow() { sync.go() },
     methods: {
         loadData(m) {
             if (m == 'init') {
-				this.list[0] = []
-                this.page = {
-                    page: 1,
-                    size: 10,
-                    total: -1,
-                    type: null,
-					pub: 1,
-                    name: ''
-                }
+				this.list = []
+				Object.assign(this.page, { page: 1, total: -1 })
             }
-            if (this.loading || this.page.total === this.list[0].length) {
-                return;
+            if (this.loading || this.page.total === this.list.length) {
+                return
             }
             this.loading = true
             this.zz.req({ $url: '/public/rec/page', ...this.page }).then(e => {
 				this.loading = false
 				// console.log(e);
 				this.page.total = e.pagination.total
-                this.list[0] = this.list[0].concat(e.list)
+                this.list = this.list.concat(e.list)
                 this.page.page++
             })
         },
@@ -78,8 +58,11 @@ export default {
 		mapView(){
 			this.zz.href('/pages/planning/z')
 		},
-        openSearch() {
-            this.cur = index
+        search(e) {
+        	if(e.keyWord != this.page.keyWord) {
+        		this.page.keyWord = e.keyWord
+        		this.loadData('init')
+        	}
         }
     },
     onReachBottom() {
