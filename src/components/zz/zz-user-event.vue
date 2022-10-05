@@ -55,7 +55,7 @@ export default {
 	methods: {
 		evt(e){ this.$emit('act',e) },
 		userInfo(){
-			console.log('page to userInfo');
+			this.zz.profile(this.obj.userInfo._id)
 		},
 		share(){
 			console.log('do share');

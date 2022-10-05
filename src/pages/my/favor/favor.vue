@@ -69,6 +69,7 @@
             </view>
             <!-- 行程和轨迹 -->
             <view v-if="item.info && TabCur===2||TabCur===3">
+                <!-- Todo: 行程与轨迹缺少部分参数 -->
                 <zz-line-track :details="item.info"></zz-line-track>
             </view>
             <!-- 兴趣点 -->
