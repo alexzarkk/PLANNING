@@ -35,7 +35,7 @@
 						<view v-if="item.list.length ===0">
 							<view :style="'height:' + mainHeight + 'px'" :class="index == currentTab ? '' : 'hide'">
 								<view class="cu-tabbar-height"></view>
-								<tui-no-data :fixed="true" :imgUrl="'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/5acf9550-9e74-11ea-b244-a9f5e5565f30.png'">暂无数据</tui-no-data>
+								<tui-no-data :fixed="true">暂无数据</tui-no-data>
 							</view>
 						</view>
 						<view v-else>
@@ -67,9 +67,9 @@ export default {
 	},
 	methods: {
 		async loadData() {
-			let trailData = uni.getStorageSync('trailData');
+			let trailData = uni.getStorageSync('trailData')
 			let regionData = trailData.regionData; // 地方数据
-			this.regionData = regionData;
+			this.regionData = regionData
 
 			// console.log('获取到的地方数据', this.regionData);
 			this.regionData.forEach(res=>{
@@ -77,8 +77,9 @@ export default {
 			})
 		},
 		userEvent(e) {
-			// let o = this.trailData.regionData[this.currentTab].list[e.idx]
+			let o = this.regionData[this.currentTab].list[e.idx]
 			// this.zz.userEvent(e.t, e.tt, o)
+			this.$set(this.regionData[this.currentTab].list,e.idx,o)
 		},
 		detail(id) {
 			this.zz.href('/pages/planning/detail?id=' + id);

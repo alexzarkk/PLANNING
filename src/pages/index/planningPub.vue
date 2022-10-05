@@ -14,13 +14,13 @@
 				</view> -->
 				
 				行程广场
-			</block>     
-			   <block slot="left">
+		</block>     
+		   <block slot="left">
 			   	<button class="cu-btn xs line-white round shadow margin-right-sm" @tap="mapView">
 			   		<text class="zzIcon-maplocation margin-right-xs"></text>
 			   		<text class="text-sm">地图</text>
 			   	</button>
-			   </block>
+		   </block>
 		</cu-custom>
         <view>
 			<zz-line-track v-for="(item,index) in list[0]" :key="index" :details="item" />
