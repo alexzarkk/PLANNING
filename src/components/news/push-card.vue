@@ -74,9 +74,13 @@ export default {
                 return null
             }
         },
-        header:{
-            type:Boolean,
-            default:true
+        header: {
+            type: Boolean,
+            default: true
+        },
+        articleId: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -90,9 +94,20 @@ export default {
     },
     methods: {
         openDetails() {
-            if(this.stopClick){
+
+
+
+            if (this.stopClick) {
                 return;
             }
+            if (this.articleId === this.details._id) {
+                uni.navigateBack({
+                    delta: 1
+                });
+                return;
+            }
+
+
             // console.log("打开详情===========", this.details)
             const isPush = this.details.type.some(res => {
                 return res === 30
