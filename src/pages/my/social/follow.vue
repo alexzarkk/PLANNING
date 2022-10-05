@@ -82,7 +82,8 @@ export default {
             }
             this.loading = true;
             const req1 = {
-                $url: 'user/ue/page',
+                $url: '/user/ue/page',
+				ui:1,
                 t: 60, // 事件：关注
                 tt: 60, // 对象: 用户
                 page: this.pageNum,
