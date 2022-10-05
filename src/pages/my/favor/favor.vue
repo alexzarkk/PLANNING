@@ -73,7 +73,7 @@
 		
 		<!-- 推荐行程 trail-->
 		<template v-if="TabCur===2">
-			<zz-trail-list :dataList="page[TabCur].list"></zz-trail-list>
+			<zz-trail-list @detail="detail" :dataList="page[TabCur].list"></zz-trail-list>
 		</template>
 		
 		<!-- kml\rec轨迹 -->
@@ -109,43 +109,43 @@ export default {
                     title: '文章', // 发布的资讯文章等等
                     tt: 10,
                     total: -1,
-                    page: 1,
-                    list: []
+                    list: [],
+					url: '/pages/planning/article'
                 },
                 {
                     title: '评论', // 户外分享
                     tt: 2,
                     total: -1,
-                    page: 1,
-                    list: []
+                    list: [],
+					url: ''
                 },
                 {
                     title: '行程', //系统推荐
                     tt: 40,
                     total: -1,
-                    page: 1,
-                    list: []
+                    list: [],
+					url: '/pages/planning/detail'
                 },
                 {
                     title: '兴趣点',
                     tt: 20,
                     total: -1,
-                    page: 1,
-                    list: []
+                    list: [],
+					url: '/pages/planning/poi'
                 },
                 {
                     title: '轨迹', // 别人走的线路
                     tt: 42,
                     total: -1,
-                    page: 1,
-                    list: []
+                    list: [],
+					url: '/pages/nav/rec/lineDetail'
                 },
                 {
                     title: '坐标',
                     tt: 44,
                     total: -1,
-                    page: 1,
-                    list: []
+                    list: [],
+					url: ''
                 },
 				
                 // {
@@ -156,44 +156,32 @@ export default {
         }
     },
     onLoad() {
-        this.user = this.zz.getAcc()
         this.loadData('init')
     },
     methods: {
         async loadData(type) {
             let cur = this.page[this.TabCur]
             if (type === 'init') {
-                Object.assign(cur, { page: 1, size: 10, total: -1, list: [], tt: cur.tt })
+                Object.assign(cur, { page: 1, size: 10, total: -1, list: [], my:1, t: this.t })
             }
-            let { tt, page, size, total } = cur
-            if (this.loading || total == cur.list.length || total === 0) {
-                return;
+            if (this.loading || cur.total == cur.list.length || cur.total === 0) {
+                return
             }
             this.loading = true
-            const req1 = {
-                $url: '/user/ue/pages',
-                tt,
-                page,
-                size,
-                t: this.t,
-                my: 1
-            }
-            await this.zz.req(req1).then(e => {
-				
+            this.zz.req({$url: '/user/ue/pages', ...cur}).then(e => {
 				console.log(e);
+				
+				this.loading = false
                 cur.total = e.pagination.total
                 cur.list = cur.list.concat(e.list)
-                cur.page++
-                // console.log('cur========',JSON.parse(JSON.stringify(cur)));
+                cur.page ++
             })
-            this.loading = false
-            // console.log("this.loading============", this.loading)
         },
-        // 打开文章详情
-        openArticleDetails(item){
-            console.log("打开文章详情",item)
-             this.zz.href(`/pages/planning/article?id=${item.info._id}`)
-        },
+		detail(id){
+			let url = this.page[this.TabCur].url
+			if(url) this.zz.href(url+'?id='+id)
+		},
+		
         // 收藏/喜欢的切换
         modeChange(e) {
             console.log('modeCHange', e);
