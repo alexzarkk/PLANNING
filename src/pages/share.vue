@@ -17,6 +17,7 @@
 				loading:true,
 				task : null,
 				login: false,
+				deptId: '',
 				path : ''
 			}
 		},
@@ -27,18 +28,20 @@
 		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/poi&id=629497c49b54e30001d3e4eb
 		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/detail&id=60312b1fedb62e0001beeeac
 		   
-		onLoad ({path='/pages/index/index', id ='', _id='', sn='', coord='', login=false}=q) {
-			path += '?id='+id
+		onLoad ({path='/pages/index/index',deptId='', id ='', _id='', sn='', coord='', login=false}=q) {
+			path += '?deptId='+deptId
+			path += '&id='+id
 			if(_id) path += '&_id='+_id
 			if(sn) path += '&sn='+sn
 			if(coord) path += '&coord='+coord
 			
 			this.path = path
 			this.login = login
+			this.deptId = deptId
 			this.init()
 		},
 		methods: {
-			init(t=0){
+			async init(t=0){
 				if(!uni.getStorageSync('sys_dict') || (this.login&&uni.getStorageSync('token')=='')){
 					t++
 					if(t<100){
@@ -49,6 +52,10 @@
 					}
 				}
 				clearTimeout(this.task)
+				if(this.deptId) {
+					uni.setStorageSync('cur_deptId', this.deptId)
+					await this.zz.setDept()
+				}
 				this.zz.href(this.path,0,this.login,'zoom-out','redirectTo')
 			},
 			reload(){

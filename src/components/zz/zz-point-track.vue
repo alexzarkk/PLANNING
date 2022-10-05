@@ -13,7 +13,7 @@
                         <text class="record-time-box-value text-cut">{{ details.name }}</text>
                     </view>
                 </view>
-                <view class="padding-right text-xxl" @click="userEvent(40,20)">
+                <view class="padding-right text-xxl" @click="userEvent(40,44)">
                     <text v-if="details.isFavor" class="cuIcon-favorfill text-yellow"></text>
                     <text v-else class="cuIcon-favor"></text>
                 </view>
@@ -207,7 +207,7 @@ export default {
     background-color: #ffffff;
     border-radius: 20rpx;
     width: 690rpx;
-    margin: 10rpx auto;
+    margin: 20rpx auto;
     padding: 20rpx;
     .line-sport-type-box {
         height: 120rpx;

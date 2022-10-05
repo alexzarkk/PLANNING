@@ -27,7 +27,7 @@
                 </swiper-item>
             </swiper>
 
-            <view class="solid-bottom padding-sm flex align-start bg-gray">
+            <view class="solid-bottom padding-sm flex align-start">
                 <view class="">
                     <view class="text-xl padding">
                         <text class="text-black text-bold solid-bottom">
@@ -53,6 +53,10 @@
                     </view>
                 </view>
             </view>
+			<!-- <view class="padding-tb-xs text-gray text-right flex justify-between align-center"> -->
+				<!-- <text class="margin-left text-sm text-gray">{{ zz.time2Date(trail.createTime,'Y-M-D h:m') }}</text> -->
+				<zz-user-event :obj="trail" @act="userEvent"></zz-user-event>
+			<!-- </view> -->
             <view class="padding bg-green">
                 <view class="padding flex text-center text-grey bg-orange light shadow">
                     <view class="flex flex-sub flex-direction solid-right solid-left">
@@ -439,8 +443,8 @@ export default {
         href(h) {
             this.zz.href(h);
         },
-        userEvent(t, p, o) {
-            this.zz.userEvent(t, p, o);
+        userEvent(t) {
+            this.zz.userEvent(t, 40, this.trail)
         }
     },
     onBackPress(event) {

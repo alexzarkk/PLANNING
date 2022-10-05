@@ -19,6 +19,8 @@
         <view class="flex flex-direction padding" style="row-gap: 20rpx">
             <button class="cu-btn round" @click="list_rec">list_rec</button>
             <button class="cu-btn round" @click="del_rec('631ea8c9a874f0000167ecd7')">删除rec</button>
+            <button class="cu-btn round" @click="reset('631ea8c9a874f0000167ecd7')">test</button>
+            <button class="cu-btn round" @click="delredis">清理redis</button>
             <button class="cu-btn round" @click="clear">清理缓存</button>
             <button class="cu-btn round bg-ztsgreen" @click="openLogin">登录</button>
             <button class="cu-btn round bg-ztsgreen" @click="openShareDetail">Share</button>
@@ -250,7 +252,14 @@ export default {
 			let e = await this.zz.req({$url:'/user/rec/delete', _id})
 			console.log(e);
 		},
-		
+		async reset(){
+			let res = await this.zz.req({$url:'/public/zz/test'})
+			console.log(res);
+		},
+		async delredis(){
+			let res = await this.zz.req({$url:'/public/zz/removeRedis'})
+			console.log(res);
+		},
 		
 		
         // 添加图标

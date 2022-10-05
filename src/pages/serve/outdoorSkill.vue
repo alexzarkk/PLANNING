@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<cu-custom bgColor="bg-ztsblue" :isBack="true" :isHome="true"><block slot="content">户外技巧</block></cu-custom>
+		<cu-custom bgColor="bg-ztsblue" :isBack="true" ><block slot="content">户外技巧</block></cu-custom>
 		<block v-for="(e,i) in list" :key="i">
 			<tui-list-cell arrow>
 				<slot>

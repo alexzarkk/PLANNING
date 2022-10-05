@@ -214,7 +214,10 @@ const
 				break;
 		}
 		console.error(m);
-		alert(m)
+		uni.showToast({
+			icon:"error",
+			title:m
+		})
 	},
 
 	getLocation = async (type = 'wgs84') => {

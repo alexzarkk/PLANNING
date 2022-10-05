@@ -54,6 +54,7 @@ export default {
                     size: 10,
                     total: -1,
                     type: null,
+					pub: 1,
                     name: ''
                 }
             }

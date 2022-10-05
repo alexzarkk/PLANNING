@@ -120,9 +120,9 @@ export default {
     methods: {
         openLineDetail() {
             // uni.navigateTo({
-            //     url: '/pages/planning/lineDetails'
+            //     url: '/pages/nav/rec/lineDetail'
             // });
-            this.zz.href('/pages/planning/lineDetails', this.details)
+            this.zz.href('/pages/nav/rec/lineDetail', this.details)
         },
         imageError(error) {
             this.coverMode = false

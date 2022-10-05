@@ -1,6 +1,6 @@
 <template>
     <view>
-        <cu-custom bgColor="bg-orange" :isBack="true" :isHome="true">
+        <cu-custom bgColor="bg-orange" :isBack="true" >
             <block slot="content">报备留踪</block>
         </cu-custom>
 

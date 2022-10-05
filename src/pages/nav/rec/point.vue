@@ -68,50 +68,44 @@ export default {
             if (this.loading || this.pageList.length === this.total || this.total === 0) {
                 return;
             }
-            this.loading = true;
+            this.loading = true
             const req1 = {
                 $url: '/user/rec/pagePoint',
+				i_s: ['isFavor'],
                 page: this.pageNum,
                 size: this.pageSize
             }
             this.zz.req(req1).then(({ pagination, list }) => {
-                this.total = pagination.total; // 赋值total
-                this.pageNum++;
+				console.log(list);
+                this.total = pagination.total
+                this.pageNum ++
                 this.pageList = this.pageList.concat(list)
-                this.loading = false;
+                this.loading = false
                 if (stopPullDown) {
                     this.zz.toast("刷新成功", 1000)
                     uni.stopPullDownRefresh();
                 }
-            });
+            })
         },
         openLineDetails(line) {
-            this.zz.href('/pages/planning/lineDetails', line)
+            this.zz.href('/pages/nav/rec/lineDetail', line)
         },
         // 打开坐标点详情
         async openPointDetails($event, lIndex, pIndex) {
 			let kml = this.pageList[lIndex]
-			if(!kml.t1) kml.t1 = await this.zz.req({ $url: '/user/rec/line', pid: kml._id })
-			 this.zz.href('/pages/comm/point', { kml: { ...kml, t1: kml.t1, t2: kml.point }, idx: pIndex })
-			
-            // await this.zz.req({ $url: '/user/rec/line', sort: 1, pid: this.pageList[lIndex]._id }).then(e => {
-            //     let { line, point } = e
-            //     for (let s of point) {
-            //         s.pt = this.dict.trail_element[s.t3] || this.dict.trail_serverPoi[s.t3] || this.dict.trail_otherPoi[s.t3]
-            //     }
-            //     this.zz.href('/pages/comm/point', { kml: { ...this.pageList[lIndex], t1: line, t2: point }, idx: pIndex })
-            // })
+			if(!kml.t1) kml.t1 = await this.zz.req({ $url: '/user/rec/line', pid: kml._id }, true)
+			this.zz.href('/pages/comm/point', { kml: { ...kml, t1: kml.t1, t2: kml.point }, idx: pIndex })
         },
         // 收藏事件
         userEvent({ t, tt }, lIndex, pIndex) {
 			let o = this.pageList[lIndex].point[pIndex]
-            const isFavor = o.isFavor
-            this.$set(o, 'isFavor', !isFavor)
-            // this.zz.userEvent(t,tt,this.pageList[lIndex].point[pIndex])
+			console.log(o);
+            this.zz.userEvent(t,tt,o)
+			this.$set(o, 'isFavor', o.isFavor)
         }
         // 跳转到兴趣点筛选
         // gotoFilter() {
-        //     this.zz.href("/pages/my/outdoor/pointFilter")
+        //     this.zz.href("/pages/nav/rec/pointFilter")
         // }
     },
     onReachBottom() {

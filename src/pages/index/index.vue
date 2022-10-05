@@ -34,7 +34,7 @@
 					<video id="myVideo"
 						src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v"
 						:autoplay="true"
-						:muted="true"
+						:muted="false"
 						:show-fullscreen-btn="true"
 						:show-mute-btn="true"
 						:show-play-btn="true"
@@ -308,7 +308,7 @@ export default {
     },
     data() {
         return {
-			focus:true,
+			focus: false,
 			dict: uni.getStorageSync('sys_dict'),
             deptId: '',
             scrolled: 0,
@@ -470,14 +470,13 @@ export default {
 				this.searchBarHeight = e.height
 			}).exec()
 			
-			
+			// #ifndef APP-PLUS
 			uni.createSelectorQuery().select('#tvideo').boundingClientRect((e) => {
 				this.videoBottom = e.bottom - this.customBar
 				this.videoTop = e.top - this.customBar
 			}).exec()
-				
 			this.videoContext = uni.createVideoContext('myVideo')
-			
+			// #endif
 			// uni.createSelectorQuery().select('#stickBar').boundingClientRect((e) => {
 			// 	this.stickBarHeight = this.height
 			// 	this.stickBarPosition = this.top - this.stickBarHeight - this.searchBarHeight - this.statusBar
@@ -494,7 +493,9 @@ export default {
         },
         href(u,e,v) {console.log(u); this.zz.href(u,e,v) }
     },
+	// #ifndef APP-PLUS
 	onHide() { this.videoContext.pause() },
+	// #endif
 	onBackPress() { return true },
     onPageScroll: function (e) {
         this.scrollTop = e.scrollTop;
