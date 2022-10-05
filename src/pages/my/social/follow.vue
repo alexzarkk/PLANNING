@@ -49,10 +49,16 @@ export default {
             userList: [], // 我关注的列表
             pageNum: 1,
             pageSize: 20,
+            userId:''
         };
     },
     onLoad(option) {
         const userId = option.userId; // 查看别人的关注
+        if(userId){
+            this.userId = userId
+        }else{
+            this.userId = this.zz.getAcc()._id
+        }
         this.loadData();
     },
     methods: {
@@ -87,14 +93,15 @@ export default {
                 t: 60, // 事件：关注
                 tt: 60, // 对象: 用户
                 page: this.pageNum,
-                size: this.pageSize
+                size: this.pageSize,
+                uid: this.userId
             }
             this.zz.req(req1).then(({ pagination, list }) => {
                 // console.log(list);
                 this.total = pagination.total; // 赋值total
                 this.pageNum++;
-                list = list.map(res=>{
-                    res.isFollow=true
+                list = list.map(res => {
+                    res.isFollow = true
                     return res
                 })
                 this.userList = this.userList.concat(list)
@@ -117,10 +124,10 @@ export default {
                 url: '/pages/index/index'
             });
         },
-       async  followUser(item, index) {  // 关注或者取消关注
+        async followUser(item, index) {  // 关注或者取消关注
             // this.userList[index].isLink = !this.userList[index].isLink
-            await this.zz.userEvent(60, 60, this.userList[index]).then(res=>{
-                console.log("关注或取消关注用户===",res)
+            await this.zz.userEvent(60, 60, this.userList[index]).then(res => {
+                console.log("关注或取消关注用户===", res)
                 //  原始值 isLink的话,取消关注则取消isLink
                 // 恢复关注则恢复isLink
                 // 如果isLink 是false 的话,则不需要改变

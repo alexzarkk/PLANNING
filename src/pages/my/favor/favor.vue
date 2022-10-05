@@ -189,6 +189,11 @@ export default {
             this.loading = false
             // console.log("this.loading============", this.loading)
         },
+        // 打开文章详情
+        openArticleDetails(item){
+            console.log("打开文章详情",item)
+             this.zz.href(`/pages/planning/article?id=${item.info._id}`)
+        },
         // 收藏/喜欢的切换
         modeChange(e) {
             console.log('modeCHange', e);
