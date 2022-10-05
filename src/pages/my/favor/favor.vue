@@ -14,7 +14,7 @@
         </scroll-view>
         <view v-for="(item, index) in page[TabCur].list" :key="index">
             <!-- 文章收藏 -->
-            <view v-if="item.info && TabCur===0" class="cu-card article">
+            <view v-if="item.info && TabCur===0" class="cu-card article" @click="openArticleDetails(item)">
                 <view class="cu-item shadow">
                     <view class="title">
                         <view class="text-cut">
@@ -180,6 +180,11 @@ export default {
             })
             this.loading = false
             // console.log("this.loading============", this.loading)
+        },
+        // 打开文章详情
+        openArticleDetails(item){
+            console.log("打开文章详情",item)
+             this.zz.href(`/pages/planning/article?id=${item.info._id}`)
         },
         // 收藏/喜欢的切换
         modeChange(e) {
