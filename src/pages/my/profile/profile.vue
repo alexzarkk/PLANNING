@@ -25,10 +25,7 @@
                             更多
                         </view> -->
 
-                    <zz-z-popups
-                        v-model="isPopShow" :pop-data="morePopList" :x="348" :y="35" placement="top-end"
-                        @tapPopup="tapPopup"
-                    ></zz-z-popups>
+                    <zz-z-popups v-model="isPopShow" :pop-data="morePopList" :x="348" :y="35" placement="top-end" @tapPopup="tapPopup"></zz-z-popups>
                 </view>
                 <!-- 左下角昵称 -->
                 <view v-if="userInfo" class="name-box">{{ userInfo.nickName }}</view>
@@ -227,7 +224,7 @@ export default {
             return this.scrollTop > 180
         }
     },
-    onLoad(option) {
+    async onLoad(option) {
         const myUserInfo = this.zz.getAcc()
         // console.log("个人主页id======", option)
         if (option.id) {
@@ -237,7 +234,7 @@ export default {
                 $url: 'public/user/info',
                 userId: this.profileId
             }
-            this.zz.req(req1).then(async (res) => {
+            await this.zz.req(req1).then(async (res) => {
                 // console.log("获取到的用户的个人信息", res)  // 当前是空的
                 this.userInfo = res
                 try {

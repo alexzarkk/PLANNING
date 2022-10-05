@@ -20,7 +20,7 @@
             <view class="padding-top padding-lr solid-bottom text-sm padding-bottom-sm flex justify-between">
                 <view @click.stop="openProfile">
                     <text class="text-grey">
-                        {{ article.author || article.origin }}
+                        {{ article.author || article.origin || article.userInfo.nickName }}
                     </text>
                     <text class="margin-left-sm text-gray">
                         {{ article.createTime }}
