@@ -21,7 +21,7 @@
 			//图片地址，没有则不显示
 			imgUrl: {
 				type: String,
-				default: ""
+				default: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/5acf9550-9e74-11ea-b244-a9f5e5565f30.png'
 			},
 			//图片宽度
 			imgWidth: {

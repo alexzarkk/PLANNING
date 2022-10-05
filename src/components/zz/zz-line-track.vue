@@ -7,11 +7,12 @@
             <view class="flex align-center line-sport-type-box">
                 <view class="sport-icon" :class="'zzIcon-z'+details.type"></view>
                 <view class="flex flex-direction line-name-sport">
-                    <view class="line-name-sport-name">
+                    <view class="text-cut text-xl text-bold">
                         {{ details.name }}
                     </view>
-                    <view class="line-name-sport-sport">
-                        {{ dict.trail_type[details.type].label }}
+                    <view class="margin-top-xs text-cut text-sm">
+						<text class="cuIcon-locationfill text-grey" v-if="addr"></text>
+                        {{ details.type==9? addr: dict.trail_type[details.type].label }}
                     </view>
                 </view>
             </view>
@@ -87,7 +88,7 @@
                 </text>
             </view>
             <view v-if="!coverMode && details.userInfo" class="flex align-center avatar-box">
-                <view class="cu-avatar radius margin-right" :style="'background-image: url('+details.userInfo.headImg+')'"></view>
+                <view class="cu-avatar radius margin-right" :style="'background-image: url('+(details.userInfo.headImg||bd.sys.logo)+')'"></view>
                 <view>{{ details.userInfo.nickName }}</view>
             </view>
         </view>
@@ -107,22 +108,26 @@ export default {
     data() {
         return {
             dict: uni.getStorageSync('sys_dict'),
+			addr: '',
+			bd: this.bd,
             typeObj: null,
             coverMode: false  // 是否是封面模式    true:有封面 false:无封面的
         };
     },
     mounted() {
-        // console.log('details===========', this.details);
+        console.log('details===========', this.details);
         if (this.details.imgs && this.details.imgs.length > 0) {
             this.coverMode = true
         }
+		if(this.details.type==9) {
+			this.zz.reGeo(this.details.t1[0].coord[0]).then(e=>{
+				this.addr = e.formatted_address.replace('浙江省','')
+			})
+		}
     },
     methods: {
         openLineDetail() {
-            // uni.navigateTo({
-            //     url: '/pages/nav/rec/lineDetail'
-            // });
-            this.zz.href('/pages/nav/rec/lineDetail', this.details)
+            this.zz.href(this.details.type==9? '/pages/comm/kml' : '/pages/nav/rec/lineDetail', this.details)
         },
         imageError(error) {
             this.coverMode = false

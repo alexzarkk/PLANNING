@@ -29,22 +29,22 @@
 			</block>
 			
 			<!-- 采集员/绘制人信息-->
-			<block v-if="kml.user">
+			<block v-if="kml.userInfo">
 				<view class=" padding-tb-xs">
 					<view class="flex align-center">
 						<view class="basis-xs">
 							<view class="padding-lr" @click="userInfo">
-								<view class="cu-avatar xl round" :style="'background-image:url('+(kml.user.headImg||bd.sys.logo)+')'"></view>
+								<view class="cu-avatar xl round" :style="'background-image:url('+(kml.userInfo.headImg||bd.sys.logo)+')'"></view>
 							</view>
 						</view>
 						<view class="basis-xl">
 							<view class="flex align-center justify-between">
 								<view @click="userInfo">
 									<view>
-										<text class="text-xl text-bold">{{ kml.user.name }}</text>
+										<text class="text-xl text-bold">{{ kml.userInfo.name }}</text>
 									</view>
 									<view class="padding-top-xs">
-										<text class="text-sm text-gray">{{ kml.user.desc||kml.user.nickName }}</text>
+										<text class="text-sm text-gray">{{ kml.userInfo.desc||kml.userInfo.nickName }}</text>
 									</view>
 								</view>
 								<view class="padding-right">
@@ -156,7 +156,7 @@
 			                    <view class="flex-treble padding-xs radius">
 			                        <view class="flex flex-wrap align-center">
 			                            <view class="padding-xs" v-for="(x, idx) in kml.element" :key="idx">
-											<view class="cu-tag bg-green round lg">{{ dict.trail_element[x].label }}</view>
+											<view class="cu-tag bg-green round lg">{{ dict.trail_element[x]?dict.trail_element[x].label:'?' }}</view>
 			                                <!-- <view class="cu-tag" :class="'bg-green'">{{ dict.trail_element[x].label }}</view> -->
 			                            </view>
 			                        </view>
@@ -330,8 +330,12 @@ export default {
 			
         }
     },
-    async onLoad({_id,sn}=q) {
-		this.kml = await this.zz.req({ $url: 'public/kml/info', _id, plain: true, chart: true })
+    async onLoad({_id,sn,v}=q) {
+		if(v){
+			this.kml = this.zz.getParam(v)
+		} else {
+			this.kml = await this.zz.req({ $url: 'public/kml/info', _id, plain: true, chart: true })
+		}
 		uni.setNavigationBarTitle({ title: this.kml.name })
 		
 		this.loading = false
