@@ -7,10 +7,10 @@
             <view class="flex align-center line-sport-type-box">
                 <view class="sport-icon" :class="'zzIcon-z'+details.type"></view>
                 <view class="flex flex-direction line-name-sport">
-                    <view class="text-cut text-xl text-bold">
+                    <view class="text-cut text-xl text-bold" style="width:600rpx">
                         {{ details.name }}
                     </view>
-                    <view class="margin-top-xs text-cut text-sm">
+                    <view class="margin-top-xs text-cut text-sm" style="width:600rpx">
 						<text class="cuIcon-locationfill text-grey" v-if="addr"></text>
                         {{ details.type==9? addr: dict.trail_type[details.type].label }}
                     </view>
