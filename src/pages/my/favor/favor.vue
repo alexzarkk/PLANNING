@@ -8,10 +8,7 @@
             <tui-segmented-control :values="titleList" activeColor="#8fc42f" @click="modeChange"></tui-segmented-control>
         </view>
         <scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-            <view
-                v-for="(item, index) in page" :key="index" class="cu-item" :class="index == TabCur ? 'text-ztsgreen cur' : ''" :data-id="index"
-                @tap="tabSelect"
-            >
+            <view v-for="(item, index) in page" :key="index" class="cu-item" :class="index == TabCur ? 'text-ztsgreen cur' : ''" :data-id="index" @tap="tabSelect">
                 {{ item.title }}
             </view>
         </scroll-view>
@@ -88,8 +85,8 @@
 export default {
     data() {
         return {
-            t: 0,
-            loading:false,
+            t: 40,  // 40收藏  30点赞/喜欢
+            loading: false,
             TabCur: 0,
             scrollLeft: 0,
             titleList: ['收藏', '喜欢'],
@@ -185,8 +182,9 @@ export default {
         },
         // 收藏/喜欢的切换
         modeChange(e) {
-            // console.log('modeCHange', e);
-            this.t = e.index == 0 ? 1 : 2
+            console.log('modeCHange', e);
+            this.t = e.index == 0 ? 40 : 30
+            this.loadData('init')
         },
         tabSelect(e) {
             this.TabCur = e.currentTarget.dataset.id

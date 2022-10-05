@@ -27,8 +27,11 @@
                         </view>
                     </view>
                     <view class="right-box" @click.stop="followUser(item,index)">
-                        <view v-if="!item.isLink" class="foolow-btn">关注</view>
-                        <view v-else class="foolow-btn">正在关注</view>
+                        <view v-if="item.isLink" class="foolow-btn">互相关注</view>
+                        <view v-else>
+                            <view v-if="item.isFollow" class="foolow-btn">正在关注</view>
+                            <view v-else class="foolow-btn">关注</view>
+                        </view>
                     </view>
                 </view>
             </view>
@@ -89,6 +92,10 @@ export default {
                 // console.log(list);
                 this.total = pagination.total; // 赋值total
                 this.pageNum++;
+                list = list.map(res=>{
+                    res.isFollow=true
+                    return res
+                })
                 this.userList = this.userList.concat(list)
                 this.loading = false;
                 if (stopPullDown) {
@@ -109,8 +116,14 @@ export default {
                 url: '/pages/index/index'
             });
         },
-        followUser(item, index) {  // 关注或者取消关注
-            this.userList[index].isLink = !this.userList[index].isLink
+       async  followUser(item, index) {  // 关注或者取消关注
+            // this.userList[index].isLink = !this.userList[index].isLink
+            await this.zz.userEvent(60, 60, this.userList[index]).then(res=>{
+                console.log("关注或取消关注用户===",res)
+                //  原始值 isLink的话,取消关注则取消isLink
+                // 恢复关注则恢复isLink
+                // 如果isLink 是false 的话,则不需要改变
+            })
         }
     },
     onPullDownRefresh() {

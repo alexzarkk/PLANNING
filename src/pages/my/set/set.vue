@@ -243,7 +243,7 @@ export default {
                 console.error("头像上传失败=====================", error)
             }
             this.zz.req({
-                $url: 'admin/sys/user/update',
+                $url: 'user/user/update',
                 _id: this.userInfo._id,
                 headImg: imgs
             }).then((res) => {
@@ -343,7 +343,7 @@ export default {
             this.modalLoading = true;
             let requestParams = {
                 // $url: 'admin/sys/person/update',
-                $url: 'admin/sys/user/update',
+                $url: 'user/user/update',
                 _id: this.userInfo._id
             };
             requestParams[modify] = this.$data['t' + modify];
@@ -370,7 +370,7 @@ export default {
                     title: '提交中...'
                 });
                 const res = await this.zz.req({
-                    $url: 'admin/sys/user/update',
+                    $url: 'user/user/update',
                     _id: this.userInfo._id,
                     // userId: this.accountInfo._id,
                     info: {

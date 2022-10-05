@@ -31,7 +31,7 @@
                 <view v-if="userInfo" class="name-box">{{ userInfo.nickName }}</view>
                 <!-- 右下角头像 -->
                 <view class="avatar-box">
-                    <view v-if="userInfo" class="cu-avatar round lg margin-left" :style="[{ backgroundImage: 'url(' + userInfo.headImg + ')' }]">
+                    <view v-if="userInfo" @click="previewHeadImg" class="cu-avatar round lg margin-left" :style="[{ backgroundImage: 'url(' + userInfo.headImg + ')' }]">
                         <!-- :class="index % 2 == 0 ? 'cuIcon-female bg-pink' : 'cuIcon-male bg-blue'" -->
                         <view class="cu-tag badge cuIcon-male bg-blue"></view>
                     </view>
@@ -303,6 +303,10 @@ export default {
                 }
                 this.followObj.loading = false
             })
+        },
+        // 预览头像
+        previewHeadImg(){
+            this.zz.viewIMG([this.userInfo.headImg],0)
         },
         // 修改头像
         // 气泡框按钮

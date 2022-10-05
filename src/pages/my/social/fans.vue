@@ -90,9 +90,15 @@ export default {
         handleSearch(event) {
             // console.log("处理搜索", event)
         },
-        followUser(item, index) {  // 关注或者取消关注
-            this.userList[index].isLink = !this.userList[index].isLink
-        },
+        async followUser(item, index) {  // 关注或者取消关注
+            // this.userList[index].isLink = !this.userList[index].isLink
+            await this.zz.userEvent(60, 60, this.userList[index]).then(res => {
+                console.log("关注或取消关注用户===", res)
+                //  原始值 isLink的话,取消关注则取消isLink
+                // 恢复关注则恢复isLink
+                // 如果isLink 是false 的话,则不需要改变
+            })
+        }
         // async followUser() {
         // const ueRes = await this.zz.userEvent(60, 60, this.details, 'userId');  // 这里修改isFollow
         // try {
