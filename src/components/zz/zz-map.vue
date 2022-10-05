@@ -122,7 +122,7 @@ export default {
 						title:'网络连接失败，请稍后重试'
 					})
 				} else {
-					console.log('超时重载！！！！')
+					console.info('超时重载！！！！')
 					setTimeout(()=>{
 						map.remove()
 						this.newMb()
@@ -382,7 +382,7 @@ export default {
 			// console.log('mapbox.mbEvent: ',e);
 		},
 		mapDo(e) {
-			console.log('mapDo ------ >', e)
+			// console.log('mapDo ------ >', e)
 			switch (e.act){
 				case 'loading':
 					uni.showLoading({ mask:true })

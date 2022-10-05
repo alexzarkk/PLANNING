@@ -84,7 +84,7 @@ export default {
 		}
 	},
 	mounted(){
-		console.log("card-----bgimg------list",this.list)
+		// console.log("card-----bgimg------list",this.list)
 	},
 	methods: {
 		

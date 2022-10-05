@@ -280,21 +280,21 @@ export default {
 	onLoad: async function() {
 		thiz = this;
 		await this.zz.req({ $url: 'public/zz/mock', tar: 'special' }, true).then(res => {
-			console.log('res-------->', res);
+			// console.log('res-------->', res);
 			this.poster = res.poster;
 			this.page = res.page;
 			this.banner = res.data;
 		});
 		this.numDH(0, this.page.share);
 		await this.zz.req({ $url: 'public/zz/mock', tar: 'userEvent' }).then(res => {
-			console.log(res);
+			// console.log(res);
 			this.avatar = res.avatar;
 		});
 		// this.zz.userEvent(20,99,this.page)
 	},
 	onShow: function() {
 		this.zz.req({ $url: 'public/zz/mock', tar: 'blogList' }).then(res => {
-			console.log(res);
+			// console.log(res);
 			this.blog = res.data;
 		});
 		// this.init()

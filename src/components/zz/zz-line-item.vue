@@ -76,8 +76,7 @@ export default {
             });
         },
         icon() {
-			
-			console.log(this.lineData);
+			// console.log(this.lineData);
             const icon = [110, 112, 114, 116, 118, 122][math(Math.random() * 10, 0)];
             return icon ?? 110;
         }

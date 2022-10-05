@@ -178,14 +178,14 @@ export default {
                 cur.total = e.pagination.total
                 cur.list = cur.list.concat(e.list)
                 cur.page++
-                console.log('cur========',JSON.parse(JSON.stringify(cur)));
+                // console.log('cur========',JSON.parse(JSON.stringify(cur)));
             })
             this.loading = false
-            console.log("this.loading============", this.loading)
+            // console.log("this.loading============", this.loading)
         },
         // 收藏/喜欢的切换
         modeChange(e) {
-            console.log('modeCHange', e);
+            // console.log('modeCHange', e);
             this.t = e.index == 0 ? 1 : 2
         },
         tabSelect(e) {

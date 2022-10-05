@@ -96,7 +96,7 @@ export default {
 	},
 	mounted(){
 		// console.log("dict==========",this.dict)
-		console.log("dataList---item",this.dataList[0])
+		// console.log("dataList---item",this.dataList[0])
 		// console.log("show==========",this.show)
 	},
 	methods: {

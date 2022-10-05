@@ -200,17 +200,17 @@ export default {
         },
         inputFocus() { },
         openProfile(item) {
-            console.log('用户信息=======', item);
+            // console.log('用户信息=======', item);
             this.zz.href(`/pages/my/profile/profile?id=${item.userInfo._id}`)
         },
         replayComment(item) {
-            console.log("回复的评论", item)
+            // console.log("回复的评论", item)
             this.replyObj = {
                 pid: this.details._id,  // pid 也就是评论的 一级评论的id
                 rid: item.userInfo._id,  // 回复的用户的 id
                 rName: item.userInfo.nickName  // 回复的用户的昵称
             };
-            console.log("回复对象==========", this.replyObj)
+            // console.log("回复对象==========", this.replyObj)
             this.activeComment = !this.activeComment;
         },
         async likeComment(item) {

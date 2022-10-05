@@ -86,7 +86,7 @@ export default {
 	},
 	onLoad() {
 		this.user = this.zz.getAcc()
-		console.log(this.user);
+		// console.log(this.user);
 	},
 	methods: {
 		getCode(){

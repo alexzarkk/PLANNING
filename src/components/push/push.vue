@@ -118,7 +118,9 @@ export default {
         this.loadData('init');
     },
     mounted() {
-
+        // console.log("push-------------------------------------------------------")
+        // console.log("push----------------userId----------------------",this.userId)
+        // console.log("push-------------------------------------------------------")
     },
     methods: {
         async loadTag() {
@@ -345,7 +347,7 @@ export default {
             this.loading = true;
             // this.userInfo._id
             const requestParams = {
-                $url: 'user/moment/page',
+                $url: 'public/moment/page',
                 userId: this.userId,
                 page: this.page,
                 size: this.size

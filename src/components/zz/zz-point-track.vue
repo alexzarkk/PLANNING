@@ -157,7 +157,7 @@ export default {
     },
     watch: {
         isFavor(val) {
-            console.log('favor---------', val, this.details);
+            // console.log('favor---------', val, this.details);
         }
     },
     mounted() {
@@ -166,7 +166,7 @@ export default {
         // 打开用户主页
         openProfile() {
             this.clickStop()
-            console.log("用户详情=========")
+            // console.log("用户详情=========")
         },
         // 打开坐标点详情
         openDetails() {
@@ -198,7 +198,7 @@ export default {
             this.cardMode = false
         },
         videoError(e) {
-            console.log('视频加载错误', e);
+            console.error('视频加载错误', e);
         }
     }
 };

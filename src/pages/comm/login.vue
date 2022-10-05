@@ -105,7 +105,7 @@ export default {
                     height: 20,
                     width: 100
                 });
-                console.log('res==========', res);
+                // console.log('res==========', res);
 
                 // const data = res.data.data;
                 // this.form.captchaId = res.data.captchaId;
@@ -115,7 +115,7 @@ export default {
                 //     this.svg = data.replace('height=', 'height="35" test=');
                 // }
             } catch (e) {
-                console.log('请求错误', e);
+                console.error('请求错误', e);
             }
         },
         reg() {

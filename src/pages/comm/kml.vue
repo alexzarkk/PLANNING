@@ -341,7 +341,7 @@ export default {
 				this.refKml = await this.zz.req({ $url: 'public/layout/around', _id: this.kml.t1[0]._id })
 			}, 3500)
 		}
-		console.log(this.kml);
+		// console.log(this.kml);
     },
     mounted() { },
 	onShow() { this.ver = uni.getStorageSync('VER') || 0 },
@@ -388,11 +388,11 @@ export default {
 			this.zz.userEvent(t,this.kml.type==99?99:100,this.kml)
 		},
 		userInfo(){
-			console.log('userInfo', this.kml.userId)
+			// console.log('userInfo', this.kml.userId)
 			this.zz.toast('功能尚未启用！')
 		},
 		follow(){
-			console.log('follow', this.kml.userId)
+			// console.log('follow', this.kml.userId)
 			this.zz.toast('功能尚未启用！')
 		},
     },

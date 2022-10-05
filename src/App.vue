@@ -64,7 +64,7 @@ export default {
                 console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
                 // #endif
 				
-				console.log('sysInfo ------->', e)
+				// console.log('sysInfo ------->', e)
                 uni.setStorageSync('sysInfo', e)
 				comm.setStorage('clientInfo', JSON.stringify({
 					PLATFORM: e.uniPlatform || e.platform,

@@ -64,7 +64,7 @@ export default {
             this.loading = true
             this.zz.req({ $url: '/public/rec/page', ...this.page }).then(e => {
 				this.loading = false
-				console.log(e);
+				// console.log(e);
 				this.page.total = e.pagination.total
                 this.list[0] = this.list[0].concat(e.list)
                 this.page.page++

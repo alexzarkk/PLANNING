@@ -87,7 +87,8 @@
             <view class="title-bar text-xxl padding-left bg-white padding-tb">动态</view>
         </view>
         <view v-if="userInfo">
-            <push :user-id="userInfo._id"></push>
+            <!-- <push-card v-if="" :details="item" :header="false" :articleId="articleId"></push-card> -->
+            <push :userId="userInfo._id"></push>
         </view>
 
         <!-- <view class="bg-white solid-bottom" @click="openPage('/pages/my/social/pushDetails')">
@@ -228,7 +229,7 @@ export default {
     },
     onLoad(option) {
         const myUserInfo = this.zz.getAcc()
-        console.log("个人主页id======", option)
+        // console.log("个人主页id======", option)
         if (option.id) {
             // 点击加载别人的个人主页
             this.profileId = option.id
@@ -237,7 +238,7 @@ export default {
                 userId: this.profileId
             }
             this.zz.req(req1).then(async (res) => {
-                console.log("获取到的用户的个人信息", res)
+                // console.log("获取到的用户的个人信息", res)  // 当前是空的
                 this.userInfo = res
                 try {
                     if (myUserInfo._id) {  // 已登录
@@ -247,10 +248,10 @@ export default {
                         }
                         this.followObj._id = res._id  //  用于关注和取消关注的用户id
                         this.followObj.isFollow = await this.zz.req(req)  // 获取是否关注
-                        console.log('查询到的是否关注', this.followObj.isFollow);
+                        // console.log('查询到的是否关注', this.followObj.isFollow);
                     }
                 } catch (error) {
-                    console.log("查询关注失败======", error)
+                    console.error("查询关注失败======", error)
                 }
 
             }).catch(err => {
@@ -272,7 +273,7 @@ export default {
                 $url: 'user/person/info',
                 _id: this.profileId
             }).then((res) => {
-                console.log('获取到的profile 信息========', res);
+                // console.log('获取到的profile 信息========', res);
                 this.person = Object.assign(this.person, res)
                 let person = this.person
                 this.countList[0].value = person.rec || 0
@@ -297,7 +298,7 @@ export default {
             }
             this.followObj.loading = true
             this.zz.userEvent(60, 60, this.followObj).then(res => {
-                console.log("关注或者取消关注")
+                // console.log("关注或者取消关注")
                 if (this.followObj.isFollow) {
                     this.zz.toast("关注成功", 1000)
                 } else {

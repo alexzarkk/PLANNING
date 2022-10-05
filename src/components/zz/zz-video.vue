@@ -51,7 +51,7 @@ export default {
     },
     watch: {
         state(state, oldValue) {
-            console.log(state, 'state');
+            // console.log(state, 'state');
             if (!state) {
                 this.VideoContext.pause()
             } else {
@@ -72,7 +72,7 @@ export default {
     },
     methods: {
         fullscreenchange(e) {
-            console.log(e.detail.fullScreen);
+            // console.log(e.detail.fullScreen);
             this.state = e.detail.fullScreen
         },
         timeupdate(e) {

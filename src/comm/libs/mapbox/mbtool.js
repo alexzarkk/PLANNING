@@ -63,7 +63,7 @@ watchLoc = (map, cur, id)=>{
 				let src = map.getSource(id)
 				if(src) src.setData(cur)
 			}
-			console.log(plus.wid, 'plus.wid ----------- ', p);
+			// console.log(plus.wid, 'plus.wid ----------- ', p);
 		}, e =>{
 			geoErr(e)
 		},{

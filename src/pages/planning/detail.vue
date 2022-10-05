@@ -369,14 +369,14 @@ export default {
             this.trail = null
             let _id = this.id
             this.trail = await this.zz.req({ $url: 'public/trail/info', _id })
-            console.log('获取到的线路的信息', this.trail);
+            // console.log('获取到的线路的信息', this.trail);
             const userInfo = this.zz.getAcc()
             if (this.trail.userId === userInfo._id) {
                 this.isWriter = true
             }
             this.zz.req({ $url: 'public/kml/info', _id: this.trail.kmlId, plain: true }).then(e => {
                 this.trail._kml = e
-                console.log('kml================info==============', this.trail);
+                // console.log('kml================info==============', this.trail);
             })
             if (!this.trail.poi) {
                 this.trail.poi = await this.zz.req({ $url: 'public/zz/near', kmlId: this.trail.kmlId, tar: 'poi', type: [4004, 4006, 4010, 4012], dist: 5000 });
@@ -387,7 +387,7 @@ export default {
             }
             this.poi = poi;
 			
-			console.log(poi);
+			// console.log(poi);
             uni.$on('newComment'+_id, (params) => {
                 // console.log('评论更新了', params);
                 this.$refs.comment.init(); // 刷新评论列表

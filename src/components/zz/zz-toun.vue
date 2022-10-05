@@ -76,7 +76,7 @@ export default {
             uni.navigateTo({
                 url: '/pages/event/clockList?id=' + item._id,
 				fail: (err) => {
-					console.log("err======",err)
+					console.error("err======",err)
 				}
             });
         },

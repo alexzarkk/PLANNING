@@ -68,7 +68,7 @@ export default {
     methods: {
         async loadData() { },
         async confirmDelete() {
-            console.log('确认删除');
+            // console.log('确认删除');
             if (this.loading) {
                 return;
             }

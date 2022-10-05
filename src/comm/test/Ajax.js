@@ -33,7 +33,7 @@ export default function Ajax(data={},u='app',t=9999) {
 			x.setRequestHeader("clientinfo", JSON.stringify(comm.getStorage('clientInfo')))
 			x.send(JSON.stringify(data))
 			
-			console.log('ajax ------------',u,data);
+			// console.log('ajax ------------',u,data);
 			
 			x.onreadystatechange = ()=>{
 				clearInterval(timer)
