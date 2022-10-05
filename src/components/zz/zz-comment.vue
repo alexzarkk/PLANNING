@@ -227,7 +227,7 @@ export default {
     mounted() {
         let _this = this;
         this.userInfo = this.zz.getAcc();
-        console.log('用户信息========', this.userInfo);
+        // console.log('用户信息========', this.userInfo);
         if (this.userInfo) {
             this.isLogin = true
         }
@@ -288,7 +288,7 @@ export default {
         },
         // 发送评论   1秒钟的节流
         sendComment() {
-            console.log("发送评论=====", this.comment)
+            // console.log("发送评论=====", this.comment)
             if (!this.comment || this.loading) {
                 return;
             }
@@ -341,7 +341,7 @@ export default {
             });
         },
         openProfile(item){
-            console.log('用户信息=======',item);
+            // console.log('用户信息=======',item);
             this.zz.href(`/pages/my/profile/profile?id=${item.userInfo._id}`)
         },
         // 打开评论的操作菜单
@@ -416,12 +416,12 @@ export default {
             this.activeComment = !this.activeComment;
         },
         replayComment(item) {
-            console.log('回复对象=======', item);
+            // console.log('回复对象=======', item);
             this.replyObj = {
                 pid: item._id,
                 rName: item.userInfo.nickName
             };
-            console.log("回复对象==========", this.replyObj)
+            // console.log("回复对象==========", this.replyObj)
             this.activeComment = !this.activeComment;
         },
         likeComment(item) {
@@ -440,7 +440,7 @@ export default {
             }
         },
         textareaKeyboardHeightChange(event) {
-            console.log("多行文本的键盘高度变化", event)
+            // console.log("多行文本的键盘高度变化", event)
             if (event.height === 0) {
                 // this.btnBottom = 0;
                 this.activeComment = false;

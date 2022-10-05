@@ -2,7 +2,7 @@
     <!-- 
     name: 记录的线路的卡片显示
  -->
-    <view>
+    <view class="container">
         <!-- 卡片模式 -->
         <view class="line-card-box" @click="openDetails">
             <view class=" line-sport-type-box record-time-box flex align-center justify-between padding-tb">
@@ -46,7 +46,9 @@
                             v-if="details.imgs[0]" width="100%" height="220rpx" radius="10rpx" mode="aspectFill"
                             :src="details.imgs[0] || ''" @click="previewImage" @error="imageError"
                         ></tui-lazyload-img>
-                        <video v-else class="point-video" :src="details.video.url" @error="videoError"></video>
+                        <view v-else class="video-box">
+                            <video  class="point-video" :src="details.video.url" @error="videoError"></video>
+                        </view>
                         <view class="flex align-center avatar-box" @click="openProfile">
                             <!-- <view class="cu-avatar radius margin-right" :style="'background-image:url(' + user.headImg + ')'"></view> -->
                             <!-- <view>户外人</view> -->
@@ -155,7 +157,7 @@ export default {
     },
     watch: {
         isFavor(val) {
-            console.log('favor---------', val, this.details);
+            // console.log('favor---------', val, this.details);
         }
     },
     mounted() {
@@ -164,7 +166,7 @@ export default {
         // 打开用户主页
         openProfile() {
             this.clickStop()
-            console.log("用户详情=========")
+            // console.log("用户详情=========")
         },
         // 打开坐标点详情
         openDetails() {
@@ -196,13 +198,15 @@ export default {
             this.cardMode = false
         },
         videoError(e) {
-            console.log('视频加载错误', e);
+            console.error('视频加载错误', e);
         }
     }
 };
 </script>
 
 <style lang="scss" scoped>
+
+
 .line-card-box {
     background-color: #ffffff;
     border-radius: 20rpx;
@@ -243,10 +247,15 @@ export default {
         // margin-bottom: 20rpx;
     }
 
-    .point-video {
+.video-box{
+    overflow: hidden;
+
+.point-video {
         width: 400rpx;
         height: 220rpx;
     }
+}
+    
 
     .line-info-box {
         // height: 120rpx;

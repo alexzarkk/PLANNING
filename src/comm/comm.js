@@ -25,7 +25,7 @@ const comm = {
 				x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
 				x.send(JSON.stringify(data))
 				
-				console.log('ajax ------------',fn,data);
+				// console.log('ajax ------------',fn,data);
 				
 				x.onreadystatechange = ()=>{
 					clearInterval(timer)
@@ -37,7 +37,7 @@ const comm = {
 								if(e.data) comm.setStorage(comm.key(fn+JSON.stringify(data)), e.data)
 								resolve(e.data)
 							} else{
-								console.log('错误：', e.message)
+								console.error('错误：', e.message)
 								reject(e.message)
 							}
 						}else{
@@ -49,7 +49,7 @@ const comm = {
 				//超时
 				if(t){
 					timer = setInterval(()=>{
-						console.log('timedout!')
+						console.info('timedout!')
 						x.abort()
 						clearInterval(timer)
 					},t)

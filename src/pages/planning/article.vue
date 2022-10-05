@@ -38,10 +38,7 @@
                 <view class="cu-card case no-card">
                     <view class="padding-top-xs shadow">
                         <view class="bg-video flex align-center" style="height: 400rpx">
-                            <video
-                                id="myVideo" loop :src="article.video.url" :autoplay="true" :muted="false"
-                                :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover"
-                            ></video>
+                            <video id="myVideo" loop :src="article.video.url" :autoplay="true" :muted="false" :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover"></video>
                         </view>
                     </view>
                     <view v-if="article.video.desc" class="padding-tb-xs bg-gray text-right">
@@ -73,10 +70,7 @@
             </view>
             <view class="padding-sm flex flex-direction solid-bottom"></view>
             <tui-scroll-top v-if="!isComment" :bottom="500" :top="300" :right="70" :scroll-top="scrolled"></tui-scroll-top>
-            <zz-comment
-                v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true"
-                @inComment="inComment" @userEvent="commentEvent"
-            ></zz-comment>
+            <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true" @inComment="inComment" @userEvent="commentEvent"></zz-comment>
         </view>
     </view>
 </template>
@@ -92,7 +86,7 @@ export default {
             isComment: false
         };
     },
-    onLoad: async function ({id}=q) {
+    onLoad: async function ({ id } = q) {
         this.article = await this.zz.req({ $url: 'public/article/info', _id: id }, true)
         setTimeout(() => {
             this.zz.userEvent(20, 10, this.article)
@@ -103,6 +97,20 @@ export default {
     },
     methods: {
         openProfile() {
+            let pages = getCurrentPages(); //获取所有页面栈实例列表
+            let prevPage = pages[pages.length - 2]; //上一页页面实例
+            if (prevPage) {
+                console.log("页面栈===", pages, prevPage)
+                console.log("路由信息", prevPage.route)
+                console.log("路由参数", prevPage.options)
+                // if (prevPage.route === 'pages/my/profile/profile' || prevPage.route === 'pages/my/profile/sysProfile') {  // 上一级是文章
+                //     uni.navigateBack({
+                //         delta: 1
+                //     });
+                //     return;
+                // }
+            }
+
             this.zz.profile(this.article.userId)
         },
         imgView: function (url) {

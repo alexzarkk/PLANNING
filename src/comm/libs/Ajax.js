@@ -19,7 +19,7 @@ export default function Ajax({u = 'app', data = {}, t = 9999 }) {
 		x.setRequestHeader("appid", '__UNI__210B33A')
 		x.send(JSON.stringify(data))
 		
-		console.log('ajax ------------',u,data);
+		// console.log('ajax ------------',u,data);
 		
 		x.onreadystatechange = ()=>{
 			clearInterval(timer)
@@ -30,11 +30,11 @@ export default function Ajax({u = 'app', data = {}, t = 9999 }) {
 						// console.log('success ------------',e.data);
 						resolve(e.data)
 					} else{
-						console.log('错误：', e.message);
+						console.error('错误：', e.message);
 						reject(e.message)
 					}
 				}else{
-					console.log('request error',e.error);
+					console.error('request error',e.error);
 					reject(e.error.message)
 				}
 			}
@@ -42,7 +42,7 @@ export default function Ajax({u = 'app', data = {}, t = 9999 }) {
 		//超时
 		if(t){
 			timer = setInterval(()=>{
-				console.log('timedout!')
+				console.info('timedout!')
 				x.abort()
 				clearInterval(timer)
 			},t)

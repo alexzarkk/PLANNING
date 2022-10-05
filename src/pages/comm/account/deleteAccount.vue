@@ -8,7 +8,7 @@
                 很遗憾看见您离开:(
             </view>
             <view>
-                通过删除您的"用户昵称"账户,我们将从系统删除您的所有个人数据和信息。
+                通过删除您的"{{userInfo.nickName}}"账户,我们将从系统删除您的所有个人数据和信息。
             </view>
             <view class="padding-tb-sm text-bold">
                 删除后将发生以下情况，
@@ -37,7 +37,7 @@
                 <text>您无需删除账户即可更改用户名和电子邮件地址，您可以随时在个人设置中进行更改。</text>
             </view>
             <view style="height:100rpx;"></view>
-            <view class="text-xl text-center text-red" @click="isDeleteShow = true"><text class="margin-right-xs">删除账户</text>用户昵称</view>
+            <view class="text-xl text-center text-red" @click="isDeleteShow = true"><text class="margin-right-xs">删除账户</text>{{userInfo.nickName}}</view>
             <zz-cu-modal
                 :disable="valid!=='删除账户'" :isLoading="loading" :show="isDeleteShow" title="提示" @confirm="confirmDelete"
                 @cancel="isDeleteShow = false"
@@ -59,16 +59,19 @@ export default {
         return {
             loading: false,
             isDeleteShow: false,
-            valid: ''
+            valid: '',
+            userInfo:null
         };
     },
     onLoad() {
         this.loadData();
+        this.userInfo = this.zz.getAcc()
+        console.log('个人信息',this.userInfo);
     },
     methods: {
         async loadData() { },
         async confirmDelete() {
-            console.log('确认删除');
+            // console.log('确认删除');
             if (this.loading) {
                 return;
             }

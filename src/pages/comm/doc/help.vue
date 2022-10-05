@@ -57,7 +57,7 @@
 		},
 		onLoad() {
 			this.zz.request('opration',{action:'sysHelp'},false,true).then(res=>{
-				console.log(res.data)
+				// console.log(res.data)
 				this.content = res.data
 				
 			})

@@ -86,7 +86,7 @@ export default {
                 size: this.pageSize
             }
             this.zz.req(req1).then(({ pagination, list }) => {
-                console.log(list);
+                // console.log(list);
                 this.total = pagination.total; // 赋值total
                 this.pageNum++;
                 this.userList = this.userList.concat(list)
@@ -99,9 +99,7 @@ export default {
         },
         // 打开个人主页
         openProfile(user) {
-            this.zz.profile(user._id)
-            // console.log('user=========', user);
-            // this.zz.href(`/pages/my/profile/sysProfile?id=${user._id}`)
+            this.zz.profile(user.tid)
         },
         handleSearch() {
 

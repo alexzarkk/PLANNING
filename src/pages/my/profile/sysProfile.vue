@@ -59,7 +59,7 @@
             </view>
             <!-- 系统账户,文章 -->
             <view v-for="(item,index) in pageList" :key="index">
-                <push-card :details="item" :header="false"></push-card>
+                <push-card :details="item" :header="false" :articleId="articleId"></push-card>
             </view>
             <zz-page-status :loading="loading" :length="pageList.length" :total="total"></zz-page-status>
             <!-- <view style="height: 100rpx; width: 750rpx"></view> -->
@@ -74,6 +74,7 @@ export default {
     components: { pushCard },
     data() {
         return {
+            articleId:'',
             person: {
                 fans: 0,  // 粉丝
                 follow: 0,  // 关注
@@ -113,6 +114,14 @@ export default {
         }
     },
     async onLoad(option) {
+        // let pages = getCurrentPages(); //获取所有页面栈实例列表
+        // let prevPage = pages[pages.length - 2]; //上一页页面实例
+        // console.log("页面栈===", pages, prevPage)
+        // console.log("路由信息",prevPage.route)
+        // console.log("路由参数",prevPage.options)
+        // if(prevPage.route === 'pages/planning/article'){  // 上一级是文章
+        //     this.articleId = prevPage.options.id
+        // }
         this.profileId = option.id
         const req1 = {
             $url: 'public/user/info',
@@ -128,7 +137,7 @@ export default {
             $url: 'public/person/info',
             _id: this.profileId
         }).then((res) => {
-            console.log('获取到的profile 信息========', res);
+            // console.log('获取到的profile 信息========', res);
             this.person = Object.assign(this.person, res)
         });
         this.loadData('init');
@@ -151,7 +160,7 @@ export default {
                     this.followObj.isFollow = await this.zz.req(req)  // 获取是否关注
                 }
             } catch (error) {
-                console.log("查询关注失败======", error)
+                console.error("查询关注失败======", error)
             }
         },
         async loadData(type, stopPullDown = false) {

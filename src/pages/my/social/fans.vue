@@ -88,7 +88,7 @@ export default {
             // this.zz.href(`/pages/my/profile/profile?id=${user._id}`)
         },
         handleSearch(event) {
-            console.log("处理搜索", event)
+            // console.log("处理搜索", event)
         },
         followUser(item, index) {  // 关注或者取消关注
             this.userList[index].isLink = !this.userList[index].isLink

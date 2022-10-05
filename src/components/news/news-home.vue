@@ -276,6 +276,7 @@ export default {
                 $url: 'public/moment/page',
                 page: cur.page,
                 size: cur.size,
+                ui:true,  // 带上个人信息
                 type: [cur.value]  // 科普
             };
             this.zz.req(req1).then(({ pagination, list }) => {

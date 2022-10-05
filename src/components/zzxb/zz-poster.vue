@@ -119,7 +119,7 @@ export default {
 	watch:{
 		doDraw() {
 			if(this.doDraw){
-				console.log('doDraw')
+				// console.log('doDraw')
 				this.OnCanvas()
 			}
 		}

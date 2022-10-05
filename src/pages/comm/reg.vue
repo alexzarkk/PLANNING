@@ -127,7 +127,7 @@ export default {
                     data: { phone: this.phone }
                 })
                 .then((res) => {
-                    console.log(res.data);
+                    // console.log(res.data);
                 });
         },
         submit() {
@@ -176,7 +176,7 @@ export default {
                         }
                     })
                     .then((res) => {
-                        console.log(res);
+                        // console.log(res);
                         this.vali = res.data;
                         if (this.vali.phone) return this.zz.toast('此手机号已注册');
                         this.isSend = false;

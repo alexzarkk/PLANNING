@@ -117,7 +117,7 @@ export default {
                     }
                 }
             }
-            console.log("动态参数======", req1)
+            // console.log("动态参数======", req1)
             this.zz.req(req1).then((res) => {
                 uni.redirectTo({
                     url: '/pages/my/discover'

@@ -96,7 +96,6 @@ export default {
 		}
 	},
 	mounted(){
-		// console.log("dataList---item",this.dataList[0])
 	},
 	methods: {
 		trailDetail: function(e) {

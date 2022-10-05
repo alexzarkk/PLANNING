@@ -74,9 +74,13 @@ export default {
                 return null
             }
         },
-        header:{
-            type:Boolean,
-            default:true
+        header: {
+            type: Boolean,
+            default: true
+        },
+        articleId: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -90,16 +94,16 @@ export default {
     },
     methods: {
         openDetails() {
-            if(this.stopClick){
+            if (this.stopClick) {
                 return;
             }
-            // console.log("打开详情===========", this.details)
+
             const isPush = this.details.type.some(res => {
                 return res === 30
             })
-            if (isPush && this.details.type.length === 1) {
+            if (isPush && this.details.type.length === 1) {  // 跳转到动态
                 this.zz.href('/pages/my/social/pushDetails', { _id: this.details._id });
-            } else {
+            } else {  // 跳转到文章
                 this.zz.href(`/pages/planning/article?id=${this.details._id}`)
             }
 
