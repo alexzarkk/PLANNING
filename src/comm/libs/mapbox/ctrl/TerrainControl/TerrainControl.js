@@ -72,7 +72,6 @@ export default class TerrainControl extends Base {
 			this.around.node.style.display = 'none'
 			this.ele.node.style.display = 'none'
 			this.terrain.node.style.display = 'none'
-			
 		}
 		
 		this.xDem = ()=>{
@@ -341,7 +340,7 @@ export default class TerrainControl extends Base {
 			
 			if(this.st>3) this.st = 0
 			map.sid = lt[this.st].id
-			
+			map.nav = {r:{}}
 			this.xDem()
 			this.xEle()
 			this.load()

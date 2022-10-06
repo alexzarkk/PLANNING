@@ -4,13 +4,11 @@
 	import mbtool from '@/comm/libs/mapbox/mbtool.js'
 	import comm from '@/comm/comm'
 	import icon from '@/comm/libs/icon'
-	// import AMapLoader from '@amap/amap-jsapi-loader'
 	import { CompassControl, LocationControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
 	import { trans } from '@/comm/geotools.js'
 	import { amapKey } from '@/comm/zz'
 	
 	import '@/comm/libs/mapbox/mapbox.css'
-	// import '@/comm/libs/mapbox/draw/mapbox-gl-draw.css'
 	
 export default {
 	data() {
@@ -58,7 +56,7 @@ export default {
 			let map = new mapboxgl.Map(this.settings)
 			
 			map.addControl(new CompassControl(), 'bottom-right')
-			map.addControl(new LocationControl(), 'bottom-left')
+			// map.addControl(new LocationControl(), 'bottom-left')
 			
 			map.sid = 'default'
 			map.pm = {}
@@ -66,57 +64,32 @@ export default {
 			map._2p = []
 			this.map = map
 			
-			// window.map = map
-			this.initAmap()
 		},
-		async initAmap(){
-			// if(!window.Geocoder) {
-			// 	await AMapLoader.load({
-			// 	    key: this.key.amap,
-			// 	    version: "2.0",
-			// 		plugins:['AMap.Geocoder']
-			// 	}).then((AMap)=>{
-			// 		window.Geocoder = new AMap.Geocoder({})
-			// 	}).catch((e)=>{
-			// 		console.error(e)
-			// 	})
-			// }
-		},
-		init(self,si,ct,isf,ctrl,t=1) {
+		init(self,si,ct,ctrl,t=1) {
 			
 			let map = this.map
 			
 			if(t==1) {
 				this.self = self
-				// this.isf = isf
-				// map.sysInfo = si
-				
-				ctrl = new TerrainControl(isf, map.sid, si.platform)
+				ctrl = new TerrainControl(true, map.sid, si.platform)
 				map.addControl(ctrl, 'top-left')
-				map.addControl(new FullscreenControl(isf), 'top-right')
 			}
 			
-			// #ifdef APP-PLUS
-			if(isf) {
-				const setTop = (x) => { for (let s of x) { s.style.marginTop = (si.safeArea.top-6)+'px' } }
-				setTop(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
-				setTop(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
-				// plus.screen.lockOrientation('landscape-primary')
-				// this.resize(si.platform=='android'?1:0)
-				this.resize(0)
+			const setTop = (x) => { for (let s of x) { s.style.marginTop = 0+'px' } }
+			setTop(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
+			setTop(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
+			this.resize(0)
 				
-			}
 			//无网重试
-			if(plus.networkinfo.getCurrentType()<=1 && t>0) {
+			if(!comm.hadNet()) {
 				let style = comm.getStorage('mbStyle')
 				if(style) {
 					map.setStyle(style)
-					return this.init(self,si,ct,isf,ctrl,0)
+					return this.init(self,si,ct,ctrl,0)
 				}
 				
 				t++
 				if(t>20) {
-					// alert('网络连接失败，请稍后重试')
 					uni.showToast({
 						icon:"error",
 						title:'网络连接失败，请稍后重试'
@@ -126,21 +99,13 @@ export default {
 					setTimeout(()=>{
 						map.remove()
 						this.newMb()
-						this.init(self,si,ct,isf,ctrl,t)
+						this.init(self,si,ct,ctrl,t)
 					}, 10000)
 				}
 				return
 			}
-			// #endif
-			
-			 
-			// #ifdef H5
 			map.resize()
-			if(isf) {
-				this.resize()
-				window.addEventListener('resize', this.resize)
-			}
-			// #endif
+			window.addEventListener('resize', this.resize)
 			
 			const evt = (e) =>{
 				let _c = (c)=>{return [mbtool.fixNum(c.lng), mbtool.fixNum(c.lat)]},
@@ -161,23 +126,6 @@ export default {
 			map.on('click', (e) => {
 				self.callMethod('mbClick', [mbtool.fixNum(e.lngLat.lng), mbtool.fixNum(e.lngLat.lat)])
 			})
-			// map.on('rotateend', ()=>{ })
-			
-			//simple_select direct_select  draw_line_string  draw_polygon  draw_point
-			// this.draw = new MapboxDraw({ displayControlsDefault: false,
-			// 							// defaultMode: 'draw_polygon',
-			// 							})
-										
-			// map.on('draw.create', e => {
-			// 	console.log('draw.create', e);
-			// })
-			// map.on('draw.delete', e => {
-			// 	console.log('draw.delete', e);
-			// })
-			// map.on('draw.update', e => {
-			// 	console.log('draw.update', e);
-			// })
-			// map.addControl(this.draw)
 		
 			for (let k in icon) {
 				map.loadImage(icon[k], (x,m)=>{ map.addImage(k, m) })
@@ -189,25 +137,25 @@ export default {
 				comm.setStorage('mbStyle', map.getStyle())
 				// this.onLoc()
 			})
-			map.on('moveend', (e) => {
-				mbtool.on(map)
-				self.callMethod('mbEvent', evt(e))
-			});
-			map.on('zoomend', () => {
-				mbtool.on(map)
-			});
 		},
 		
-		async updateData({exec=null, sysInfo={}, center=null, pms=null, line=[], point=[], gon=[], isf=false}, ov, self) {
+		async updateData({exec=null, sysInfo={}, center=null, pms=null, line=[], point=[], gon=[]}, ov, self) {
 			if(exec) return this[exec.m](exec.e)
 			let map = this.map
 			if (!map) return
-			if (!map.init) return this.init(self, sysInfo, center, isf)
+			if (!map.init) return this.init(self, sysInfo, center)
 			
 			// console.log('map.inited...')
 			// console.log('updateData:=======================', center,point,line);
 			// console.log('updateData.old:====',ov);
-			
+			if(!pms) {
+				this.map.on('moveend', (e) => {
+					mbtool.on(map)
+				});
+				this.map.on('zoomend', () => {
+					mbtool.on(map)
+				});
+			}
 			mbtool.setKml(this.map, pms, line, point, gon)
 		},
 		
@@ -217,6 +165,7 @@ export default {
 		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
 		runx(e){ mbtool.run(this.map,e) },
 		around(e){ mbtool.getAround(this.map,null,e) },
+		fly(e){this.map.flyTo({center: this.map.sid=='amap'? trans(e.coord):e.coord, zoom:16})},
 		mbAct(e){
 			if(this[e.act]) {
 				this[e.act](e.e)
@@ -230,7 +179,7 @@ export default {
 
 <template>
     <view>
-        <view id="mbContainer" :style="{ height: winH + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
+        <view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
 		
 		<view class="cu-modal" :class="video ? 'show' : ''">
 		    <view class="cu-dialog">
@@ -246,13 +195,12 @@ export default {
 <script>
 	
 export default {
-    name: 'zzMap',
     data() {
         return {
 			mdone: false,
 			mb: {},
 			ver: 0,
-			sysInfo: {},
+			sysInfo: uni.getStorageSync('sysInfo'),
 			isFullscreen: false,
 			video: null
         };
@@ -300,10 +248,6 @@ export default {
 		        return {}
 		    }
 		},
-        winH: {
-            type: Number,
-            default: 400
-        }
     },
     watch: {
         line(e, o) {
@@ -321,27 +265,10 @@ export default {
         refKml(e, o) {
             if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'setKml', e} }
         },
-        winH(e, o) {
-			this.exec({m:'resize'})
-            this.setProp()
-        }
     },
 	
     mounted() {
-		this.sysInfo = uni.getStorageSync('sysInfo')
-		this.isFullscreen = this.winH == this.sysInfo.windowHeight
-		if(!this.center.length) {
-			if(this.pms) {
-				let t=this.pms[0]
-				this._center = t.t1==1? t.coord[0]:t.coord
-			} else if(this.line.length) {
-				this._center = this.line[0].coord[0]
-			} else if(this.point.length) {
-				this._center = this.point[0].coord
-			}
-		}else {
-			this._center = this.center
-		}
+		console.log(this.pms);
         this.setProp()
     },
     methods: {
@@ -361,7 +288,6 @@ export default {
 			} else {
 				this.mb = {
 				    sysInfo: this.sysInfo,
-					isf: this.isFullscreen,
 				    center: this._center,
 				}
 			}
@@ -400,18 +326,6 @@ export default {
 					this.zz.toast(e.e)
 					this.setProp()
 					break;
-				case 'fullscreen':
-					if(e.e) {
-					// if(this.isFullscreen) {
-						// #ifdef APP-PLUS
-						plus.screen.lockOrientation('portrait-primary')
-						// #endif
-						
-						uni.navigateBack()
-					} else {
-						this.zz.href('/pages/comm/mapboxFullscreen', {pms: this.pms, line:this.line, point:this.point, gon:this.gon, refKml:this.refKml},0,'slide-in-bottom')
-					}
-					break;
 				default:
 					this.$emit(e.act, e)
 					break;
@@ -420,5 +334,4 @@ export default {
     }
 };
 </script>
-
 <style lang="scss"></style>

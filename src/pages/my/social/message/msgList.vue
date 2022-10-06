@@ -104,7 +104,6 @@
 export default {
     data() {
         return {
-            bd:bd
         };
     },
     onLoad() {

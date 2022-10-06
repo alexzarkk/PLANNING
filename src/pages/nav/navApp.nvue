@@ -1,5 +1,11 @@
 <template>
 	<view>
+		
+		<!-- #ifndef APP-PLUS -->
+		<nav-h5 ref="map" :center="center" :pms="kml.children" :rec="rec"></nav-h5>
+		<!-- #endif -->
+		
+		<!-- #ifdef APP-PLUS -->
 		<map id="amap"
 			:style="{width: '750rpx', height: winH + 'px' }"
 			:show-location="true"
@@ -19,6 +25,7 @@
 			@markertap="markertap"
 			@tap="mapTap"
 		></map>
+		<!-- #endif -->
 		
 		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
@@ -44,10 +51,17 @@
 </template>
 
 <script>
-
+// #ifdef APP-PLUS
 const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 const tts = uni.requireNativePlugin("nrb-tts-plugin")
 tts && tts.init({ "lang":"ZH", "country":"CN" })
+// #endif
+
+// #ifndef APP-PLUS
+const tts = {}
+import navH5 from './components/nav-h5'
+import { locationModule } from '@/comm/geotools'
+// #endif
 
 import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on, around } from '@/comm/nav'
@@ -59,13 +73,18 @@ import zz from '@/comm/zz'
 import fab from './components/fab'
 
 export default {
-	components: { fab },
+	components: {
+		fab
+		// #ifndef APP-PLUS
+		,navH5
+		// #endif
+	},
 	data() {
 		return {
 			sysInfo: uni.getStorageSync('sysInfo'),
 			winH: 0,
 			stH: 0,
-			kml: {},
+			kml: {children:[]},
 			tmt: 0,
 			cps: [],
 			way: {},
@@ -80,7 +99,7 @@ export default {
 			onRec: false,
 			puase: false,
 			tim: {H:0, M:0, S:0, MS:0},
-			nav: {line:[], point:[]},
+			nav: {line:[], point:[]}, // 基础
 			rec: {line:[], point:[]},
 			
 			timer: null,
@@ -101,6 +120,10 @@ export default {
 		this.winH = this.sysInfo.windowHeight
 		this.stH = this.sysInfo.statusBarHeight
 		this.mapHeight = this.winH
+		
+		// #ifndef APP-PLUS
+		this.stH += 60
+		// #endif
 		
 		if(v) {
 			let { kml, tmt = 0 } = zz.getParam(v)
@@ -142,9 +165,9 @@ export default {
 		await this.around(this.center)
 		console.log(this.cps)
 	},
-	onReady() {
-		this.amap = uni.createMapContext('amap', this)
-	},
+	// #ifdef APP-PLUS
+	onReady() { this.amap = uni.createMapContext('amap', this) },
+	// #endif
 	async onShow() {
 		let poi = uni.getStorageSync('nav_poi')
 		if (poi) {
@@ -182,22 +205,30 @@ export default {
 			this.lock = true
 		},
 		fly(c){
-			this.amap.moveToLocation({
-				longitude: c[0],
-				latitude: c[1],
-				success: (e)=>{
-					setTimeout(()=>{
-						this.scale = this.scale==17? 17.01:17
-					}, 555)
-				}
-			})
+			if(this.amap) {
+				this.amap.moveToLocation({
+					longitude: c[0],
+					latitude: c[1],
+					success: (e)=>{
+						setTimeout(()=>{
+							this.scale = this.scale==17? 17.01:17
+						}, 555)
+					}
+				})
+			}else{
+				this.$refs.map.exec({m:'fly', e:{coord: c}})
+			}
 		},
 		
 		stop(){
 			let rec = this.rec
 			this.onRec = false
 			locationModule.stopLocation()
+			
+			// #ifdef APP-PLUS
 			this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
+			// #endif
+			
 			if(rec.coord.length<10 && !rec.point.length) return zz.modal('本次记录太短了！')
 			zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
 		},
@@ -331,7 +362,10 @@ export default {
 			this.rec = rec
 			this.clock()
 			this.onRec = true
+			
+			// #ifdef APP-PLUS
 			this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
+			// #endif
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
@@ -340,10 +374,11 @@ export default {
 					notifyTitle: '环浙步道',
 					sysName: '环浙步道'
 				}, (xiaoming)=>{
+					console.log(xiaoming);
 					if (xiaoming.success) {
 						// console.log('xiaoming --------',xiaoming);
 						let _p = xiaoming.data,
-							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude, _p.timestamp || zz.now(), fixNum(_p.speed,2)],
+							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
 							line = rec.line[0],
 							size = rec.coord.length
 						

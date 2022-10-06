@@ -41,10 +41,8 @@
 		{
 			"root": "pages/nav/",
 			"pages": [
-				// #ifdef APP-PLUS
 				{"path": "navApp"},
-				// #endif
-				{"path": "navH5"},
+				// {"path": "navH5"},
 				{"path": "info"},
 				{"path": "point"},
 				{"path": "save"},

@@ -473,37 +473,33 @@ async function req(params = {}, loading = false, t=9999) {
 					// clearTimeout(tim)
 				}
 
-			// uni.request({
-			//     url: cloud + fn,
-				// timeout:10000,
-			//     header: {
-			//         'content-type': 'application/json',
-			//         authorization: token,
-			//         clientinfo: uni.getStorageSync('clientInfo')
-			//     },
-			//     data: params,
-			//     method: 'POST',
-			//     success,
-			//     fail,
-			//     complete
-			// })
-
-			delete params.$url
-			uniCloud.callFunction({
-				name: fn,
-				data: {
-					url,
-					params,
-					token
-				},
-				success,
-				fail,
-				complete
+			uni.request({
+			    url: cloud + fn,
+				timeout:10000,
+			    header: {
+			        'content-type': 'application/json',
+			        authorization: token,
+			        clientinfo: uni.getStorageSync('clientInfo')
+			    },
+			    data: params,
+			    method: 'POST',
+			    success,
+			    fail,
+			    complete
 			})
-			// tim = setTimeout(()=>{
-			// 	reject('服务器连接超时~')
-			// 	clearTimeout(tim)
-			// },t)
+
+			// delete params.$url
+			// uniCloud.callFunction({
+			// 	name: fn,
+			// 	data: {
+			// 		url,
+			// 		params,
+			// 		token
+			// 	},
+			// 	success,
+			// 	fail,
+			// 	complete
+			// })
 		})
 	} else {
 		let data = comm.getStorage(comm.key(fn + url + JSON.stringify(params)))

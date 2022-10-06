@@ -359,6 +359,19 @@ const
 			cc = [fixNum(td[0]), fixNum(td[1]), ~~cds[2]]
 		}
 		return cc
+	},
+	locationModule = {
+		tim: null,
+		stopLocation(){
+			clearTimeout(this.tim)
+		},
+		async startLocation(option, fn){
+			let {p} = await getLocation()
+			fn({data: p, success: true})
+			this.tim = setTimeout(()=>{
+				this.startLocation(option, fn)
+			},option.intervalTime)
+		}
 	}
 	
 	
@@ -376,6 +389,7 @@ const geotools = {
 
 	bearing,
 	getLocation,
+	locationModule,
 	geoErr,
 	getDist,
 	dist,

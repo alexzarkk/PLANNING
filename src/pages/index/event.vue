@@ -153,12 +153,7 @@ export default {
             menu: [
                 {
                     name: '足迹',
-                    // #ifdef APP-PLUS
                     url: '/pages/nav/navApp',
-                    // #endif
-                    // #ifdef H5
-                    url: '/pages/nav/navH5',
-                    // #endif
                     icon: 'cuIcon-upstage',
                     text: '扫码步道柱记录足迹'
                 },

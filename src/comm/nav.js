@@ -172,12 +172,9 @@ async function scan(coord){
 }
 
 async function on(){
+	// #ifdef 
 	const getZoom = async()=>{
-		return new Promise((res) => {
-			this.amap.getScale({
-				success(x){ res(~~x.scale) }
-			})
-		})
+		return new Promise((res) => {APP-PLUS})
 	},
 	center = async()=>{
 		return new Promise((res) => {
@@ -226,6 +223,7 @@ async function on(){
 	nav.point = point
 	
 	nav.busy = false
+	// #endif
 }
 
 

@@ -395,16 +395,7 @@ export default {
         },
         useLine() {
             if (this.mdone) this.$refs.zmap.exec({ m: 'stopLoc' })
-
-            // #ifdef H5
-            this.zz.toast('功能尚未启用~')
-            this.zz.href('/pages/nav/navH5', { kml: this.trail._kml, tmt: 0 }, true)
-            // #endif
-
-            // this.zz.href('/pages/planning/lineTrack?isNeedLine=true')
-            // #ifdef APP-PLUS
             this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
-            // #endif
         },
         //获取文字信息
         moveTo: function (e) {

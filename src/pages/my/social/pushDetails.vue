@@ -207,7 +207,7 @@ export default {
 		if(id) {
 			this.loadData(id)
 		}else{
-			const params = this.zz.getParam(option.v);
+			const params = this.zz.getParam(v);
 			if (params._id) {
 			    this.loadData(params._id);
 			}
