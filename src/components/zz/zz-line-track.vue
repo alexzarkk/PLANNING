@@ -7,12 +7,12 @@
             <view class="flex align-center line-sport-type-box">
                 <view class="sport-icon" :class="'zzIcon-z'+details.type"></view>
                 <view class="flex flex-direction line-name-sport">
-                    <view class="text-cut text-xl text-bold" style="width:600rpx">
+                    <view class="text-cut text-xl text-bold" style="width:580rpx">
                         {{ details.name }}
                     </view>
-                    <view class="margin-top-xs text-cut text-sm" style="width:600rpx">
+                    <view class="margin-top-xs text-cut text-sm" style="width:580rpx">
 						<text class="cuIcon-locationfill text-grey" v-if="addr"></text>
-                        {{ details.type==9? addr: dict.trail_type[details.type].label }}
+                        {{ details.loop? addr: dict.trail_type[details.type].label }}
                     </view>
                 </view>
             </view>
@@ -47,7 +47,7 @@
                 <view class="basis-lg">
                     <image class="response cover" :src="details.imgs[0]" mode="aspectFill" @error="imageError"></image>
                     <view v-if="details.userInfo" class="flex align-center avatar-box">
-                        <view class="cu-avatar radius margin-right" :style="'background-image: url('+details.userInfo.headImg+')'"></view>
+                        <view class="cu-avatar radius margin-right" :style="'background-image: url('+(details.userInfo.headImg||bd.sys.logo)+')'"></view>
                         <view>{{ details.userInfo.nickName }}</view>
                     </view>
                 </view>
@@ -115,11 +115,10 @@ export default {
         };
     },
     mounted() {
-        console.log('details===========', this.details);
         if (this.details.imgs && this.details.imgs.length > 0) {
             this.coverMode = true
         }
-		if(this.details.type==9) {
+		if(this.details.loop) {
 			this.zz.reGeo(this.details.t1[0].coord[0]).then(e=>{
 				this.addr = e.formatted_address.replace('浙江省','')
 			})
@@ -127,7 +126,7 @@ export default {
     },
     methods: {
         openLineDetail() {
-            this.zz.href(this.details.type==9? '/pages/comm/kml' : '/pages/nav/rec/lineDetail', this.details)
+            this.zz.href(this.details.loop? '/pages/comm/kml' : '/pages/nav/rec/lineDetail', this.details)
         },
         imageError(error) {
             this.coverMode = false

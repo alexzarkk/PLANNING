@@ -16,19 +16,29 @@
 		<!-- 文章收藏 -->
 		<template v-if="TabCur===0">
 			<view v-for="(item, index) in page[TabCur].list" :key="index">
-			    <view class="cu-card article">
+			    <view class="cu-card article" @click="detail(item._id)">
 			        <view class="cu-item shadow">
 			            <view class="title">
 			                <view class="text-cut">
-			                    {{ item.title }}
+			                    {{ item.title?item.title:'动态' }}
 			                </view>
 			            </view>
-			            <view class="content">
-			                <image :src="item.cover.url" mode="aspectFill"></image>
-			                <view class="desc">
-			                    <view class="text-content">{{ item.desc }}</view>
-			                </view>
-			            </view>
+						<template v-if="item.title">
+							<view class="content">
+								<image :src="item.cover.url || bd.sys.logo" mode="aspectFill"></image>
+								<view class="desc">
+									<view class="text-content">{{ item.desc }}</view>
+								</view>
+							</view>
+						</template>
+						<template v-else>
+							<view class="content">
+								<image :src="item.imgs[0]" mode="aspectFill"></image>
+								<view class="desc">
+									<view class="text-content">{{ item.content }}</view>
+								</view>
+							</view>
+						</template>
 			        </view>
 			    </view>
 			</view>
@@ -37,7 +47,7 @@
 		<!-- 评论 blog-->
 		<template v-if="TabCur===1">
 			<view v-for="(item, index) in page[TabCur].list" :key="index">
-				<view class="padding bg-white flex justify-between margin-bottom-sm" style="position: relative">
+				<view class="padding bg-white flex justify-between margin-bottom-sm" style="position: relative" @click="detail(item._id)">
 					<view class="flex">
 						<view class="margin-right">
 							<view v-if="item.userInfo" class="cu-avatar round lg" :style="'background-image:url(' + item.userInfo.headImg + ')'"></view>
@@ -109,6 +119,7 @@ export default {
                     title: '文章', // 发布的资讯文章等等
                     tt: 10,
                     total: -1,
+					page: 1,
                     list: [],
 					url: '/pages/planning/article'
                 },
@@ -116,13 +127,15 @@ export default {
                     title: '评论', // 户外分享
                     tt: 2,
                     total: -1,
+					page: 1,
                     list: [],
-					url: ''
+					url: '/pages/my/social/pushDetails'
                 },
                 {
                     title: '行程', //系统推荐
                     tt: 40,
                     total: -1,
+					page: 1,
                     list: [],
 					url: '/pages/planning/detail'
                 },
@@ -130,13 +143,15 @@ export default {
                     title: '兴趣点',
                     tt: 20,
                     total: -1,
+					page: 1,
                     list: [],
 					url: '/pages/planning/poi'
                 },
                 {
                     title: '轨迹', // 别人走的线路
-                    tt: 42,
+                    tt: [42,100],
                     total: -1,
+					page: 1,
                     list: [],
 					url: '/pages/nav/rec/lineDetail'
                 },
@@ -144,6 +159,7 @@ export default {
                     title: '坐标',
                     tt: 44,
                     total: -1,
+					page: 1,
                     list: [],
 					url: ''
                 },
@@ -162,19 +178,19 @@ export default {
         async loadData(type) {
             let cur = this.page[this.TabCur]
             if (type === 'init') {
-                Object.assign(cur, { page: 1, size: 10, total: -1, list: [], my:1, t: this.t })
+                Object.assign(this.page[this.TabCur], { page: 1, size: 10, total: -1, list: [], my:1, t: this.t })
             }
             if (this.loading || cur.total == cur.list.length || cur.total === 0) {
                 return
             }
             this.loading = true
             this.zz.req({$url: '/user/ue/pages', ...cur}).then(e => {
-				console.log(e);
-				
 				this.loading = false
                 cur.total = e.pagination.total
                 cur.list = cur.list.concat(e.list)
                 cur.page ++
+				
+				// console.log(e,cur);
             })
         },
 		detail(id){

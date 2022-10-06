@@ -26,7 +26,7 @@ export default {
     data() {
         return {
             loading: false,
-            page: {total:-1, size: 10, pub:1, ui:1, ue:1, keyWord:null},
+            page: {total:-1, size: 10, pub:1, ui:1, ue:1},
 			list:[]
         };
     },

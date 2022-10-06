@@ -203,11 +203,15 @@ export default {
             ]
         };
     },
-    onLoad(option) {
-        const params = this.zz.getParam(option.v);
-        if (params._id) {
-            this.loadData(params._id);
-        }
+    onLoad({id,v}) {
+		if(id) {
+			this.loadData(id)
+		}else{
+			const params = this.zz.getParam(option.v);
+			if (params._id) {
+			    this.loadData(params._id);
+			}
+		}
     },
     onShow() {
         uni.$on('modifyComment', (params) => {
