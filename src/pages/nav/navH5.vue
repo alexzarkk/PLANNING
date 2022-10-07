@@ -1,24 +1,7 @@
 <template>
 	<view>
-		<map id="amap"
-			:style="{width: '750rpx', height: winH + 'px' }"
-			:show-location="true"
-			:longitude="center[0]"
-			:latitude="center[1]"
-			:scale="scale"
-			
-			:min-scale="3"
-			:enable-satellite="true"
-			:enable-rotate="false"
-			:enable-overlooking="false"
-			
-			:polyline="[...lines]"
-			:markers="points"
-			
-			@regionchange="onchg"
-			@markertap="markertap"
-			@tap="mapTap"
-		></map>
+		<nav-h5 ref="map" :center="center" :pms="kml.children" :rec="rec"></nav-h5>
+		<mumu-get-qrcode ref="scan" @success='qrcodeSucess'></mumu-get-qrcode>
 		
 		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
@@ -44,11 +27,10 @@
 </template>
 
 <script>
-const locationModule = uni.requireNativePlugin('XM_Alive_Location')
-const tts = uni.requireNativePlugin("nrb-tts-plugin")
-tts && tts.init({ "lang":"ZH", "country":"CN" })
-
-import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
+const tts = {}
+import navH5 from './components/nav-h5'
+import mumuGetQrcode from '@/uni_modules/mumu-getQrcode/components/mumu-getQrcode/mumu-getQrcode.vue'
+import { locationModule, uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on, around } from '@/comm/nav'
 import icon from '@/comm/libs/icon'
 import comm from '@/comm/comm'
@@ -58,9 +40,7 @@ import zz from '@/comm/zz'
 import fab from './components/fab'
 
 export default {
-	components: {
-		fab
-	},
+	components: { fab ,navH5, mumuGetQrcode },
 	data() {
 		return {
 			sysInfo: uni.getStorageSync('sysInfo'),
@@ -100,7 +80,7 @@ export default {
 	},
 	async onLoad({v}) {
 		this.winH = this.sysInfo.windowHeight
-		this.stH = this.sysInfo.statusBarHeight
+		this.stH = this.sysInfo.statusBarHeight + 60
 		this.mapHeight = this.winH
 		
 		if(v) {
@@ -143,7 +123,9 @@ export default {
 		await this.around(this.center)
 		console.log(this.cps)
 	},
+	// #ifdef APP-PLUS
 	onReady() { this.amap = uni.createMapContext('amap', this) },
+	// #endif
 	async onShow() {
 		let poi = uni.getStorageSync('nav_poi')
 		if (poi) {
@@ -181,15 +163,19 @@ export default {
 			this.lock = true
 		},
 		fly(c){
-			this.amap.moveToLocation({
-				longitude: c[0],
-				latitude: c[1],
-				success: (e)=>{
-					setTimeout(()=>{
-						this.scale = this.scale==17? 17.01:17
-					}, 555)
-				}
-			})
+			if(this.amap) {
+				this.amap.moveToLocation({
+					longitude: c[0],
+					latitude: c[1],
+					success: (e)=>{
+						setTimeout(()=>{
+							this.scale = this.scale==17? 17.01:17
+						}, 555)
+					}
+				})
+			}else{
+				this.$refs.map.exec({m:'fly', e:{coord:c}})
+			}
 		},
 		
 		stop(){
@@ -197,7 +183,9 @@ export default {
 			this.onRec = false
 			locationModule.stopLocation()
 			
+			// #ifdef APP-PLUS
 			this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
+			// #endif
 			
 			if(rec.coord.length<10 && !rec.point.length) return zz.modal('本次记录太短了！')
 			zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
@@ -333,7 +321,9 @@ export default {
 			this.clock()
 			this.onRec = true
 			
+			// #ifdef APP-PLUS
 			this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
+			// #endif
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
@@ -459,15 +449,14 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				let p = await scan(trans(uni.getStorageSync('cur_loc_gcj02'), 'gcj02towgs84'))
-				if(p) {
-					if(this.rec.line[1]) this.rec.line.splice(1,1)
-					
-					this.rec.t[p._id] = 1
-					this.point.splice(this.point.findIndex(x => x.id == p._id), 1)
-					this.point.push(createEle(p,1))
-					this.fly(trans(p.coord))
-				}
+				// #ifdef APP-PLUS
+					let p = await scan(trans(uni.getStorageSync('cur_loc_gcj02'), 'gcj02towgs84'))
+					this.scaned(p)
+				// #endif
+				// #ifndef APP-PLUS
+					this.$refs.scan.createMsk()
+					this.$refs.scan.openScan()
+				// #endif
 			}
 			if(t=='position') {
 				this.onLoc(1)
@@ -490,6 +479,26 @@ export default {
 					zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 				}
 			}
+		},
+		scaned(p){
+			if(p) {
+				if(this.rec.line[1]) this.rec.line.splice(1,1)
+				
+				this.rec.t[p._id] = 1
+				this.point.splice(this.point.findIndex(x => x.id == p._id), 1)
+				this.point.push(createEle(p,1))
+				this.fly(trans(p.coord))
+			}
+		},
+		qrcodeSucess(p) {
+			this.scaned(p)
+			uni.showModal({
+				title: '成功',
+				content: p,
+				success: () => {
+					uni.navigateBack({})
+				}
+			})
 		},
 		onPuase(e){
 			console.log('onPuase', e);

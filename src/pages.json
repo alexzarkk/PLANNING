@@ -42,12 +42,10 @@
 			"root": "pages/nav/",
 			"pages": [
 				{"path": "navApp"},
-				// {"path": "navH5"},
+				{"path": "navH5"},
 				{"path": "info"},
 				{"path": "point"},
 				{"path": "save"},
-				
-				
 				
 				{"path": "rec/line"},
 				{"path": "rec/lineDetail"},
@@ -254,8 +252,8 @@
 				{"path": "account/login"}, 
 				{"path": "account/reg"}, 
 				{"path": "account/repsd"},
-				{"path": "account/changePhone"},  // 更换绑定手机号
-				{"path": "account/deleteAccount"},  // 更换绑定手机号
+				{"path": "account/changePhone"},
+				{"path": "account/deleteAccount"},
 				{"path": "doc/privacy"},
 				{"path": "doc/protocol"}
 			]

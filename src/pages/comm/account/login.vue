@@ -115,11 +115,8 @@ export default {
         async submit(form) {
             try {
                 const isPass = await this.$refs.uForm.submit();
-                if (!isPass) return;
-                if (this.loading) {
-                    return;
-                }
-                this.loading = true;
+                if (!isPass || this.loading) return
+                this.loading = true
                 const res = await this.zz.req({
                     $url: 'admin/comm/login',
                     username: this.form.username,
@@ -130,9 +127,9 @@ export default {
                 this.loading = false;
 				
                 if (res.token) {
-                    await this.zz.setAcc(res.user);
-                    this.zz.setToken(res.token);
-                    uni.$emit('commentLogin');
+                    this.zz.setAcc(res.user)
+                    this.zz.setToken(res.token)
+                    uni.$emit('commentLogin')
 					this.back()
                 } else {
                     this.getVerifyCode()
