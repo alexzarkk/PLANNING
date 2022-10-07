@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import { md5 } from '@/comm/libs/md5';
-var _isMobile = v => { return /^(?:13\d|14\d|15\d|16\d|17\d|18\d|19\d)\d{5}(\d{3}|\*{3})$/.test(v) }
+import { md5 } from '@/comm/libs/md5'
+import { _isMobile, isSafe } from './reg'
 
 export default {
 	computed: {
@@ -65,7 +65,7 @@ export default {
 		},
 		veried: function() {
 			let bool = true;
-			if (this.id!='' && this.password.length>=6) {
+			if (this.id!='' && this.password.length>=8) {
 				bool = false;
 			}
 			return bool;
@@ -129,6 +129,9 @@ export default {
 			}
 		},
 		async save(){
+			let r = isSafe(this.password)
+			if(!r) return this.zz.toast(r)
+			
 			let res = await this.zz.req({
 				$url: '/admin/comm/resetPsd',
 				id: this.id, password: md5(this.password)

@@ -40,8 +40,9 @@
 </template>
 
 <script>
-import { md5 } from '@/comm/libs/md5';
-import { sys } from '@/comm/bd';
+import { md5 } from '@/comm/libs/md5'
+import { sys } from '@/comm/bd'
+import { isSafe } from './reg'
 
 export default {
     data() {
@@ -131,7 +132,23 @@ export default {
 				
                 if (res.token) {
                     await this.zz.setAcc(res.user);
-                    this.zz.setToken(res.token);
+                    this.zz.setToken(res.token)
+					
+					let r = isSafe(this.form.password)
+					if(r) {
+						const [_, ask] = await uni.showModal({
+							title: '提示',
+							content: '您的密码过于简单，存在安全风险，建议您及时修改',
+							cancelText: '下次再说',
+							confirmText: '去修改'
+						})
+						if (ask.confirm) {
+							return uni.redirectTo({
+								url:'/pages/comm/account/repsd'
+							})
+						}
+					}
+					
                     uni.$emit('commentLogin');
 					this.back()
                 } else {

@@ -71,18 +71,14 @@
 </template>
 
 <script>
-// import { sys } from '@/common/dict';
+import { md5 } from '@/comm/libs/md5.js'
+import { _isMobile, isSafe } from './reg'
 
-import { md5 } from '@/comm/libs/md5.js';
-// console.log('md5=============', md5('88748586123'));
-const _isMobile = (v) => {
-    return /^(?:13\d|14\d|15\d|16\d|17\d|18\d|19\d)\d{5}(\d{3}|\*{3})$/.test(v);
-};
 export default {
     computed: {
         disabled: function () {
             let bool = true;
-            if (_isMobile(this.phone) && this.code.length == 4 && this.nickName && this.username && this.password.length >= 6 && !this.vali.phone && !this.vali.username) {
+            if (_isMobile(this.phone) && this.code.length == 4 && this.nickName && this.username && this.password.length >= 8 && !this.vali.phone && !this.vali.username) {
                 bool = false;
             }
             return bool;
@@ -147,7 +143,11 @@ export default {
             if (this.code.length != 4) return this.zz.toast('请输入正确的验证码');
             if (!this.nickName) return this.zz.toast('请输入昵称');
             if (!this.username) return this.zz.toast('请输入用户名');
-            if (this.password.length < 6) return this.zz.toast('密码长度不能少于6位数');
+            if (this.password.length < 8) return this.zz.toast('密码长度不能少于8位数')
+			
+			let r = isSafe(this.password)
+			if(!r) return this.zz.toast(r)
+			
             let user = {
                 phone: this.phone,
                 nickName: this.nickName,
