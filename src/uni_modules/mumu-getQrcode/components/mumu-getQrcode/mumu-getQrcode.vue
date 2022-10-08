@@ -52,8 +52,8 @@
 </template>
 
 <script>
-// import jsQR from './jsQR.js'
-import jsQR from "jsqr"
+import jsQR from './jsQR.js'
+// import jsQR from "jsqr"
 
 export default {
 	props: {

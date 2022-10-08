@@ -5,7 +5,8 @@
  * @LastEditTime: 2022-05-30 15:49:44
  * @FilePath: \sport-planing\src\pages\template\nvuePage.nvue
  * @Description: 	
- * 人气打卡点
+ * 人气打卡点  
+ // 暂未启用
  * 
 -->
 <template>
@@ -53,29 +54,29 @@
 
 <script>
 import gaodeMap from '@/components/gaode-map/zz-gaode-map.nvue';
-import nvueTools from '@/utils/nvueTools.js';
+// import nvueTools from '@/utils/nvueTools.js';
 export default {
 	components: {
 		gaodeMap
 	},
 	async onLoad() {
 		// console.log('point-----onload-------');
-		const sysInfo = uni.getStorageSync('sysInfo');
-		this.isAndroid = sysInfo.platform === 'android'  // 指定平台
-		this.statusBarHeight = sysInfo.statusBarHeight * 2;
-		this.mapHeight = sysInfo.windowHeight - this.statusBarHeight + 3;
-		// code: '330213',
-		let area = uni.getStorageSync('areaGon'); // 边界信息
-		if (!area) {
-			area = await nvueTools.req({ $url: 'public/zz/geoGon', code: '330213' }, true);
-			uni.setStorageSync('areaGon', area);
-		} else {
-			// console.log('使用了缓存的边界信息');
-		}
-		this.center = area.center; // 使用边界的center
-		this.polygon = area.children; // 用线模拟边界
-		this.list = await nvueTools.req({ $url: 'public/poi/list', deptId: '330213', type: [4042, 4044, 4046, 4048, 4048, 4004, 4006] }); // 打卡点列表
-		this.isMapReady = true;
+		// const sysInfo = uni.getStorageSync('sysInfo');
+		// this.isAndroid = sysInfo.platform === 'android'  // 指定平台
+		// this.statusBarHeight = sysInfo.statusBarHeight * 2;
+		// this.mapHeight = sysInfo.windowHeight - this.statusBarHeight + 3;
+		// // code: '330213',
+		// let area = uni.getStorageSync('areaGon'); // 边界信息
+		// if (!area) {
+		// 	area = await nvueTools.req({ $url: 'public/zz/geoGon', code: '330213' }, true);
+		// 	uni.setStorageSync('areaGon', area);
+		// } else {
+		// 	// console.log('使用了缓存的边界信息');
+		// }
+		// this.center = area.center; // 使用边界的center
+		// this.polygon = area.children; // 用线模拟边界
+		// this.list = await nvueTools.req({ $url: 'public/poi/list', deptId: '330213', type: [4042, 4044, 4046, 4048, 4048, 4004, 4006] }); // 打卡点列表
+		// this.isMapReady = true;
 	},
 	onReady() {
 		// console.log('point----------nvue');
