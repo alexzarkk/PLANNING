@@ -9,8 +9,8 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-	onLaunch() {
-		
+    onLaunch() {
+
         uni.getSystemInfo({
             success: function (e) {
                 Vue.prototype.WinHeight = e.windowHeight
@@ -21,91 +21,94 @@ export default {
                 Vue.prototype.CustomBar = e.statusBarHeight + 44
                 console.info('App Launch at APP-PLUS' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + Vue.prototype.StatusBar);
                 // #endif
-               
-				// #ifdef H5
-				window.model = e.model
+
+                // #ifdef H5
+                window.model = e.model
                 e.platform = 'H5';
                 Vue.prototype.platform = 'H5'
                 Vue.prototype.CustomBar = e.statusBarHeight //+ 44  // H5 端使用 
-					
-				const u = navigator.userAgent.toLowerCase()
-				//内置浏览器
-				if ( u.match(/MicroMessenger/i) == "micromessenger"
-					|| u.match(/WeiBo/i) == "weibo"
-					|| (u.indexOf('qq') != -1 && u.indexOf('mqqbrowser') == -1)
-					|| /alipay/ig.test(u)
-					|| u.indexOf('dingtalk') != -1
-					|| u.indexOf('zlb') != -1) {
-					
-					e.platform = 'H5-APP'
-					Vue.prototype.platform = 'H5-APP'
-				}
+
+                const u = navigator.userAgent.toLowerCase()
+                //内置浏览器
+                if (u.match(/MicroMessenger/i) == "micromessenger"
+                    || u.match(/WeiBo/i) == "weibo"
+                    || (u.indexOf('qq') != -1 && u.indexOf('mqqbrowser') == -1)
+                    || /alipay/ig.test(u)
+                    || u.indexOf('dingtalk') != -1
+                    || u.indexOf('zlb') != -1) {
+
+                    e.platform = 'H5-APP'
+                    Vue.prototype.platform = 'H5-APP'
+                }
                 // #endif
                 // #ifdef H5-ZLB
                 e.platform = 'H5-ZLB';
                 Vue.prototype.platform = 'H5-ZLB'
                 Vue.prototype.CustomBar = e.statusBarHeight
-				ZWJSBridge.onReady(() => {
-					console.log('浙里办初始化完成，执行bridge方法')
-				})
+                ZWJSBridge.onReady(() => {
+                    console.log('浙里办初始化完成，执行bridge方法')
+                    ZWJSBridge.getUiStyle().then(res=>{  // 获取style,适老化配置
+
+                    })
+                })
                 console.log('浙里办启动 H5-ZLB ---------------------->')
                 // #endif
-				
+
                 // #ifdef MP-WEIXIN
                 Vue.prototype.platform = 'MP-WEIXIN';
                 let custom = wx.getMenuButtonBoundingClientRect()
                 Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
                 console.log('App Launch at MP-WEIXIN' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + e.statusBarHeight);
                 // #endif
-				
+
                 // #ifdef MP-ALIPAY
                 Vue.prototype.platform = 'MP-ALIPAY'
                 Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight
                 console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
                 // #endif
-				
-				// console.log('sysInfo ------->', e)
+
+                // console.log('sysInfo ------->', e)
                 uni.setStorageSync('sysInfo', e)
-				comm.setStorage('clientInfo', JSON.stringify({
-					PLATFORM: e.uniPlatform || e.platform,
-					OS: e.osName,
-					APPID: e.appId || '__UNI__210B33A',
-					deviceId: e.deviceId,
-					deviceModel: e.model
-				}))
-				
-				// #ifdef APP-PLUS
-				if (e.platform == 'ios') locationModule.requestAlwaysAuthorization()
-				// #endif
+                comm.setStorage('clientInfo', JSON.stringify({
+                    PLATFORM: e.uniPlatform || e.platform,
+                    OS: e.osName,
+                    APPID: e.appId || '__UNI__210B33A',
+                    deviceId: e.deviceId,
+                    deviceModel: e.model
+                }))
+
+                // #ifdef APP-PLUS
+                if (e.platform == 'ios') locationModule.requestAlwaysAuthorization()
+                // #endif
             }
         })
-		
+
         // #ifdef APP-PLUS
-			setTimeout(() => { checkUpdate() }, 3000)
+        setTimeout(() => { checkUpdate() }, 3000)
         // #endif
-		
-		// #ifndef APP-PLUS
-			uni.getNetworkType({ success(e){ comm.setNet(e.networkType!='none') } })
-		// #endif
-		
-		// uni.clearStorageSync()
-		this.zz.init()
+
+        // #ifndef APP-PLUS
+        uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
+        // #endif
+
+        // uni.clearStorageSync()
+        this.zz.init()
     },
     onShow() {
-		sync.go()
-		uni.onNetworkStatusChange(e=>{
-			// console.log(e,'onShow //////');
-			// #ifndef APP-PLUS
-			comm.setNet(e.networkType!='none')
-			// #endif
-			
-			if(e.isConnected) {
-				sync.go()
-			}
-		})
-	},
+        sync.go()
+        uni.onNetworkStatusChange(e => {
+            // console.log(e,'onShow //////');
+            // #ifndef APP-PLUS
+            comm.setNet(e.networkType != 'none')
+            // #endif
+
+            if (e.isConnected) {
+                sync.go()
+            }
+        })
+    },
     onHide() { },
-    methods: { }
+    methods: {}
 }
 </script>
 
@@ -118,7 +121,7 @@ export default {
 @import './comm/colorui/animation.css';
 @import './comm/css/app.css';
 // @import './comm/css/zzIcon.css';  // 远程
-@import './comm/css/local/zzIcon.css';  // 本地
+@import './comm/css/local/zzIcon.css'; // 本地
 @import './components/uParse/src/wxParse.css';
 /* 我增加的样式 */
 body.pages-index-index uni-page-body {
