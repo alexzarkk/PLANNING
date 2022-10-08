@@ -1,6 +1,6 @@
 # Painter 画板
 > uniapp 海报画板，可根据自身需求配置生成海报
-> [查看更多](http://liangei.gitee.io/limeui/#/painter)   
+<!-- > [查看更多](http://liangei.gitee.io/limeui/#/painter)    -->
 > Q群：806744170   
 
 ## 平台兼容

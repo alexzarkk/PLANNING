@@ -13,7 +13,7 @@
     <view class="moment-box padding">
         <view class="header-bar">
             <view class="avatar-box">
-                <view class="cu-avatar round df margin-right-xs" :style="[{ backgroundImage: 'url(' + 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg' + ')' }]">
+                <!-- <view class="cu-avatar round df margin-right-xs" :style="[{ backgroundImage: 'url(' + 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg' + ')' }]"> -->
                     <view class="cu-tag badge cuIcon-male bg-blue"></view>
                 </view>
                 <view class="avatar-name-time" @click="testLogin">

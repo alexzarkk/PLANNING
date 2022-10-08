@@ -172,15 +172,16 @@ export default {
             this.zz.href('/pages/comm/account/login');
         },
         showShare() {
-            let shareData = {
-                shareUrl: 'https://kemean.com/',
-                shareTitle: '分享的标题',
-                shareContent: '分享的描述',
-                shareImg: 'http://qn.kemean.cn//upload/202004/18/1587189024467w6xj18b1.jpg',
-                appId: 'wxd0e0881530ee4444', // 默认不传type的时候，必须传appId和appPath才会显示小程序图标
-                appPath: 'pages/home/home',
-                appWebUrl: 'https://kemean.com/'
-            };
+            // let shareData = {
+            //     shareUrl: 'https://kemean.com/',
+            //     shareTitle: '分享的标题',
+            //     shareContent: '分享的描述',
+            //     shareImg: 'http://qn.kemean.cn//upload/202004/18/1587189024467w6xj18b1.jpg',
+            //     appId: 'wxd0e0881530ee4444', // 默认不传type的时候，必须传appId和appPath才会显示小程序图标
+            //     appPath: 'pages/home/home',
+            //     appWebUrl: 'https://kemean.com/'
+            // };
+            let shareData = {}
             // 调用
             let shareObj = appShare(shareData, (res) => {
                 console.log('分享成功回调', res);
