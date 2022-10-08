@@ -1,14 +1,11 @@
 import { async } from 'regenerator-runtime'
-
-import grid from '@/comm/libs/grid'
+import { api } from '@/comm/bd'
 import { dist, isSame, getLocation } from '@/comm/geotools'
+import grid from '@/comm/libs/grid'
 
 const comm = {
 	key(k){return k? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : ''},
 	async req(data={},fn='app',t=9999) {
-		let cloud = 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/',
-			api = { app: cloud + 'app', zz: cloud + 'http/zz' }
-		
 		if(comm.hadNet()) {
 			return new Promise((resolve, reject) => {
 				let timer,x,e
@@ -19,13 +16,13 @@ const comm = {
 				x = window.XMLHttpRequest? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP")
 				// #endif
 					
-				x.open('POST',api[fn],true)
+				x.open('POST',api+fn,true)
 				x.setRequestHeader("Content-type","application/json")
 				x.setRequestHeader("authorization", comm.getStorage('210B33A_token'))
 				x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
 				x.send(JSON.stringify(data))
 				
-				// console.log('ajax ------------',fn,data);
+				console.log('ajax ------------',fn,data);
 				
 				x.onreadystatechange = ()=>{
 					clearInterval(timer)
@@ -121,7 +118,7 @@ const comm = {
 	async gridNet(k,xy,zoom){
 		let nav = comm.getGrid()
 		if (!nav[k][xy+zoom] || !nav[k][xy+zoom].time || (Date.now() - nav[k][xy+zoom].time) > (1000*60*60*24 * 5)) {
-			nav[k][xy+zoom] = await comm.req({url: 'on', center: k, zoom, xy }, 'zz') || {line:[],point:[]}
+			nav[k][xy+zoom] = await comm.req({url: 'on', center: k, zoom, xy }, '/http/zz') || {line:[],point:[]}
 			comm.setStorage('sys_nav', nav)
 		}
 		return nav[k][xy+zoom]
@@ -167,7 +164,7 @@ const comm = {
 			let nav = comm.getGrid()
 			
 			if (!nav[k].cp || (Date.now() - nav[k].cp) > (1000*60*60*24 * 7)) {
-				let {time, list} = await comm.req({ url:'cps', coord: k, d: 12000 },'zz')
+				let {time, list} = await comm.req({ url:'cps', coord: k, d: 12000 },'/http/zz')
 				if(time) {
 					nav[k].cp = time
 					for (let s of list) {

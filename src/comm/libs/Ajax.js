@@ -1,9 +1,5 @@
-import { cloud } from '@/comm/zz'
+import { api } from '@/comm/bd'
 export default function Ajax({u = 'app', data = {}, t = 9999 }) {
-	const api = {
-		app: cloud + 'app',
-		zz: cloud + 'http/zz'
-	}
 	return new Promise((resolve, reject) => {
 		
 		let timer,x
@@ -14,7 +10,7 @@ export default function Ajax({u = 'app', data = {}, t = 9999 }) {
 		x = window.XMLHttpRequest? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP")
 		// #endif
 			
-		x.open('POST',api[u],true)
+		x.open('POST',api+u,true)
 		x.setRequestHeader("Content-type","application/x-www-form-urlencoded")
 		x.setRequestHeader("appid", '__UNI__210B33A')
 		x.send(JSON.stringify(data))

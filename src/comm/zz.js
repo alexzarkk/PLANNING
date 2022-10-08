@@ -1,11 +1,8 @@
-import { async } from 'regenerator-runtime';
-import { isSame, clone, math, isArray } from '@/comm/geotools.js'
+import { api } from '@/comm/bd'
+import { isSame, clone, math, isArray } from '@/comm/geotools'
 import comm from '@/comm/comm'
 
 const amapKey = 'daffb83c14428939221e09ebc785c89c',
-	cloud = 'https://996909cb-e5ca-4be8-8150-b60ae2422186.bspapp.com/',  // dev
-	// cloud = 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/',  // prod
-
 	toArr = (o) => {
 		let a = []
 		for (let k in o) {
@@ -474,7 +471,7 @@ async function req(params = {}, loading = false, t=9999) {
 				}
 
 			uni.request({
-			    url: cloud + fn,
+			    url: api + fn,
 				timeout:10000,
 			    header: {
 			        'content-type': 'application/json',
@@ -609,7 +606,6 @@ function userEvent(t, tt, o, ref = '_id') {
 }
 
 const zz = {
-	cloud,
 	amapKey,
 	math,
 	isSame,

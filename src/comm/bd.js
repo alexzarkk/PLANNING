@@ -1,11 +1,14 @@
+//BasicData
 const bd = {
+	api: 'https://dev.5618.co/',
+	// api: 'https://ztsapi.5618.co/',
+	
 	sys: {
 		name: "环浙步道",
 		desc: "运动浙江 户外天堂",
-		code: '330213',
+		code: '330213', 
 		admin: '宁波之之步道技术有限公司',
 		png: 'https://zts.5618.co/static/png/',
-		// logo:"https://vkceyugu.cdn.bspapp.com/VKCEYUGU-fb41164a-2f7b-434d-a985-757ed85d35c5/fa5b6a73-10e5-4c8c-8264-3ded2d454f14.png",
 		logo:"https://zts.5618.co/repo/logoIcon.png",
 		
 		footer: {
@@ -24,10 +27,6 @@ const bd = {
 				text: "环浙步道"
 			}]
 		}
-	},
-	msgTemplate: {
-		reply: 'qHeFuOgNEMR6zRqZUldReE83a7jpMVlwBvS975ej-EU',		//留言回复通知
-		errreport: ''
 	},
 	imgs: {
 		nodata: 		'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/687b11af-e7e2-4cef-80d8-b3e1744dd101.png',
