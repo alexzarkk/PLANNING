@@ -114,7 +114,7 @@ export default {
             background-color: #ffffff;
             border-radius: 50%;
             .icon {
-                font-size: 40rpx;
+                font-size: 2rem;
             }
         }
 
@@ -124,7 +124,7 @@ export default {
             align-items: center;
 
             .title {
-                font-size: 32rpx;
+                font-size: 1.6rem;
                 // font-weight: 600;
             }
         }

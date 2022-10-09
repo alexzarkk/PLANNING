@@ -146,7 +146,7 @@
 		background-color: #007AFF;
 		border-radius: 50%;
 		box-shadow: 0 0 10rpx #999999;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		color: #666;
 		text-align: center;
 	}
@@ -159,7 +159,7 @@
 	.val {
 		width: 80rpx;
 		text-align: center;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 		color: #666;
 	}
 </style>

@@ -272,7 +272,7 @@ export default {
 		}
 
 		.line-info-name {
-			font-size: 48rpx;
+			font-size: 2.4rem;
 			font-weight: 900;
 		}
 
@@ -303,7 +303,7 @@ export default {
 			.operation-icon {
 				margin-bottom: 10rpx;
 				color: $zts-green;
-				font-size: 40rpx;
+				font-size: 2rem;
 			}
 			.operation-title {
 				color: $zts-green;
@@ -343,13 +343,13 @@ export default {
 
 				// border-left: 1px solid black;
 				.detail-item-title {
-					font-size: 24rpx;
+					font-size: 1.2rem;
 					color: #858585;
 					margin-bottom: 6rpx;
 				}
 
 				.detail-item-value {
-					font-size: 36rpx;
+					font-size: 1.8rem;
 					font-weight: bold;
 					color: #282828;
 				}
@@ -366,7 +366,7 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		font-size: 36rpx;
+		font-size: 1.8rem;
 		height: 150rpx;
 		padding-top: 50rpx;
 		padding-bottom: 50rpx;
@@ -408,13 +408,13 @@ export default {
 			flex-direction: column;
 			align-items: center;
 			.title {
-				font-size: 36rpx;
+				font-size: 1.8rem;
 				font-weight: bold;
 				color: #333333;
 			}
 
 			.sub {
-				font-size: 24rpx;
+				font-size: 1.2rem;
 				color: #b7b7b7;
 			}
 		}
@@ -423,7 +423,7 @@ export default {
 		}
 
 		.right {
-			font-size: 36rpx;
+			font-size: 1.8rem;
 			font-weight: bold;
 		}
 	}
@@ -447,20 +447,20 @@ export default {
 
 			.person-info {
 				.title {
-					font-size: 32rpx;
+					font-size: 1.6rem;
 					font-weight: bold;
 					color: #333333;
 				}
 
 				.sub {
-					font-size: 24rpx;
+					font-size: 1.2rem;
 					color: #b7b7b7;
 				}
 			}
 
 			.use-time {
 				position: absolute;
-				font-size: 36rpx;
+				font-size: 1.8rem;
 				font-weight: bold;
 				right: 80rpx;
 			}
@@ -473,7 +473,7 @@ export default {
 		border-top: 1px solid #e2e2e2;
 		border-bottom: 1px solid #e2e2e2;
 		color: $zts-blue;
-		font-size: 36rpx;
+		font-size: 1.8rem;
 		font-weight: bold;
 	}
 }

@@ -7,13 +7,15 @@
 					<view class="margin-top-xs flex align-center padding-xl content" @tap="href('./wxLogin')">
 						<view class="cu-avatar radius"><text class="cuIcon-people"></text></view>
 						<view class="padding-left">
-							<!-- #ifdef APP-PLUS || H5 -->
-							<text>注册/登录</text>
-							<!-- #endif -->
+							 <!-- #ifndef H5-ZLB -->
+                            <!-- #ifdef APP-PLUS || H5 -->
+                            <text>注册/登录</text>
+                            <!-- #endif -->
+                            <!-- #endif -->
 
-							<!-- #ifdef MP -->
-							<text>授权/登录</text>
-							<!-- #endif -->
+                            <!-- #ifdef H5-ZLB -->
+                            <text>授权/登录</text>
+                            <!-- #endif -->
 						</view>
 						<view class="margin-left-xs cuIcon-right"></view>
 					</view>
@@ -25,26 +27,26 @@
 								<!-- <view class="cu-avatar round shadow lg" :style="'background-image:url(' + user.ava + ')'"></view> -->
 								<view
 									:style="'background-image:url(' + user.ava + ')'"
-									style="height: 112upx;width: 112upx; border-radius: 56upx;   background-size: cover;"
+									style="height: 112rpx;width: 112rpx; border-radius: 56rpx;   background-size: cover;"
 								></view>
 								<view class="text-white padding-left">
 									<view class="text-xl margin-right">{{ user.name }}</view>
-									<view class="text-xl margin-right" style="display: flex; align-items: center;margin-top: 12upx;">
+									<view class="text-xl margin-right" style="display: flex; align-items: center;margin-top: 12rpx;">
 										<view class="new_zyz_hy" @click="href('/pages/subPackages/coupon/card', true)">
 											<image
-												style="width: 24upx;height: 24upx;"
+												style="width: 24rpx;height: 24rpx;"
 												src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-fb41164a-2f7b-434d-a985-757ed85d35c5/95a5190a-dd0f-42c7-868b-7dd1a4d75b61.png"
 											></image>
-											<view style="margin: 0 12upx 0 10upx;">会员</view>
-											<view class="cuIcon-xiangyoudan" style="font-size: 16upx;"></view>
+											<view style="margin: 0 12rpx 0 10rpx;">会员</view>
+											<view class="cuIcon-xiangyoudan" style="font-size: 16rpx;"></view>
 										</view>
 										<view class="new_zyz_hy" @click="href('/pages/subPackages/volunteer/volunteer', true)">
 											<image
-												style="width: 24upx;height: 24upx;"
+												style="width: 24rpx;height: 24rpx;"
 												src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-fb41164a-2f7b-434d-a985-757ed85d35c5/2604ab3a-3141-4e30-bcd5-0fec36f6d3f5.png"
 											></image>
-											<view style="margin: 0 12upx 0 10upx;">志愿者</view>
-											<view class="cuIcon-xiangyoudan" style="font-size: 16upx;"></view>
+											<view style="margin: 0 12rpx 0 10rpx;">志愿者</view>
+											<view class="cuIcon-xiangyoudan" style="font-size: 16rpx;"></view>
 										</view>
 									</view>
 								</view>
@@ -55,49 +57,49 @@
 			</view>
 		</view>
 
-		<view class="bg-white" style="margin: 20upx;border-radius: 8upx;">
-			<view class=" flex text-center text-grey" style="padding: 30upx 0;">
+		<view class="bg-white" style="margin: 20rpx;border-radius: 8rpx;">
+			<view class=" flex text-center text-grey" style="padding: 30rpx 0;">
 				<view class="flex flex-sub flex-direction" @tap="href('/pages/subPackages/order', true)">
-					<view class="text-xxl text-purple"><view class="cuIcon-formfill" style="color: #0477B3; font-size: 60upx;"></view></view>
+					<view class="text-xxl text-purple"><view class="cuIcon-formfill" style="color: #0477B3; font-size: 60rpx;"></view></view>
 					<view class=" color">支付订单</view>
 				</view>
 				<view class="flex flex-sub flex-direction " @tap="href('/pages/subPackages/coupon/card', true)">
-					<view class="text-xxl text-orange"><view class="cuIcon-card" style="color:#7F59B6;  font-size: 60upx;"></view></view>
+					<view class="text-xxl text-orange"><view class="cuIcon-card" style="color:#7F59B6;  font-size: 60rpx;"></view></view>
 					<view class=" color">会员卡</view>
 				</view>
 				<view class="flex flex-sub flex-direction " @tap="href('/pages/subPackages/coupon/coupon', true)">
-					<view class="text-xxl text-orange"><view class="cuIcon-redpacket_fill" style="color:#E54D42;  font-size: 60upx;"></view></view>
+					<view class="text-xxl text-orange"><view class="cuIcon-redpacket_fill" style="color:#E54D42;  font-size: 60rpx;"></view></view>
 					<view class=" color">优惠券</view>
 				</view>
 				<view class="flex flex-sub flex-direction" @tap="href('/pages/subPackages/news/collect', true)">
-					<view class="text-xxl text-orange"><view class="cuIcon-favorfill" style="color:#F37B1D;  font-size: 60upx;"></view></view>
+					<view class="text-xxl text-orange"><view class="cuIcon-favorfill" style="color:#F37B1D;  font-size: 60rpx;"></view></view>
 					<view class=" color">我的收藏</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="bg-white" style="margin: 20upx; padding: 28upx 28upx 40upx;border-radius:8upx ;">
-			<view style="color: #999999;font-size: 28upx;">常用功能</view>
+		<view class="bg-white" style="margin: 20rpx; padding: 28rpx 28rpx 40rpx;border-radius:8rpx ;">
+			<view style="color: #999999;font-size: 1.4rem;">常用功能</view>
 			<view style="display: flex;align-items: center;flex-wrap: wrap;">
-				<view v-for="(item, index) in chydata" :key="index" style="width: 25%; text-align: center;margin: 32upx 0 0;" @click="todetails(index)">
-					<view :class="item.icon" style="color: #0477B3;font-size: 50upx;"></view>
-					<view style="color: #666666;font-size: 26upx;margin-top: 16upx;">{{ item.name }}</view>
+				<view v-for="(item, index) in chydata" :key="index" style="width: 25%; text-align: center;margin: 32rpx 0 0;" @click="todetails(index)">
+					<view :class="item.icon" style="color: #0477B3;font-size: 50rpx;"></view>
+					<view style="color: #666666;font-size: 1.3rem;margin-top: 16rpx;">{{ item.name }}</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="bg-gray" style="margin: 20upx; border-radius:8upx ; overflow: hidden;">
+		<view class="bg-gray" style="margin: 20rpx; border-radius:8rpx ; overflow: hidden;">
 			<view class="cu-list menu shadow-lg radius solid">
 				<view class="cu-item arrow" @tap="href('/pages/my/doc/privacy')">
 					<view class="content">
-						<text class="cuIcon-edit" style="color: #0477B3;font-size: 30upx;"></text>
-						<text class="text-grey" style="color: #666666; font-size: 26upx;">隐私政策</text>
+						<text class="cuIcon-edit" style="color: #0477B3;font-size: 1.5rem;"></text>
+						<text class="text-grey" style="color: #666666; font-size: 1.3rem;">隐私政策</text>
 					</view>
 				</view>
 				<view class="cu-item arrow" @tap="href('/pages/my/doc/protocol')">
 					<view class="content">
-						<text class="cuIcon-evaluate" style="color: #0477B3;font-size: 30upx;"></text>
-						<text class="text-grey" style="color: #666666;font-size: 26upx;">服务协议</text>
+						<text class="cuIcon-evaluate" style="color: #0477B3;font-size: 1.5rem;"></text>
+						<text class="text-grey" style="color: #666666;font-size: 1.3rem;">服务协议</text>
 					</view>
 				</view>
 			</view>
@@ -245,8 +247,8 @@ page {
 
 .color {
 	color: #333333;
-	font-size: 28upx;
-	margin-top: 16upx;
+	font-size: 1.4rem;
+	margin-top: 16rpx;
 }
 
 .new_class {
@@ -261,10 +263,10 @@ page {
 	align-items: center;
 	background-color: rgba(255, 255, 255, 0.3);
 	justify-content: space-between;
-	font-size: 20upx;
-	padding: 4upx 10upx;
-	border-radius: 20upx;
-	margin-right: 20upx;
+	font-size: 1rem;
+	padding: 4rpx 10rpx;
+	border-radius: 20rpx;
+	margin-right: 20rpx;
 }
 
 .UCenter-bg button {
@@ -293,15 +295,15 @@ page {
 .nav-list {
 	display: flex;
 	flex-wrap: wrap;
-	padding: 20px 20upx 0px;
+	padding: 20px 20rpx 0px;
 	justify-content: space-between;
 }
 
 .nav-li {
-	padding: 30upx;
-	border-radius: 12upx;
+	padding: 30rpx;
+	border-radius: 12rpx;
 	width: 45%;
-	margin: 0 2.5% 40upx;
+	margin: 0 2.5% 40rpx;
 	background-size: cover;
 	background-position: center;
 	position: relative;
@@ -317,7 +319,7 @@ page {
 	height: 100%;
 	left: 0;
 	bottom: -10%;
-	border-radius: 10upx;
+	border-radius: 10rpx;
 	opacity: 0.2;
 	transform: scale(0.9, 0.9);
 }
@@ -325,23 +327,23 @@ page {
 .nav-li.cur {
 	color: #fff;
 	background: rgb(94, 185, 94);
-	box-shadow: 4upx 4upx 6upx rgba(94, 185, 94, 0.4);
+	box-shadow: 4rpx 4rpx 6rpx rgba(94, 185, 94, 0.4);
 }
 
 .nav-title {
-	font-size: 32upx;
+	font-size: 1.6rem;
 	font-weight: 300;
 }
 
 .nav-title::first-letter {
-	font-size: 40upx;
-	margin-right: 4upx;
+	font-size: 2rem;
+	margin-right: 4rpx;
 }
 
 .nav-name {
-	font-size: 28upx;
+	font-size: 1.4rem;
 	text-transform: Capitalize;
-	margin-top: 20upx;
+	margin-top: 20rpx;
 	position: relative;
 }
 
@@ -349,8 +351,8 @@ page {
 	content: '';
 	position: absolute;
 	display: block;
-	width: 40upx;
-	height: 6upx;
+	width: 40rpx;
+	height: 6rpx;
 	background: #fff;
 	bottom: 0;
 	right: 0;
@@ -361,29 +363,29 @@ page {
 	content: '';
 	position: absolute;
 	display: block;
-	width: 100upx;
+	width: 100rpx;
 	height: 1px;
 	background: #fff;
 	bottom: 0;
-	right: 40upx;
+	right: 40rpx;
 	opacity: 0.3;
 }
 
 .nav-name::first-letter {
 	font-weight: bold;
-	font-size: 36upx;
+	font-size: 1.8rem;
 	margin-right: 1px;
 }
 
 .nav-li text {
 	position: absolute;
-	right: 30upx;
-	top: 30upx;
-	font-size: 52upx;
-	width: 60upx;
-	height: 60upx;
+	right: 30rpx;
+	top: 30rpx;
+	font-size: 52rpx;
+	width: 60rpx;
+	height: 60rpx;
 	text-align: center;
-	line-height: 60upx;
+	line-height: 60rpx;
 }
 
 .text-light {
@@ -396,7 +398,7 @@ page {
 	}
 
 	60% {
-		transform: translateY(40upx);
+		transform: translateY(40rpx);
 	}
 
 	100% {
@@ -410,7 +412,7 @@ page {
 	}
 
 	60% {
-		transform: translateY(40upx);
+		transform: translateY(40rpx);
 	}
 
 	100% {

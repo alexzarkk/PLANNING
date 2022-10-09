@@ -217,8 +217,8 @@
 		},
 		methods: {
 			initData() {
-				this.sliderWidth = uni.upx2px(this.sliderBarWidth);
-				this.sliderHeight = uni.upx2px(this.sliderBarHeight);
+				this.sliderWidth = uni.rpx2px(this.sliderBarWidth);
+				this.sliderHeight = uni.rpx2px(this.sliderBarHeight);
 			},
 			success() {
 				//验证成功

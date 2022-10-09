@@ -104,31 +104,31 @@ export default {
 }
 
 .tright {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	left: 0upx;
-	font-size: 26upx;
-	padding: 0upx 6upx;
-	height: 38upx;
+	top: 0rpx;
+	left: 0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 6rpx;
+	height: 38rpx;
 	color: #ffffff;
 	width: 150rpx;
 }
 .tleft {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	right: -0upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: 0rpx;
+	right: -0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 
 .bgimg {
 		/* background-attachment:fixed; */
 		background-repeat:no-repeat;
-		height: 240upx;
+		height: 240rpx;
 		/* z-index: 29 */
 		/* background-size:cover; */
 		/* -moz-background-size:cover; */
@@ -168,7 +168,7 @@ export default {
 	
 	.tui-pro-tit {
 		color: #2e2e2e;
-		font-size: 26rpx;
+		font-size: 1.3rem;
 		word-break: break-all;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -182,13 +182,13 @@ export default {
 	}
 	
 	.tui-sale-price {
-		font-size: 34rpx;
+		font-size: 1.7rem;
 		font-weight: 500;
 		color: #e41f19;
 	}
 	
 	.tui-factory-price {
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		color: #a0a0a0;
 		text-decoration: line-through;
 		padding-left: 12rpx;
@@ -196,7 +196,7 @@ export default {
 	
 	.tui-pro-pay {
 		padding-top: 10rpx;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		color: #a0a0a0;
 	}	
 </style>

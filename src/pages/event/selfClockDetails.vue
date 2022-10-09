@@ -40,7 +40,7 @@
 			<text class="warning-message-text">目标位置：{{ Number(pm.coord[0]).toFixed(6) }},{{ Number(pm.coord[1]).toFixed(6) }}</text> -->
                 <text class="warning-message-text">当前位置：121.426833,29.675277</text>
                 <text class="warning-message-text">目标位置：120.549082,27.882264</text>
-                <!-- <text :class="distance<=150?'success-message-text':'danger-message-text'" style="font-size: 18px; font-weight: bold;">距离：{{ distance }}m</text> -->
+                <!-- <text :class="distance<=150?'success-message-text':'danger-message-text'" style="font-size: 1.8rem; font-weight: bold;">距离：{{ distance }}m</text> -->
                 <text class="text-df text-bold" :class="distance <= 150 ? 'success-message-text' : 'danger-message-text'">距离：{{ distance }}m</text>
                 <text class="text-df text-bold" :class="distance <= 150 ? 'success-message-text' : 'danger-message-text'">已在打卡范围内</text>
                 <button class="cu-btn round response bg-ztsgreen lg" @click="getClock" :disabled="isNotClock">打卡</button>
@@ -274,7 +274,7 @@ export default {
     }
 
     .time {
-        font-size: 36rpx;
+        font-size: 1.8rem;
     }
 
     .clock-success {
@@ -283,7 +283,7 @@ export default {
     }
 
     .order {
-        font-size: 36rpx;
+        font-size: 1.8rem;
     }
 }
 </style>

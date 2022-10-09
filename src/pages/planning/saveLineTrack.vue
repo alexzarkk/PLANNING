@@ -410,7 +410,7 @@ body {
 
 		&-title {
 			margin-bottom: 12rpx;
-			font-size: 24rpx;
+			font-size: 1.2rem;
 			color: #999999;
 		}
 	}
@@ -433,7 +433,7 @@ body {
 		padding: 16rpx;
 
 		// .sport-type-icon{
-		// 	font-size: 20rpx;
+		// 	font-size: 1rem;
 		// }
 
 		&-image {
@@ -444,7 +444,7 @@ body {
 
 	&-title {
 		color: #525252;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 	}
 }
 
@@ -453,7 +453,7 @@ body {
 }
 
 .current-level {
-	font-size: 28rpx;
+	font-size: 1.4rem;
 	color: #222222;
 }
 

@@ -170,7 +170,7 @@ export default {
     height: 100vh;
     .tui-page-title {
         width: 100%;
-        font-size: 48rpx;
+        font-size: 2.4rem;
         font-weight: bold;
         color: $uni-text-color;
         line-height: 42rpx;
@@ -277,7 +277,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    font-size: 32rpx;
+    font-size: 1.6rem;
     background: #fff;
 }
 
@@ -342,7 +342,7 @@ export default {
 }
 
 .input {
-    font-size: 32rpx;
+    font-size: 1.6rem;
     color: #353535;
     width: 565rpx;
     padding-right: 5rpx;
@@ -352,7 +352,7 @@ export default {
 
 .text {
     padding: 0 10rpx;
-    font-size: 32rpx;
+    font-size: 1.6rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

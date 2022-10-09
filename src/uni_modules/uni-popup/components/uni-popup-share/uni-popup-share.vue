@@ -119,7 +119,7 @@
 		height: 40px;
 	}
 	.uni-share-title-text {
-		font-size: 14px;
+		font-size: 1.4rem;
 		color: #666;
 	}
 	.uni-share-content {
@@ -162,7 +162,7 @@
 
 	.uni-share-text {
 		margin-top: 10px;
-		font-size: 14px;
+		font-size: 1.4rem;
 		color: #3B4144;
 	}
 
@@ -178,7 +178,7 @@
 		flex: 1;
 		border-radius: 50px;
 		color: #666;
-		font-size: 16px;
+		font-size: 1.6rem;
 	}
 
 	.uni-share-button::after {

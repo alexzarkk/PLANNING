@@ -255,7 +255,7 @@ body {
                 padding: 0 20rpx;
                 color: #ffffff;
                 z-index: 20;
-                font-size: 36rpx;
+                font-size: 1.8rem;
             }
 
             .name-box {
@@ -299,7 +299,7 @@ body {
     align-items: center;
     .bottom-btn {
         width: 300rpx;
-        font-size: 36rpx;
+        font-size: 1.8rem;
     }
 
     .send {

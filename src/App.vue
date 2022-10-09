@@ -61,7 +61,7 @@ export default {
                 })
 
                 // globalData.zlbCfg.fontSize = '10px'
-                globalData.zlbCfg.fontSize = '16px'
+                globalData.zlbCfg.fontSize = '14px'
                 console.log(globalData.zlbCfg.uiStyle)
                 console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
                 console.log('浙里办启动 H5-ZLB ---------------------->')
@@ -136,6 +136,15 @@ export default {
 // @import './comm/css/zzIcon.css';  // 远程
 @import './comm/css/local/zzIcon.css'; // 本地
 @import './components/uParse/src/wxParse.css';
+
+view {
+    font-size: 1.6rem;
+}
+
+text {
+    font-size: 1.6rem;
+}
+
 /* 我增加的样式 */
 body.pages-index-index uni-page-body {
     padding-top: 0 !important;
@@ -154,13 +163,13 @@ a.mapboxgl-ctrl-logo {
     display: none !important;
 }
 .mybadge {
-    /* border-radius: 200upx; */
+    /* border-radius: 200rpx; */
     position: absolute;
-    top: 0upx;
-    right: -0upx;
-    font-size: 26upx;
-    padding: 0upx 10upx;
-    height: 38upx;
+    top: 0rpx;
+    right: -0rpx;
+    font-size: 1.3rem;
+    padding: 0rpx 10rpx;
+    height: 38rpx;
     color: #ffffff;
 }
 .text-through {
@@ -172,7 +181,7 @@ a.mapboxgl-ctrl-logo {
 // 没有更多了的文字
 .tui-nomore-text {
     color: #999;
-    font-size: 24rpx;
+    font-size: 1.2rem;
     text-align: center;
     padding: 0 2px;
     height: 36rpx;
@@ -209,14 +218,14 @@ a.mapboxgl-ctrl-logo {
 .nav-list {
     display: flex;
     flex-wrap: wrap;
-    padding: 0px 40upx 0px;
+    padding: 0px 40rpx 0px;
     justify-content: space-between;
 }
 .nav-li {
-    padding: 30upx;
-    border-radius: 12upx;
+    padding: 30rpx;
+    border-radius: 12rpx;
     width: 45%;
-    margin: 0 2.5% 40upx;
+    margin: 0 2.5% 40rpx;
     /* background-image: url(https://cdn.nlark.com/yuque/0/2019/png/280374/1552996358352-assets/web-upload/cc3b1807-c684-4b83-8f80-80e5b8a6b975.png); */
     background-size: cover;
     background-position: center;
@@ -232,35 +241,35 @@ a.mapboxgl-ctrl-logo {
     height: 100%;
     left: 0;
     bottom: -10%;
-    border-radius: 10upx;
+    border-radius: 10rpx;
     opacity: 0.2;
     transform: scale(0.9, 0.9);
 }
 .nav-li.cur {
     color: #fff;
     background: rgb(94, 185, 94);
-    box-shadow: 4upx 4upx 6upx rgba(94, 185, 94, 0.4);
+    box-shadow: 4rpx 4rpx 6rpx rgba(94, 185, 94, 0.4);
 }
 .nav-title {
-    font-size: 32upx;
+    font-size: 1.6rem;
     font-weight: 300;
 }
 .nav-title::first-letter {
-    font-size: 40upx;
-    margin-right: 4upx;
+    font-size: 2rem;
+    margin-right: 4rpx;
 }
 .nav-name {
-    font-size: 28upx;
+    font-size: 1.4rem;
     text-transform: Capitalize;
-    margin-top: 20upx;
+    margin-top: 20rpx;
     position: relative;
 }
 .nav-name::before {
     content: '';
     position: absolute;
     display: block;
-    width: 40upx;
-    height: 6upx;
+    width: 40rpx;
+    height: 6rpx;
     background: #fff;
     bottom: 0;
     right: 0;
@@ -270,27 +279,27 @@ a.mapboxgl-ctrl-logo {
     content: '';
     position: absolute;
     display: block;
-    width: 100upx;
+    width: 100rpx;
     height: 1px;
     background: #fff;
     bottom: 0;
-    right: 40upx;
+    right: 40rpx;
     opacity: 0.3;
 }
 .nav-name::first-letter {
     font-weight: bold;
-    font-size: 36upx;
+    font-size: 1.8rem;
     margin-right: 1px;
 }
 .nav-li text {
     position: absolute;
-    right: 30upx;
-    top: 30upx;
-    font-size: 52upx;
-    width: 60upx;
-    height: 60upx;
+    right: 30rpx;
+    top: 30rpx;
+    font-size: 52rpx;
+    width: 60rpx;
+    height: 60rpx;
     text-align: center;
-    line-height: 60upx;
+    line-height: 60rpx;
 }
 .text-light {
     font-weight: 300;
@@ -300,7 +309,7 @@ a.mapboxgl-ctrl-logo {
         transform: translateY(-50px);
     }
     60% {
-        transform: translateY(40upx);
+        transform: translateY(40rpx);
     }
     100% {
         transform: translateY(0px);
@@ -311,7 +320,7 @@ a.mapboxgl-ctrl-logo {
         transform: translateY(-50px);
     }
     60% {
-        transform: translateY(40upx);
+        transform: translateY(40rpx);
     }
     100% {
         transform: translateY(0px);

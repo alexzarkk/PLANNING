@@ -112,7 +112,7 @@
 	}
 
 	.tui-icon-arrow {
-		font-size: 32rpx;
+		font-size: 1.6rem;
 		transform: rotate(0);
 		transform-origin: center center;
 		transition: all 0.3s;

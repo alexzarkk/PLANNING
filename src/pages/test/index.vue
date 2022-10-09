@@ -5,7 +5,7 @@
             <block slot="content">TEST</block>
         </cu-custom>
 
-        <view class="bg-white" style="margin: 20upx; padding: 20upx; border-radius: 8upx">
+        <view class="bg-white" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpx">
             <view class="text-df text-gray padding-tb-xs">常用功能</view>
 
             <view class="cu-list grid col-4 solid-top solid-left solid-right">
@@ -101,7 +101,7 @@ export default {
             ifShow: true,
             val: 'https://www.baidu.com', // 要生成的二维码值
             size: 350, // 二维码大小
-            unit: 'upx', // 单位
+            unit: 'rpx', // 单位
             background: '#b4e9e2', // 背景色
             foreground: '#309286', // 前景色
             pdground: '#32dbc6', // 角标色

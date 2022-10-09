@@ -71,7 +71,7 @@
 		},
 		methods: {
 			handleHeight(h) {
-				this.height = uni.upx2px(h || 0)
+				this.height = uni.rpx2px(h || 0)
 			},
 			initColumn(val) {
 				val = val + '';

@@ -106,7 +106,7 @@
 		// #endif
 		methods: {
 			getPx(rpx) {
-				let px = parseInt(uni.upx2px(Number(rpx)))
+				let px = parseInt(uni.rpx2px(Number(rpx)))
 				return px % 2 === 0 ? px : px - 1
 			},
 			getEvenNum(px) {
@@ -247,7 +247,7 @@
 	}
 
 	.tui-tooltip__title {
-		font-size: 30rpx;
+		font-size: 1.5rem;
 		color: #fff;
 		line-height: 30rpx;
 		flex-shrink: 0;
@@ -260,7 +260,7 @@
 	}
 
 	.tui-tooltip__val {
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		line-height: 24rpx;
 		color: #fff;
 		margin-left: 6rpx;

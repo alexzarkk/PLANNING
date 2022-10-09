@@ -114,7 +114,7 @@
 		background-color: #fff;
 		box-sizing: border-box;
 		position: relative;
-		font-size: 32rpx;
+		font-size: 1.6rem;
 		line-height: 32rpx;
 	}
 

@@ -80,7 +80,7 @@ export default {
 }
 
 .tui-msg__desc {
-	font-size: 32rpx;
+	font-size: 1.6rem;
 	text-align: center;
 }
 </style>

@@ -8,7 +8,7 @@
 		<block v-if="list.length > 0">
 			<view class="cu-list menu">
 				<block v-for="(log, i) in list" :key="i">
-					<view class="cu-item" :class="log.imgs&&log.imgs.length?'arrow':''" style="height: 120upx;" @click="logImg(i)">
+					<view class="cu-item" :class="log.imgs&&log.imgs.length?'arrow':''" style="height: 120rpx;" @click="logImg(i)">
 						<view class="cu-avatar round lg" :class="'bg-el-'+dict.laySt[log.status].type">
 							<!-- <view class="cu-tag badge bg-grey">
 								<view class="text-white cuIcon-light"></view>

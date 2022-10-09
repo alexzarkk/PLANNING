@@ -440,7 +440,7 @@ page {
 
 	&-title {
 		margin-bottom: 12rpx;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		color: #999999;
 	}
 }
@@ -467,7 +467,7 @@ page {
         }
 
         .line-info-name {
-            font-size: 48rpx;
+            font-size: 2.4rem;
             font-weight: 900;
         }
 
@@ -495,7 +495,7 @@ page {
         .operation-icon {
             margin-bottom: 10rpx;
             color: $zts-green;
-            font-size: 40rpx;
+            font-size: 2rem;
         }
         .operation-title {
             color: $zts-green;
@@ -539,13 +539,13 @@ page {
 
                 // border-left: 1px solid black;
                 .detail-item-title {
-                    font-size: 24rpx;
+                    font-size: 1.2rem;
                     color: #858585;
                     margin-bottom: 6rpx;
                 }
 
                 .detail-item-value {
-                    font-size: 36rpx;
+                    font-size: 1.8rem;
                     font-weight: bold;
                     color: #282828;
                 }
@@ -561,7 +561,7 @@ page {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        font-size: 36rpx;
+        font-size: 1.8rem;
         height: 150rpx;
         padding-top: 50rpx;
         padding-bottom: 50rpx;

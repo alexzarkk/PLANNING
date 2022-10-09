@@ -82,7 +82,7 @@
 
 	.tui-title {
 		width: 180rpx;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 		flex-shrink: 0;
 	}
 
@@ -100,16 +100,16 @@
 	.tui-input-city {
 		flex: 1;
 		height: 40rpx;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 		padding-right: 30rpx;
 	}
 
 	.tui-phcolor {
 		color: #ccc;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 	}
 	.tui-cell-title{
-		font-size: 28rpx;
+		font-size: 1.4rem;
 		flex-shrink: 0;
 	}
 	.tui-addr-label {
@@ -121,7 +121,7 @@
 		height: 40rpx;
 		border: 1rpx solid rgb(136, 136, 136);
 		border-radius: 6rpx;
-		font-size: 26rpx;
+		font-size: 1.3rem;
 		text-align: center;
 		line-height: 40rpx;
 		margin-right: 20rpx;
@@ -143,7 +143,7 @@
 		box-sizing: border-box;
 		border-radius: 6rpx;
 		overflow: hidden;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 	}
 
 	.tui-switch-small {

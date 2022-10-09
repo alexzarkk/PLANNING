@@ -373,7 +373,7 @@ export default {
         .operation-icon {
             margin-bottom: 10rpx;
             color: $zts-green;
-            font-size: 40rpx;
+            font-size: 2rem;
         }
         .operation-title {
             color: $zts-green;

@@ -110,31 +110,31 @@ export default {
 }
 
 .tright {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	left: 0upx;
-	font-size: 26upx;
-	padding: 0upx 6upx;
-	height: 38upx;
+	top: 0rpx;
+	left: 0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 6rpx;
+	height: 38rpx;
 	color: #ffffff;
 	width: 150rpx;
 }
 .tleft {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	right: -0upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: 0rpx;
+	right: -0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 
 .bgimg {
 		/* background-attachment:fixed; */
 		background-repeat:no-repeat;
-		height: 320upx;
+		height: 320rpx;
 		/* z-index: 29 */
 		/* background-size:cover; */
 		/* -moz-background-size:cover; */
@@ -144,7 +144,7 @@ export default {
 	
 	
 	.bgtitle{
-		top: 233upx;
+		top: 233rpx;
 	}
 	
 </style>

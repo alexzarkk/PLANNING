@@ -327,7 +327,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    font-size: 36rpx;
+    font-size: 1.8rem;
     color: #ffffff;
 }
 
@@ -361,7 +361,7 @@ export default {
     align-items: center;
     height: 600rpx;
     .text {
-        font-size: 36rpx;
+        font-size: 1.8rem;
     }
 }
 
@@ -418,11 +418,11 @@ export default {
                 justify-content: space-between;
                 padding: 10rpx 0;
                 .main-title {
-                    font-size: 36rpx;
+                    font-size: 1.8rem;
                     font-weight: bold;
                 }
                 .sub-title {
-                    font-size: 24rpx;
+                    font-size: 1.2rem;
                 }
             }
         }

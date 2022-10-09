@@ -94,6 +94,6 @@ body {
 }
 
 .cu-list.menu-avatar > .cu-item{
-height: 160upx;
+height: 160rpx;
 }
 </style>

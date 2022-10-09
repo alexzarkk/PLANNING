@@ -119,7 +119,7 @@
 		},
 		methods: {
 			getPx(rpx) {
-				let px = parseInt(uni.upx2px(Number(rpx)))
+				let px = parseInt(uni.rpx2px(Number(rpx)))
 				return px % 2 === 0 ? px : px + 1
 			},
 			getDrawData(dots, idx, type = 'l') {
@@ -251,7 +251,7 @@
 
 	.tui-radar__name {
 		min-width: 120rpx;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		position: absolute;
 		top: -20rpx;
 		left: 50%;
@@ -336,7 +336,7 @@
 	}
 
 	.tui-tooltip__title {
-		font-size: 30rpx;
+		font-size: 1.5rem;
 		color: #fff;
 		line-height: 30rpx;
 	}
@@ -355,7 +355,7 @@
 	}
 
 	.tui-tooltip__val {
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		line-height: 24rpx;
 		color: #fff;
 		margin-left: 6rpx;

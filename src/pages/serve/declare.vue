@@ -99,7 +99,7 @@
                     <view class="tui-title solid-right">手机号</view>
                     <input placeholder-class="tui-phcolor" type="number" v-model="form.mobile" placeholder="必填" maxlength="11" />
                     <!-- <block v-if="form.mobile==''">
-						<button style="width: 220upx;" class="cu-btn line-dark" type="default" open-type="getPhoneNumber" @getphonenumber="decryptPhoneNumber">获取手机号</button>
+						<button style="width: 220rpx;" class="cu-btn line-dark" type="default" open-type="getPhoneNumber" @getphonenumber="decryptPhoneNumber">获取手机号</button>
 					</block> -->
                 </view>
             </tui-list-cell>
@@ -385,7 +385,7 @@ export default {
 }
 .tui-title {
     width: 180rpx;
-    font-size: 26rpx;
+    font-size: 1.3rem;
 }
 .itext {
     border-left: 1rpx solid #f3f3f3;
@@ -393,6 +393,6 @@ export default {
 }
 .tui-phcolor {
     color: #c8c8c8;
-    font-size: 26rpx;
+    font-size: 1.3rem;
 }
 </style>

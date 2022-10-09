@@ -753,7 +753,7 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	color: #ffffff;
-	font-size: 32rpx;
+	font-size: 1.6rem;
 }
 
 .tui-cropper-tabbar::after {

@@ -174,6 +174,6 @@ export default {
     column-gap: 40rpx;
     background-color: #ffffff;
     padding-left: 30rpx;
-    font-size: 36rpx;
+    font-size: 1.8rem;
 }
 </style>

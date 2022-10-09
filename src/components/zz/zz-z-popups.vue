@@ -279,7 +279,7 @@
 	}
 	.light{
 		color: #515a6e;
-		box-shadow: 0upx 0upx 30upx rgba(0,0,0,0.2);
+		box-shadow: 0rpx 0rpx 30rpx rgba(0,0,0,0.2);
 		background: #fff;
 		.top-start:after {
 			content: "";

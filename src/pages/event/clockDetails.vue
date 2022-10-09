@@ -154,7 +154,7 @@ export default {
                 font-weight: bold;
             }
             .clock {
-                font-size: 40rpx;
+                font-size: 2rem;
             }
         }
     }
@@ -176,7 +176,7 @@ export default {
     }
 
     .time {
-        font-size: 36rpx;
+        font-size: 1.8rem;
     }
 
     .clock-success {

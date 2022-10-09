@@ -428,7 +428,7 @@ page {
 .error {
 	color: #fff;
 	padding: 40rpx;
-	font-size: 24rpx;
+	font-size: 1.2rem;
 	background-color: #333333;
 	position: fixed;
 	top: 50%;
@@ -439,6 +439,6 @@ page {
 }
 
 .error .on1 {
-	font-size: 30rpx;
+	font-size: 1.5rem;
 }
 </style>

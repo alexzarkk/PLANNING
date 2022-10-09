@@ -576,7 +576,7 @@ export default {
 }
 
 .start-btn-name {
-	font-size: 14px;
+	font-size: 1.4rem;
 	font-weight: 500;
 	color: #ffffff;
 }
@@ -584,7 +584,7 @@ export default {
 	width: 400rpx;
 	height: 80rpx;
 	background-color: #0081ff;
-	box-shadow: 0 30upx 20upx rgba(0, 0, 0, 0.2);
+	box-shadow: 0 30rpx 20rpx rgba(0, 0, 0, 0.2);
 	
 	border-radius: 40rpx;
 	align-items: center;

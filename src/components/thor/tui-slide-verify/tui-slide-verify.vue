@@ -147,7 +147,7 @@
 
 	.tui-slide-icon {
 		font-family: "tuiSlideVcode" !important;
-		font-size: 34rpx;
+		font-size: 1.7rem;
 		font-style: normal;
 		-webkit-font-smoothing: antialiased;
 	}

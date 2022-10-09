@@ -430,24 +430,24 @@ body{
 
 .mybadge {
     position: absolute;
-    top: 0upx;
-    right: 0upx;
-    font-size: 26upx;
-    padding: 0upx 10upx;
-    height: 38upx;
+    top: 0rpx;
+    right: 0rpx;
+    font-size: 1.3rem;
+    padding: 0rpx 10rpx;
+    height: 38rpx;
 	.round {
-		border-radius: 200upx 0 0 200upx;
+		border-radius: 200rpx 0 0 200rpx;
 	}
 }
 
 .mybadge-left {
-   border-radius: 0 200upx 200upx 0;
+   border-radius: 0 200rpx 200rpx 0;
     position: absolute;
-    top: 0upx;
-    left: 0upx;
-    font-size: 26upx;
-    padding: 0upx 10upx;
-    height: 38upx;
+    top: 0rpx;
+    left: 0rpx;
+    font-size: 1.3rem;
+    padding: 0rpx 10rpx;
+    height: 38rpx;
 }
 
 

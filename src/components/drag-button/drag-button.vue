@@ -134,7 +134,7 @@
 		// justify-content: center;
 		// align-items: center;
 		background-color: $zts-green;
-		// box-shadow: 0 0 6upx rgba(0, 0, 0, 0.4);
+		// box-shadow: 0 0 6rpx rgba(0, 0, 0, 0.4);
 		color: $uni-text-color-inverse;
 		width: 120rpx;
 		height: 120rpx;

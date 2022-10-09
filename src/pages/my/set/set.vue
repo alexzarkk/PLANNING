@@ -204,7 +204,7 @@ export default {
             ifShow: true,
             val: '加好友', // 要生成的二维码值
             size: 350, // 二维码大小
-            unit: 'upx', // 单位
+            unit: 'rpx', // 单位
             background: '#b4e9e2', // 背景色
             foreground: '#309286', // 前景色
             pdground: '#32dbc6', // 角标色

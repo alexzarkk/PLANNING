@@ -139,7 +139,7 @@
 		align-items: center;
 		justify-content: center;
 		text-align: center;
-		font-size: 34rpx;
+		font-size: 1.7rem;
 		position: relative;
 	}
 

@@ -283,33 +283,33 @@ export default {
 <style>
 .cardTitle {
 	color: #282828;
-	padding: 56upx 20upx 10upx 20upx;
-	font-size: 36upx;
+	padding: 56rpx 20rpx 10rpx 20rpx;
+	font-size: 1.8rem;
 	font-weight: 500;
 	transform: skew(-10deg, 0deg);
 	position: relative;
-	text-shadow: 0px 0px 6upx rgba(255, 255, 255, 0.3);
+	text-shadow: 0px 0px 6rpx rgba(255, 255, 255, 0.3);
 }
 
 .mybadge-l {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	left: -0upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: 0rpx;
+	left: -0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 
 .mybadge {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	right: -0upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: 0rpx;
+	right: -0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 </style>

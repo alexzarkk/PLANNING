@@ -27,7 +27,7 @@ export default {
 		},
 		unit: {
 			type: String,
-			default: 'upx'
+			default: 'rpx'
 		},
 		show: {
 			type: Boolean,
@@ -180,8 +180,8 @@ export default {
 	},
 	computed: {
 		cpSize() {
-			if(this.unit == "upx"){
-				return uni.upx2px(this.size)
+			if(this.unit == "rpx"){
+				return uni.rpx2px(this.size)
 			}else{
 				return this.size
 			}
@@ -204,8 +204,8 @@ export default {
 }
 .tki-qrcode-canvas {
   position: fixed;
-  top: -99999upx;
-  left: -99999upx;
+  top: -99999rpx;
+  left: -99999rpx;
   z-index: -99999;
 }
 </style>

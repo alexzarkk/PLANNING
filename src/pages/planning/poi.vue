@@ -39,7 +39,7 @@
 				<view id="tvideo" v-if="poi.video&&poi.video.url">
 					<view class="cu-card case no-card">
 						<view class="shadow">
-							<view class="bg-video flex align-center" style="height: 420upx;" >
+							<view class="bg-video flex align-center" style="height: 420rpx;" >
 								<video id="myVideo" loop
 									:src="poi.video.url"
 									:autoplay="true"

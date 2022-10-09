@@ -33,12 +33,12 @@
         </view>
         <view
           class="uni-list-match"
-          style="justify-content: space-between; height: 120upx"
+          style="justify-content: space-between; height: 120rpx"
         >
           <view class="title"><span>*</span>头像</view>
           <view class="img" @tap="upclo">
             <image v-if="data.ava" :src="data.ava"></image>
-            <view v-else style="color: #999999; font-size: 40rpx">+</view>
+            <view v-else style="color: #999999; font-size: 2rem">+</view>
           </view>
         </view>
         <picker mode="date" :value="data.birthday" @change="bindbirthdayChange">
@@ -196,26 +196,26 @@ page {
   padding-bottom: 140rpx;
 }
 .titlet {
-  margin: 20upx 20upx;
+  margin: 20rpx 20rpx;
 }
 .uni-list-match {
   display: flex;
   justify-content: flex-start;
   flex-direction: row;
   align-items: center;
-  height: 80upx;
-  line-height: 80upx;
-  padding-left: 28upx;
-  padding-right: 28upx;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding-left: 28rpx;
+  padding-right: 28rpx;
   background-color: #ffffff;
   border-radius: 8rpx;
   margin-bottom: 20rpx;
   .title {
-    font-bodysize: 28upx;
+    font-bodysize: 28rpx;
     white-space: nowrap;
     padding: 0;
-    width: 100upx;
-    border: 2upx;
+    width: 100rpx;
+    border: 2rpx;
     span {
       color: red;
     }
@@ -247,12 +247,12 @@ page {
     display: flex;
     align-items: center;
     .nan {
-      width: 100upx;
-      height: 50upx;
-      line-height: 50upx;
+      width: 100rpx;
+      height: 50rpx;
+      line-height: 50rpx;
       text-align: center;
       border: 1px solid #e2e2e2;
-      font-bodysize: 28upx;
+      font-bodysize: 28rpx;
     }
     .nv {
       border: 1px solid #0081ff;
@@ -266,14 +266,14 @@ page {
   left: 0;
   right: 0;
   z-index: 999;
-  height: 90upx;
-  line-height: 90upx;
+  height: 90rpx;
+  line-height: 90rpx;
   text-align: center;
   color: #ffffff;
   width: 90%;
-  margin: 20upx auto;
+  margin: 20rpx auto;
   background-color: #0081ff;
-  border-radius: 14upx;
+  border-radius: 14rpx;
 }
 .value {
   display: flex;
@@ -285,12 +285,12 @@ page {
   }
   .certification {
     background-color: #0081ff;
-    font-size: 28upx;
-    width: 120upx;
-    margin-left: 20upx;
+    font-size: 1.4rem;
+    width: 120rpx;
+    margin-left: 20rpx;
     color: #fff;
-    height: 60upx;
-    line-height: 60upx;
+    height: 60rpx;
+    line-height: 60rpx;
   }
 }
 </style>

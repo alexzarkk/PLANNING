@@ -15,8 +15,10 @@
                             <text class="cuIcon-people"></text>
                         </view>
                         <view class="padding-left">
+                          <!-- #ifndef H5-ZLB -->
                             <!-- #ifdef APP-PLUS || H5 -->
                             <text>注册/登录</text>
+                            <!-- #endif -->
                             <!-- #endif -->
 
                             <!-- #ifdef H5-ZLB -->
@@ -363,7 +365,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 30rpx;
-	font-size: 30rpx;
+	font-size: 1.5rem;
 }
 
 </style>

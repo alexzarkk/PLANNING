@@ -1165,7 +1165,7 @@ export default {
     width: 100%;
     padding-right: 20rpx;
     box-sizing: border-box;
-    font-size: 28rpx;
+    font-size: 1.4rem;
     height: 60rpx;
     background: #fff8d5;
     display: flex;
@@ -1191,7 +1191,7 @@ export default {
 }
 
 .my-btn.button-hover {
-    transform: translate(1upx, 1upx);
+    transform: translate(1rpx, 1rpx);
 }
 
 .tui-icon-bg {
@@ -1261,7 +1261,7 @@ page {
 
 .tui-header {
     width: 100%;
-    font-size: 18px;
+    font-size: 1.8rem;
     line-height: 18px;
     font-weight: 500;
     height: auto;
@@ -1328,7 +1328,7 @@ page {
 }
 
 .tui-menu-header {
-    font-size: 34rpx;
+    font-size: 1.7rem;
     color: #fff;
     height: 32px;
     display: flex;
@@ -1341,7 +1341,7 @@ page {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    font-size: 26rpx;
+    font-size: 1.3rem;
 }
 
 .tui-menu-item {
@@ -1413,7 +1413,7 @@ page {
 /* #endif */
 
 .tui-size {
-    font-size: 24rpx;
+    font-size: 1.2rem;
     line-height: 24rpx;
 }
 
@@ -1455,7 +1455,7 @@ page {
     align-items: center;
     justify-content: space-between;
     color: #ff201f;
-    font-size: 36rpx;
+    font-size: 1.8rem;
     font-weight: bold;
     line-height: 44rpx;
 }
@@ -1470,7 +1470,7 @@ page {
 }
 
 .tui-original-price {
-    font-size: 26rpx;
+    font-size: 1.3rem;
     line-height: 26rpx;
     padding: 10rpx 30rpx;
     box-sizing: border-box;
@@ -1498,7 +1498,7 @@ page {
 }
 
 .tui-pro-titbox {
-    font-size: 32rpx;
+    font-size: 1.6rem;
     font-weight: 500;
     position: relative;
     padding: 0 150rpx 0 30rpx;
@@ -1558,7 +1558,7 @@ page {
     position: relative;
     display: flex;
     align-items: center;
-    font-size: 26rpx;
+    font-size: 1.3rem;
     line-height: 26rpx;
     padding: 36rpx 30rpx;
     box-sizing: border-box;
@@ -1638,7 +1638,7 @@ page {
     display: flex;
     flex-wrap: wrap;
     padding: 20rpx 30rpx 30rpx 30rpx;
-    font-size: 24rpx;
+    font-size: 1.2rem;
 }
 
 .tui-guarantee-item {
@@ -1665,7 +1665,7 @@ page {
 }
 
 .tui-cmt-content {
-    font-size: 26rpx;
+    font-size: 1.3rem;
 }
 
 .tui-cmt-user {
@@ -1686,7 +1686,7 @@ page {
 }
 
 .tui-attr {
-    font-size: 24rpx;
+    font-size: 1.2rem;
     color: #999;
     padding: 6rpx 0;
 }
@@ -1769,7 +1769,7 @@ page {
 }
 
 .tui-operation-text {
-    font-size: 22rpx;
+    font-size: 1.1rem;
     color: #333;
 }
 
@@ -1823,7 +1823,7 @@ page {
 /* .tui-popup-btn .tui-btn-class {
 		width: 90% !important;
 		display: block !important;
-		font-size: 28rpx !important;
+		font-size: 1.4rem !important;
 	} */
 
 /* .tui-icon-close {
@@ -1835,7 +1835,7 @@ page {
 .tui-product-box {
     display: flex;
     align-items: flex-end;
-    font-size: 24rpx;
+    font-size: 1.2rem;
     padding-bottom: 30rpx;
 }
 
@@ -1853,11 +1853,11 @@ page {
 
 .tui-amount {
     color: #ff201f;
-    font-size: 36rpx;
+    font-size: 1.8rem;
 }
 
 .tui-number {
-    font-size: 24rpx;
+    font-size: 1.2rem;
     line-height: 24rpx;
     padding-top: 12rpx;
     color: #999;
@@ -1865,7 +1865,7 @@ page {
 
 .tui-popup-scroll {
     height: 600rpx;
-    font-size: 26rpx;
+    font-size: 1.3rem;
 }
 
 .tui-scrollview-box {
@@ -1897,7 +1897,7 @@ page {
     border-radius: 32rpx;
     margin-right: 20rpx;
     margin-bottom: 20rpx;
-    font-size: 26rpx;
+    font-size: 1.3rem;
 }
 
 .tui-attr-active {

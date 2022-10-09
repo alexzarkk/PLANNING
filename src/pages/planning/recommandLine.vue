@@ -175,14 +175,14 @@ page {
 
             .re-grid-title {
                 color: #ffffff;
-                font-size: 36rpx;
+                font-size: 1.8rem;
                 margin-bottom: 10rpx;
             }
 
             .re-grid-sub-title {
                 color: #efefef;
 				
-                font-size: 24rpx;
+                font-size: 1.2rem;
             }
         }
 

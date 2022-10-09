@@ -30,12 +30,12 @@
 			<block>
 				<view class="solid-bottom flex align-start bg-white">
 					<view v-for="(item, index) in event.region" :key="index">
-						<view class="bg-blue mybadge-left" :style="'left:' + index * 90 + 'upx'">{{ item.value }}</view>
+						<view class="bg-blue mybadge-left" :style="'left:' + index * 90 + 'rpx'">{{ item.value }}</view>
 					</view>
 				</view>
 				<view class="solid-bottom flex align-start bg-white">
 					<view v-for="(item, index) in event.type" :key="index">
-						<view class="mybadge" :class="'bg-' + item.color" :style="'right:' + index * 90 + 'upx'">{{ item.value }}</view>
+						<view class="mybadge" :class="'bg-' + item.color" :style="'right:' + index * 90 + 'rpx'">{{ item.value }}</view>
 					</view>
 				</view>
 			</block>
@@ -106,7 +106,7 @@
 				<view id="tvideo">
 					<view class="cu-card case no-card" v-for="(item, index) in event.video" :key="index">
 						<view class="padding-top-xs shadow">
-							<view class="bg-video flex align-center" style="height: 422upx;">
+							<view class="bg-video flex align-center" style="height: 422rpx;">
 								<video
 									id="myVideo"
 									autoplay
@@ -842,28 +842,28 @@ export default {
 }
 
 .mybadge {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: -50upx;
-	right: -0upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: -50rpx;
+	right: -0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 
 .mybadge-left {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: -50upx;
-	left: -10upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: -50rpx;
+	left: -10rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 .left5 {
-	margin-left: 5upx;
+	margin-left: 5rpx;
 }
 
 .my-btn {
@@ -877,7 +877,7 @@ export default {
 }
 
 .my-btn.button-hover {
-	transform: translate(1upx, 1upx);
+	transform: translate(1rpx, 1rpx);
 }
 /* */
 </style>

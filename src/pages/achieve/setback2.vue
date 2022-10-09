@@ -216,16 +216,16 @@ body{
 
 .cu-form-group .title {
     min-width: calc(4em + 15px);
-    border-right: 1upx solid rgba(0, 0, 0, 0.1);
+    border-right: 1rpx solid rgba(0, 0, 0, 0.1);
 }
 
 image {
     width: 320rpx;
     height: 320rpx;
-    border-radius: 60upx;
+    border-radius: 60rpx;
 }
 input {
-    margin-left: 5upx;
+    margin-left: 5rpx;
 }
 
 .tui-cells {
@@ -237,16 +237,16 @@ input {
     height: 120rpx;
     width: 100%;
     color: #737373;
-    font-size: 28rpx;
+    font-size: 1.4rem;
 }
 
 .tui-phcolor {
     color: #c8c8c8;
-    font-size: 28rpx;
+    font-size: 1.4rem;
 }
 
 .textarea-counter {
-    font-size: 24rpx;
+    font-size: 1.2rem;
     color: #999;
     text-align: right;
     height: 40rpx;

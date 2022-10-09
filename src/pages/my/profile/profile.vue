@@ -92,7 +92,7 @@
 
         <!-- <view class="bg-white solid-bottom" @click="openPage('/pages/my/social/pushDetails')">
                 <view class="flex align-end padding-left">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">28</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">28</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm padding-left"><text class="round bg-gray padding-lr margin-left text-bold">08:30:59</text></view>
@@ -107,7 +107,7 @@
 
             <view class="bg-white padding solid-bottom">
                 <view class="flex align-end">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">20</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">20</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm"><text class="round bg-gray padding-lr margin-left text-bold">15:30:59</text></view>
@@ -121,7 +121,7 @@
 
             <view class="bg-white padding solid-bottom">
                 <view class="flex align-end padding">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">20</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">20</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm"><text class="round bg-gray padding-lr margin-left text-bold">15:30:59</text></view>
@@ -378,7 +378,7 @@ body {
                 padding: 0 20rpx;
                 color: #ffffff;
                 z-index: 20;
-                font-size: 36rpx;
+                font-size: 1.8rem;
             }
 
             .name-box {
@@ -424,7 +424,7 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     .bottom-btn {
         // width: 300rpx;
-        font-size: 36rpx;
+        font-size: 1.8rem;
     }
 
     .send {

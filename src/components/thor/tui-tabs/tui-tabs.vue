@@ -291,7 +291,7 @@
 
 	.tui-tabs__badge {
 		position: absolute;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		height: 32rpx;
 		min-width: 20rpx;
 		padding: 0 6rpx;

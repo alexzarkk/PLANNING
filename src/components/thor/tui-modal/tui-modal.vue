@@ -198,7 +198,7 @@ export default {
 
 .tui-modal-title {
 	text-align: center;
-	font-size: 34rpx;
+	font-size: 1.7rem;
 	color: #333;
 	padding-top: 20rpx;
 	font-weight: bold;
@@ -207,7 +207,7 @@ export default {
 .tui-modal-content {
 	text-align: center;
 	color: #999;
-	font-size: 28rpx;
+	font-size: 1.4rem;
 	padding-top: 20rpx;
 	padding-bottom: 60rpx;
 }
@@ -237,7 +237,7 @@ export default {
 	line-height: 68rpx;
 	position: relative;
 	border-radius: 10rpx;
-	font-size: 26rpx;
+	font-size: 1.3rem;
 	overflow: visible;
 	margin-left: 0;
 	margin-right: 0;

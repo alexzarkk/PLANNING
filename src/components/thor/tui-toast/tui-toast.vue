@@ -104,7 +104,7 @@
 	}
 
 	.tui-toast-text {
-		font-size: 30rpx;
+		font-size: 1.5rem;
 		line-height: 30rpx;
 		font-weight: 400;
 		color: #fff;
@@ -112,7 +112,7 @@
 	}
 	.tui-unicon{
 		line-height: 40rpx !important;
-		font-size: 32rpx !important;
+		font-size: 1.6rem !important;
 	}
 	.tui-content-ptop {
 		padding-top: 10rpx;

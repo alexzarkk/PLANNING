@@ -152,7 +152,7 @@
         </swiper>
 
         <view class="padding-xs">
-            <view class="bg-blue light" style="margin: 20upx; padding: 20upx; border-radius: 8upxs">
+            <view class="bg-blue light" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpxs">
                 <view class="text-df text-ftblue text-bold padding-tb-xs">
                     <text class="cuIcon-safe text-ftblues text-lg padding-lr-xs"></text>
                     服务与保障
@@ -165,8 +165,8 @@
                 </view>
             </view>
         </view>
-        <!-- <view class="bg-white padding-sm solid" style="margin: 20upx;border-radius: 8upx;">
-			<view class=" flex text-center text-grey" style="padding: 30upx 0;">
+        <!-- <view class="bg-white padding-sm solid" style="margin: 20rpx;border-radius: 8rpx;">
+			<view class=" flex text-center text-grey" style="padding: 30rpx 0;">
 				<block v-for="(item, index) in serve" :key="index">
 					<view class="flex flex-sub flex-direction" @click="href(item.url?'/pages/serve/'+item.url+'?tar=f&sn=000&loc=121.402022,29.658711':'/pages/serve')">
 						<view class="text-xxl text-purple">
@@ -181,7 +181,7 @@
 
         <view
             class="bg-img padding-top"
-            style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333upx"
+            style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333rpx"
             @tap="href('/pages/mall/special')"
         >
             <view class="flex justify-end padding-top"><view class="cu-tag bg-pink text-right">当季热销</view></view>
@@ -766,11 +766,11 @@ export default {
 }
 
 // page {
-// 	padding-top: 90upx;
+// 	padding-top: 90rpx;
 // }
 
 .nav-li {
-    border-radius: 6upx;
+    border-radius: 6rpx;
     width: 280rpx;
     margin: 0 10rpx;
     background-size: 100% 100%;
@@ -839,7 +839,7 @@ export default {
 
 .watch-box {
     align-items: center;
-    font-size: 20rpx;
+    font-size: 1rem;
     display: flex;
     flex-direction: row;
     column-gap: 20rpx;

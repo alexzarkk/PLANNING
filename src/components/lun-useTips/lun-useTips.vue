@@ -91,7 +91,7 @@
 		},
 		created() {
 			this.isShow = this.show;
-			this.newPadding = uni.upx2px(this.padding);
+			this.newPadding = uni.rpx2px(this.padding);
 		},
 		mounted() {
 			let sysInfo = uni.getSystemInfoSync();
@@ -197,11 +197,11 @@
 			text-align: center;
 
 			.content-info {
-				font-size: 36rpx;
+				font-size: 1.8rem;
 			}
 
 			.content-next {
-				font-size: 36rpx;
+				font-size: 1.8rem;
 				width: 160rpx;
 				border: 2rpx solid #fff;
 				border-radius: 8rpx;

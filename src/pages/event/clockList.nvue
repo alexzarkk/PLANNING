@@ -114,7 +114,7 @@ export default {
 		padding-top: 5rpx;
 		&-title {
 			color: $color-gray;
-			font-size: 24rpx;
+			font-size: 1.2rem;
 		}
 	}
 
@@ -127,7 +127,7 @@ export default {
 		&-title {
 			margin-left: 20rpx;
 			color: #ffffff;
-			font-size: 28rpx;
+			font-size: 1.4rem;
 		}
 	}
 }
@@ -190,7 +190,7 @@ export default {
 					justify-content: center;
 					align-items: center;
 					.text-white {
-						font-size: 36rpx;
+						font-size: 1.8rem;
 						color: #ffffff;
 					}
 				}
@@ -201,11 +201,11 @@ export default {
 				justify-content: space-between;
 				padding: 10rpx 0;
 				.main-title {
-					font-size: 36rpx;
+					font-size: 1.8rem;
 					font-weight: bold;
 				}
 				.sub-title {
-					font-size: 24rpx;
+					font-size: 1.2rem;
 					color: $color-gray;
 				}
 			}

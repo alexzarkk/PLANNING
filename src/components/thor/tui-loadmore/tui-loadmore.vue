@@ -33,7 +33,7 @@
 		width: 48%;
 		margin: 1.5em auto;
 		line-height: 1.5em;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		text-align: center;
 	}
 

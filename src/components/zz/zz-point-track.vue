@@ -224,13 +224,13 @@ export default {
         .line-name-sport {
             &-name {
                 color: #232323;
-                font-size: 32rpx;
+                font-size: 1.6rem;
                 font-weight: bold;
             }
 
             &-sport {
                 color: #4e4e4e;
-                font-size: 24rpx;
+                font-size: 1.2rem;
             }
         }
     }
@@ -270,12 +270,12 @@ export default {
             flex-direction: column;
             justify-content: flex-start;
             &-title {
-                font-size: 24rpx;
+                font-size: 1.2rem;
                 color: #858585;
             }
 
             &-value {
-                font-size: 36rpx;
+                font-size: 1.8rem;
                 font-weight: bold;
                 color: #282828;
             }
@@ -289,13 +289,13 @@ export default {
 
 .record-time-box {
     &-title {
-        font-size: 32rpx;
+        font-size: 1.6rem;
         font-weight: bold;
         margin-right: 20rpx;
     }
 
     &-value {
-        font-size: 28rpx;
+        font-size: 1.4rem;
     }
 }
 </style>

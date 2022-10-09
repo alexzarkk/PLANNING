@@ -138,7 +138,7 @@ body {
     // column-gap: 20rpx;
     .city-tag {
 		margin-bottom: 20rpx;
-        font-size: 24rpx;
+        font-size: 1.2rem;
         width: 210rpx;
         height: 60rpx;
         line-height: 60rpx;

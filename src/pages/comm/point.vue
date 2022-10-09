@@ -227,18 +227,18 @@ export default {
 <style>
 .cu-form-group {
 	background-color: #fcfcfc;
-	padding: 1upx 30upx;
+	padding: 1rpx 30rpx;
 	display: flex;
 	align-items: center;
-	min-height: 80upx;
+	min-height: 80rpx;
 	justify-content: flex-start;
 }
 .cu-form-group .title {
 	min-width: calc(4em + 15px);
 }
 .avt {
-	width: 100upx;
-	height: 100upx;
+	width: 100rpx;
+	height: 100rpx;
 	
 	background-size: contain;
 	background-repeat: no-repeat;

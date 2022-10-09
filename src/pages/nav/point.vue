@@ -320,7 +320,7 @@ export default {
 
         &-title {
             margin-bottom: 12rpx;
-            font-size: 24rpx;
+            font-size: 1.2rem;
             color: #999999;
         }
     }

@@ -64,7 +64,7 @@ export default {
 	width: 600rpx;
 	height: 70rpx;
 	display: flex;
-	font-size: 30rpx;
+	font-size: 1.5rem;
 	line-height: 86rpx;
 	padding-left: 30rpx;
 }
@@ -79,7 +79,7 @@ export default {
 }
 
 .tui-address-detail {
-	font-size: 24rpx;
+	font-size: 1.2rem;
 	word-break: break-all;
 	padding-bottom: 25rpx;
 	padding-left: 25rpx;

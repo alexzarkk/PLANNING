@@ -154,7 +154,7 @@ page {
         padding: 24rpx;
         .sport-title {
             color: #8b8b8b;
-            font-size: 24rpx;
+            font-size: 1.2rem;
             margin-bottom: 16rpx;
         }
 
@@ -180,7 +180,7 @@ page {
                     padding: 16rpx;
 
                     // .sport-type-icon{
-                    // 	font-size: 20rpx;
+                    // 	font-size: 1rem;
                     // }
 
                     &-image {
@@ -191,7 +191,7 @@ page {
 
                 &-title {
                     color: #525252;
-                    font-size: 28rpx;
+                    font-size: 1.4rem;
                 }
             }
 

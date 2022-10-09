@@ -151,7 +151,7 @@
 
 	.tui-badge {
 		position: absolute;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		line-height: 32rpx;
 		height: 32rpx;
 		min-width: 20rpx;

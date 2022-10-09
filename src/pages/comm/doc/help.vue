@@ -85,6 +85,6 @@
 	.tui-product-img image {
 		width: 100%;
 		display: block;
-		padding: 20upx;
+		padding: 20rpx;
 	}
 </style>

@@ -463,7 +463,7 @@ export default {
 			const p = this.$refs.custom
 			// 自定义，使用原生和内部方法生成更个性的图形
 			await p.custom(async (ctx, draw) => {
-				// 原生方法的单位为px，如果想用rpx,请使用uni.upx2px(150)
+				// 原生方法的单位为px，如果想用rpx,请使用uni.rpx2px(150)
 				// 绘制背景颜色
 				ctx.setFillStyle('#ff976a')
 				ctx.setShadow(5, 5, 50, '#ff976a')

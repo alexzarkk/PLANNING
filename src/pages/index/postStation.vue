@@ -155,7 +155,7 @@ page {
 
             .re-grid-sub-title {
                 color: #ffaa7f;
-                font-size: 24rpx;
+                font-size: 1.2rem;
             }
         }
 

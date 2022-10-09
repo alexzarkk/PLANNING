@@ -263,14 +263,14 @@ page {
 }
 
 .tui-modal-custom-text {
-    font-size: 30rpx;
+    font-size: 1.5rem;
     color: #333;
     padding: 30rpx 0 50rpx;
 }
 
 .tui-prompt-title {
     padding-bottom: 20rpx;
-    font-size: 34rpx;
+    font-size: 1.7rem;
 }
 .tui-modal-input {
     width: 80%;
@@ -278,7 +278,7 @@ page {
     border-bottom: 1rpx solid #e6e6e6;
     margin: 30rpx auto 50rpx;
     padding-bottom: 20rpx;
-    font-size: 32rpx;
+    font-size: 1.6rem;
 }
 .tui-hidden-input {
     /* #ifdef MP-WEIXIN */

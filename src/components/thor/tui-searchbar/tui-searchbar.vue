@@ -201,7 +201,7 @@
 		padding: 0 8px;
 		width: 100%;
 		border: 0;
-		font-size: 14px;
+		font-size: 1.4rem;
 		box-sizing: content-box;
 		background: transparent;
 	}
@@ -242,7 +242,7 @@
 
 	.tui-search-bar__text {
 		display: inline-block;
-		font-size: 14px;
+		font-size: 1.4rem;
 		vertical-align: middle;
 		padding-left: 12rpx;
 		color: rgba(0, 0, 0, 0.5);

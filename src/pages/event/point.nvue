@@ -175,7 +175,7 @@ export default {
 
 			&-value {
 				color: #252525;
-				font-size: 16px;
+				font-size: 1.6rem;
 			}
 		}
 	}
@@ -192,7 +192,7 @@ export default {
 			.line-title {
 				width: 320rpx;
 				color: #222222;
-				font-size: 16px;
+				font-size: 1.6rem;
 				overflow: hidden;
 				text-overflow: ellipsis; /* 超出部分省略号 */
 				lines: 1; //NVUE下要用这个属性，来让文字超出隐藏变省略号L
@@ -201,7 +201,7 @@ export default {
 
 			.line-name {
 				color: #555555;
-				font-size: 14px;
+				font-size: 1.4rem;
 				width: 420rpx;
 				overflow: hidden;
 				// word-break: break-all; /* break-all(允许在单词内换行。) */
@@ -230,7 +230,7 @@ export default {
 
 				&-value {
 					color: #252525;
-					font-size: 16px;
+					font-size: 1.6rem;
 				}
 			}
 		}
@@ -249,7 +249,7 @@ export default {
 
 			&-text {
 				text-align: center;
-				font-size: 24rpx;
+				font-size: 1.2rem;
 				color: #ffffff;
 			}
 		}

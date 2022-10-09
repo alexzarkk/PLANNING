@@ -131,7 +131,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 26rpx;
+    font-size: 1.3rem;
     color: #333;
 }
 
@@ -195,7 +195,7 @@ export default {
     height: 84rpx;
     padding: 10rpx 30rpx;
     box-sizing: border-box;
-    font-size: 24rpx;
+    font-size: 1.2rem;
     align-items: center;
     overflow: hidden;
 }

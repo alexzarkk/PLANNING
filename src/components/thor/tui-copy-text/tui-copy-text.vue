@@ -161,7 +161,7 @@
 	}
 
 	.tui-tooltip__list {
-		font-size: 14px;
+		font-size: 1.4rem;
 		position: absolute;
 		border-radius: 6px;
 		background-color: #060607;

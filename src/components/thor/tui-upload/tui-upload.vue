@@ -427,7 +427,7 @@
 		background-color: #EB0909;
 		border-radius: 50%;
 		color: white;
-		font-size: 34rpx;
+		font-size: 1.7rem;
 		z-index: 999;
 	}
 
@@ -476,7 +476,7 @@
 	}
 
 	.tui-tips {
-		font-size: 26rpx;
+		font-size: 1.3rem;
 		color: #fff;
 	}
 
@@ -484,7 +484,7 @@
 		padding: 4rpx 16rpx;
 		border-radius: 40rpx;
 		text-align: center;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		color: #fff;
 		border: 1px solid #fff;
 		display: flex;

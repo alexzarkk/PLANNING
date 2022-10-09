@@ -187,7 +187,7 @@
 	}
 
 	.uni-dialog-title-text {
-		font-size: 16px;
+		font-size: 1.6rem;
 		font-weight: 500;
 	}
 
@@ -202,7 +202,7 @@
 	}
 
 	.uni-dialog-content-text {
-		font-size: 14px;
+		font-size: 1.4rem;
 		color: #6C6C6C;
 	}
 
@@ -235,7 +235,7 @@
 	}
 
 	.uni-dialog-button-text {
-		font-size: 16px;
+		font-size: 1.6rem;
 		color: #333;
 	}
 
@@ -245,7 +245,7 @@
 
 	.uni-dialog-input {
 		flex: 1;
-		font-size: 14px;
+		font-size: 1.4rem;
 		border: 1px #eee solid;
 		height: 40px;
 		padding: 0 10px;

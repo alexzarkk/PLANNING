@@ -162,7 +162,7 @@ export default {
 
 			&-value {
 				color: #252525;
-				font-size: 16px;
+				font-size: 1.6rem;
 			}
 		}
 	}
@@ -180,7 +180,7 @@ export default {
 				width: 170px;
 				// word-wrap:normal;
 				color: #222222;
-				font-size: 16px;
+				font-size: 1.6rem;
 				overflow: hidden;
 				// word-break: break-all; /* break-all(允许在单词内换行。) */
 				text-overflow: ellipsis; /* 超出部分省略号 */
@@ -192,7 +192,7 @@ export default {
 
 			.line-name {
 				color: #555555;
-				font-size: 14px;
+				font-size: 1.4rem;
 			}
 		}
 
@@ -213,7 +213,7 @@ export default {
 
 				&-value {
 					color: #252525;
-					font-size: 16px;
+					font-size: 1.6rem;
 				}
 			}
 		}

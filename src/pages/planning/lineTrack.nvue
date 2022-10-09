@@ -876,7 +876,7 @@ export default {
 
 		&-text {
 			color: #fff;
-			font-size: 16px;
+			font-size: 1.6rem;
 			// text-align: center;
 		}
 	}
@@ -887,12 +887,12 @@ export default {
 		align-items: center;
 		.record-text {
 			color: #fff;
-			font-size: 14px;
+			font-size: 1.4rem;
 		}
 
 		.record-time {
 			color: #fff;
-			font-size: 20px;
+			font-size: 2rem;
 			font-weight: bold;
 		}
 	}
@@ -913,7 +913,7 @@ export default {
 
 		&-text {
 			color: #fff;
-			font-size: 16px;
+			font-size: 1.6rem;
 			// text-align: center;
 		}
 	}
@@ -946,7 +946,7 @@ export default {
 		// z-index: 1000;
 
 		.type-text {
-			font-size: 16px;
+			font-size: 1.6rem;
 			color: #222222;
 		}
 
@@ -997,7 +997,7 @@ export default {
 		align-items: center;
 		&-title {
 			&-text {
-				font-size: 16px;
+				font-size: 1.6rem;
 				color: #222222;
 			}
 		}
@@ -1010,7 +1010,7 @@ export default {
 			&-location {
 				height: 200rpx;
 				line-height: 200rpx;
-				font-size: 48rpx;
+				font-size: 2.4rem;
 				font-weight: bold;
 			}
 			&-copy {

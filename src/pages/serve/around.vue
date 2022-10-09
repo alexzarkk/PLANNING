@@ -136,7 +136,7 @@
 			this.keywords = qr.key || this.tag[this.tagIdx];
 			setTimeout(() => {
 				let winHeight = uni.getSystemInfoSync().windowHeight;
-				this.scrollH = winHeight - 44 - this.customBar - uni.upx2px(600);
+				this.scrollH = winHeight - 44 - this.customBar - uni.rpx2px(600);
 				this.getPoiAround()
 				// this.amapAround(this.pm.coord)
 			}, 100)
@@ -520,7 +520,7 @@
 
 	.search-bar-text {
 		display: inline-block;
-		font-size: 14px;
+		font-size: 1.4rem;
 		vertical-align: middle;
 	}
 
@@ -539,7 +539,7 @@
 	}
 
 	.search-bar-input {
-		font-size: 14px;
+		font-size: 1.4rem;
 		flex: 1;
 	}
 
@@ -585,7 +585,7 @@
 	}
 
 	.addr-title {
-		font-size: 30rpx;
+		font-size: 1.5rem;
 		line-height: 40rpx;
 		color: #000;
 		font-weight: bold;
@@ -609,7 +609,7 @@
 		/* autoprefixer: off */
 		-webkit-box-orient: vertical;
 		/* autoprefixer: on */
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		color: #999;
 	}
 
@@ -636,7 +636,7 @@
 
 	.text {
 		color: #333;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 		line-height: 30rpx;
 	}
 </style>

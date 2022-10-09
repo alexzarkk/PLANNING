@@ -91,7 +91,7 @@ export default {
 	width: 80%;
 	box-sizing: border-box;
 	color: #fff;
-	font-size: 28rpx;
+	font-size: 1.4rem;
 	position: fixed;
 	visibility: hidden;
 	opacity: 0;

@@ -295,7 +295,7 @@
 				if (this.placeholderStyle) {
 					this.placeholderStyl = this.placeholderStyle
 				} else {
-					const size = uni.upx2px(this.size)
+					const size = uni.rpx2px(this.size)
 					this.placeholderStyl = `fontSize:${size}px`
 				}
 			},
@@ -457,7 +457,7 @@
 		/* #endif */
 		/* #ifdef APP-NVUE */
 		color: #ccc;
-		font-size: 32rpx;
+		font-size: 1.6rem;
 		/* #endif */
 	}
 

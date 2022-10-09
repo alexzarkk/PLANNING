@@ -93,7 +93,7 @@ export default {
 
 .watch-box {
 	align-items: center;
-	font-size: 20rpx;
+	font-size: 1rem;
 	display: flex;
 	flex-direction: row;
 	column-gap: 24rpx;

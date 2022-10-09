@@ -554,7 +554,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		font-size: 26rpx;
+		font-size: 1.3rem;
 		line-height: 26rpx;
 		/* #ifdef MP */
 		box-shadow: 0 15rpx 10rpx -15rpx #efefef;
@@ -583,7 +583,7 @@
 		justify-content: space-between;
 		align-items: center;
 		box-sizing: border-box;
-		font-size: 32rpx;
+		font-size: 1.6rem;
 		position: relative;
 	}
 
@@ -614,16 +614,16 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 36rpx;
+		font-size: 1.8rem;
 		color: #333;
 	}
 
 	.tui-font-size_32 {
-		font-size: 32rpx !important;
+		font-size: 1.6rem !important;
 	}
 
 	.tui-date__unit-text {
-		font-size: 24rpx !important;
+		font-size: 1.2rem !important;
 		padding-left: 8rpx;
 	}
 

@@ -45,6 +45,6 @@
 		justify-content: center;
 		z-index: 99;
 		background-color: #fafafa;
-		font-size: 24rpx;
+		font-size: 1.2rem;
 	}
 </style>

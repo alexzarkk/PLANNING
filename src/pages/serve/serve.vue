@@ -10,8 +10,8 @@
             
         </view>
 
-        <view class="bg-white" style="margin: 20upx;border-radius: 8upx;">
-            <view class=" flex text-center text-grey" style="padding: 30upx 0;">
+        <view class="bg-white" style="margin: 20rpx;border-radius: 8rpx;">
+            <view class=" flex text-center text-grey" style="padding: 30rpx 0;">
                 <view class="flex flex-sub flex-direction" @tap="href('/pages/serve/outdoorTips')">
                     <view class="text-xxl text-purple">
                         <view class="zzIcon-knowledge text-big" style="color: #0477B3;"></view>
@@ -39,7 +39,7 @@
             </view>
         </view>
 
-        <view class="bg-white " style="margin: 20upx; padding: 20upx; border-radius:8upx ;">
+        <view class="bg-white " style="margin: 20rpx; padding: 20rpx; border-radius:8rpx ;">
             <view class="text-df text-gray padding-tb-xs">常用功能</view>
 
             <view class="cu-list grid col-4 solid-top solid-left solid-right">
@@ -188,8 +188,8 @@ page {
 
 .color {
     color: #333333;
-    font-size: 28upx;
-    margin-top: 16upx;
+    font-size: 1.4rem;
+    margin-top: 16rpx;
 }
 
 .new_class {
@@ -204,10 +204,10 @@ page {
     align-items: center;
     background-color: rgba(255, 255, 255, 0.3);
     justify-content: space-between;
-    font-size: 20upx;
-    padding: 4upx 10upx;
-    border-radius: 20upx;
-    margin-right: 20upx;
+    font-size: 1rem;
+    padding: 4rpx 10rpx;
+    border-radius: 20rpx;
+    margin-right: 20rpx;
 }
 
 .UCenter-bg button {
@@ -233,21 +233,21 @@ page {
     height: 100vh;
 }
 .text-big {
-    font-size: 60upx;
+    font-size: 60rpx;
 }
 
 .nav-list {
     display: flex;
     flex-wrap: wrap;
-    padding: 20px 20upx 0px;
+    padding: 20px 20rpx 0px;
     justify-content: space-between;
 }
 
 .nav-li {
-    padding: 30upx;
-    border-radius: 12upx;
+    padding: 30rpx;
+    border-radius: 12rpx;
     width: 45%;
-    margin: 0 2.5% 40upx;
+    margin: 0 2.5% 40rpx;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -263,7 +263,7 @@ page {
     height: 100%;
     left: 0;
     bottom: -10%;
-    border-radius: 10upx;
+    border-radius: 10rpx;
     opacity: 0.2;
     transform: scale(0.9, 0.9);
 }
@@ -271,23 +271,23 @@ page {
 .nav-li.cur {
     color: #fff;
     background: rgb(94, 185, 94);
-    box-shadow: 4upx 4upx 6upx rgba(94, 185, 94, 0.4);
+    box-shadow: 4rpx 4rpx 6rpx rgba(94, 185, 94, 0.4);
 }
 
 .nav-title {
-    font-size: 32upx;
+    font-size: 1.6rem;
     font-weight: 300;
 }
 
 .nav-title::first-letter {
-    font-size: 40upx;
-    margin-right: 4upx;
+    font-size: 2rem;
+    margin-right: 4rpx;
 }
 
 .nav-name {
-    font-size: 28upx;
+    font-size: 1.4rem;
     text-transform: Capitalize;
-    margin-top: 20upx;
+    margin-top: 20rpx;
     position: relative;
 }
 
@@ -295,8 +295,8 @@ page {
     content: '';
     position: absolute;
     display: block;
-    width: 40upx;
-    height: 6upx;
+    width: 40rpx;
+    height: 6rpx;
     background: #fff;
     bottom: 0;
     right: 0;
@@ -307,29 +307,29 @@ page {
     content: '';
     position: absolute;
     display: block;
-    width: 100upx;
+    width: 100rpx;
     height: 1px;
     background: #fff;
     bottom: 0;
-    right: 40upx;
+    right: 40rpx;
     opacity: 0.3;
 }
 
 .nav-name::first-letter {
     font-weight: bold;
-    font-size: 36upx;
+    font-size: 1.8rem;
     margin-right: 1px;
 }
 
 .nav-li text {
     position: absolute;
-    right: 30upx;
-    top: 30upx;
-    font-size: 52upx;
-    width: 60upx;
-    height: 60upx;
+    right: 30rpx;
+    top: 30rpx;
+    font-size: 52rpx;
+    width: 60rpx;
+    height: 60rpx;
     text-align: center;
-    line-height: 60upx;
+    line-height: 60rpx;
 }
 
 .text-light {
@@ -342,7 +342,7 @@ page {
     }
 
     60% {
-        transform: translateY(40upx);
+        transform: translateY(40rpx);
     }
 
     100% {
@@ -356,7 +356,7 @@ page {
     }
 
     60% {
-        transform: translateY(40upx);
+        transform: translateY(40rpx);
     }
 
     100% {
@@ -367,7 +367,7 @@ page {
 .tui-btn-back {
     width: 88rpx;
     height: 88rpx;
-    font-size: 26rpx;
+    font-size: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: center;

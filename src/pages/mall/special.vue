@@ -17,7 +17,7 @@
 
 		<view id="tvideo">
 			<view class="cu-card case no-card">
-				<view class="bg-video flex align-center" style="height: 339upx;">
+				<view class="bg-video flex align-center" style="height: 339rpx;">
 					<video
 						id="myVideo"
 						autoplay
@@ -498,31 +498,31 @@ export default {
 }
 
 .mybadge {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	left: 0upx;
-	font-size: 26upx;
-	padding: 0upx 6upx;
-	height: 38upx;
+	top: 0rpx;
+	left: 0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 6rpx;
+	height: 38rpx;
 	color: #ffffff;
 	width: 150rpx;
 }
 .mybadge-r {
-	/* border-radius: 200upx; */
+	/* border-radius: 200rpx; */
 	position: absolute;
-	top: 0upx;
-	right: -0upx;
-	font-size: 26upx;
-	padding: 0upx 10upx;
-	height: 38upx;
+	top: 0rpx;
+	right: -0rpx;
+	font-size: 1.3rem;
+	padding: 0rpx 10rpx;
+	height: 38rpx;
 	color: #ffffff;
 }
 
 .bgimg {
 	/* background-attachment:fixed; */
 	background-repeat: no-repeat;
-	height: 240upx;
+	height: 240rpx;
 	/* z-index: 29 */
 	/* background-size:cover; */
 	/* -moz-background-size:cover; */

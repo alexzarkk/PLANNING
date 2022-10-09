@@ -251,7 +251,7 @@
 				};
 			},
 			px(num) {
-				return uni.upx2px(num) + 'px';
+				return uni.rpx2px(num) + 'px';
 			}
 		}
 	};
@@ -273,7 +273,7 @@
 		/* padding: 15px 20px; */
 		box-sizing: border-box;
 		transition: transform 0.2s ease;
-		font-size: 14px;
+		font-size: 1.4rem;
 		cursor: pointer;
 	}
 

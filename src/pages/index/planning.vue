@@ -1,4 +1,6 @@
 <template>
+    <page-meta :root-font-size="globalData.zlbCfg.fontSize">
+    </page-meta>
     <view class="container">
         <cu-custom bgColor="bg-ztsblue">
 			<block slot="left">
@@ -102,6 +104,7 @@ export default {
 
     data() {
         return {
+            globalData:getApp().globalData,
             trailData: [],
             bd: this.bd,
             td: {},

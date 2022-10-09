@@ -140,14 +140,14 @@
 				this.scrollByIndex(newVal);
 			},
 			leftGap(newVal) {
-				this.gap = uni.upx2px(Number(newVal))
+				this.gap = uni.rpx2px(Number(newVal))
 			}
 		},
 		created() {
 			this.currentTab = this.current;
 		},
 		mounted() {
-			this.gap = uni.upx2px(Number(this.leftGap))
+			this.gap = uni.rpx2px(Number(this.leftGap))
 			this.init()
 		},
 		data() {

@@ -175,6 +175,6 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 26rpx;
+	font-size: 1.3rem;
 }
 </style>

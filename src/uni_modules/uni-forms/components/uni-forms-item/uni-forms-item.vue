@@ -337,7 +337,7 @@ export default {
 	padding: 0px;
 	text-align: left;
 	color: #333;
-	font-size: 14px;
+	font-size: 1.4rem;
 	// margin-bottom: 22px;
 }
 .uni-forms-item__box {
@@ -376,7 +376,7 @@ export default {
 	// height: 36px;
 	margin-right: 5px;
 	.label-text {
-		font-size: 14px;
+		font-size: 1.4rem;
 		color: #fff;
 	}
 }

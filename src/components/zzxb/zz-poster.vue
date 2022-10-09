@@ -82,7 +82,7 @@ export default {
 			Type:String,
 			default:'#b8b8b8'
 		},
-		Width:{			//画布宽度  (高度根据图片比例计算 单位upx)
+		Width:{			//画布宽度  (高度根据图片比例计算 单位rpx)
 			Type:String,
 			default:750
 		},
@@ -145,10 +145,10 @@ export default {
 			
 			_this.ctx = uni.createCanvasContext(_this.CanvasID,this);
 			
-			const 	C_W = uni.upx2px(_this.Width), //canvas宽度
-					C_P = uni.upx2px(30), //canvas Paddng 间距
-					C_Q = uni.upx2px(150), //二维码或太阳码宽高
-					C_A = uni.upx2px(80); // 用户头像
+			const 	C_W = uni.rpx2px(_this.Width), //canvas宽度
+					C_P = uni.rpx2px(30), //canvas Paddng 间距
+					C_Q = uni.rpx2px(150), //二维码或太阳码宽高
+					C_A = uni.rpx2px(80); // 用户头像
 					
 			let _strlineW = 0; //文本宽度
 			
@@ -179,7 +179,7 @@ export default {
 			if(_this.pageTitle!=''){
 				//添加页眉
 				_this.ctx.setFillStyle(_this.TitleColor);
-				_this.ctx.setFontSize(uni.upx2px(25));
+				_this.ctx.setFontSize(uni.rpx2px(25));
 				_this.ctx.fillText(_this.pageTitle, C_P, C_P+6, r[0], r[1]);
 				//添加页眉 end
 				_pth = 16
@@ -191,7 +191,7 @@ export default {
 			//添加图片展示 end
 			
 			//设置文本
-			_this.ctx.setFontSize(uni.upx2px(32)); //设置标题字体大小
+			_this.ctx.setFontSize(uni.rpx2px(32)); //设置标题字体大小
 			_this.ctx.setFillStyle(_this.TitleColor); //设置标题文本颜色
 			let _strLastIndex = 0; //每次开始截取的字符串的索引
 			let _strHeight = r[1] + C_P * 2 + _h; //绘制字体距离canvas顶部的初始高度
@@ -223,60 +223,60 @@ export default {
 
 			//设置价格
 			_strlineW = C_P;
-			_strHeight += uni.upx2px(50);
+			_strHeight += uni.rpx2px(50);
 			if(_num==1){
 				_strHeight += 18;	//单行标题时占位符
 			}
 			
 			if(_this.PriceTxt !=''){	//判断是否有销售价格
 				_this.ctx.setFillStyle(_this.PriceColor);
-				_this.ctx.setFontSize(uni.upx2px(38));
+				_this.ctx.setFontSize(uni.rpx2px(38));
 				_this.ctx.fillText(_this.PriceTxt, _strlineW, _strHeight); //商品价格
-				_strlineW += _this.ctx.measureText(_this.PriceTxt).width + uni.upx2px(10);
+				_strlineW += _this.ctx.measureText(_this.PriceTxt).width + uni.rpx2px(10);
 			}
 			if(_this.PriceTxt !='' && _this.OriginalTxt !=''){	//判断是否有销售价格且原价
 				_this.ctx.setFillStyle(_this.OriginalColor);
-				_this.ctx.setFontSize(uni.upx2px(24));
+				_this.ctx.setFontSize(uni.rpx2px(24));
 				_this.ctx.fillText(_this.OriginalTxt, _strlineW, _strHeight); //商品原价
 			}
 			if(_this.OriginalTxtCut){
 				_this.ctx.strokeStyle = _this.OriginalColor;
-				_this.ctx.moveTo(_strlineW, _strHeight - uni.upx2px(10)); //起点
-				_this.ctx.lineTo(_strlineW + _this.ctx.measureText(_this.OriginalTxt).width, _strHeight - uni.upx2px(10)); //终点
+				_this.ctx.moveTo(_strlineW, _strHeight - uni.rpx2px(10)); //起点
+				_this.ctx.lineTo(_strlineW + _this.ctx.measureText(_this.OriginalTxt).width, _strHeight - uni.rpx2px(10)); //终点
 				_this.ctx.stroke();
 			}
 			//设置价格 end
 			
 
 			//添加二维码
-			_strHeight += uni.upx2px(18);
+			_strHeight += uni.rpx2px(18);
 			_this.ctx.drawImage(_QrCode.path, r[0] - q[0] + C_P, _strHeight, q[0], q[1]);
 			//添加二维码 end
 			
 			
 			//添加推荐人与描述
-			_strHeight += uni.upx2px(4);
+			_strHeight += uni.rpx2px(4);
 			_this.ctx.setFillStyle(_this.TitleColor);
-			_this.ctx.setFontSize(uni.upx2px(30));
-			_this.ctx.fillText(this.user.wxinfo.nickName + " " +_this.Referrer, C_A+C_P+C_P - uni.upx2px(10), _strHeight + q[1] / 2);
+			_this.ctx.setFontSize(uni.rpx2px(30));
+			_this.ctx.fillText(this.user.wxinfo.nickName + " " +_this.Referrer, C_A+C_P+C_P - uni.rpx2px(10), _strHeight + q[1] / 2);
 			//添加推荐人与描述 end
 			
 			
 			//添加用户头像
-			_strHeight += uni.upx2px(26);
+			_strHeight += uni.rpx2px(26);
 			_this.ctx.drawImage(_Avatar.path, C_P, _strHeight, a[0], a[1]);
 			//添加用户头像 end
 			
 			
 			_this.ctx.setFillStyle(_this.OriginalColor);
-			_this.ctx.setFontSize(uni.upx2px(24));
+			_this.ctx.setFontSize(uni.rpx2px(24));
 			_this.ctx.fillText("第【"+this.shareNum+"】位分享者", C_P, _strHeight + q[1] / 2 + 20);
 			
 			
 			//长按或扫描识别二维码
-			_strHeight += uni.upx2px(18);
+			_strHeight += uni.rpx2px(18);
 			_this.ctx.setFillStyle(_this.OriginalColor);
-			_this.ctx.setFontSize(uni.upx2px(24));
+			_this.ctx.setFontSize(uni.rpx2px(24));
 			_this.ctx.fillText(_this.ViewDetails, C_W-128, _strHeight + q[1] / 2 + 28);
 			//长按或扫描识别二维码 end
 			

@@ -24,7 +24,7 @@
 
         <swiper :current="tabCur" :style="'height:calc(100vh)'" :duration="300" @change="tabSelect">
             <swiper-item v-for="(tab, idx) in tabs" :key="idx">
-                <scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height: calc(100vh - 465upx)" :scroll-top="top" @scroll="thisRoll">
+                <scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height: calc(100vh - 465rpx)" :scroll-top="top" @scroll="thisRoll">
                     <block v-if="idx == 0 && tabCur == 0">
                         <view id="tab0">
                             <tui-divider :gradual="true" :height="60" :gradualColor="gradualColor">农特产商城</tui-divider>
@@ -348,7 +348,7 @@ export default {
 
 .pro-img {
     width: 100%;
-    height: 200upx;
+    height: 200rpx;
     display: block;
 }
 
@@ -364,7 +364,7 @@ export default {
 .pro-tit {
     /* font-size:  */
     color: #2e2e2e;
-    font-size: 26rpx;
+    font-size: 1.3rem;
     word-break: break-all;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -378,13 +378,13 @@ export default {
 }
 
 .sale-price {
-    font-size: 34rpx;
+    font-size: 1.7rem;
     font-weight: 500;
     color: #ea1500;
 }
 
 .factory-price {
-    font-size: 24rpx;
+    font-size: 1.2rem;
     color: #a0a0a0;
     text-decoration: line-through;
     padding-left: 12rpx;
@@ -392,7 +392,7 @@ export default {
 
 .pro-pay {
     padding-top: 10rpx;
-    font-size: 24rpx;
+    font-size: 1.2rem;
     color: #656565;
 }
 </style>

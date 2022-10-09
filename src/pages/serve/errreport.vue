@@ -37,7 +37,7 @@
 					<view class="tui-title">联系手机</view>
 					<input placeholder-class="tui-phcolor" type="number" v-model="mobile" class="tui-input-sj" name="mobile" placeholder="方便我们和您联系" maxlength="11"/>
 					<block v-if="mobile==''">
-					<button style="width: 240upx;" class="cu-btn line-dark" type="default" open-type="getPhoneNumber" @getphonenumber="decryptPhoneNumber">获取手机号</button>
+					<button style="width: 240rpx;" class="cu-btn line-dark" type="default" open-type="getPhoneNumber" @getphonenumber="decryptPhoneNumber">获取手机号</button>
 					</block>
 				</view>
 			</tui-list-cell>
@@ -320,7 +320,7 @@ console.log("clouadpath ------------------>", this.pics)
 		min-width: calc(4em + 15px);
 	}
 	.title {
-	  font-size: 30rpx;
+	  font-size: 1.5rem;
 	  color: #666;
 	  padding-bottom: 26rpx;
 	}
@@ -337,12 +337,12 @@ console.log("clouadpath ------------------>", this.pics)
 	  height: 210rpx;
 	  width: 100%;
 	  color: #666;
-	  font-size: 28rpx;
+	  font-size: 1.4rem;
 	}
 	
 	
 	.textarea-counter {
-	  font-size: 24rpx;
+	  font-size: 1.2rem;
 	  color: #999;
 	  text-align: right;
 	  height: 40rpx;
@@ -375,14 +375,14 @@ console.log("clouadpath ------------------>", this.pics)
 	}
 	.tui-title {
 		width: 180rpx;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 	}
 	.tui-input-sj {
 		width: 440rpx;
 	}
 	.tui-phcolor {
 		color: #c8c8c8;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 	}
 	
 </style>

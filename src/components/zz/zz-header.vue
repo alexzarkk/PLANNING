@@ -133,7 +133,7 @@
 
 	.tui-header {
 		width: 100%;
-		font-size: 18px;
+		font-size: 1.8rem;
 		/* line-height: 18px; */
 		font-weight: 500;
 		height: auto;

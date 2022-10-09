@@ -33,7 +33,7 @@
                         <text class="text-black text-bold solid-bottom">
                             {{ trail.name }}
                         </text>
-                        <view v-for="(item, idx) in trail.region" :key="idx" class="bg-blue mybadge-left" :style="'left:' + idx * 90 + 'upx'">
+                        <view v-for="(item, idx) in trail.region" :key="idx" class="bg-blue mybadge-left" :style="'left:' + idx * 90 + 'rpx'">
                             {{ item }}
                         </view>
                         <view v-if="trail.kml.loop < 500" class="bg-green mybadge">
@@ -130,7 +130,7 @@
 
             <!-- :style="{top:'240rpx',left:0}" -->
             <view v-if="trail._kml" style="width: 350rpx" :style="{ top: customBar + 44 + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
-                <button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
+                <button style="min-width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
                     <text class="zzIcon-distfill margin-right-sm" />
                     使用路线
                 </button>
@@ -139,7 +139,7 @@
             <view v-if="trail.video.url" id="tvideo">
                 <view class="cu-card case no-card">
                     <view class="padding-top-xs shadow">
-                        <view class="bg-video flex align-center" style="height: 422upx">
+                        <view class="bg-video flex align-center" style="height: 422rpx">
                             <video
                                 id="myVideo" autoplay :src="trail.video.url" :muted="ismute" :show-fullscreen-btn="true"
                                 :show-mute-btn="true" :show-play-btn="true" object-fit="cover"
@@ -176,7 +176,7 @@
             <view class="sticky-box bg-cyan margin-top" :style="[{ top: customBar + 'px' }]">
                 <scroll-view class="nav text-center" scroll-x scroll-with-animation>
                     <view
-                        v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item" :class="item.sight ? 'cur text-bold text-red' : ''"
+                        v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item text-sm" :class="item.sight ? 'cur text-bold  text-red' : ''"
                         @tap="moveTo"
                     >
                         {{ item.name }}
@@ -534,13 +534,13 @@ page {
 }
 
 .mybadge-left {
-    /* border-radius: 200upx; */
+    /* border-radius: 200rpx; */
     position: absolute;
-    top: -16upx;
-    left: -10upx;
-    font-size: 26upx;
-    padding: 0upx 10upx;
-    height: 38upx;
+    top: -16rpx;
+    left: -10rpx;
+    font-size: 1.3rem;
+    padding: 0rpx 10rpx;
+    height: 38rpx;
     color: #ffffff;
 }
 /* */

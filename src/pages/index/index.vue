@@ -32,7 +32,7 @@
         <view id="tvideo" v-show="!hotList.length">
             <!-- #ifndef APP-PLUS -->
             <view class="cu-card case no-card">
-                <view class="bg-video flex align-center" style="height: 400upx;">
+                <view class="bg-video flex align-center" style="height: 400rpx;">
                     <video id="myVideo" src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v" :autoplay="true" :muted="false" :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover">
                     </video>
                 </view>
@@ -54,10 +54,10 @@
                 <view class="action">
                     <text class="cuIcon-titles text-blue text-lg"></text>
                     关于奉化健身步道                
-                <text class="rem-12">12</text>
+                <!-- <text class="rem-12">12</text>
                 <text class="rem-14">14</text>
                 <text class="rem-16">16</text>
-                <text class="rem-18">18</text>
+                <text class="rem-18">18</text> -->
                 </view>
                 <view class="action">
                     <view class="cuIcon-right"></view>
@@ -147,7 +147,7 @@
         </template>
 
         <view class="padding-xs">
-            <view class="bg-blue light" style="margin: 20upx; padding: 20upx; border-radius: 8upxs">
+            <view class="bg-blue light" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpxs">
                 <view class="text-df text-ftblue text-bold padding-tb-xs">
                     <text class="cuIcon-safe text-ftblues text-lg padding-lr-xs"></text>
                     服务与保障
@@ -162,7 +162,7 @@
         </view>
 
         <template v-if="deptId=='330213'">
-            <view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333upx" @click="href('/pages/mall/special')">
+            <view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333rpx" @click="href('/pages/mall/special')">
                 <view class="flex justify-end padding-top">
                     <view class="cu-tag bg-pink text-right">当季热销</view>
                 </view>
@@ -546,7 +546,7 @@ export default {
 }
 
 .nav-li {
-    border-radius: 6upx;
+    border-radius: 6rpx;
     width: 280rpx;
     margin: 0 10rpx;
     background-size: 100% 100%;
@@ -615,7 +615,7 @@ export default {
 
 .watch-box {
     align-items: center;
-    font-size: 20rpx;
+    // font-size: 1rem;
     font-size: 2rem;
     display: flex;
     flex-direction: row;
@@ -639,7 +639,8 @@ export default {
     display: block;
     margin-top: 10px;
     width: 100%;
-    font-size: 26px;
+    // font-size: 26px;
+    font-size: 2.6rem;
 }
 
 .push-content {

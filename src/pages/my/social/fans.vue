@@ -157,7 +157,7 @@ body {
                     .name {
                         color: $color-black;
                         // font-weight: bold;
-                        font-size: 32rpx;
+                        font-size: 1.6rem;
                         margin-bottom: 5rpx;
                     }
 
@@ -168,7 +168,7 @@ body {
                         // width: calc(4em + 20rpx);
                         padding: 5rpx 10rpx;
                         border-radius: 50rpx;
-                        font-size: 16rpx;
+                        font-size: 0.8rem;
                         color: $color-black;
                         // font-weight: bold;
                         text-align: center;
@@ -177,7 +177,7 @@ body {
                     }
 
                     .date {
-                        font-size: 28rpx;
+                        font-size: 1.4rem;
                         color: $color-gray;
                     }
                 }

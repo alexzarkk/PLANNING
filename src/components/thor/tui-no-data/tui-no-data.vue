@@ -97,7 +97,7 @@
 	.tui-tips-content {
 		text-align: center;
 		color: #666666;
-		font-size: 28rpx;
+		font-size: 1.4rem;
 		padding: 0 50rpx 28rpx 50rpx;
 		box-sizing: border-box;
 		word-break: break-all;

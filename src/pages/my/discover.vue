@@ -9,7 +9,7 @@
             <push ref="push" :center="true" :user-id="userInfo._id"></push>
             <!-- <view class="bg-white padding solid-bottom" @click="openDetail(item)" v-for="(item, index) in momentList" :key="index">
                 <view class="flex align-end">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">{{ item.dateInfo.day }}</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">{{ item.dateInfo.day }}</text>
                     <text>{{ item.dateInfo.month }}月</text> 
                 </view>
                 <view class="margin-top-sm">
@@ -29,7 +29,7 @@
             </view> -->
             <!-- <view class="bg-white padding-top" @click="openPage('/pages/my/social/pushDetails')">
                 <view class="flex align-end padding-left">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">28</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">28</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm padding-left"><text class="round bg-gray padding-lr margin-left text-bold">08:30:59</text></view>
@@ -44,7 +44,7 @@
 
             <view class="bg-white padding">
                 <view class="flex align-end">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">20</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">20</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm"><text class="round bg-gray padding-lr margin-left text-bold">15:30:59</text></view>
@@ -58,7 +58,7 @@
 
             <view class="bg-white padding">
                 <view class="flex align-end padding">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">20</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">20</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm"><text class="round bg-gray padding-lr margin-left text-bold">15:30:59</text></view>
