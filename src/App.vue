@@ -9,11 +9,11 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
+	 // #ifdef H5-ZLB
     globalData: {
-        zlbCfg: {
-            uiStyle: ''
-        }
+        zlbCfg: { uiStyle: '' }
     },
+	// #endif
     onLaunch() {
         let globalData = getApp().globalData
         uni.getSystemInfo({

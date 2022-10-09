@@ -1,12 +1,7 @@
 <template>
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true">
-            <block slot="content"></block>
-            <view slot="right">
-                <view class="padding-right" @click="sendPush">
-                    <text class="text-white">发布</text>
-                </view>
-            </view>
+            <block slot="content">发布动态</block>
         </cu-custom>
         <view class="container">
             <view class="padding-lr padding-bottom bg-white">
