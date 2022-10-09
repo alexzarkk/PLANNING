@@ -43,7 +43,8 @@ export default {
                 // #endif
 				
                 // #ifdef H5-ZLB
-                e.platform = 'H5-ZLB';
+                e.platform = 'H5-ZLB'
+				e.uniPlatform  = 'H5-ZLB'
                 Vue.prototype.platform = 'H5-ZLB'
                 Vue.prototype.CustomBar = e.statusBarHeight
                 ZWJSBridge.onReady(() => {
