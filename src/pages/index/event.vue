@@ -1,6 +1,4 @@
 <template>
-    <page-meta :root-font-size="globalData.zlbCfg.fontSize">
-    </page-meta>
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->

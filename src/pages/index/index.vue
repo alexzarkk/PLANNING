@@ -1,7 +1,6 @@
 <!-- 首页模板 -->
 <template>
-    <page-meta :root-font-size="globalData.zlbCfg.fontSize">
-    </page-meta>
+    <page-meta :root-font-size="globalData.zlbCfg.fontSize"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
