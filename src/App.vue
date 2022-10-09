@@ -60,8 +60,8 @@ export default {
                     })
                 })
 
-                // globalData.zlbCfg.fontSize = '10px'
-                globalData.zlbCfg.fontSize = '14px'
+                globalData.zlbCfg.fontSize = '10px'
+                // globalData.zlbCfg.fontSize = '16px'
                 console.log(globalData.zlbCfg.uiStyle)
                 console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
                 console.log('浙里办启动 H5-ZLB ---------------------->')
