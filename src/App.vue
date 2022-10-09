@@ -11,7 +11,8 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 export default {
     globalData: {
         zlbCfg: {
-            uiStyle: ''
+            uiStyle: '',
+            fontSize: '12px'
         }
     },
     onLaunch() {
@@ -51,20 +52,20 @@ export default {
                 e.platform = 'H5-ZLB';
                 Vue.prototype.platform = 'H5-ZLB'
                 Vue.prototype.CustomBar = e.statusBarHeight
+                console.log('浙里办启动 H5-ZLB ---------------------->')
                 ZWJSBridge.onReady(() => {
                     console.log('浙里办初始化完成，执行bridge方法')
                     ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
                         console.log("获取到的当前的style======", uiStyle)
                         globalData.zlbCfg.uiStyle = uiStyle
+                        if(uiStyle === ''){
+                            globalData.zlbCfg.fontSize = '16px'
+                        }
+                        console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
 
                     })
                 })
 
-                globalData.zlbCfg.fontSize = '12px'
-                // globalData.zlbCfg.fontSize = '16px'
-                console.log(globalData.zlbCfg.uiStyle)
-                console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
-                console.log('浙里办启动 H5-ZLB ---------------------->')
                 // #endif
 
                 // #ifdef MP-WEIXIN
@@ -137,13 +138,13 @@ export default {
 @import './comm/css/local/zzIcon.css'; // 本地
 @import './components/uParse/src/wxParse.css';
 
-view {
-    font-size: 1.6rem;
-}
+// view {
+//     font-size: 1.6rem;
+// }
 
-text {
-    font-size: 1.6rem;
-}
+// text {
+//     font-size: 1.6rem;
+// }
 
 /* 我增加的样式 */
 body.pages-index-index uni-page-body {
