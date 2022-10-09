@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<nav-h5 ref="map" :center="center" :pms="kml.children" :rec="rec"></nav-h5>
+		<nav-map ref="map" :rec="rec" :onRec="onRec" :center="center" :pms="kml.children"></nav-map>
 		<mumu-get-qrcode ref="scan" @success='qrcodeSucess'></mumu-get-qrcode>
 		
 		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
@@ -28,7 +28,7 @@
 
 <script>
 const tts = {}
-import navH5 from './components/nav-h5'
+import navMap from './components/navMap'
 import mumuGetQrcode from '@/uni_modules/mumu-getQrcode/components/mumu-getQrcode/mumu-getQrcode.vue'
 import { locationModule, uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on, around } from '@/comm/nav'
@@ -40,7 +40,7 @@ import zz from '@/comm/zz'
 import fab from './components/fab'
 
 export default {
-	components: { fab ,navH5, mumuGetQrcode },
+	components: { fab ,navMap, mumuGetQrcode },
 	data() {
 		return {
 			sysInfo: uni.getStorageSync('sysInfo'),
@@ -163,21 +163,9 @@ export default {
 			this.lock = true
 		},
 		fly(c){
-			if(this.amap) {
-				this.amap.moveToLocation({
-					longitude: c[0],
-					latitude: c[1],
-					success: (e)=>{
-						setTimeout(()=>{
-							this.scale = this.scale==17? 17.01:17
-						}, 555)
-					}
-				})
-			}else{
-				this.$refs.map.exec({m:'fly', e:{coord:c}})
-			}
+			console.log(c);
+			this.$refs.map.exec({m:'fly', e:{coord:c}})
 		},
-		
 		stop(){
 			let rec = this.rec
 			this.onRec = false
@@ -332,11 +320,10 @@ export default {
 					notifyTitle: '环浙步道',
 					sysName: '环浙步道'
 				}, (xiaoming)=>{
-					console.log(xiaoming);
 					if (xiaoming.success) {
 						// console.log('xiaoming --------',xiaoming);
 						let _p = xiaoming.data,
-							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
+							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~(_p.altitude||0), _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
 							line = rec.line[0],
 							size = rec.coord.length
 						
@@ -378,7 +365,7 @@ export default {
 								}
 								
 								//保持地图中心
-								if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
+								if (this.lock) this.fly([c1[0],c1[1]])
 							}
 							
 							// 打卡提醒 
@@ -449,14 +436,8 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				// #ifdef APP-PLUS
-					let p = await scan(trans(uni.getStorageSync('cur_loc_gcj02'), 'gcj02towgs84'))
-					this.scaned(p)
-				// #endif
-				// #ifndef APP-PLUS
-					this.$refs.scan.createMsk()
-					this.$refs.scan.openScan()
-				// #endif
+				this.$refs.scan.createMsk()
+				this.$refs.scan.openScan()
 			}
 			if(t=='position') {
 				this.onLoc(1)
@@ -566,9 +547,10 @@ export default {
 <style>
 .start-f {
 	position: fixed;
-	bottom: 80rpx;
+	bottom: 100rpx;
 	left: 0;
 	right: 0;
+	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	background-color: rgba(255, 255, 255, 0);
@@ -585,7 +567,7 @@ export default {
 	height: 80rpx;
 	background-color: #0081ff;
 	box-shadow: 0 30upx 20upx rgba(0, 0, 0, 0.2);
-	
+	display: flex;
 	border-radius: 40rpx;
 	align-items: center;
 	justify-content: center;

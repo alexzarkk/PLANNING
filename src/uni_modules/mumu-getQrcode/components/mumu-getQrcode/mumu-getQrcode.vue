@@ -44,7 +44,7 @@
 					<view class="on1">相机权限被拒绝，请尝试如下操作：</view>
 					<view>· 刷新页面后重试；</view>
 					<view>· 在系统中检测当前App或浏览器的相机权限是否被禁用；</view>
-					<!-- <view>· 如果依然不能体验，建议在微信中打开链接；</view> -->
+					<view>· 如果依然不能体验，建议在微信中打开链接；</view>
 				</view>
 			</slot>
 		</template>
@@ -53,7 +53,6 @@
 
 <script>
 import jsQR from './jsQR.js'
-// import jsQR from "jsqr"
 
 export default {
 	props: {
@@ -103,10 +102,10 @@ export default {
 		this.windowHeight = this.size === 'whole' ? this.windowHeight : this.windowHeight / 2
 		this.isParse = true
 
-		// this.$nextTick(() => {
-		// 	this.createMsk()
-		// 	this.openScan()
-		// })
+		this.$nextTick(() => {
+			this.createMsk()
+			this.openScan()
+		})
 	},
 	destroyed() {
 		this.closeCamera()
@@ -123,7 +122,8 @@ export default {
 					height
 				}
 			}
-			navigator.mediaDevices.getUserMedia(videoParam)
+			navigator.mediaDevices
+				.getUserMedia(videoParam)
 				.then(stream => {
 					this.video = document.createElement('video')
 					this.video.width = this.windowWidth
@@ -163,16 +163,8 @@ export default {
 					}, 500)
 				})
 				.catch(err => {
-					alert(err)
 					this.isUse = false
 					this.$emit('error', err)
-					uni.showModal({
-					  title: '摄像头授权失败',
-					  content: '摄像头授权失败，请检测当前浏览器是否有摄像头权限。',
-					  success: () => {
-						// uni.navigateBack({})
-					  }
-					})
 				})
 		},
 

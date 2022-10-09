@@ -60,10 +60,6 @@
                 <view class="action">
                     <text class="cuIcon-titles text-blue text-lg"></text>
                     关于奉化健身步道                
-                <text class="rem-12">12</text>
-                <text class="rem-14">14</text>
-                <text class="rem-16">16</text>
-                <text class="rem-18">18</text>
                 </view>
                 <view class="action">
                     <view class="cuIcon-right"></view>
@@ -409,7 +405,7 @@ export default {
     },
     onReady() {
         this.cal()
-        console.log("index===================globalData.zlbCfg.fontSize=========",this.globalData.zlbCfg.fontSize)
+        // console.log("index===================globalData.zlbCfg.fontSize=========",this.globalData.zlbCfg.fontSize)
     },
     onShow() {
         this.loadData()
