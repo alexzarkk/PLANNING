@@ -2,7 +2,7 @@ export default function Ajax(data={},u='app',t=9999) {
 	let cloud = 'https://699d1eb1-ee53-4c66-bddd-06cda80d1231.bspapp.com/',
 		api = {
 			app: cloud + 'app',
-			zz: cloud + 'http/zz'
+			zz: cloud + 'zz'
 		},
 		net
 	

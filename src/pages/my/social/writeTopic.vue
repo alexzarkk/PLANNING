@@ -71,22 +71,12 @@ export default {
     },
     methods: {
         async loadData() {
-            const req1 = {
-                $url: 'public/zz/dict',
-                tar: ['article']
-            }
-            this.zz.req(req1).then(({ article }) => {
-                // console.log("获取到的文章类型", article)
-                const tagList = article.filter(res => {
-                    return res.pub
-                })
-
-                this.tagList = tagList.map(tag => {
-                    tag.active = false
-                    return tag
-                })
-                // console.log("tagList===", this.tagList)
-            })
+			let d = uni.getStorageSync('sys_dict')
+			
+			this.tagList = this.zz.toArr(d.article).filter(e => e.pub).map(tag => {
+				tag.active = false
+				return tag
+			})
         },
         // 发布
         async sendPush() {
@@ -95,8 +85,9 @@ export default {
             }
             this.loading = true;
             let req1 = {
-                $url: 'user/moment/add',
+                $url: '/user/article/add',
                 content: this.content,
+				status: 1,
                 imgs: []
             };
             const selectedTag = this.tagList.filter(tag => {

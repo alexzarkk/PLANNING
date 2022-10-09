@@ -428,7 +428,7 @@ async function req(params = {}, loading = false, t=9999) {
 			toLogin()
 		}, true)
 	}
-	console.info("requestPrams ===========", params, net)
+	console.info("requestPrams ===========", params, api + fn)
 
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
@@ -468,6 +468,7 @@ async function req(params = {}, loading = false, t=9999) {
 					params.$url = url
 					if (loading) uni.hideLoading()
 					// clearTimeout(tim)
+					// console.log(e);
 				}
 
 			uni.request({

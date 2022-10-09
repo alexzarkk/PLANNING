@@ -1,6 +1,6 @@
 <template>
     <view>
-        <view class="cu-bar bg-ztsblue search fixed align-center" style="height:100rpx;">
+        <view class="cu-bar bg-ztsblue search fixed align-center" style="height:100rpx;" :style="[{ top: customBar + 'px' }]">
          	<view v-if="areaPick" class="fixed align-center text-white padding-xs" @click="show = true">
          		<text class="text-sm text-grey">区域</text>
          		<text class="margin-left-xs">{{dict.deps[deptId[0]].name}}</text>
@@ -18,6 +18,7 @@
 
 <script>
 export default {
+	name: 'zzSearch',
 	props: {
 		//显示区域
 		areaPick: {
@@ -32,6 +33,7 @@ export default {
     data() {
         return {
             dict: uni.getStorageSync('sys_dict'),
+			customBar: this.CustomBar,
             loading: false,
             show: false,
             area: [{text: "浙江省", value: "330000"}],
@@ -40,6 +42,9 @@ export default {
         }
     },
     mounted() {
+		
+		console.log('mountedmountedmountedmounted')
+		
 		let { deptId } = this.zz.getDept(),
 			d = this.dict.deps,
 			cur = d[deptId],

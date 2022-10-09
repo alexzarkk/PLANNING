@@ -2,9 +2,9 @@
     <view class="container">
         <cu-custom bgColor="bg-ztsblue">
 			<block slot="left">
-				<button class="cu-btn xs line-white round shadow margin-left" @tap="onCollect">
-					<text class="cuIcon-search margin-right-xs"></text>
-					<text class="text-sm">记录</text>
+				<button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
+					<text class="zzIcon-dist margin-right-xs"></text>
+					<text class="text-sm">去记录</text>
 				</button>
 			</block>
             <block slot="content">行程推荐</block>

@@ -1,4 +1,5 @@
-import { upload, removeFile, cloud } from '@/comm/zz'
+import { api } from '@/comm/bd'
+import { upload, removeFile } from '@/comm/zz'
 import { hadNet, getStorage } from '@/comm/comm'
 
 const sync = {
@@ -14,7 +15,7 @@ const sync = {
 			x = window.XMLHttpRequest? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP")
 			// #endif
 	
-			x.open('POST',cloud+'sync',true)
+			x.open('POST',api+'sync',true)
 			x.setRequestHeader("Content-type","application/json")
 			x.setRequestHeader("authorization", getStorage('210B33A_token'))
 			x.setRequestHeader("clientInfo", JSON.stringify(getStorage('clientInfo')))
@@ -64,7 +65,7 @@ const sync = {
 			let tk = this.get(),
 				now = Date.now()
 				
-			// console.log((now-tk.r),'task.start --->', tk);
+			console.log((now-tk.r),'task.start --->', tk);
 			
 			if((now-tk.r)>=20000) {
 				tk.r = now
@@ -118,7 +119,7 @@ const sync = {
 				tk.r-=20000
 				this.set(tk)
 			}
-			// console.log(Date.now() - now,'task.finish --->', tk);
+			console.log(Date.now() - now,'task.finish --->', tk);
 		}
 	}
 }

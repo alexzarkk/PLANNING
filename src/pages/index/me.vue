@@ -81,9 +81,18 @@
                     收藏|喜欢
                 </view>
             </view>
-            <view class="flex flex-sub flex-direction" @tap="href('/pages/my/blog/blog')">
+            <view class="flex flex-sub flex-direction solid-right" @tap="href('/pages/my/discover')">
                 <view class="text-xxl text-orange">
                     <view class="cuIcon-edit"></view>
+                </view>
+                <view class="margin-top-sm">
+                    <!-- 帖子| -->
+                    我的动态
+                </view>
+            </view>
+            <view class="flex flex-sub flex-direction" @tap="href('/pages/my/blog/blog')">
+                <view class="text-xxl text-orange">
+                    <view class="cuIcon-community"></view>
                 </view>
                 <view class="margin-top-sm">
                     <!-- 帖子| -->
@@ -101,47 +110,29 @@
                     </text>
                 </view>
             </view> -->
+			
+			<block v-for="(item,idx) of nav" :key="idx">
+				<tui-list-cell padding="0" :lineLeft="false" :arrow="true" @tap="href(item.url, item.veri || false)">
+					<view class="zz-list-cell">
+						<view class="content">
+							<text class="text-blue padding-lr-sm" :class="'cuIcon-'+item.icon"></text>
+							<text class="text-grey">{{item.text}}</text>
+						</view>
+					</view>
+				</tui-list-cell>
+			</block>
 
-            <view class="cu-item" @tap="href('/pages/nav/rec/line')">
-                <view class="content">
-                    <text class="cuIcon-fork"></text>
-                    <text class="text-grey">
-                        我的轨迹
-                    </text>
-                </view>
-            </view>
-            <view class="cu-item" @tap="href('/pages/nav/rec/point')">
-                <view class="content">
-                    <text class="cuIcon-footprint"></text>
-                    <text class="text-grey">
-                        我的兴趣点
-                    </text>
-                </view>
-            </view>
-            <!-- <view class="cu-item" @tap="href('/pages/nav/rec/picture')">
-                <view class="content">
-                    <text class="cuIcon-pic"></text>
-                    <text class="text-grey">我的相册</text>
-                </view>
-            </view> -->
-            <view class="cu-item" @tap="href('/pages/my/discover')">
-                <view class="content">
-                    <text class="cuIcon-discover"></text>
-                    <text class="text-grey">
-                        我的动态
-                    </text>
-                </view>
-            </view>
-
-            <view class="cu-item margin-top" @tap="href('/pages/my/set/settings',{},false)">
+            <!-- <view class="cu-item margin-top" @tap="href('/pages/my/set/settings',{},false)">
                 <view class="content">
                     <text class="cuIcon-settings"></text>
                     <text class="text-grey">
                         设置
                     </text>
                 </view>
-            </view>
+            </view> -->
         </view>
+		
+		
         <!-- 更换封面modal -->
         <view class="cu-modal" :class="modalName == 'Modal' ? 'show' : ''">
             <view class="cu-dialog">
@@ -230,48 +221,43 @@ export default {
                 }
             ],
             elements: [],
-            serve: [
-                {
-                    name: '救援求助',
-                    icon: 'SOS',
-                    url: 'sos',
-                    route: 'planningServeSos',
-                    color: 'red'
-                },
-                {
-                    name: '报备留踪',
-                    icon: 'dist',
-                    url: 'declare',
-                    route: 'planningServeDeclare',
-                    color: 'orange',
-                    very: 1
-                },
-                {
-                    name: '天气预报',
-                    icon: 'sun',
-                    color: 'yellow',
-                    url: 'weather',
-                    route: 'planningServeWeather'
-                },
-                {
-                    name: '周边信息',
-                    icon: 'map',
-                    color: 'blue',
-                    url: 'around',
-                    route: 'planningServeAround'
-                }
-                // {
-                // 	name: '领队服务',
-                // 	icon: 'tutor2',
-                // 	color: 'green',
-                // 	url: 0
-                // },
-                // {
-                // 	name: '教育培训',
-                // 	icon: 'reward',
-                // 	color: 'pink',
-                // 	url: 0
-                // }
+            nav: [
+            	// {
+            	// 	text:'技术文档',
+            	// 	url: '/pages/mine/faq/faqlist',
+            	// 	icon:'question'
+            	// },
+            	{
+            		text:'意见反馈',
+            		url: '/pages/comm/feedback?path=profile',
+            		icon:'post'
+            	},
+            	{
+            		text:'服务协议',
+            		url: '/pages/comm/doc/protocol',
+            		icon:'read'
+            	},
+            	{
+            		text:'隐私政策',
+            		url: '/pages/comm/doc/privacy',
+            		icon:'profile '
+            	},
+            	{
+            		text:'设置',
+            		url: '/pages/my/set/settings',
+            		icon:'settings'
+            	},
+            	// {
+            	// 	text:'地图',
+            	// 	url: '/pages/test/mapTest',
+            	// 	icon:'settings'
+            	// }
+            	// {
+            	// 	text:'分享测试',
+            	// 	url: '/pages/share/index',
+            	// 	icon:'settings'
+            	// 	// veri: true
+            	// }
             ]
         };
     },
@@ -372,4 +358,12 @@ export default {
     mix-blend-mode: screen;
     height: 100rpx;
 }
+
+.zz-list-cell {
+	display: flex;
+	align-items: center;
+	padding: 30rpx;
+	font-size: 30rpx;
+}
+
 </style>

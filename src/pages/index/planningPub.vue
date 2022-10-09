@@ -1,18 +1,22 @@
 <template>
     <view>
-        <cu-custom bg-color="bg-ztsblue">
+        <cu-custom bg-color="bg-ztsblue" :isBack="true">
+			<!-- <block slot="left">
+				<button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
+					<text class="zzIcon-dist margin-right-xs"></text>
+					<text class="text-sm">去记录</text>
+				</button>
+			</block> -->
+            <block slot="content">行程广场</block>     
 			<block slot="left">
 				<button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
 					<text class="zzIcon-dist margin-right-xs"></text>
 					<text class="text-sm">去记录</text>
 				</button>
-			</block>
-            <block slot="content">行程广场</block>     
-			<block slot="left">
-			   	<button class="cu-btn xs line-white round shadow margin-right-sm" @tap="mapView">
+			   	<!-- <button class="cu-btn xs line-white round shadow margin-right-sm" @tap="mapView">
 			   		<text class="zzIcon-maplocation margin-right-xs"></text>
 			   		<text class="text-sm">地图</text>
-			   	</button>
+			   	</button> -->
 			</block>
 		</cu-custom>
         <zz-search :areaPick="false" @search="search"></zz-search>

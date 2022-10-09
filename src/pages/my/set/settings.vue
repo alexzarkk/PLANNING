@@ -59,16 +59,16 @@
 					    <view class="justify-between flex padding-right align-center"><text class="">我的收货地址</text></view>
 					</tui-list-cell> -->
 				</block>
-                	<tui-list-cell arrow @click="openPage('/pages/comm/doc/protocol')">
+                	<!-- <tui-list-cell arrow @click="openPage('/pages/comm/doc/protocol')">
 					    <view class="justify-between flex padding-right align-center"><text class="">服务协议</text></view>
 					</tui-list-cell>
                 	<tui-list-cell arrow @click="openPage('/pages/comm/doc/privacy')">
 					    <view class="justify-between flex padding-right align-center"><text class="">隐私政策</text></view>
-					</tui-list-cell>
+					</tui-list-cell> -->
                 <!-- <tui-list-cell arrow @click="openPage('/pages/my/set/feedback')"> -->
-                <tui-list-cell arrow @click="openPage('/pages/comm/feedback')">
+                <!-- <tui-list-cell arrow @click="openPage('/pages/comm/feedback')">
                     <view class="justify-between flex padding-right align-center"><text class="">意见反馈</text></view>
-                </tui-list-cell>
+                </tui-list-cell> -->
                 <tui-list-cell arrow @click="openPage('/pages/comm/about')">
                     <view class="justify-between flex padding-right align-center"><text class="">关于环浙步道</text></view>
                 </tui-list-cell>

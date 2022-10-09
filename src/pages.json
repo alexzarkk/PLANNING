@@ -62,7 +62,7 @@
 			"root": "pages/planning/",
 			"pages": [
 				// #ifdef APP-PLUS
-				{"path": "lineMap"},
+				// {"path": "lineMap"},
 				// #endif
 			
 				{
@@ -94,10 +94,10 @@
 				{"path": "map"},
 				{"path": "list"},
 				{"path": "mapView"},
-				{"path": "z"},
 				{"path": "recommandLine"},
 				{"path": "localLine"},
-				{"path": "myLineTrack"}
+				{"path": "myLineTrack"},
+				{"path": "z"}
 			]
 		},
 		// 赛事活动
@@ -282,13 +282,8 @@
 			},
 			
 			{
-				// #ifdef APP-PLUS
-				"pagePath": "pages/index/planningPub",
-				// #endif
-				// #ifndef APP-PLUS
+				// "pagePath": "pages/index/planningPub",
 				"pagePath": "pages/index/planning",
-				// #endif
-				
 				"text": "行程",
 				"iconPath": "static/bar/nav_.png",
 				"selectedIconPath": "static/bar/nav.png"

@@ -27,7 +27,7 @@ export default {
 				Object.assign(this.page, { page: 1, total: -1 })
             }
             if (this.loading || this.page.total === this.list.length) {
-                return;
+                return
             }
             this.loading = true
             this.zz.req({ $url: '/public/kml/page', ...this.page }).then(e => {

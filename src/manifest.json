@@ -196,7 +196,7 @@
                 "useOriginalMsgbox" : true,
                 "iosStyle" : "storyboard",
                 "ios" : {
-                    "storyboard" : "C:/APP/_/appuploader_win/my/Collect_splashscreen.zip"
+                    "storyboard" : "D:/_/appuploader_win/my/Collect_splashscreen.zip"
                 },
                 "androidStyle" : "common",
                 "android" : {

@@ -273,7 +273,7 @@ export default {
             this.loading = true
             // 加载动态信息
             const req1 = {
-                $url: 'public/moment/page',
+                $url: '/public/article/page',
                 page: cur.page,
                 size: cur.size,
                 ui:true,  // 带上个人信息
