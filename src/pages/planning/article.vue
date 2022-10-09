@@ -111,7 +111,7 @@ export default {
                 // }
             }
 
-            this.zz.profile(this.article.userId)
+            this.zz.profile(this.article.userInfo._id)
         },
         imgView: function (url) {
             this.zz.viewIMG([url], 0);

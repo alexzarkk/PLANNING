@@ -9,8 +9,13 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
+    globalData: {
+        zlbCfg: {
+            uiStyle: ''
+        }
+    },
     onLaunch() {
-
+        let globalData = getApp().globalData
         uni.getSystemInfo({
             success: function (e) {
                 Vue.prototype.WinHeight = e.windowHeight
@@ -41,7 +46,7 @@ export default {
                     Vue.prototype.platform = 'H5-APP'
                 }
                 // #endif
-				
+
                 // #ifdef H5-ZLB
                 e.platform = 'H5-ZLB'
 				e.uniPlatform  = 'H5-ZLB'
@@ -49,10 +54,17 @@ export default {
                 Vue.prototype.CustomBar = e.statusBarHeight
                 ZWJSBridge.onReady(() => {
                     console.log('浙里办初始化完成，执行bridge方法')
-                    ZWJSBridge.getUiStyle().then(res=>{  // 获取style,适老化配置
+                    ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
+                        console.log("获取到的当前的style======", uiStyle)
+                        globalData.zlbCfg.uiStyle = uiStyle
 
                     })
                 })
+
+                // globalData.zlbCfg.fontSize = '10px'
+                globalData.zlbCfg.fontSize = '16px'
+                console.log(globalData.zlbCfg.uiStyle)
+                console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
                 console.log('浙里办启动 H5-ZLB ---------------------->')
                 // #endif
 

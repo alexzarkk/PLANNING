@@ -1,5 +1,7 @@
 <!-- 首页模板 -->
 <template>
+    <page-meta :root-font-size="globalData.zlbCfg.fontSize">
+    </page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
@@ -56,7 +58,11 @@
             <view class="cu-bar bg-white solid-bottom" @click="href('/pages/planning/article?id=' + '5eb69f446f49e7004daf7b67')">
                 <view class="action">
                     <text class="cuIcon-titles text-blue text-lg"></text>
-                    关于奉化健身步道
+                    关于奉化健身步道                
+                <text class="rem-12">12</text>
+                <text class="rem-14">14</text>
+                <text class="rem-16">16</text>
+                <text class="rem-18">18</text>
                 </view>
                 <view class="action">
                     <view class="cuIcon-right"></view>
@@ -306,6 +312,7 @@ export default {
     },
     data() {
         return {
+            globalData:getApp().globalData,
             focus: false,
             dict: uni.getStorageSync('sys_dict'),
             deptId: '',
@@ -401,6 +408,7 @@ export default {
     },
     onReady() {
         this.cal()
+        console.log("index===================globalData.zlbCfg.fontSize=========",this.globalData.zlbCfg.fontSize)
     },
     onShow() {
         this.loadData()
@@ -490,7 +498,6 @@ export default {
         },
 		pause(){this.videoContext.pause()},
         href(u,e,v){this.zz.href(u,e,v)}
-		
     },
     // #ifndef APP-PLUS
     onHide() { this.pause() },
@@ -614,6 +621,7 @@ export default {
 .watch-box {
     align-items: center;
     font-size: 20rpx;
+    font-size: 2rem;
     display: flex;
     flex-direction: row;
     column-gap: 20rpx;
@@ -653,5 +661,19 @@ export default {
             margin-top: 10rpx;
         }
     }
+}
+
+.rem-12 {
+    font-size: 1.2rem;
+}
+.rem-14 {
+    font-size: 1.4rem;
+}
+.rem-16 {
+    font-size: 1.6rem;
+}
+
+.rem-18 {
+    font-size: 1.8rem;
 }
 </style>
