@@ -46,7 +46,7 @@ export default {
                     Vue.prototype.platform = 'H5-APP'
                 }
                 // #endif
-				
+
                 // #ifdef H5-ZLB
                 e.platform = 'H5-ZLB';
                 Vue.prototype.platform = 'H5-ZLB'
@@ -56,9 +56,14 @@ export default {
                     ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
                         console.log("获取到的当前的style======", uiStyle)
                         globalData.zlbCfg.uiStyle = uiStyle
-                        console.log(globalData.zlbCfg.uiStyle)
+
                     })
                 })
+
+                // globalData.zlbCfg.fontSize = '10px'
+                globalData.zlbCfg.fontSize = '16px'
+                console.log(globalData.zlbCfg.uiStyle)
+                console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
                 console.log('浙里办启动 H5-ZLB ---------------------->')
                 // #endif
 
