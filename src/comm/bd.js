@@ -13,12 +13,12 @@ const bd = {
 		
 		footer: {
 			
-			// #ifdef APP-PLUS
-			content: "© 2022 浙江体育科学研究所（浙江省反兴奋剂中心）",
+			// #ifdef H5-ZLB
+			content: "© 2022 浙江省体育局 宁波市奉化区文化和广电旅游体育局",
 			// #endif
 			
-			// #ifndef APP-PLUS
-			content: "© 2022 浙江省体育局 宁波市奉化区文化和广电旅游体育局",
+			// #ifndef H5-ZLB
+			content: "© 2022 浙江体育科学研究所（浙江省反兴奋剂中心）",
 			// #endif
 			
 			navigate: [{

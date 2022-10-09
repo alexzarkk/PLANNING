@@ -24,6 +24,7 @@
 			<view class="margin-top-sm padding-left text-grey text-sm">{{sys.footer.content}} </view>
 		</view>
 		
+		<!-- #ifndef H5-ZLB -->
 		<view class="cu-bar bg-gray margin-top-sm solid-top">
 			<view class="action">
 				<text class="cuIcon-titles text-grey"></text>
@@ -39,9 +40,7 @@
 		<view class="padding-lr text-grey pre-line margin-top-sm">
 			联系人: 徐小辉
 		</view>
-		<!-- <view class="padding-lr text-grey pre-line margin-top-sm">
-			QQ群: 893635552
-		</view> -->
+		<!-- #endif -->
 		
 		<view class="padding-lr text-grey">
 			<view class="padding flex flex-direction" @tap="zz.href('/pages/comm/feedback?path=about',true)">

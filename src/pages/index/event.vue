@@ -58,7 +58,7 @@
 		</view>
         <!-- <zz-map ref="zmap" :pms="trail._kml.children"></zz-map> -->
             <view class="padding flex align-end text-center text-grey bg-white shadow-warp">
-                <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/nav/rec/foots',null,1)">
+                <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/comm/nodata',null,1)">
                     <view class="flex align-end justify-center">
                         <view class="text-xxl">{{num.poi}}</view>
                         <view class="text-df text-gray">/</view>
@@ -146,7 +146,7 @@ export default {
 			    },
 			    {
 			        title: '视频',
-					path:'/pages/nav/rec/video',
+					path:'/pages/comm/nodata',
 			        k: 'video'
 			    }
 			],
