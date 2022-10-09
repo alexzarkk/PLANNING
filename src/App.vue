@@ -41,6 +41,7 @@ export default {
                     Vue.prototype.platform = 'H5-APP'
                 }
                 // #endif
+				
                 // #ifdef H5-ZLB
                 e.platform = 'H5-ZLB';
                 Vue.prototype.platform = 'H5-ZLB'
