@@ -38,8 +38,8 @@
                 </view>
             </view>
             <!-- 关注/粉丝   +  个性签名 -->
-            <view class="info-box padding-tb flex justify-between align-center">
-                <view class="flex flex-direction align-center">
+            <view class="info-box padding-tb flex flex-direction justify-between align-start">
+                <view class="flex  align-center justify-between">
                     <view class="flex align-center margin-tb">
                         <view class="flex align-center" @click="openPage('/pages/my/social/follow')">
                             <view class="text-df margin-lr">关注</view>
@@ -50,24 +50,26 @@
                             <view class="text-xl text-bold">{{ fans }}</view>
                         </view>
                     </view>
-                    <view>
-                        <view v-if="userInfo && userInfo.desc" class="flex">
-                            <view class="margin-lr">签名</view>
-                            <view>{{ userInfo.desc }}</view>
-                        </view>
+                    <view v-if="!isMy" class="flex justify-center padding-lr padding-right">
+                        <button v-if="followObj.isFollow" style="width:350rpx;height:50rpx;" class="cu-btn radius response bg-gray bottom-btn" @click="followUser()">
+                            <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>取消关注
+                        </button>
+                        <button v-else style="width:350rpx; height:50rpx;" class="cu-btn radius response bg-green bottom-btn" @click="followUser()">
+                            <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>
+                            <text class="cuIcon-add"></text>
+                            关注
+                        </button>
+                    </view>
+
+                </view>
+                <view>
+                    <view v-if="userInfo && userInfo.desc" class="flex align-center">
+                        <view class="margin-lr" style="width:2em;">签名</view>
+                        <view>{{ userInfo.desc }}</view>
                     </view>
                 </view>
                 <!-- v-if="!isMy" -->
-                <view v-if="!isMy" class="flex justify-center padding-lr padding-right">
-                    <button v-if="followObj.isFollow" style="width:350rpx;height:50rpx;" class="cu-btn radius response bg-gray bottom-btn" @click="followUser()">
-                        <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>取消关注
-                    </button>
-                    <button v-else style="width:350rpx; height:50rpx;" class="cu-btn radius response bg-green bottom-btn" @click="followUser()">
-                        <text v-if="followObj.loading" class="cuIcon-loading2 cuIconfont-spin"></text>
-                        <text class="cuIcon-add"></text>
-                        关注
-                    </button>
-                </view>
+
             </view>
         </view>
         <!-- 发布数据统计 -->
@@ -305,8 +307,8 @@ export default {
             })
         },
         // 预览头像
-        previewHeadImg(){
-            this.zz.viewIMG([this.userInfo.headImg],0)
+        previewHeadImg() {
+            this.zz.viewIMG([this.userInfo.headImg], 0)
         },
         // 修改头像
         // 气泡框按钮
