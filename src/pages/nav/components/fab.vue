@@ -199,7 +199,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	// bottom: 30px;
 	/* #ifdef H5 */
 	left: calc(15px + var(--window-left));
-	bottom: calc(30px + var(--window-bottom));
+	bottom: calc(60px + var(--window-bottom));
 	/* #endif */
 	// padding: 10px;
 }
@@ -225,7 +225,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	bottom: 90px;
 	/* #ifdef H5 */
 	left: calc(0px + var(--window-left));
-	bottom: calc(30px + var(--window-bottom));
+	bottom: calc(60px + var(--window-bottom));
 	/* #endif */
 }
 

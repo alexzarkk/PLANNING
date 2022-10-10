@@ -273,9 +273,6 @@ export default {
             if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'setKml', e} }
         },
 		
-		rec(e,o) {
-		    if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'record', e} }
-		},
         onRec(e,o) {e:
             if(o!=e) this.mb = { exec: {m:'setTop', e:e?42:0} }
         }

@@ -71,7 +71,7 @@ const comm = {
 	},
 	// #ifdef APP-PLUS
 	stopWatch(){ plus.geolocation.clearWatch(plus.wid) },
-	setStorage:(k,v)=> { 
+	setStorage:(k,v)=> {
 		plus.storage.setItem(k, typeof v=='object'? JSON.stringify(v):v)
 	},
 	getStorage:(k)=>{
