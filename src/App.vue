@@ -9,14 +9,15 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-    // #ifdef H5-ZLB
     globalData: {
         zlbCfg: {
-            fontSize: '12px'
+            fontSize: '10px'
         }
     },
-    // #endif
     onLaunch() {
+        this.$nextTick(function(){
+            document.documentElement.style.fontSize="10px"
+        })
         let globalData = getApp().globalData
         uni.getSystemInfo({
             success: function (e) {
