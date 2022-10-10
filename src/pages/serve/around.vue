@@ -136,7 +136,7 @@
 			this.keywords = qr.key || this.tag[this.tagIdx];
 			setTimeout(() => {
 				let winHeight = uni.getSystemInfoSync().windowHeight;
-				this.scrollH = winHeight - 44 - this.customBar - uni.rpx2px(600);
+				this.scrollH = winHeight - 44 - this.customBar - uni.upx2px(600);
 				this.getPoiAround()
 				// this.amapAround(this.pm.coord)
 			}, 100)

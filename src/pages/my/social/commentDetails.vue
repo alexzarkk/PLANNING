@@ -36,7 +36,7 @@
                         </view>
                     </view>
                 </view>
-                <view class="more-action" @click="moreAction(details)">
+                <view v-if="isMy" class="more-action" @click="moreAction(details)">
                     <text class="cuIcon-moreandroid"></text>
                 </view>
             </view>
@@ -79,7 +79,7 @@
                         </view>
                     </view>
                 </view>
-                <view class="more-action" @click="moreAction(item)">
+                <view v-if="item.isMy" class="more-action" @click="moreAction(item)">
                     <text class="cuIcon-moreandroid"></text>
                 </view>
             </view>
@@ -92,10 +92,7 @@
                     <!-- <view class="action">
                         <text class="cuIcon-roundaddfill text-grey"></text>
                     </view> -->
-                    <input
-                        v-model="comment" :focus="activeComment" :adjust-position="false" :placeholder="replayInfo" class="solid-bottom"
-                        maxlength="50" cursor-spacing="10" @keyboardheightchange="keyboardheightchange"
-                    >
+                    <input v-model="comment" :focus="activeComment" :adjust-position="false" :placeholder="replayInfo" class="solid-bottom" maxlength="50" cursor-spacing="10" @keyboardheightchange="keyboardheightchange">
                     <!-- <view class="action">
                         <text class="cuIcon-emojifill text-grey"></text>
                     </view> -->
@@ -135,6 +132,7 @@ export default {
                 name: ''
             },
             comment: '',
+            isMy: false,
             tid: '', // 评论的内容的主ID
             isMyMenuShow: false, // 展示菜单    自己的评论
             isOtherMenuShow: false, // 打开别人的评论菜单
@@ -181,6 +179,7 @@ export default {
         uni.onKeyboardHeightChange((res) => {
             _this.btnBottom = res.height;
         });
+
     },
     methods: {
         async loadData(commentId) {
@@ -191,11 +190,19 @@ export default {
             this.zz.req(requestParams).then((res) => {
                 this.details = res;
                 this.isReady = true;
+                this.isMy = this.details.userId === this.userInfo._id
                 this.replyObj = {
                     pid: this.details._id,  // 对当前的一级评论回复
                     rid: this.details.userInfo._id,  // 一级评论的用户id
                     rName: this.details.userInfo.nickName  // 一级评论的用户 昵称
                 };
+                // console.log("评论", this.details.children)
+                let children = this.details.children
+                children = children.map(comment => {
+                    comment.isMy = comment.userId === this.userInfo._id
+                    console.log('子评论===================', comment.userId, this.userInfo._id);
+                    return comment
+                });
             });
         },
         inputFocus() { },
@@ -282,6 +289,7 @@ export default {
         moreAction(item) {
             this.currentComment = item;
             // 如果userId是自己，则表示当前是自己的评论
+            console.log(item.userId, this.userInfo._id)
             if (item.userId === this.userInfo._id) {
                 this.isMyMenuShow = true; // 我的评论
                 // this.isOtherMenuShow = true;

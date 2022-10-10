@@ -16,6 +16,13 @@ export default {
     },
     onLaunch() {
         let globalData = getApp().globalData
+        // #ifndef H5-ZLB
+        // 调试的时候热刷新保持字体一致
+        this.$nextTick(function () {
+            document.documentElement.style.fontSize = "10px"
+        })
+        // #endif
+
         uni.getSystemInfo({
             success: function (e) {
                 Vue.prototype.WinHeight = e.windowHeight

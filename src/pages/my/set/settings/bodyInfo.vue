@@ -78,7 +78,7 @@ export default {
         async confirm() {
             this.isLoading = true
             await this.zz.req({
-                $url: 'admin/sys/user/update',
+                $url: 'user/user/update',
                 _id: this.userInfo._id,
                 info: {
                     height: this.height,

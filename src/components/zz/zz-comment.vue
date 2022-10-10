@@ -89,10 +89,7 @@
         <view class="comment-bar" style="bottom:0;">
             <view class="cu-bar input comment-bar-wrapper">
                 <view class="search-form round">
-                    <input
-                        v-model="comment" :disabled="true" :adjust-position="false" :placeholder="replayInfo" class="solid-bottom"
-                        maxlength="50" cursor-spacing="10" confirm-type="send" type="text" @click="inputFocus"
-                    >
+                    <input v-model="comment" :disabled="true" :adjust-position="false" :placeholder="replayInfo" class="solid-bottom" maxlength="50" cursor-spacing="10" confirm-type="send" type="text" @click="inputFocus">
                 </view>
                 <view class="action text-df" @click="contentComment">
                     <text class="cuIcon-comment text-grey margin-rgiht-xs"></text>
@@ -118,10 +115,7 @@
                 <view class="text-sm text-gray">评论</view>
                 <button :class="comment===''?'bg-gray':'bg-orange'" class="cu-btn text-sm" @tap="sendComment">发布</button>
             </view>
-            <tui-textarea
-                v-model="comment" isCounter :placeholder="replayInfo" :adjust-position="false" :focus="activeComment"
-                minHeight="100rpx" height="100rpx" @keyboardheightchange="textareaKeyboardHeightChange"
-            ></tui-textarea>
+            <tui-textarea v-model="comment" isCounter :placeholder="replayInfo" :adjust-position="false" :focus="activeComment" minHeight="100rpx" height="100rpx" @keyboardheightchange="textareaKeyboardHeightChange"></tui-textarea>
         </view>
         <view style="height:100rpx;"></view>
         <!-- 单挑评论的相应操作
@@ -163,7 +157,7 @@ export default {
     },
     data() {
         return {
-            isMy:false,
+            isMy: false,
             bd: this.bd,
             isLoginShow: false, // 登录modal提示
             isLogin: false,
@@ -261,16 +255,12 @@ export default {
                 tid: this.tid
             };
             this.zz.req(requestParams).then((res) => {
-                this.commentList = res.map(comment=>{
-                    if (comment.userId === this.userInfo._id){
-                        comment.isMy = true
-                    }else{
-                        comment.isMy = false
-                    }
+                this.commentList = res.map(comment => {
+                    comment.isMy = comment.userId === this.userInfo._id
                     return comment
                 });
 
-                
+
                 this.total = this.commentList.length
             }).catch((err) => {
                 console.error("评论 fail=======", err)
@@ -326,7 +316,7 @@ export default {
                         userId: this.userInfo._id,  // 前端参数使用
                         userInfo: this.userInfo,
                         createTime: now,
-                        isMy:true
+                        isMy: true
                     };
                     this.commentList.unshift(comment);  // 前端插入列表
                 }
@@ -340,7 +330,7 @@ export default {
                 this.loading = false;
             });
         },
-        openProfile(item){
+        openProfile(item) {
             // console.log('用户信息=======',item);
             this.zz.href(`/pages/my/profile/profile?id=${item.userInfo._id}`)
         },

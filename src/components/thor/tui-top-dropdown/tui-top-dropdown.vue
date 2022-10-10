@@ -60,7 +60,7 @@ export default {
 			this.$emit('close', {});
 		},
 		px(num) {
-			return uni.rpx2px(num) + 'px';
+			return uni.upx2px(num) + 'px';
 		}
 	}
 };

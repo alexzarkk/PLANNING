@@ -39,7 +39,7 @@
             </view>
             <!-- 关注/粉丝   +  个性签名 -->
             <view class="info-box padding-tb flex flex-direction justify-between align-start">
-                <view class="flex  align-center justify-between">
+                <view class="flex response  align-center justify-between">
                     <view class="flex align-center margin-tb">
                         <view class="flex align-center" @click="openPage('/pages/my/social/follow')">
                             <view class="text-df margin-lr">关注</view>
@@ -228,8 +228,7 @@ export default {
     },
     async onLoad(option) {
         const myUserInfo = this.zz.getAcc()
-        // console.log("个人主页id======", option)
-        if (option.id) {
+        if ( option.id && option.id !== myUserInfo._id) {
             // 点击加载别人的个人主页
             this.profileId = option.id
             const req1 = {
@@ -259,12 +258,13 @@ export default {
             this.isMy = false;
         } else {
             this.userInfo = myUserInfo
-            this.profileId = this.userInfo._id
+            this.profileId = myUserInfo._id
             this.isMy = true;
+            console.log("我的主页============================",this.profileId)
             //  我自己的主页
         }
         this.loadData();
-        // console.log('获取到的状态栏的高度', this.StatusBar);
+        console.log('主页id===========', this.profileId);
     },
     methods: {
         async loadData() {

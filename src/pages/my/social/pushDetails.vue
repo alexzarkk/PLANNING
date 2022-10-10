@@ -38,7 +38,7 @@
                                     <!-- {{ details.dateInfo.year }}年{{ details.dateInfo.month }}月{{ details.dateInfo.day }}日 -->
                                 </view>
                             </view>
-                            <view class="padding-right">
+                            <view v-if="!isMy" class="padding-right">
                                 <button v-if="details.isFollow" class="cu-btn line-ztsgreen" @click="followUser">
                                     取消关注
                                 </button>
@@ -74,18 +74,6 @@
                     <view v-if="details.kml" class="padding">
                         <zz-line-card></zz-line-card>
                     </view>
-                    <!-- <view class="push-content padding">
-                        <view class="line-info-box">
-                            <image class="line-info-image" src="https://s1.ax1x.com/2022/06/24/ji7ipq.jpg" mode="" />
-                            <view class="flex justify-between flex-direction padding">
-                                <view class="text-df text-bold text-spacing">2022-02-28 08:50:38</view>
-                                <view class="flex justify-between text-gray text-df">
-                                    <text>徒步</text>
-                                    <text>8.5km</text>
-                                </view>
-                            </view>
-                        </view>
-                    </view> -->
 
                     <!-- 标签 -->
                     <view v-if="details.tagList && details.tagList.length > 0" class="padding-lr tag-box">
@@ -111,7 +99,7 @@
                             <text v-if="details.isFavor" class="cuIcon-favorfill text-orange margin-lr-xs"></text>
                             <text v-else class="cuIcon-favor margin-lr-xs"></text>
                             {{ details.favor }}
-                        </view> 
+                        </view>
                     </view>
                     <!-- 点赞、 评论 、 转发 、 收藏 -->
                     <!-- <view class="line-operation-box">
@@ -120,10 +108,7 @@
                             <view class="operation-title">{{ item.title }}</view>
                         </view>
                     </view> -->
-                    <zz-comment
-                        v-if="details._id" ref="comment" :tid="details._id" :details="details" @commentChange="commentChange"
-                        @userEvent="commentEvent"
-                    ></zz-comment>
+                    <zz-comment v-if="details._id" ref="comment" :tid="details._id" :details="details" @commentChange="commentChange" @userEvent="commentEvent"></zz-comment>
                 </view>
             </view>
 
@@ -165,6 +150,8 @@ export default {
     // components: { zzBlog, ZzComment },
     data() {
         return {
+            isMy: false,
+            userInfo: null,
             CustomBar: this.CustomBar,
             btnBottom: 0,
             isCard: true,
@@ -203,15 +190,16 @@ export default {
             ]
         };
     },
-    onLoad({id,v}) {
-		if(id) {
-			this.loadData(id)
-		}else{
-			const params = this.zz.getParam(v);
-			if (params._id) {
-			    this.loadData(params._id);
-			}
-		}
+    onLoad({ id, v }) {
+        if (id) {
+            this.loadData(id)
+        } else {
+            const params = this.zz.getParam(v);
+            if (params._id) {
+                this.loadData(params._id);
+            }
+        }
+        this.userInfo = this.zz.getAcc()
     },
     onShow() {
         uni.$on('modifyComment', (params) => {
@@ -245,6 +233,9 @@ export default {
                             return item.value == tag
                         })
                     })
+                }
+                if (this.details.userInfo._id === this.userInfo._id) {
+                    this.isMy = true
                 }
                 this.isReady = true;
                 // console.log("详情================",this.details)
@@ -320,7 +311,7 @@ export default {
             // this.details.comment = commentList.length
             this.$set(this.details, "comment", commentList.length)
         },
-           commentEvent(params) {
+        commentEvent(params) {
             this.zz.userEvent(params.t, params.tt, this.details)
         },
     },

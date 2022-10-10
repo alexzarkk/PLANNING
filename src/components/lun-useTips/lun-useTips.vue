@@ -91,7 +91,7 @@
 		},
 		created() {
 			this.isShow = this.show;
-			this.newPadding = uni.rpx2px(this.padding);
+			this.newPadding = uni.upx2px(this.padding);
 		},
 		mounted() {
 			let sysInfo = uni.getSystemInfoSync();
