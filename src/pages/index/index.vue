@@ -207,7 +207,7 @@
                 </view>
             </view>
         </view>
-
+        <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
     </view>
 </template>
 <script>
@@ -307,6 +307,7 @@ export default {
     },
     data() {
         return {
+            bd: this.bd, // APP相关信息
             globalData:getApp().globalData,
             focus: false,
             dict: uni.getStorageSync('sys_dict'),

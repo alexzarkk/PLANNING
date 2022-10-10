@@ -38,15 +38,12 @@
                         <text v-else>未设置</text>
                     </view>
                 </tui-list-cell>
-                <tui-list-cell arrow>
-                    <!--  @click="showModal($event)" -->
+                <!-- <tui-list-cell arrow>
                     <view class="justify-between flex padding-right align-center" :data-modelId="3" @click="showModal($event)">
                         <text class="">二维码</text>
                         <view class="text-xl"><text class="cuIcon-qr_code"></text></view>
-                        <!-- <tui-lazyload-img width="70rpx" height="70rpx" :src="myQrCode || ''"></tui-lazyload-img> -->
-                        <!-- <text class="text-black  ">男</text> -->
                     </view>
-                </tui-list-cell>
+                </tui-list-cell> -->
                 <!-- <tui-list-cell arrow>
                     <view class="justify-between flex padding-right align-center" :data-modelId="4" @click="changeRegion">
                         <text class="">地区</text>
@@ -116,12 +113,7 @@
                         </view>
                         <view class="text-black margin-right">{{ userInfo.nickName }}</view>
                     </view>
-                    <zz-z-qrcode
-                        v-if="ifShow" ref="qrcode" cid="qrcode1" :val="val" :size="size"
-                        :unit="unit" :background="background" :foreground="foreground" :pdground="pdground" :icon="icon"
-                        :iconSize="iconsize" :lv="lv" :onval="onval" :loadMake="loadMake" :usingComponents="true"
-                        :showLoading="false" @result="qrComplete"
-                    ></zz-z-qrcode>
+                    <zz-z-qrcode v-if="ifShow" ref="qrcode" cid="qrcode1" :val="val" :size="size" :unit="unit" :background="background" :foreground="foreground" :pdground="pdground" :icon="icon" :iconSize="iconsize" :lv="lv" :onval="onval" :loadMake="loadMake" :usingComponents="true" :showLoading="false" @result="qrComplete"></zz-z-qrcode>
                 </view>
                 <view class="padding">
                     请用
@@ -141,20 +133,11 @@
         </view> -->
 
         <!-- 修改昵称 -->
-        <zz-cu-modal
-            title="修改昵称" :isLoading="modalLoading" :show="modalName == 'modal4'" targetProp="nickName" @confirm="confirmChangeInfo"
-            @cancel="modalName = ''"
-        >
-            <tui-textarea
-                v-model="tnickName" isCounter placeholder="请输入昵称" height="60rpx" min-height="60rpx"
-                :maxlength="12"
-            ></tui-textarea>
+        <zz-cu-modal title="修改昵称" :isLoading="modalLoading" :show="modalName == 'modal4'" targetProp="nickName" @confirm="confirmChangeInfo" @cancel="modalName = ''">
+            <tui-textarea v-model="tnickName" isCounter placeholder="请输入昵称" height="60rpx" min-height="60rpx" :maxlength="12"></tui-textarea>
         </zz-cu-modal>
         <!-- 个性签名 -->
-        <zz-cu-modal
-            title="修改个性签名" :isLoading="modalLoading" :show="modalName == 'modal5'" targetProp="desc" @confirm="confirmChangeInfo"
-            @cancel="modalName = ''"
-        >
+        <zz-cu-modal title="修改个性签名" :isLoading="modalLoading" :show="modalName == 'modal5'" targetProp="desc" @confirm="confirmChangeInfo" @cancel="modalName = ''">
             <tui-textarea v-model="tdesc" isCounter placeholder="请输入个性签名" :maxlength="120"></tui-textarea>
         </zz-cu-modal>
         <!-- 选择性别 -->
