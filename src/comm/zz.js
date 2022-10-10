@@ -10,7 +10,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		}
 		return a
 	},
-	
+
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
 		// #ifdef APP-PLUS
 		authCemera()
@@ -29,7 +29,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		})
 	},
 	// #ifdef APP-PLUS
-	authCemera=()=>{ if(uni.getAppAuthorizeSetting().cameraAuthorized=='denied') zz.modal("请开启手机相机权限！") },
+	authCemera = () => { if (uni.getAppAuthorizeSetting().cameraAuthorized == 'denied') zz.modal("请开启手机相机权限！") },
 	// #endif
 	checkNet = async () => {
 		return await comm.hadNet()
@@ -64,7 +64,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 					}
 				})
 				// #endif
-				
+
 				// #ifndef APP-PLUS
 				resolve(true)
 				// #endif
@@ -75,11 +75,11 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 	 * 上传文件
 	 */
 	upload = async (filePath, remove) => {
-		
+
 		return new Promise((resolve, reject) => {
 			uniCloud.uploadFile({
 				filePath,
-				cloudPath: filePath.startsWith('blob')? 'szs_h5_' + uni.getStorageSync(filePath) : 'szs_' + filePath.replace('_doc/uniapp_save/', ''),
+				cloudPath: filePath.startsWith('blob') ? 'szs_h5_' + uni.getStorageSync(filePath) : 'szs_' + filePath.replace('_doc/uniapp_save/', ''),
 				onUploadProgress(progressEvent) {
 					// let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
 				},
@@ -103,17 +103,17 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 				// #ifdef APP-PLUS
 				e.tempFilePaths[i] = await saveFile(e.tempFilePaths[i])
 				// #endif
-				
+
 				// #ifndef APP-PLUS
 				uni.setStorageSync(e.tempFilePaths[i], e.tempFiles[i].name)
 				// #endif
-				
+
 				if (save) e.tempFilePaths[i] = await upload(e.tempFilePaths[i])
 			}
 			uni.hideLoading()
-			
+
 			return e.tempFilePaths
-		}else{
+		} else {
 			// #ifdef APP-PLUS
 			authCemera()
 			// #endif
@@ -127,20 +127,20 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		// #endif
 
 		const [_, e] = await uni.chooseVideo({ sourceType, compressed, camera, maxDuration })
-		if(e) {
+		if (e) {
 			uni.showLoading({ mask: true })
 			e.tempFilePath = await saveFile(e.tempFilePath)
 			if (save) e.tempFilePath = await upload(e.tempFilePath)
-			
+
 			delete e.errMsg
 			uni.hideLoading()
 			return e
-		}else{
+		} else {
 			// #ifdef APP-PLUS
 			authCemera()
 			// #endif
 		}
-		
+
 	},
 	/**
 	 * time:
@@ -409,7 +409,7 @@ async function init() {
  * @param boolean veri 是否验证登录
  * return data
  */
-async function req(params = {}, loading = false, t=9999) {
+async function req(params = {}, loading = false, t = 9999) {
 	let tim,
 		fn = params.$fn || 'app',
 		veri = params.$veri || false,
@@ -417,7 +417,7 @@ async function req(params = {}, loading = false, t=9999) {
 		token = zz.getToken(),
 		net = comm.hadNet(),
 		toLogin = () => {
-			zz.href('/pages/comm/account/login',0,{back:1})
+			zz.href('/pages/comm/account/login', 0, { back: 1 })
 		}
 
 	delete params.$fn
@@ -472,18 +472,18 @@ async function req(params = {}, loading = false, t=9999) {
 				}
 
 			uni.request({
-			    url: api + fn,
-				timeout:10000,
-			    header: {
-			        'content-type': 'application/json',
-			        authorization: token,
-			        clientinfo: uni.getStorageSync('clientInfo')
-			    },
-			    data: params,
-			    method: 'POST',
-			    success,
-			    fail,
-			    complete
+				url: api + fn,
+				timeout: 10000,
+				header: {
+					'content-type': 'application/json',
+					authorization: token,
+					clientinfo: uni.getStorageSync('clientInfo')
+				},
+				data: params,
+				method: 'POST',
+				success,
+				fail,
+				complete
 			})
 
 			// delete params.$url
@@ -525,7 +525,7 @@ async function req(params = {}, loading = false, t=9999) {
 function userEvent(t, tt, o, ref = '_id') {
 	let user = zz.getAcc()
 	const toLogin = () => {
-		zz.href('/pages/comm/account/login',0,{back:1})
+		zz.href('/pages/comm/account/login', 0, { back: 1 })
 	}
 	if (!user && t !== 20) {  // 未登录
 		zz.modal('您尚未登录，请登录后操作', (flag) => {
@@ -535,7 +535,7 @@ function userEvent(t, tt, o, ref = '_id') {
 				return;
 			}
 		}, true)
-		return new Promise((resolve,reject)=>{
+		return new Promise((resolve, reject) => {
 			reject('未登录')
 		});
 	}
@@ -553,7 +553,7 @@ function userEvent(t, tt, o, ref = '_id') {
 		}
 	}
 	if (t == 30) {  // 点赞
-		if(!o.like) o.like = 0
+		if (!o.like) o.like = 0
 		if (!o.isLike) {
 			o.like++
 			o.isLike = true
@@ -565,7 +565,7 @@ function userEvent(t, tt, o, ref = '_id') {
 		}
 	}
 	if (t == 40) {  // 收藏
-		if(!o.favor) o.favor = 0
+		if (!o.favor) o.favor = 0
 		if (!o.isFavor) {
 			o.favor++
 			o.isFavor = true
@@ -577,7 +577,7 @@ function userEvent(t, tt, o, ref = '_id') {
 		}
 	}
 	if (t == 50) {  // 分享
-		if(!o.share) o.share = 0
+		if (!o.share) o.share = 0
 		o.share++
 		e.inc = 1
 	}
@@ -694,6 +694,34 @@ const zz = {
 			}
 		})
 	},
+	// #ifdef H5-ZLB
+	// 浙里办PV 埋点  跳转页面埋点
+	sendZlbPV() {
+		const sdk = window.ZWJSBridge
+		const getLocation = sdk.getLocation()
+		const getUserType = sdk.getUserType()
+		Promise.all([getUserType, getLocation]).then(([userTypeData, locationData]) => {
+			const { userType } = userTypeData
+			const { longitude, latitude } = locationData
+			window.aplus_queue.push({
+				action: 'aplus.sendPV',
+				arguments: [
+					{
+						is_auto: false
+					},
+					{
+						miniAppId: zlbAppId,
+						miniAppName: 'xxx',
+						long: longitude,
+						lati: latitude,
+						userType
+					}
+				]
+			})
+		})
+	},
+	// #endif
+
 	/**
 	 * 
 	 * @param {*} url 跳转页面 路径
@@ -702,8 +730,8 @@ const zz = {
 	 * @returns 
 	 */
 	href(url, v, veri, animationType, t = 'navigateTo') {
-		if(url.startsWith('/pages/index')) return uni.switchTab({ url })
-		
+		if (url.startsWith('/pages/index')) return uni.switchTab({ url })
+
 		if (v) {
 			url += '?v=' + encodeURI(JSON.stringify(v))
 		}
@@ -720,15 +748,21 @@ const zz = {
 			uni[t]({
 				url,
 				animationType,
+				success: () => {
+					// #ifdef H5-ZLB
+					// 添加pv埋点
+					// zz.sendZlbPV()
+					// #endif
+				},
 				fail: (err) => {
 					console.error('路由跳转失败===', err)
 				}
 			})
 		}
 	},
-	profile(id){
+	profile(id) {
 		let d = uni.getStorageSync('sys_dict')
-		this.href(`/pages/my/profile/${d.sysUser[id]?'sysProfile':'profile'}?id=${id}`)
+		this.href(`/pages/my/profile/${d.sysUser[id] ? 'sysProfile' : 'profile'}?id=${id}`)
 	},
 	getParam(v) { return JSON.parse(decodeURI(v)) }
 }
