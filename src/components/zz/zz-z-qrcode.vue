@@ -181,7 +181,7 @@ export default {
 	computed: {
 		cpSize() {
 			if(this.unit == "rpx"){
-				return uni.rpx2px(this.size)
+				return uni.upx2px(this.size)
 			}else{
 				return this.size
 			}

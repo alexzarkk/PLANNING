@@ -59,7 +59,7 @@
 				})
 			},
 			getPX(val) {
-				return uni.rpx2px(Number(val) * Number(this.pixel))
+				return uni.upx2px(Number(val) * Number(this.pixel))
 			},
 			getWrapText(text, fontSize, textWidth, width, ctx, rows = 2) {
 				let textArr = [];

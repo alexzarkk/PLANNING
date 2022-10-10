@@ -27,7 +27,7 @@ export function toPx(value, baseSize, isDecimal = false) {
 		value = parseFloat(value);
 		let res = 0;
 		if (unit === 'rpx') {
-			res = uni.rpx2px(value);
+			res = uni.upx2px(value);
 		} else if (unit === 'px') {
 			res = value * 1;
 		} else if (unit === '%') {

@@ -288,7 +288,7 @@
 		// #endif
 		methods: {
 			getPx(rpx) {
-				let px = parseInt(uni.rpx2px(Number(rpx)))
+				let px = parseInt(uni.upx2px(Number(rpx)))
 				return px % 2 === 0 ? px : px + 1
 			},
 			getYAxisVal(idx, index) {
