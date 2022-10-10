@@ -280,6 +280,7 @@
     "h5" : {
         "title" : "环浙步道",
         "appkey" : "065wqkqc+2001832114+rswca",
+        // "devServer" : { "https" : true},
         "router" : {
             "base" : "/h5/",
             "mode" : "hash"

@@ -9,7 +9,7 @@
 			</block> -->
             <block slot="content">行程广场</block>     
 			<block slot="left">
-				<button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
+				<button class="cu-btn xs line-white round shadow margin-right-sm" @tap="onCollect">
 					<text class="zzIcon-dist margin-right-xs"></text>
 					<text class="text-sm">去记录</text>
 				</button>

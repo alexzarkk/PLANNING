@@ -52,6 +52,11 @@ export default {
 			ct.style[e==1?'height':'width'] = document.body.clientWidth+'px'
 			this.map.resize()
 		},
+		setTop(e){
+			const top = (x) => { for (let s of x) { s.style.marginTop = e+'px' } }
+			top(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
+			top(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
+		},
 		newMb(){
 			let map = new mapboxgl.Map(this.settings)
 			
@@ -74,10 +79,7 @@ export default {
 				ctrl = new TerrainControl(true, map.sid, si.platform)
 				map.addControl(ctrl, 'top-left')
 			}
-			
-			const setTop = (x) => { for (let s of x) { s.style.marginTop = 0+'px' } }
-			setTop(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
-			setTop(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
+			this.setTop(0)
 			this.resize(0)
 				
 			//无网重试
@@ -166,6 +168,10 @@ export default {
 		runx(e){ mbtool.run(this.map,e) },
 		around(e){ mbtool.getAround(this.map,null,e) },
 		fly(e){this.map.flyTo({center: this.map.sid=='amap'? trans(e.coord):e.coord, zoom:16})},
+		
+		record(e){
+			console.log('recording --------',  e);
+		},
 		mbAct(e){
 			if(this[e.act]) {
 				this[e.act](e.e)
@@ -236,7 +242,7 @@ export default {
 		        return []
 		    }
 		},
-		cur: {
+		rec: {
 		    type: Object,
 		    default: () => {
 		        return {}
@@ -248,27 +254,34 @@ export default {
 		        return {}
 		    }
 		},
+		onRec: {
+			type: Boolean,
+			default: false
+		}
     },
     watch: {
-        line(e, o) {
+        line(e,o) {
 			if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.setProp()
         },
-        point(e, o) {
+        point(e,o) {
 			if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.setProp()
         },
-        gon(e, o) {
+        gon(e,o) {
             if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.setProp()
         },
-        cur(e, o) {
-            if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'fit', e} }
-        },
-        refKml(e, o) {
+        refKml(e,o) {
             if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'setKml', e} }
         },
+		
+		rec(e,o) {
+		    if(o&&JSON.stringify(o)!=JSON.stringify(e)) this.mb = { exec: {m:'record', e} }
+		},
+        onRec(e,o) {e:
+            if(o!=e) this.mb = { exec: {m:'setTop', e:e?42:0} }
+        }
     },
 	
     mounted() {
-		console.log(this.pms);
         this.setProp()
     },
     methods: {
@@ -292,18 +305,13 @@ export default {
 				}
 			}
         },
-		exec({m,e}){
-			this.mb = {exec:{m,e}}
-		},
+		exec({m,e}){ this.mb = {exec:{m,e}} },
         mapDone(e) {
 			this.mdone = e
 			this.setProp()
             this.$emit('mapDone', e)
         },
-		mbClick(e) {
-			// console.log('mapbox.mbClick: ',e);
-			this.$emit('mbClick', e);
-		},
+		mbClick(e) { this.$emit('mbClick', e) },
 		mbEvent(e){
 			// console.log('mapbox.mbEvent: ',e);
 		},

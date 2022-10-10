@@ -31,8 +31,13 @@
         <view id="tvideo" v-show="!hotList.length">
             <!-- #ifndef APP-PLUS -->
             <view class="cu-card case no-card">
-                <view class="bg-video flex align-center" style="height: 400rpx;">
-                    <video id="myVideo" src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v" :autoplay="true" :muted="false" :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover">
+                <view class="bg-video flex align-center" style="height: 400upx;">
+                    <video id="myVideo" src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v" 
+					:autoplay="false"
+					:muted="false"
+					:show-fullscreen-btn="true"
+					:show-mute-btn="true"
+					:show-play-btn="true" object-fit="cover">
                     </video>
                 </view>
             </view>
@@ -53,10 +58,6 @@
                 <view class="action">
                     <text class="cuIcon-titles text-blue text-lg"></text>
                     关于奉化健身步道                
-                <!-- <text class="rem-12">12</text>
-                <text class="rem-14">14</text>
-                <text class="rem-16">16</text>
-                <text class="rem-18">18</text> -->
                 </view>
                 <view class="action">
                     <view class="cuIcon-right"></view>
@@ -402,7 +403,7 @@ export default {
     },
     onReady() {
         this.cal()
-        console.log("index===================globalData.zlbCfg.fontSize=========",this.globalData.zlbCfg.fontSize)
+        // console.log("index===================globalData.zlbCfg.fontSize=========",this.globalData.zlbCfg.fontSize)
     },
     onShow() {
         this.loadData()
@@ -417,7 +418,7 @@ export default {
             this.dict = dict
             if (this.deptId != deptId) {
                 this.deptId = deptId
-
+				
                 let hots = [
                     { _id: '627911aac2b3040001747310', name: '环浙样板线' },
                     { _id: '609805434c73e7000189c405', name: '奉城屋基' },
@@ -437,7 +438,6 @@ export default {
                     regionData = [],
                     hotList = [],
                     tabIndex = 0
-
 
                 await this.zz.req({ $url: 'public/trail/list', deptId: [deptId], status: 10, type: 60 }).then(list => {
                     for (let s of tStyle) { s.list = [] }
@@ -491,10 +491,11 @@ export default {
                 duration: 300
             });
         },
-        href(u, e, v) { this.zz.href(u, e, v) }
+		pause(){this.videoContext.pause()},
+        href(u,e,v){this.zz.href(u,e,v)}
     },
     // #ifndef APP-PLUS
-    onHide() { this.videoContext.pause() },
+    onHide() { this.pause() },
     // #endif
     onBackPress() { return true },
     onPageScroll: function (e) {
@@ -521,7 +522,7 @@ export default {
         //     }
         // }
         if (e.scrollTop >= this.videoBottom) {
-            this.videoContext.pause();
+            this.pause();
         } else if (e.scrollTop <= this.videoTop) {
             this.videoContext.play();
         }
