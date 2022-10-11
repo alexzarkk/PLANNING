@@ -395,19 +395,28 @@ export default {
     },
 
     async onLoad(option) {
-        this.loginZlb()
+        // this.loginZlb()
         // header 添加 isTestUrl: '1'
+        const obj = {
+            url: 'public/zz/test'
+        }
         mgop({
             api: 'mgop.zz.zts.login', // 必填
             host: 'https://mapi.zjzwfw.gov.cn/',
             dataType: 'JSON',
+            header: {
+                isTestUrl: '1'
+            },
+            data: {
+                url: '/public/zz/test'
+            },
             type: 'POST',
             appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
             onSuccess: data => {
-                console.log('data============', data)
+                console.log('mgop---------------------data============', data)
             },
             onFail: err => {
-                console.log(err, 'err')
+                console.log(err, 'mgop----------------------err')
             }
         });
         setTimeout(() => {
