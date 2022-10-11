@@ -16,16 +16,7 @@
         <view class="content">
             <view class="search-box">
                 <!-- mSearch组件 如果使用原样式，删除组件元素-->
-                <search-input
-                    class="mSearch-input-box"
-                    :mode="2"
-                    button="inside"
-                    :placeholder="defaultKeyword"
-                    @search="doSearch(false)"
-                    @input="inputChange"
-                    @confirm="doSearch(false)"
-                    v-model="keyword"
-                ></search-input>
+                <search-input class="mSearch-input-box" :mode="2" button="inside" :placeholder="defaultKeyword" @search="doSearch(false)" @input="inputChange" @confirm="doSearch(false)" v-model="keyword"></search-input>
                 <!-- 原样式 如果使用原样式，恢复下方注销代码 -->
                 <!-- 						
         		<view class="input-box">
@@ -40,8 +31,12 @@
                 <scroll-view class="keyword-list-box" v-show="isShowKeywordList" scroll-y>
                     <block v-for="(row, index) in keywordList" :key="index">
                         <view class="keyword-entry" hover-class="keyword-entry-tap">
-                            <view class="keyword-text" @tap.stop="doSearch(keywordList[index].keyword)"><rich-text :nodes="row.htmlStr"></rich-text></view>
-                            <view class="keyword-img" @tap.stop="setKeyword(keywordList[index].keyword)"><image src="/static/HM-search/back.png"></image></view>
+                            <view class="keyword-text" @tap.stop="doSearch(keywordList[index].keyword)">
+                                <rich-text :nodes="row.htmlStr"></rich-text>
+                            </view>
+                            <view class="keyword-img" @tap.stop="setKeyword(keywordList[index].keyword)">
+                                <image src="/static/HM-search/back.png"></image>
+                            </view>
                         </view>
                     </block>
                 </scroll-view>
@@ -69,7 +64,9 @@
                         <view class="keyword" v-if="forbid == ''">
                             <view v-for="(keyword, index) in hotKeywordList" @tap="doSearch(keyword)" :key="index">{{ keyword }}</view>
                         </view>
-                        <view class="hide-hot-tis" v-else><view>当前搜热门搜索已隐藏</view></view>
+                        <view class="hide-hot-tis" v-else>
+                            <view>当前搜热门搜索已隐藏</view>
+                        </view>
                     </view>
                 </scroll-view>
             </view>
@@ -87,7 +84,7 @@ export default {
     onLoad() {
         this.loadData();
     },
-    onReady() {},
+    onReady() { },
     data() {
         return {
             defaultKeyword: '',
@@ -199,15 +196,6 @@ export default {
                 icon: 'none',
                 duration: 2000
             });
-            //以下是示例跳转淘宝搜索，可自己实现搜索逻辑
-            /*
-				//#ifdef APP-PLUS
-				plus.runtime.openURL(encodeURI('taobao://s.taobao.com/search?q=' + keyword));
-				//#endif
-				//#ifdef H5
-				window.location.href = 'taobao://s.taobao.com/search?q=' + keyword
-				//#endif
-				*/
         },
         //保存关键字到历史记录
         saveKeyword(keyword) {
@@ -245,9 +233,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-}
-
 view {
     display: block;
 }

@@ -525,7 +525,7 @@ export default {
         // #ifdef H5-ZLB
         //  打开 以后 通过goto返回到页面来读取ticket
         // console.log('获取到的url参数', option);
-        let ticket = this.getQueryVariable('ticket');
+        // let ticket = this.getQueryVariable('ticket');
 
         // console.log('获取到的ticket', ticket);
         // console.log('H5-ZLB尝试登录==================================================');
@@ -617,19 +617,6 @@ export default {
             });
         },
         testLogin() {},
-        getQueryVariable(variable) {
-            // console.log('getQueryVariable========', variable);
-            // console.log('getQueryVariable==========url=================', window.location);
-            var query = window.location.search.substring(1);
-            var vars = query.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split('=');
-                if (pair[0] == variable) {
-                    return pair[1];
-                }
-            }
-            return false;
-        },
         tabSelect(e) {
             this.currentTab = e.currentTarget.dataset.id;
             let boxName = this.articleTabs[this.currentTab].boxName;

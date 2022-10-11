@@ -197,20 +197,6 @@ export default {
             }
             this.zz.toast("暂无搜索结果")
             this.keyword = ''
-            // uni.showToast({
-            //     title: keyword,
-            //     icon: 'none',
-            //     duration: 2000
-            // });
-            //以下是示例跳转淘宝搜索，可自己实现搜索逻辑
-            /*
-				//#ifdef APP-PLUS
-				plus.runtime.openURL(encodeURI('taobao://s.taobao.com/search?q=' + keyword));
-				//#endif
-				//#ifdef H5
-				window.location.href = 'taobao://s.taobao.com/search?q=' + keyword
-				//#endif
-				*/
         },
         //保存关键字到历史记录
         saveKeyword(keyword) {
@@ -248,8 +234,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-}
 
 view {
     display: block;
