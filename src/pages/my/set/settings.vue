@@ -43,14 +43,12 @@
 
             <tui-list-view margin-top="20rpx">
 				
-				<!-- #ifdef APP-PLUS -->
                 <tui-list-cell arrow @click="clear">
                     <view class="justify-between flex padding-right align-center">
                         <text class="">清除缓存</text>
                         <text class="text-black">{{fileSizeString}}</text>
                     </view>
                 </tui-list-cell>
-				<!-- #endif -->
 				<block v-if="user">
 					<tui-list-cell arrow @click="openPage('/pages/comm/account/repsd')">
 					    <view class="justify-between flex padding-right align-center"><text class="">重置密码</text></view>

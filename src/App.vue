@@ -88,15 +88,14 @@ export default {
                 console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
                 // #endif
 
-                // console.log('sysInfo ------->', e)
                 uni.setStorageSync('sysInfo', e)
-                comm.setStorage('clientInfo', JSON.stringify({
+                comm.setStorage('clientInfo', {
                     PLATFORM: e.uniPlatform || e.platform,
                     OS: e.osName,
                     APPID: e.appId || '__UNI__210B33A',
                     deviceId: e.deviceId,
                     deviceModel: e.model
-                }))
+                })
 
                 // #ifdef APP-PLUS
                 if (e.platform == 'ios') locationModule.requestAlwaysAuthorization()

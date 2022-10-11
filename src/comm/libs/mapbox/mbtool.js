@@ -685,7 +685,7 @@ setKml = (m,pms,line,point,gon,act=1)=>{
 	}, 1200)
 },
 
-onLoc = (map)=>{
+onLoc = (map, watch=true)=>{
 	let id = '_curLoc',
 		size = 100,
 		pulsingDot = {
@@ -778,7 +778,11 @@ onLoc = (map)=>{
 		'layout': { 'icon-image': id }
 	})
 	
-	watchLoc(map, curLoc, id)
+	if(watch) {
+		watchLoc(map, curLoc, id)
+	} else{
+		return curLoc
+	}
 },
 
 on = async(map) => {

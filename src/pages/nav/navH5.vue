@@ -1,9 +1,203 @@
+<script module="_mapbox" lang="renderjs">
+	import mapboxgl from '!mapbox-gl/dist/mapbox-gl'
+	import MapboxDraw from '@/comm/libs/mapbox/draw/mapbox-gl-draw'
+	import mbtool from '@/comm/libs/mapbox/mbtool.js'
+	import comm from '@/comm/comm'
+	import icon from '@/comm/libs/icon'
+	import { CompassControl, LocationControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
+	import { trans } from '@/comm/geotools.js'
+	import '@/comm/libs/mapbox/mapbox.css'
+	
+export default {
+	data() {
+		return {
+			map: null,
+			self: null,
+			
+			key: {
+				mb: 'pk.eyJ1IjoiYWxleHphcmtrIiwiYSI6ImNrcWdzNXdrcjI3NmEyb3F0cmVzd291amcifQ.tPuMJfthzboYHg3MzbKtKw',
+				tdt: '70ede380913047ef13bc4dc92ff4f75b'
+			},
+			
+			settings: {
+				style: 'mapbox://styles/alexzarkk/ckqt2gqrc650n17nw67q4glqu',
+				container: 'mbContainer',
+				center: [121,29],
+				zoom: 15,
+				minZoom: 5,
+				maxZoom: 20,
+				pitch: 0,
+				maxPitch: 0
+			}
+		}
+	},
+	async mounted() {
+		mapboxgl.accessToken = this.key.mb
+		window.mbAct = this.mbAct
+		this.newMb()
+		
+		window.addEventListener("popstate", (e)=> {
+			// console.log('popstate.back <<<<<<<<<<<')
+			window.removeEventListener('resize', this.resize)
+			this.stopLoc()
+		}, false)
+	},
+	methods: {
+		resize(e){
+			let ct = document.getElementById('mbContainer')
+			ct.style[e==1?'width':'height'] = document.body.clientHeight+'px'
+			ct.style[e==1?'height':'width'] = document.body.clientWidth+'px'
+			this.map.resize()
+		},
+		setTop(e){
+			const top = (x) => { for (let s of x) { s.style.marginTop = e+'px' } }
+			top(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
+			top(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
+		},
+		newMb(){
+			let map = new mapboxgl.Map(this.settings)
+			
+			map.addControl(new CompassControl(), 'bottom-right')
+			map.addControl(new LocationControl(), 'bottom-left')
+			
+			map.sid = 'default'
+			map.pm = {}
+			map.nav = {r:{}}
+			map._2p = []
+			this.map = map
+		},
+		
+		init(self,si,ct,ctrl,t=1) {
+			
+			let map = this.map
+			
+			if(t==1) {
+				this.self = self
+				ctrl = new TerrainControl(true, map.sid, si.platform)
+				map.addControl(ctrl, 'top-left')
+			}
+			this.setTop(10)
+			this.resize(0)
+				
+			//无网重试
+			if(!comm.hadNet()) {
+				let style = comm.getStorage('mbStyle')
+				if(style) {
+					map.setStyle(style)
+					return this.init(self,si,ct,ctrl,0)
+				}
+				
+				t++
+				if(t>20) {
+					uni.showToast({
+						icon:"error",
+						title:'网络连接失败，请稍后重试'
+					})
+				} else {
+					console.info('超时重载！！！！')
+					setTimeout(()=>{
+						map.remove()
+						this.newMb()
+						this.init(self,si,ct,ctrl,t)
+					}, 10000)
+				}
+				return
+			}
+			map.resize()
+			window.addEventListener('resize', this.resize)
+			
+			const evt = (e) =>{
+				let _c = (c)=>{return [mbtool.fixNum(c.lng), mbtool.fixNum(c.lat)]},
+					center = _c(map.getCenter()),
+					zoom = mbtool.fixNum(map.getZoom(), 0),
+					bounds = map.getBounds(),
+					_ne = _c(bounds.getNorthEast()),
+					_sw = _c(bounds.getSouthWest())
+					
+				return { event: e.type, center, zoom, _ne, _sw }
+			}
+			if(ct){
+				map.setZoom(14)
+				map.setCenter(map.sid=='amap'? trans([ct[0],ct[1]]): [ct[0],ct[1]])
+			}else{
+				map.setZoom(6.5)
+			}
+			map.on('click', (e) => {
+				self.callMethod('mbClick', [mbtool.fixNum(e.lngLat.lng), mbtool.fixNum(e.lngLat.lat)])
+			})
+		
+			for (let k in icon) {
+				map.loadImage(icon[k], (x,m)=>{ map.addImage(k, m) })
+			}
+			map.on('load', (e) => {
+				ctrl.done()
+				map.init = true
+				self.callMethod('mapDone', true)
+				comm.setStorage('mbStyle', map.getStyle())
+				// this.onLoc()
+			})
+		},
+		
+		async updateData({exec=null, sysInfo={}, center=null, pms=null, line=[], point=[], gon=[]}, ov, self) {
+			if(exec) return this[exec.m](exec.e)
+			let map = this.map
+			if (!map) return
+			if (!map.init) return this.init(self, sysInfo, center)
+			
+			// console.log('updateData.old:====',ov);
+			if(!pms) {
+				this.map.on('moveend', (e) => {
+					mbtool.on(map)
+				});
+				this.map.on('zoomend', () => {
+					mbtool.on(map)
+				});
+			}
+			mbtool.setKml(this.map, pms, line, point, gon)
+		},
+		
+		onLoc(){ mbtool.onLoc(this.map, 0);  this.setCurLoc() },
+		stopLoc(){ comm.stopWatch() },
+		fit(e){ mbtool.setActive(this.map,e) },
+		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
+		runx(e){ mbtool.run(this.map,e) },
+		getAround(e){ mbtool.getAround(this.map,null,e) },
+		fly2(e){this.map.flyTo({center: this.map.sid=='amap'? trans(e.coord):e.coord, zoom:16})},
+		
+		setCurLoc(e){
+			console.log(this.map.getSource('_curLoc'));
+			this.onLoc()
+			cur.features[0].geometry.coordinates = coord 
+			let src = map.getSource('_curLoc')
+			if(src) src.setData(cur)
+			
+		},
+		mbAct(e){
+			if(this[e.act]) {
+				this[e.act](e.e)
+			} else {
+				this.self.callMethod('mapDo', e)
+			}
+		}
+	}
+}
+</script>
 <template>
 	<view>
-		<nav-map ref="map" :rec="rec" :onRec="onRec" :center="center" :pms="kml.children"></nav-map>
-		<mumu-get-qrcode ref="scan" @success='qrcodeSucess'></mumu-get-qrcode>
+		<view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
 		
-		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
+		<view class="cu-modal" :class="video ? 'show' : ''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">短视频</view>
+					<view class="action" @tap="video=null"><text class="cuIcon-close text-red"></text></view>
+				</view>
+			   <video v-if="video" id="myVideo" :src="video" controls></video>
+			</view>
+		</view>
+		<!-- <mumu-get-qrcode ref="scan" @success='qrcodeSucess' /> -->
+		
+		<!-- <image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image> -->
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
 		
 		<block v-if="!onRec">
@@ -15,11 +209,8 @@
 			</view>
 		</block>
 		<block v-else>
-			<!-- <block v-if="!puase"> -->
-				
-				<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
-				<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
-			<!-- </block> -->
+			<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
+			<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
 			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" />
 		</block>
 		
@@ -28,19 +219,19 @@
 
 <script>
 const tts = {}
-import navMap from './components/navMap'
 import mumuGetQrcode from '@/uni_modules/mumu-getQrcode/components/mumu-getQrcode/mumu-getQrcode.vue'
-import { locationModule, uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
+import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on, around } from '@/comm/nav'
+
+import locationModule from '@/comm/locationModule'
 import icon from '@/comm/libs/icon'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
-import zz from '@/comm/zz'
 
 import fab from './components/fab'
 
 export default {
-	components: { fab ,navMap, mumuGetQrcode },
+	components: { fab, mumuGetQrcode },
 	data() {
 		return {
 			sysInfo: uni.getStorageSync('sysInfo'),
@@ -68,6 +259,11 @@ export default {
 			lock: false,
 			
 			// isConn: true,
+			
+			mdone: false,
+			mb: {},
+			ver: 0,
+			video: null
 		}
 	},
 	computed: {
@@ -79,12 +275,11 @@ export default {
 		}
 	},
 	async onLoad({v}) {
-		this.winH = this.sysInfo.windowHeight
 		this.stH = this.sysInfo.statusBarHeight + 60
 		this.mapHeight = this.winH
 		
 		if(v) {
-			let { kml, tmt = 0 } = zz.getParam(v)
+			let { kml, tmt = 0 } = this.zz.getParam(v)
 			
 			this.kml = kml
 			this.tmt = tmt
@@ -105,14 +300,14 @@ export default {
 			this.center = [p.longitude, p.latitude]
 			
 		} else {
-			await this.onLoc(true)
+			await this.getLoc(true)
 		}
 		
 		//是否赛事
 		if(this.tmt) {
 			// this.start()
 		}else{
-			zz.req({$fn:'sync', $url:'/user/rec/sync',get:1}).then(e=>{
+			this.zz.req({$fn:'sync', $url:'/user/rec/sync',get:1}).then(e=>{
 				console.log(e);
 				if(e&&(e.rec.point.length||e.rec.coord.length)&&!uni.getStorageSync('nav_rec'+this.tmt)) {
 					uni.setStorageSync('nav_rec'+this.tmt, e.rec)
@@ -123,9 +318,6 @@ export default {
 		await this.around(this.center)
 		console.log(this.cps)
 	},
-	// #ifdef APP-PLUS
-	onReady() { this.amap = uni.createMapContext('amap', this) },
-	// #endif
 	async onShow() {
 		let poi = uni.getStorageSync('nav_poi')
 		if (poi) {
@@ -144,8 +336,59 @@ export default {
 		}
 	},
 	onBackPress() { return this.onRec },
-	
+	mounted() { this.setProp() },
 	methods: {
+		setProp() {
+			if(this.mdone) {
+				this.mb = {
+					ver: this.ver++,
+				    center: this.center,
+					pms: this.kml.children
+				    // line: this.line,
+				    // point: this.point,
+				    // gon: this.gon
+				}
+				if(this.nav.line) {
+					setTimeout(()=> {this.exec({m:'setKml', e:this.nav})}, 3500)
+				}
+			} else {
+				this.mb = {
+				    sysInfo: this.sysInfo,
+				    center: this.center,
+				}
+			}
+		},
+		exec({m,e}){ this.mb = {exec:{m,e}} },
+		mapDone(e) {
+			this.mdone = e
+			this.setProp()
+		},
+		mbClick(e) { this.$emit('mbClick', e) },
+		mapDo(e) {
+			// console.log('mapDo ------ >', e)
+			switch (e.act){
+				case 'loading':
+					uni.showLoading({ mask:true })
+					break;
+				case 'hideloading':
+					uni.hideLoading()
+					break;
+				case 'viewImg':
+					this.this.zz.viewIMG(e.imgs,e.idx)
+					break;
+				case 'viewVideo':
+					this.video = e.url
+					break;
+				case 'chgStyle':
+					this.this.zz.toast(e.e)
+					this.setProp()
+					break;
+				default:
+					this.$emit(e.act, e)
+					break;
+			}
+		},
+		
 		setRec(){uni.setStorageSync('nav_rec'+this.tmt, this.rec)},
 		async onchg(e){ this.lock = false; on.call(this) },
 		async around(c){
@@ -153,7 +396,7 @@ export default {
 				this.cps = await comm.around(c)
 			}
 		},
-		async onLoc(ct,c){
+		async getLoc(ct,c){
 			if(!c){
 				let {coord} = await getLocation()
 				c = trans(coord)
@@ -163,20 +406,15 @@ export default {
 			this.lock = true
 		},
 		fly(c){
-			console.log(c);
-			this.$refs.map.exec({m:'fly', e:{coord:c}})
+			this.exec({m:'fly2', e:{coord:c}})
 		},
 		stop(){
 			let rec = this.rec
 			this.onRec = false
 			locationModule.stopLocation()
-			
-			// #ifdef APP-PLUS
-			this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
-			// #endif
-			
-			if(rec.coord.length<10 && !rec.point.length) return zz.modal('本次记录太短了！')
-			zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
+			this.exec({m:'setTop', e:0})
+			if(rec.coord.length<10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
+			this.zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
 		},
 		clock(){
 			let tim = this.tim
@@ -207,7 +445,7 @@ export default {
 				},
 				tim = {H:0, M:0, S:0, MS:0},
 				rec = {
-					startTime: zz.now(),
+					startTime: this.zz.now(),
 					stopTime: 0,
 					endTime: 0,
 					t: {},
@@ -257,7 +495,7 @@ export default {
 			// 查询本地是否有未完成的轨迹记录
 			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
 			if (nav_rec) {
-				if(zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
+				if(this.zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
 					init()
 				}else{
 					const [_, res] = await uni.showModal({
@@ -308,10 +546,7 @@ export default {
 			this.rec = rec
 			this.clock()
 			this.onRec = true
-			
-			// #ifdef APP-PLUS
-			this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
-			// #endif
+			this.exec({m:'setTop', e:42})
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
@@ -323,7 +558,7 @@ export default {
 					if (xiaoming.success) {
 						// console.log('xiaoming --------',xiaoming);
 						let _p = xiaoming.data,
-							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~(_p.altitude||0), _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
+							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~(_p.altitude||0), _p.timestamp || this.zz.now(), fixNum(_p.speed||0,2)],
 							line = rec.line[0],
 							size = rec.coord.length
 						
@@ -333,7 +568,7 @@ export default {
 						if(!this.puase) {
 							if (!size) {
 								size++
-								this.onLoc(true,c1)
+								this.getLoc(true,c1)
 								rec.coord.push(c1)
 								line.points.push(pt(c1))
 							}else{
@@ -374,7 +609,7 @@ export default {
 								delete rec.t[size-6]
 								
 								toDist(trans(c1, 'gcj02towgs84'), this.cps, this.tmt? this.way.coord:null)
-								this.cps.sort(zz.compare('dist'))
+								this.cps.sort(this.zz.compare('dist'))
 								
 								let p = this.cps[0]
 								
@@ -425,7 +660,7 @@ export default {
 							console.info(rec)
 						}
 					} else {
-						zz.toast('GPS定位失败，信号弱！')
+						this.zz.toast('GPS定位失败，信号弱！')
 					}
 				}
 			)
@@ -440,10 +675,10 @@ export default {
 				this.$refs.scan.openScan()
 			}
 			if(t=='position') {
-				this.onLoc(1)
+				this.getLoc(1)
 			}
 			if(t=='v' || t=='camera') {
-				let e = t=='v'? await zz.chooseVideo({}) : await zz.chooseImage({})
+				let e = t=='v'? await this.zz.chooseVideo({}) : await this.zz.chooseImage({})
 				if(e) {
 					let {coord} = await getLocation(),
 						poi = {
@@ -453,11 +688,11 @@ export default {
 								t2: t=='v'? 60:50,
 								coord: trans(coord),
 								desc: '',
-								time: zz.time2Date(),
+								time: this.zz.time2Date(),
 								imgs: t=='v'? []:e,
 								video: t=='v'? e:null
 							}
-					zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
+					this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 				}
 			}
 		},
@@ -486,11 +721,11 @@ export default {
 			this.puase = e
 			let r = this.rec
 			if(e){
-				r.name = zz.time2Date()
-				r.endTime = zz.now()
+				r.name = this.zz.time2Date()
+				r.endTime = this.zz.now()
 				clearInterval(this.timer)
 			} else {
-				r.stopTime += zz.now() - r.endTime
+				r.stopTime += this.zz.now() - r.endTime
 				this.clock()
 			}
 			this.setRec()
@@ -507,7 +742,7 @@ export default {
 				if(r) {
 					// 编辑
 					if (r.tapIndex == 0) {
-						zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
+						this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 					}
 					
 					//删除
@@ -518,10 +753,10 @@ export default {
 						})
 						if (m.confirm) {
 							for (let filePath of poi.imgs) {
-								zz.removeFile(filePath)
+								this.zz.removeFile(filePath)
 							}
 							if(poi.video) {
-								zz.removeFile(poi.video.tempFilePath)
+								this.zz.removeFile(poi.video.tempFilePath)
 							}
 							rec.point.splice(idx, 1)
 							point.splice(point.findIndex(x => x.id == e.detail.markerId), 1)

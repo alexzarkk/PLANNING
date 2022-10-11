@@ -1,3 +1,4 @@
+import { mgop } from '@aligov/jssdk-mgop'
 import { api } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 import comm from '@/comm/comm'
@@ -433,8 +434,9 @@ async function req(params = {}, loading = false, t = 9999) {
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
 		return new Promise((resolve, reject) => {
-
+			tim = setTimeout(()=>{ reject('timedout') },9999)
 			const success = (e) => {
+				clearTimeout(tim)
 				const { code, data, message } = e.data || e.result
 				switch (code) {
 					// 成功
@@ -472,20 +474,20 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			uni.request({
-				url: api + fn,
-				timeout: 10000,
-				header: {
-					'content-type': 'application/json',
-					authorization: token,
-					clientinfo: uni.getStorageSync('clientInfo')
-				},
-				data: params,
-				method: 'POST',
-				success,
-				fail,
-				complete
+			    url: api + fn,
+				timeout:10000,
+			    header: {
+			        'content-type': 'application/json',
+			        authorization: token,
+			        clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+			    },
+			    data: params,
+			    method: 'POST',
+			    success,
+			    fail,
+			    complete
 			})
-
+			
 			// delete params.$url
 			// uniCloud.callFunction({
 			// 	name: fn,
