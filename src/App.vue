@@ -11,7 +11,8 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 export default {
     globalData: {
         zlbCfg: {
-            fontSize: '10px'
+            fontSize: '10px',
+            appId:'2002281722'  // 应用的浙里办appId
         }
     },
     onLaunch() {
