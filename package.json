@@ -44,6 +44,7 @@
 		"zlb": "cross-env NODE_ENV=development uniapp-cli custom h5-zlb"
 	},
 	"dependencies": {
+		"@aligov/jssdk-mgop": "^3.1.9",
 		"@amap/amap-jsapi-loader": "^1.0.1",
 		"@dcloudio/uni-app-plus": "^2.0.1-36420220922001",
 		"@dcloudio/uni-h5": "^2.0.1-36420220922001",
