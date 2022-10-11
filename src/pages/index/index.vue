@@ -32,12 +32,7 @@
             <!-- #ifndef APP-PLUS -->
             <view class="cu-card case no-card">
                 <view class="bg-video flex align-center" style="height: 400upx;">
-                    <video id="myVideo" src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v" 
-					:autoplay="false"
-					:muted="false"
-					:show-fullscreen-btn="true"
-					:show-mute-btn="true"
-					:show-play-btn="true" object-fit="cover">
+                    <video id="myVideo" src="https://699d1eb1-ee53-4c66-bddd-06cda80d1231.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/2a6fea9c-08c5-45a0-b312-8a06823192cb.m4v" :autoplay="false" :muted="false" :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover">
                     </video>
                 </view>
             </view>
@@ -57,7 +52,7 @@
             <view class="cu-bar bg-white solid-bottom" @click="href('/pages/planning/article?id=' + '5eb69f446f49e7004daf7b67')">
                 <view class="action">
                     <text class="cuIcon-titles text-blue text-lg"></text>
-                    关于奉化健身步道                
+                    关于奉化健身步道
                 </view>
                 <view class="action">
                     <view class="cuIcon-right"></view>
@@ -308,7 +303,7 @@ export default {
     data() {
         return {
             bd: this.bd, // APP相关信息
-            globalData:getApp().globalData,
+            globalData: getApp().globalData,
             focus: false,
             dict: uni.getStorageSync('sys_dict'),
             deptId: '',
@@ -397,6 +392,9 @@ export default {
     },
 
     async onLoad(option) {
+        this.loginZlb()
+
+
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
@@ -410,7 +408,21 @@ export default {
         this.loadData()
     },
     methods: {
+        loginZlb() {
+            const sUserAgent = window.navigator.userAgent.toLowerCase()
+            // 浙里办APP
+            const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
+            // 浙里办支付宝小程序
+            const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
 
+            if (bIsAlipayMini) {
+                window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+            } else {
+                window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+            }
+            // 或者使用replace()
+            // window.location.replace('https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】');
+        },
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
@@ -419,7 +431,7 @@ export default {
             this.dict = dict
             if (this.deptId != deptId) {
                 this.deptId = deptId
-				
+
                 let hots = [
                     { _id: '627911aac2b3040001747310', name: '环浙样板线' },
                     { _id: '609805434c73e7000189c405', name: '奉城屋基' },
@@ -492,8 +504,8 @@ export default {
                 duration: 300
             });
         },
-		pause(){this.videoContext.pause()},
-        href(u,e,v){this.zz.href(u,e,v)}
+        pause() { this.videoContext.pause() },
+        href(u, e, v) { this.zz.href(u, e, v) }
     },
     // #ifndef APP-PLUS
     onHide() { this.pause() },

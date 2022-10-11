@@ -12,7 +12,7 @@ export default {
     globalData: {
         zlbCfg: {
             fontSize: '10px',
-            appId:'2002281722'  // 应用的浙里办appId
+            appId: '2002281722'  // 应用的浙里办appId
         }
     },
     onLaunch() {
@@ -73,7 +73,61 @@ export default {
                     })
                 })
 
+                // const sUserAgent = window.navigator.userAgent.toLowerCase()
+                // // 浙里办APP
+                // const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
+                // // 浙里办支付宝小程序
+                // const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
+                // // 单点登录跳转
+                // isLoad = () => {
+                //     if (bIsAlipayMini) {
+                //         window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+                //     } else {
+                //         window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+                //     }
+                //     // 或者使用replace()
+                //     // window.location.replace('https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】');
+                // }
+
+                // watchApp = () => {
+                //     window.onpageshow = (event) => {
+                //         if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+                //             ZWJSBridge.close();
+                //         }
+                //         isLoad();
+                //     }
+                // }
+                // // 支付宝浙里办小程序判断页面进入状态
+                // watchApply = () => {
+                //     window.onpageshow = (event) => {
+                //         if (event.persisted || (window.performance && (window.performance.navigation.type == 1 || window.performance.navigation.type == 0))) {
+                //             isLoad();
+                //         } else {
+                //             // my.navigateBack();
+                //             // uni.navigateBack()
+                //         }
+                //     }
+                // }
+                // init = () => {
+                //     if (that.getQuery('ticket') == null && that.ticket == "") {
+                //         uni.showLoading({
+                //             title: '登录中',
+                //             mask: true
+                //         });
+                //         if (bIsDtDreamApp) {
+                //             watchApp();
+                //         } else if (bIsAlipayMini) {
+                //             watchApply();
+                //         }
+                //     } else {
+                //         that.ticket = that.getQuery('ticket');
+                //         uni.reLaunch({
+                //             url: `./index?ticket=${that.ticket}`
+                //         })
+                //     }
+                // }
                 // #endif
+
 
                 // #ifdef MP-WEIXIN
                 Vue.prototype.platform = 'MP-WEIXIN';

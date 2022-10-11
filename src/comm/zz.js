@@ -1,4 +1,4 @@
-import { mgop } from '@aligov/jssdk-mgop'
+// import { mgop } from '@aligov/jssdk-mgop'
 import { api } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 import comm from '@/comm/comm'
