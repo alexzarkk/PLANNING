@@ -405,15 +405,15 @@ export default {
             host: 'https://mapi.zjzwfw.gov.cn/',
             dataType: 'JSON',
             header: {
-				authorization: uni.getStorageSync('210B33A_token'),
-				clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
+                authorization: uni.getStorageSync('210B33A_token'),
+                clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
             },
             data: {
-				"$url": '/public/zz/test',
-				"page": 1,
-				"size": 5,
-				"type": [10],
-				"ui": true
+                "$url": '/public/zz/test',
+                "page": 1,
+                "size": 5,
+                "type": [10],
+                "ui": true
             },
             type: 'POST',
             appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
@@ -445,8 +445,10 @@ export default {
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
 
             if (bIsAlipayMini) {
+                // `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${ZLB_SERVICE_CODE}&redirectUrl=${ZLB_LOCAL_PAGE}&goto=${ZLB_LOCAL_PAGE}`
                 window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
             } else {
+                //  `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${ZLB_SERVICE_CODE}&redirectUrl=${ZLB_PROD_PAGE}&goto=${ZLB_LOCAL_PAGE}`
                 window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
             }
             // 或者使用replace()
