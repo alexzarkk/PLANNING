@@ -60,15 +60,15 @@ export default {
                 e.uniPlatform = 'H5-ZLB'
                 Vue.prototype.platform = 'H5-ZLB'
                 Vue.prototype.CustomBar = e.statusBarHeight
-                console.log('浙里办启动 H5-ZLB ---------------------->')
+                // console.log('浙里办启动 H5-ZLB ---------------------->')
                 ZWJSBridge.onReady(() => {
                     console.log('浙里办初始化完成，执行bridge方法')
                     ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
-                        console.log("获取到的当前的style======", uiStyle)
+                        // console.log("获取到的当前的style======", uiStyle)
                         if (uiStyle === 'elder') {
                             globalData.zlbCfg.fontSize = '16px'
                         }
-                        console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
+                        // console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
 
                     })
                 })
