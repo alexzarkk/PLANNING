@@ -3,6 +3,7 @@ import { api, isDev, appKey } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 
 const amapKey = 'daffb83c14428939221e09ebc785c89c',
+	rndInt = (min, max)=> { return Math.floor(Math.random() * (max - min + 1) ) + min },
 	toArr = (o) => {
 		let a = []
 		for (let k in o) {
@@ -10,6 +11,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		}
 		return a
 	},
+	
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
 		// #ifdef APP-PLUS
 		authCemera()
@@ -610,6 +612,7 @@ function userEvent(t, tt, o, ref = '_id') {
 
 const zz = {
 	amapKey,
+	rndInt,
 	math,
 	isSame,
 	clone,

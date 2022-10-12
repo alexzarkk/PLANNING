@@ -268,36 +268,36 @@
     },
     "vueVersion" : "2",
     //浙里办
-    //   "h5" : {
-    //   	"title" : "环浙步道",
-    //   	"appkey" : "065wqkqc+2001832114+rswca",
-    //   	"publicPath": "./",
-    // "router" : { "base" : "./", "mode" : "hash" },
-    // "sdkConfigs" : { "maps" : { "qqmap" : { "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ" } } },
-    // "optimization" : { "treeShaking" : { "enable" : true } }
-    // },
-    // H5
     "h5" : {
-        "title" : "环浙步道",
-        "appkey" : "065wqkqc+2001832114+rswca",
-        // "devServer" : { "https" : true},
-        "router" : {
-            "base" : "/h5/",
-            "mode" : "hash"
-        },
-        "sdkConfigs" : {
-            "maps" : {
-                "qqmap" : {
-                    "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ"
-                }
-            }
-        },
-        "optimization" : {
-            "treeShaking" : {
-                "enable" : true
-            }
-        }
+      	"title" : "环浙步道",
+      	"appkey" : "4kzz5t3t+2002281722+mzaaot",
+      	"publicPath": "./",
+		"router" : { "base" : "./", "mode" : "hash" },
+		"sdkConfigs" : { "maps" : { "qqmap" : { "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ" } } },
+		"optimization" : { "treeShaking" : { "enable" : true } }
     },
+    // H5
+    // "h5" : {
+    //     "title" : "环浙步道",
+    //     "appkey" : "4kzz5t3t+2002281722+mzaaot",
+    //     // "devServer" : { "https" : true},
+    //     "router" : {
+    //         "base" : "/h5/",
+    //         "mode" : "hash"
+    //     },
+    //     "sdkConfigs" : {
+    //         "maps" : {
+    //             "qqmap" : {
+    //                 "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ"
+    //             }
+    //         }
+    //     },
+    //     "optimization" : {
+    //         "treeShaking" : {
+    //             "enable" : true
+    //         }
+    //     }
+    // },
     "locale" : "zh-Hans",
     "fallbackLocale" : "zh-Hans"
 }

@@ -1,5 +1,5 @@
 import { api } from '@/comm/bd'
-import { req, upload, removeFile } from '@/comm/zz'
+import { req, rndInt, upload, removeFile } from '@/comm/zz'
 import { hadNet, getStorage } from '@/comm/comm'
 
 const sync = {
@@ -73,7 +73,10 @@ const sync = {
 				this.set(tk)
 				for (var i = 0; i < tk.q.length; i++) {
 					let q = tk.q[i], u, v, r
-					if(q.k=='req'){ u = q.o.$url } 
+					if(q.k=='req'){ 
+						q.o.$fn = 'sync' + rndInt(0,4)
+						u = q.o.$url
+					} 
 					
 					await this[q.k](q.o).then(x=>{v=x}).catch(e=>{r=e})
 					
