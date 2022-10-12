@@ -436,8 +436,6 @@ async function req(params = {}, loading = false, t = 9999) {
 		return new Promise((resolve, reject) => {
 			tim = setTimeout(()=>{ reject('timedout') },9999)
 			const success = (e) => {
-				// console.log('success ---------', e);
-				
 				clearTimeout(tim)
 				const { code, data, message } = e.data || e.result
 				switch (code) {
@@ -460,8 +458,6 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 			},
 				fail = (e) => {
-					// console.error('fail -----------',e);
-					// zz.toast("服务器连接超时~")
 					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
@@ -504,7 +500,7 @@ async function req(params = {}, loading = false, t = 9999) {
 							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
 						},
 						data: params,
-						method: 'POST',
+						// method: 'POST',
 						success,
 						fail,
 						complete
