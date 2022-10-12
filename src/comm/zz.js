@@ -475,54 +475,43 @@ async function req(params = {}, loading = false, t = 9999) {
 					// console.log(e);
 				}
 			
-				// uni.request({
-				// 	url: api + fn,
-				// 	timeout:10000,
-				// 	header: {
-				// 		'content-type': 'application/json',
-				// 		authorization: token,
-				// 		clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
-				// 	},
-				// 	data: params,
-				// 	method: 'POST',
-				// 	success,
-				// 	fail,
-				// 	complete
-				// })
-			
-			// mgop({
-			//     api: 'mgop.zz.zts.' + fn, // 必填
-			//     host: 'https://mapi.zjzwfw.gov.cn/',
-			//     dataType: 'JSON',
-			//     header: {
-			//         isTestUrl: '1'
-			//     },
-			//     data: params,
-			//     type: 'POST',
-			//     appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
-			//     onSuccess: data => {
-			//         console.log('mgop---------------------data============', data)
-			//     },
-			//     onFail: err => {
-			//         console.log(err, 'mgop----------------------err')
-			//     }
-			// });
-			
-				mgop({
-					api: 'mgop.zz.zts.app', // 必填
-					// api: 'mgop.zz.zts.login', // 必填
-					host: 'https://mapi.zjzwfw.gov.cn/',
-					dataType: 'JSON',
-					type: 'POST',
-					appKey: '6xxfslcv+200600801+tlkciqg', // 必填
-					header: {
-					    authorization: token,
-					    clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
-					},
-					data: params,
-					onSuccess: success,
-					onFail: fail
-				});
+			 // #ifdef H5
+			 
+				// #ifdef H5-ZLB
+					mgop({
+						api: 'mgop.zz.zts.' + fn, // 必填
+						host: 'https://mapi.zjzwfw.gov.cn/',
+						dataType: 'JSON',
+						type: 'POST',
+						appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
+						header: {
+							authorization: token,
+							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+						},
+						data: params,
+						onSuccess: success,
+						onFail: fail
+					});
+				// #endif
+				
+				// #ifndef H5-ZLB
+					uni.request({
+						url: api + fn,
+						timeout:10000,
+						header: {
+							'content-type': 'application/json',
+							authorization: token,
+							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+						},
+						data: params,
+						method: 'POST',
+						success,
+						fail,
+						complete
+					})
+				// #endif
+				
+			 // #endif
 			
 			// #ifdef APP-PLUS
 				delete params.$url
