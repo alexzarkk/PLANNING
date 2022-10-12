@@ -1,5 +1,5 @@
 import { mgop } from '@aligov/jssdk-mgop'
-import { api } from '@/comm/bd'
+import { api, isDev, appKey } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 import comm from '@/comm/comm'
 
@@ -429,7 +429,7 @@ async function req(params = {}, loading = false, t = 9999) {
 			toLogin()
 		}, true)
 	}
-	console.info("requestPrams ===========", params, api + fn)
+	console.info("requestPrams ===========", params, api[isDev] + fn)
 
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
@@ -479,8 +479,9 @@ async function req(params = {}, loading = false, t = 9999) {
 						host: 'https://mapi.zjzwfw.gov.cn/',
 						dataType: 'JSON',
 						type: 'POST',
-						appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
+						appKey,
 						header: {
+							isTestUrl: isDev+'',
 							authorization: token,
 							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
 						},
@@ -492,7 +493,7 @@ async function req(params = {}, loading = false, t = 9999) {
 				
 				// #ifndef H5-ZLB
 					uni.request({
-						url: api + fn,
+						url: api[isDev] + fn,
 						timeout:10000,
 						header: {
 							'content-type': 'application/json',
@@ -500,7 +501,7 @@ async function req(params = {}, loading = false, t = 9999) {
 							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
 						},
 						data: params,
-						// method: 'POST',
+						method: 'POST',
 						success,
 						fail,
 						complete
