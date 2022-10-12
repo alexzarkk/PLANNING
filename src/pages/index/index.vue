@@ -212,8 +212,6 @@ import card from './component/card.vue';
 import newsHome from '@/components/news/news-home.vue'
 import newsPage from '../station/news.vue';
 
-import { mgop } from '@aligov/jssdk-mgop'
-
 export default {
     components: {
         news,
@@ -400,30 +398,6 @@ export default {
         const obj = {
             url: '/public/zz/test'
         }
-        mgop({
-            api: 'mgop.zz.zts.app', // 必填
-            host: 'https://mapi.zjzwfw.gov.cn/',
-            dataType: 'JSON',
-            header: {
-                authorization: uni.getStorageSync('210B33A_token'),
-                clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
-            },
-            data: {
-                "$url": '/public/zz/test',
-                "page": 1,
-                "size": 5,
-                "type": [10],
-                "ui": true
-            },
-            type: 'POST',
-            appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
-            onSuccess: data => {
-                console.log('mgop---------------------data============', data)
-            },
-            onFail: err => {
-                console.log(err, 'mgop----------------------err')
-            }
-        });
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
