@@ -195,7 +195,7 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		<!-- <mumu-get-qrcode ref="scan" @success='qrcodeSucess' /> -->
+		<mumu-get-qrcode ref="scan" @success='qrcodeSucess' />
 		
 		<!-- <image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image> -->
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
@@ -307,7 +307,7 @@ export default {
 		if(this.tmt) {
 			// this.start()
 		}else{
-			this.zz.req({$fn:'sync', $url:'/user/rec/sync',get:1}).then(e=>{
+			this.zz.req({$fn:'sync' + this.zz.rndInt(0,4), $url:'/user/rec/sync',get:1}).then(e=>{
 				console.log(e);
 				if(e&&(e.rec.point.length||e.rec.coord.length)&&!uni.getStorageSync('nav_rec'+this.tmt)) {
 					uni.setStorageSync('nav_rec'+this.tmt, e.rec)

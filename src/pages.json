@@ -295,13 +295,13 @@
 				"selectedIconPath": "static/bar/event.png"
 			},
 			
-			// #ifdef H5-ZLB
-			{
-				"pagePath": "pages/index/postStation",
-				"text": "驿站",
-				"iconPath": "static/bar/station_.png",
-				"selectedIconPath": "static/bar/station.png"
-			},
+			// #ifdef H5&&H5-ZLB
+			// {
+			// 	"pagePath": "pages/index/postStation",
+			// 	"text": "驿站",
+			// 	"iconPath": "static/bar/station_.png",
+			// 	"selectedIconPath": "static/bar/station.png"
+			// },
 			// #endif
 			
 			{

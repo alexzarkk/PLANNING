@@ -1,9 +1,9 @@
 import { mgop } from '@aligov/jssdk-mgop'
-import { api } from '@/comm/bd'
+import { api, isDev, appKey } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
-import comm from '@/comm/comm'
 
 const amapKey = 'daffb83c14428939221e09ebc785c89c',
+	rndInt = (min, max)=> { return Math.floor(Math.random() * (max - min + 1) ) + min },
 	toArr = (o) => {
 		let a = []
 		for (let k in o) {
@@ -11,7 +11,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		}
 		return a
 	},
-
+	
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
 		// #ifdef APP-PLUS
 		authCemera()
@@ -33,7 +33,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 	authCemera = () => { if (uni.getAppAuthorizeSetting().cameraAuthorized == 'denied') zz.modal("请开启手机相机权限！") },
 	// #endif
 	checkNet = async () => {
-		return await comm.hadNet()
+		return await zz.hadNet()
 	},
 	saveFile = async (u) => {
 		// if(u.startsWith('http')) { uni.getImageInfo({ src:u, success(e){ u = e.path } }) }
@@ -380,28 +380,6 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 		})
 	}
 
-async function init() {
-	let dict = uni.getStorageSync('sys_dict') || {}
-
-	req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
-		Object.assign(dict, e)
-		uni.setStorageSync('sys_dict', dict)
-		// console.log('dict ===============', dict)
-	})
-
-	if (uni.getStorageSync('cur_deptId') == '') {
-		uni.setStorageSync('cur_deptId', '330213')
-		zz.setDept()
-	}
-
-	// #ifdef APP-PLUS
-	comm.on()
-	// #endif
-
-	// #ifndef APP-PLUS
-	comm.on([121, 29])
-	// #endif
-}
 
 /**
  * 请求数据处理
@@ -416,7 +394,7 @@ async function req(params = {}, loading = false, t = 9999) {
 		veri = params.$veri || false,
 		url = params.$url,
 		token = zz.getToken(),
-		net = comm.hadNet(),
+		net = zz.hadNet(),
 		toLogin = () => {
 			zz.href('/pages/comm/account/login', 0, { back: 1 })
 		}
@@ -429,21 +407,19 @@ async function req(params = {}, loading = false, t = 9999) {
 			toLogin()
 		}, true)
 	}
-	console.info("requestPrams ===========", params, api + fn)
+	console.info("requestPrams ===========", params, api[isDev] + fn)
 
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
 		return new Promise((resolve, reject) => {
 			tim = setTimeout(()=>{ reject('timedout') },9999)
 			const success = (e) => {
-				// console.log('success ---------', e);
-				
 				clearTimeout(tim)
 				const { code, data, message } = e.data || e.result
 				switch (code) {
 					// 成功
 					case 1000:
-						if (data) uni.setStorage(comm.key(fn + url + JSON.stringify(params)), data)
+						if (data) uni.setStorage(zz.key(fn + url + JSON.stringify(params)), data)
 						resolve(data)
 						break
 					// 登录失效
@@ -460,8 +436,6 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 			},
 				fail = (e) => {
-					// console.error('fail -----------',e);
-					// zz.toast("服务器连接超时~")
 					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
@@ -476,18 +450,18 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 			
 			 // #ifdef H5
-			 
+				let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
 				// #ifdef H5-ZLB
 					mgop({
 						api: 'mgop.zz.zts.' + fn, // 必填
 						host: 'https://mapi.zjzwfw.gov.cn/',
 						dataType: 'JSON',
 						type: 'POST',
-						appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
+						appKey,
 						header: {
-							isTestUrl: '1',
+							isTestUrl: isDev+'',
 							authorization: token,
-							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+							clientinfo
 						},
 						data: params,
 						onSuccess: success,
@@ -497,12 +471,12 @@ async function req(params = {}, loading = false, t = 9999) {
 				
 				// #ifndef H5-ZLB
 					uni.request({
-						url: api + fn,
+						url: api[isDev] + fn,
 						timeout:10000,
 						header: {
 							'content-type': 'application/json',
 							authorization: token,
-							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+							clientinfo
 						},
 						data: params,
 						method: 'POST',
@@ -530,7 +504,7 @@ async function req(params = {}, loading = false, t = 9999) {
 			// #endif
 		})
 	} else {
-		let data = comm.getStorage(comm.key(fn + url + JSON.stringify(params)))
+		let data = uni.getStorageSync(zz.key(fn + url + JSON.stringify(params)))
 		if (!data) zz.toast("请求失败，没有网络！")
 		return data
 	}
@@ -638,6 +612,7 @@ function userEvent(t, tt, o, ref = '_id') {
 
 const zz = {
 	amapKey,
+	rndInt,
 	math,
 	isSame,
 	clone,
@@ -655,7 +630,7 @@ const zz = {
 	timeFrom,
 	formatDuring,
 
-	init,
+	
 	req,
 	userEvent,
 	reGeo,
@@ -668,6 +643,15 @@ const zz = {
 	upload,
 	chooseImage,
 	chooseVideo,
+	
+	key(k){return k? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : ''},
+	// #ifdef APP-PLUS
+	hadNet(){ return plus.networkinfo.getCurrentType()>1 },
+	// #endif
+	
+	// #ifndef APP-PLUS
+	hadNet(){ return window.hadNet },
+	// #endif
 
 	now() { return Date.now() },
 	async setAcc(u) {

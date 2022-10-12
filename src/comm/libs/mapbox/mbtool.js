@@ -647,7 +647,7 @@ getAround = async(map, loc, btn) =>{
 	//6ft
 	// let bounds = map.getBounds()
 	// const o2s = (o)=>{ return fixNum(o.lng)+','+fixNum(o.lat) }
-	// let ft6 = await comm.Ajax({data:{ $url: '/public/zz/around6ft', ne: o2s(bounds.getNorthEast()), sw: o2s(bounds.getSouthWest()), zoom: ~~map.getZoom() }})
+	// let ft6 = await comm.req({data:{ $url: '/public/zz/around6ft', ne: o2s(bounds.getNorthEast()), sw: o2s(bounds.getSouthWest()), zoom: ~~map.getZoom() }})
 	// console.log(ft6)
 	
 	map.busy = false
