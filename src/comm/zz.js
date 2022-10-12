@@ -485,6 +485,7 @@ async function req(params = {}, loading = false, t = 9999) {
 						type: 'POST',
 						appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
 						header: {
+							isTestUrl: '1',
 							authorization: token,
 							clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
 						},
