@@ -398,17 +398,22 @@ export default {
         // this.loginZlb()
         // header 添加 isTestUrl: '1'
         const obj = {
-            url: 'public/zz/test'
+            url: '/public/zz/test'
         }
         mgop({
-            api: 'mgop.zz.zts.login', // 必填
+            api: 'mgop.zz.zts.app', // 必填
             host: 'https://mapi.zjzwfw.gov.cn/',
             dataType: 'JSON',
             header: {
-                isTestUrl: '1'
+				authorization: uni.getStorageSync('210B33A_token'),
+				clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
             },
             data: {
-                url: '/public/zz/test'
+				"$url": '/public/zz/test',
+				"page": 1,
+				"size": 5,
+				"type": [10],
+				"ui": true
             },
             type: 'POST',
             appKey: '4kzz5t3t+2002281722+mzaaot', // 必填

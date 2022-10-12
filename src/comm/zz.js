@@ -1,3 +1,4 @@
+import { mgop } from '@aligov/jssdk-mgop'
 import { api } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 import comm from '@/comm/comm'
@@ -382,7 +383,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 async function init() {
 	let dict = uni.getStorageSync('sys_dict') || {}
 
-	req({ $url: 'public/zz/dict', obj: true, v: dict.v, tar: null }).then(e => {
+	req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
 		Object.assign(dict, e)
 		uni.setStorageSync('sys_dict', dict)
 		// console.log('dict ===============', dict)
@@ -435,6 +436,8 @@ async function req(params = {}, loading = false, t = 9999) {
 		return new Promise((resolve, reject) => {
 			tim = setTimeout(()=>{ reject('timedout') },9999)
 			const success = (e) => {
+				// console.log('success ---------', e);
+				
 				clearTimeout(tim)
 				const { code, data, message } = e.data || e.result
 				switch (code) {
@@ -457,7 +460,7 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 			},
 				fail = (e) => {
-					console.error(e);
+					// console.error('fail -----------',e);
 					// zz.toast("服务器连接超时~")
 					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
@@ -471,34 +474,70 @@ async function req(params = {}, loading = false, t = 9999) {
 					// clearTimeout(tim)
 					// console.log(e);
 				}
-
-			uni.request({
-			    url: api + fn,
-				timeout:10000,
-			    header: {
-			        'content-type': 'application/json',
-			        authorization: token,
-			        clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
-			    },
-			    data: params,
-			    method: 'POST',
-			    success,
-			    fail,
-			    complete
-			})
 			
-			// delete params.$url
-			// uniCloud.callFunction({
-			// 	name: fn,
-			// 	data: {
-			// 		url,
-			// 		params,
-			// 		token
-			// 	},
-			// 	success,
-			// 	fail,
-			// 	complete
-			// })
+				// uni.request({
+				// 	url: api + fn,
+				// 	timeout:10000,
+				// 	header: {
+				// 		'content-type': 'application/json',
+				// 		authorization: token,
+				// 		clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+				// 	},
+				// 	data: params,
+				// 	method: 'POST',
+				// 	success,
+				// 	fail,
+				// 	complete
+				// })
+			
+			// mgop({
+			//     api: 'mgop.zz.zts.' + fn, // 必填
+			//     host: 'https://mapi.zjzwfw.gov.cn/',
+			//     dataType: 'JSON',
+			//     header: {
+			//         isTestUrl: '1'
+			//     },
+			//     data: params,
+			//     type: 'POST',
+			//     appKey: '4kzz5t3t+2002281722+mzaaot', // 必填
+			//     onSuccess: data => {
+			//         console.log('mgop---------------------data============', data)
+			//     },
+			//     onFail: err => {
+			//         console.log(err, 'mgop----------------------err')
+			//     }
+			// });
+			
+				mgop({
+					api: 'mgop.zz.zts.app', // 必填
+					// api: 'mgop.zz.zts.login', // 必填
+					host: 'https://mapi.zjzwfw.gov.cn/',
+					dataType: 'JSON',
+					type: 'POST',
+					appKey: '6xxfslcv+200600801+tlkciqg', // 必填
+					header: {
+					    authorization: token,
+					    clientinfo: JSON.stringify(comm.getStorage('clientInfo'))
+					},
+					data: params,
+					onSuccess: success,
+					onFail: fail
+				});
+			
+			// #ifdef APP-PLUS
+				delete params.$url
+				uniCloud.callFunction({
+					name: fn,
+					data: {
+						url,
+						params,
+						token
+					},
+					success,
+					fail,
+					complete
+				})
+			// #endif
 		})
 	} else {
 		let data = comm.getStorage(comm.key(fn + url + JSON.stringify(params)))
