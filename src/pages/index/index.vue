@@ -404,6 +404,11 @@ export default {
         const ticket = this.getQuery("ticket");
         if (ticket) {
             console.log("获取到的ticket", ticket)
+			
+			this.zz.req({$url:'/admin/comm/loginGov', ticket}).then(e=>{
+				console.log('获取到的获取到的获取到的获取到的',e);
+			})
+			
         } else {
             this.loginZlb()
         }

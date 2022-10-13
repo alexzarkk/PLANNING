@@ -9,7 +9,7 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-	// #ifdef H5-ZLB
+	// #ifndef H5-ZLB
     globalData: {
         zlbCfg: {
             fontSize: '10px',
@@ -20,11 +20,11 @@ export default {
     async onLaunch() {
         
         // #ifdef H5-ZLB
-        let globalData = this.globalData
         // this.$nextTick(function () {
         //     console.log("执行 document.documentElement.style.fontSize =16 ")
         //     document.documentElement.style.fontSize = "16px"
         // })
+
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
             console.log("页面启动------------", event.persisted, window.performance.navigation.type == 2)
