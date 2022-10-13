@@ -1,4 +1,5 @@
 <template>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->

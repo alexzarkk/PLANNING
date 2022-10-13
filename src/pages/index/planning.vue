@@ -1,6 +1,7 @@
 <template>
     <!-- <page-meta :root-font-size="globalData.zlbCfg.fontSize">
     </page-meta> -->
+    <page-meta root-font-size="10px"></page-meta>
     <view class="container">
         <cu-custom bgColor="bg-ztsblue">
             <block slot="left">

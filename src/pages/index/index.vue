@@ -1,6 +1,6 @@
 <!-- 首页模板 -->
 <template>
-    <page-meta :root-font-size="rootFontSize"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
@@ -8,12 +8,9 @@
         <!--搜索框-->
         <view class="cu-bar bg-ztsblue search fixed align-center" style="height:100rpx;" id="searchBar" :style="[{ top: customBar + 'px' }]">
             <view class="action text-white round padding-xs" @click="href('/pages/comm/region')">
-                <!-- <button class="cu-btn xs line-white round shadow" @tap="mapView('/pages/planning/mapView')"> -->
                 <text class="cuIcon-locationfill"></text>
-                <!-- <text v-if="district && district.name" class="text-df">{{district.name}}</text> -->
                 <text class="text-df">{{dict?dict.deps[deptId].name:''}}</text>
                 <text class="margin-left-xxs cuIcon-triangledownfill"></text>
-                <!-- </button> -->
             </view>
             <view class="search-form round" @click="href('/pages/planning/list?key=1')">
                 <!-- <view class="search-form round" @click="href('/pages/comm/search')"> -->
@@ -25,9 +22,7 @@
                 <view class="margin-left-xs">发布</view>
             </view>
         </view>
-
         <view class="cu-tabbar-height"></view>
-
         <view id="tvideo" v-show="!hotList.length">
             <!-- #ifndef APP-PLUS -->
             <view class="cu-card case no-card">
@@ -300,15 +295,16 @@ export default {
                 }
             ]
         },
-        rootFontSize() {
-            console.log("getApp().globalData.zlbCfg.fontSize===============", this.globalData.zlbCfg.fontSize)
-            return this.globalData.zlbCfg.fontSize
-        }
+        // rootFontSize() {
+        //     // console.log("rootFontSize***************************", this.globalData.zlbCfg.fontSize)
+        //     // return this.globalData.zlbCfg.fontSize
+        //     return '10px'
+        // }
     },
     data() {
         return {
+            rootFontSize:'10px',
             globalData: null,
-            // rootFontSize: '',
             bd: this.bd, // APP相关信息
             focus: false,
             dict: uni.getStorageSync('sys_dict'),
@@ -423,20 +419,12 @@ export default {
     },
     onReady() {
         this.cal()
-        // #ifdef H5-ZLB
-        // this.globalData = getApp().globalData
-        // console.log("index===================globalData.zlbCfg.fontSize=========", this.globalData.zlbCfg.fontSize)
-        // this.rootFontSize = this.globalData.zlbCfg.fontSize
-        // #endif
     },
     onShow() {
         this.loadData()
         // #ifdef H5-ZLB
-        // this.globalData = getApp().globalData
-        // console.log("index===================globalData.zlbCfg.fontSize=========", this.globalData.zlbCfg.fontSize)
-        // this.rootFontSize = this.globalData.zlbCfg.fontSize
+        this.globalData = getApp().globalData
         // #endif
-
     },
     methods: {
         loginZlb() {

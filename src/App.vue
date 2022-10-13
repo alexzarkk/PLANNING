@@ -21,13 +21,21 @@ export default {
         // #ifndef H5-ZLB
         // 调试的时候热刷新保持字体一致
         // #ifdef H5
-        this.$nextTick(function () {
-            document.documentElement.style.fontSize = "10px"
-        })
+        // this.$nextTick(function () {
+        //     document.documentElement.style.fontSize = "10px"
+        // })
+        // #endif
+        // #ifdef APP-PLUS
+        // this.$nextTick(function () {
+        //     document.documentElement.style.fontSize = "10px"
+        // })
         // #endif
         // #endif
-
         // #ifdef H5-ZLB
+        // this.$nextTick(function () {
+        //     console.log("执行 document.documentElement.style.fontSize =16 ")
+        //     document.documentElement.style.fontSize = "16px"
+        // })
         ZWJSBridge.onReady(() => {
             console.log('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
@@ -35,7 +43,10 @@ export default {
                 // uiStyle = 'elder'
                 if (uiStyle === 'elder') {
                     globalData.zlbCfg.fontSize = '16px'
+                } else {
+                    globalData.zlbCfg.fontSize = '10px'
                 }
+
                 console.log("app-------------------globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
             })
         })

@@ -1,4 +1,7 @@
+
+// #ifdef H5-ZLB
 import { mgop } from '@aligov/jssdk-mgop'
+// #endif
 import { api, isDev, appKey } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 
