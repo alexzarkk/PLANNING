@@ -1,13 +1,17 @@
 //BasicData
 const bd = {
-	isDev: 1,
+	isDev: 1, //是否开发
 	api: ['https://ztsapi.5618.co/','https://dev.5618.co/'],
+	
+	/* 浙里办资料 */
 	appid: '2002281722',
 	appKey: '4kzz5t3t+2002281722+mzaaot', // 浙里办
 	sysname: 'tuo3hudjqex7toqupxw9j4lm',
 	SecretKey: 'BCDSGS_0f05ec12aa9be2b107edb2a07e66ae45',	//servicepwd
 	AccessKey: 'BCDSGA_7d4388d47d989fef0eb063d9e63c0c53',	//servicecode
-	amapKey: 'daffb83c14428939221e09ebc785c89c', //高德
+	
+	/* 高德 */
+	amapKey: 'daffb83c14428939221e09ebc785c89c',
 	
 	sys: {
 		name: "环浙步道",

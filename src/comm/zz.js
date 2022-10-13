@@ -1,13 +1,14 @@
 // #ifdef H5-ZLB
 import { mgop } from '@aligov/jssdk-mgop'
+import { pathToBase64 } from '@/js_sdk/mmmm-image-tools'
 // #endif
+
 import { api, isDev, appKey, amapKey } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 
-import { pathToBase64 } from '@/js_sdk/mmmm-image-tools'
 
 const 
-	rndInt = (min, max)=> { return Math.floor(Math.random() * (max - min + 1) ) + min },
+	rndInt = (a=0,z=4)=> { return Math.floor(Math.random() * (z - a + 1) ) + a },
 	toArr = (o) => {
 		let a = []
 		for (let k in o) {
@@ -88,28 +89,63 @@ const
 	 * 上传文件
 	 */
 	upload = async (filePath, remove) => {
-
-		return new Promise((resolve, reject) => {
-			uniCloud.uploadFile({
-				filePath,
-				cloudPath: filePath.startsWith('blob') ? 'szs_h5_' + uni.getStorageSync(filePath) : 'szs_' + filePath.replace('_doc/uniapp_save/', ''),
-				onUploadProgress(progressEvent) {
-					// let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-				},
-				success(e) {
-					if (remove) removeFile(filePath)
-					if (filePath.startsWith('blob')) uni.removeStorageSync(filePath)
-					resolve(e.fileID)
-				},
-				fail(err) {
-					console.error(filePath, "文件上传失败===", err)
-					reject(false)
+		// #ifdef H5-ZLB
+			/* 用 http 请求上传 */
+			let base64 = [],
+				f = await pathToBase64(filePath)
+				
+			const put = (s,n=900000) =>{
+				if(s.length>n){
+					base64.push(s.substring(0,n))
+					put(s.substring(n,s.length))
+				}else{
+					base64.push(s)
 				}
+			}
+			put(f.split(',')[1])
+			
+			let file = {
+				id: Date.now()+'',
+				sn: 1,
+				size: base64.length,
+				cloudPath: uni.getStorageSync(filePath)
+			}
+			for (let s of base64) {
+				let e = await zz.req({$fn:'sync'+ rndInt(), $url:'/admin/comm/upload', dataUrl: s, ...file})
+				if(e) {
+					file.url = e.fileID
+					if (remove) uni.removeStorageSync(filePath)
+				}
+				file.sn ++
+			}
+			
+			return new Promise((resolve, reject) => {
+				file.url? resolve(file.url) : reject(false)
 			})
-		})
+		// #endif
+		
+		// #ifndef H5-ZLB
+			return new Promise((resolve, reject) => {
+				uniCloud.uploadFile({
+					filePath,
+					cloudPath: filePath.startsWith('blob') ? 'szs_h5_' + uni.getStorageSync(filePath) : 'szs_' + filePath.replace('_doc/uniapp_save/', ''),
+					onUploadProgress(progressEvent) {
+						// let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+					},
+					success(e) {
+						if (remove) removeFile(filePath)
+						if (filePath.startsWith('blob')) uni.removeStorageSync(filePath)
+						resolve(e.fileID)
+					},
+					fail(err) {
+						console.error(filePath, "文件上传失败===", err)
+						reject(false)
+					}
+				})
+			})
+		// #endif
 	},
 	chooseImage = async ({ sourceType = ['album', 'camera'], sizeType = ['compressed'], count = 1 }, save = false) => {
-		
 		
 		const [_, e] = await uni.chooseImage({ sourceType, sizeType, count })
 		if (e) {
@@ -120,11 +156,6 @@ const
 				// #endif
 
 				// #ifndef APP-PLUS
-				pathToBase64(e.tempFilePaths[i]).then(f=>{
-					console.info(f, "文件上传失败===")
-				})
-				
-				
 				uni.setStorageSync(e.tempFilePaths[i], e.tempFiles[i].name)
 				// #endif
 

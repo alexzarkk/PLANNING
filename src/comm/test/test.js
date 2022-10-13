@@ -61,3 +61,8 @@ for (var i = 0; i < tk.length; i++) {
 	console.log(i,tk);
 }
 console.log(tk);
+
+
+for (var i = 2-1; i > 0; i--) {
+	console.log('‘',i);
+}

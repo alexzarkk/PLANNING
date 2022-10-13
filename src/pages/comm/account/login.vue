@@ -128,7 +128,7 @@ export default {
                 this.loading = false;
 				
                 if (res.token) {
-                    await this.zz.setAcc(res.user);
+                    this.zz.setAcc(res.user)
                     this.zz.setToken(res.token)
 					
 					let r = isSafe(this.form.password)

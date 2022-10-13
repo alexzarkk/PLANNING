@@ -74,7 +74,7 @@ const sync = {
 				for (var i = 0; i < tk.q.length; i++) {
 					let q = tk.q[i], u, v, r
 					if(q.k=='req'){ 
-						q.o.$fn = 'sync' + rndInt(0,4)
+						q.o.$fn = 'sync' + rndInt()
 						u = q.o.$url
 					} 
 					
