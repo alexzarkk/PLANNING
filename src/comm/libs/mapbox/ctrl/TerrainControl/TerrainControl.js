@@ -51,7 +51,9 @@ export default class TerrainControl extends Base {
 			this.layer.setIcon(iLayer())
 			
 			if(this.full) {
+				// #ifndef H5-ZLB
 				this.around.node.style.display = ''
+				// #endif
 			}
 			
 			if(this.map.sid=='amap') {
@@ -245,9 +247,9 @@ export default class TerrainControl extends Base {
 			let e = {self: this.around, iAround:iAround(), iHide: iHide(), iLoading:iLoading()}
 			if(this.map.onAround) {
 				e.x = 1
-				window.mbAct({act:'around', e})
+				window.mbAct({act:'getAround', e})
 			} else{
-				await window.mbAct({act:'around', e})
+				await window.mbAct({act:'getAround', e})
 			}
 		})
 		

@@ -7,7 +7,7 @@
 	// import AMapLoader from '@amap/amap-jsapi-loader'
 	import { CompassControl, LocationControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
 	import { trans } from '@/comm/geotools.js'
-	import { amapKey } from '@/comm/zz'
+	import { amapKey } from '@/comm/bd'
 	
 	import '@/comm/libs/mapbox/mapbox.css'
 	// import '@/comm/libs/mapbox/draw/mapbox-gl-draw.css'
@@ -216,7 +216,7 @@ export default {
 		fit(e){ mbtool.setActive(this.map,e) },
 		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
 		runx(e){ mbtool.run(this.map,e) },
-		around(e){ mbtool.getAround(this.map,null,e) },
+		getAround(e){ mbtool.getAround(this.map,null,e) },
 		mbAct(e){
 			if(this[e.act]) {
 				this[e.act](e.e)

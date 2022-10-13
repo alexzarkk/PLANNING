@@ -1,8 +1,10 @@
 //BasicData
 const bd = {
 	isDev: 1,
-	appKey: '4kzz5t3t+2002281722+mzaaot', // 浙里办
 	api: ['https://ztsapi.5618.co/','https://dev.5618.co/'],
+	appid: '2002281722',
+	appKey: '4kzz5t3t+2002281722+mzaaot', // 浙里办
+	amapKey: 'daffb83c14428939221e09ebc785c89c', //高德
 	
 	sys: {
 		name: "环浙步道",

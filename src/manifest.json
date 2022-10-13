@@ -2,8 +2,8 @@
     "name" : "环浙步道",
     "appid" : "__UNI__210B33A",
     "description" : "环浙步道客户端app",
-    "versionName" : "1.0.7",
-    "versionCode" : 111,
+    "versionName" : "1.0.8",
+    "versionCode" : 112,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -269,12 +269,25 @@
     "vueVersion" : "2",
     //浙里办
     "h5" : {
-      	"title" : "环浙步道",
-      	"appkey" : "4kzz5t3t+2002281722+mzaaot",
-      	"publicPath": "./",
-		"router" : { "base" : "./", "mode" : "hash" },
-		"sdkConfigs" : { "maps" : { "qqmap" : { "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ" } } },
-		"optimization" : { "treeShaking" : { "enable" : true } }
+        "title" : "环浙步道",
+        "appkey" : "4kzz5t3t+2002281722+mzaaot",
+        "publicPath" : "./",
+        "router" : {
+            "base" : "./",
+            "mode" : "hash"
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "5VZBZ-WNO6Q-R4I55-GRABZ-P3NVO-RPFZC"
+                }
+            }
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        }
     },
     // H5
     // "h5" : {

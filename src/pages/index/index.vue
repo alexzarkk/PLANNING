@@ -1,6 +1,8 @@
 <!-- 首页模板 -->
 <template>
-    <page-meta :root-font-size="globalData.zlbCfg.fontSize"></page-meta>
+	<!-- #ifdef H5&&H5-ZLB -->
+	<page-meta :root-font-size="globalData.zlbCfg.fontSize"></page-meta>
+	<!-- #endif -->
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
@@ -304,7 +306,7 @@ export default {
     data() {
         return {
             bd: this.bd, // APP相关信息
-            globalData: getApp().globalData,
+            // globalData: getApp().globalData,
             focus: false,
             dict: uni.getStorageSync('sys_dict'),
             deptId: '',

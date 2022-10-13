@@ -303,7 +303,6 @@
 			// 	"selectedIconPath": "static/bar/station.png"
 			// },
 			// #endif
-			
 			{
 				"pagePath": "pages/index/me",
 				"text": "我",

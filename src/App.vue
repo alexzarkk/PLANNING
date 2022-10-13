@@ -9,19 +9,19 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-    globalData: {
-        zlbCfg: {
-            fontSize: '10px',
-            appId: '2002281722'  // 应用的浙里办appId
-        }
-    },
+    // globalData: {
+    //     zlbCfg: {
+    //         fontSize: '10px',
+    //         appId: '2002281722'  // 应用的浙里办appId
+    //     }
+    // },
     onLaunch() {
-        let globalData = getApp().globalData
+        // let globalData = getApp().globalData
         // #ifndef H5-ZLB
         // 调试的时候热刷新保持字体一致
-        this.$nextTick(function () {
-            document.documentElement.style.fontSize = "10px"
-        })
+        // this.$nextTick(function () {
+        //     document.documentElement.style.fontSize = "10px"
+        // })
         // #endif
 
         uni.getSystemInfo({
@@ -144,8 +144,8 @@ export default {
 
                 uni.setStorageSync('sysInfo', e)
                 comm.setStorage('clientInfo', {
+					OS: e.osName,
                     PLATFORM: e.uniPlatform || e.platform,
-                    OS: e.osName,
                     APPID: e.appId || '__UNI__210B33A',
                     deviceId: e.deviceId,
                     deviceModel: e.model
