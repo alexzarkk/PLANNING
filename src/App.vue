@@ -15,12 +15,29 @@ export default {
             appId: '2002281722'  // 应用的浙里办appId
         }
     },
-    onLaunch() {
-        let globalData = getApp().globalData
+    async onLaunch() {
+        let globalData = this.globalData
+        // console.log("appvue-------------globalData", globalData)
         // #ifndef H5-ZLB
         // 调试的时候热刷新保持字体一致
+        // #ifdef H5
         this.$nextTick(function () {
             document.documentElement.style.fontSize = "10px"
+        })
+        // #endif
+        // #endif
+
+        // #ifdef H5-ZLB
+        ZWJSBridge.onReady(() => {
+            console.log('浙里办初始化完成，执行bridge方法')
+            ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
+                console.log("获取到的当前的style======", uiStyle)
+                // uiStyle = 'elder'
+                if (uiStyle === 'elder') {
+                    globalData.zlbCfg.fontSize = '16px'
+                }
+                console.log("app-------------------globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
+            })
         })
         // #endif
 
@@ -61,17 +78,7 @@ export default {
                 Vue.prototype.platform = 'H5-ZLB'
                 Vue.prototype.CustomBar = e.statusBarHeight
                 // console.log('浙里办启动 H5-ZLB ---------------------->')
-                ZWJSBridge.onReady(() => {
-                    console.log('浙里办初始化完成，执行bridge方法')
-                    ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
-                        // console.log("获取到的当前的style======", uiStyle)
-                        if (uiStyle === 'elder') {
-                            globalData.zlbCfg.fontSize = '16px'
-                        }
-                        // console.log("globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
 
-                    })
-                })
 
                 // const sUserAgent = window.navigator.userAgent.toLowerCase()
                 // // 浙里办APP
@@ -183,29 +190,29 @@ export default {
     },
     onHide() { },
     methods: {
-		async init() {
-			let dict = uni.getStorageSync('sys_dict') || {}
-		
-			this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
-				Object.assign(dict, e)
-				uni.setStorageSync('sys_dict', dict)
-				// console.log('dict ===============', dict)
-			})
-		
-			if (uni.getStorageSync('cur_deptId') == '') {
-				uni.setStorageSync('cur_deptId', '330213')
-				this.zz.setDept()
-			}
-		
-			// #ifdef APP-PLUS
-			comm.on()
-			// #endif
-		
-			// #ifndef APP-PLUS
-			comm.on([121, 29])
-			// #endif
-		}
-	}
+        async init() {
+            let dict = uni.getStorageSync('sys_dict') || {}
+
+            this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
+                Object.assign(dict, e)
+                uni.setStorageSync('sys_dict', dict)
+                // console.log('dict ===============', dict)
+            })
+
+            if (uni.getStorageSync('cur_deptId') == '') {
+                uni.setStorageSync('cur_deptId', '330213')
+                this.zz.setDept()
+            }
+
+            // #ifdef APP-PLUS
+            comm.on()
+            // #endif
+
+            // #ifndef APP-PLUS
+            comm.on([121, 29])
+            // #endif
+        }
+    }
 }
 </script>
 

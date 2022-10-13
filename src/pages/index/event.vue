@@ -115,7 +115,6 @@ import sync from '@/comm/sync'
 export default {
     data() {
         return {
-            globalData: getApp().globalData,
             tNum: 99999,
             num: {
                 event: 0, //  赛事
@@ -184,6 +183,8 @@ export default {
                 }
             ],
         }
+    },
+    onLoad() {
     },
     onShow() {
         this.loadData(!this.num.tCount)

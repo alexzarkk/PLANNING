@@ -36,9 +36,6 @@
                         <view v-for="(article) in item.list" :key="article._id">
                             <article-card v-if="!article.title" :details="article"></article-card>
                             <push-card v-else :details="article"></push-card>
-                            <!-- <view>
-                                {{ article.title }}
-                            </view> -->
                         </view>
                         <view v-if="showMore && item.list.length > 4" class="response padding bg-white" @click="href('/pages/station/news',{tab:index})">
                             <view class="text-center text-blue">查看更多</view>
@@ -234,10 +231,7 @@ export default {
             })
         })
         this.loadData('init');
-
         this.resetHeight()
-
-
         // const timestamp = this.zz.date2Time("2022-08-15 14:57:15")
         // const time = this.zz.timeFrom(timestamp)  // 个性化显示时间
     },
@@ -256,11 +250,7 @@ export default {
             }
         },
         async loadData(type) {
-            // if (!this.articleTabs.length) {
-            // this.dict = uni.getStorageSync('sys_dict')
-
-            // return setTimeout(()=> { this.loadData(type) }, 120)
-            // }
+            console.log("news-home-----------",type)
             if (type === 'init') {
                 this.articleTabs[this.currentTab].list = []
                 this.articleTabs[this.currentTab].page = 1
@@ -280,6 +270,7 @@ export default {
                 type: [cur.value]  // 科普
             };
             this.zz.req(req1).then(({ pagination, list }) => {
+                console.log("/public/article/page--------------",pagination)
                 // console.log(pagination)
                 cur.total = pagination.total
                 list = list.map((item) => {
@@ -295,7 +286,7 @@ export default {
                 });
                 cur.page++
                 cur.list = cur.list.concat(list)
-                // console.log("新list", cur)
+                console.log("新list", cur)
                 this.$set(this.articleTabs, this.currentTab, cur)
                 // console.log('科普========', this.articleTabs[5].list);
                 // console.log('this.articleTabs', JSON.parse(JSON.stringify(this.articleTabs)));

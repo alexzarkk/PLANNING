@@ -1,14 +1,14 @@
 <template>
-    <page-meta :root-font-size="globalData.zlbCfg.fontSize">
-    </page-meta>
+    <!-- <page-meta :root-font-size="globalData.zlbCfg.fontSize">
+    </page-meta> -->
     <view class="container">
         <cu-custom bgColor="bg-ztsblue">
-			<block slot="left">
-				<button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
-					<text class="zzIcon-dist margin-right-xs"></text>
-					<text class="text-sm">去记录</text>
-				</button>
-			</block>
+            <block slot="left">
+                <button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
+                    <text class="zzIcon-dist margin-right-xs"></text>
+                    <text class="text-sm">去记录</text>
+                </button>
+            </block>
             <block slot="content">行程推荐</block>
         </cu-custom>
         <!--搜索框-->
@@ -23,7 +23,7 @@
 			</view> 
 		</view> -->
 
-     <!--   	<view id="t1" class="sticky-box bg-cyan margin-top fixed" :style="[{ top: customBar + 'px' }]">
+        <!--   	<view id="t1" class="sticky-box bg-cyan margin-top fixed" :style="[{ top: customBar + 'px' }]">
 			<scroll-view scroll-x class="bg-blue light nav text-center">
 				<view class="cu-item" :class="index == tabCur ? 'text-blue cur text-bold' : ''" v-for="(item, index) in tabs" :key="index" @click="tabSelect(index)">
 					{{ item.label }}
@@ -33,7 +33,7 @@
         <!-- App独有 -->
         <view>
             <!-- 搜索框 -->
-           <view class="cu-bar search bg-blue light">
+            <view class="cu-bar search bg-blue light">
                 <view class="search-form round">
                     <text class="cuIcon-search"></text>
                     <input style="padding-left: 20rpx" class="text-center" :adjust-position="false" type="text" placeholder="搜索线路" confirm-type="search" />
@@ -104,7 +104,6 @@ export default {
 
     data() {
         return {
-            globalData:getApp().globalData,
             trailData: [],
             bd: this.bd,
             td: {},
@@ -139,8 +138,9 @@ export default {
     onShow() {
         // console.log("加载的tabs",this.tabs)
     },
-	onBackPress() { return true },
+    onBackPress() { return true },
     onLoad(qr) {
+        // this.globalData = this.globalData
         let td = uni.getStorageSync('trailData');
         this.trailData = td.trailData;
         // console.log('trailData==========', this.trailData);
@@ -150,59 +150,59 @@ export default {
         } else {
             this.tabs = tabsData;
         }
-		
-		// this.trailShowData = this.trailShowData.concat(trailShowData)
-		// this.trailShowData = trailShowData
-		
+
+        // this.trailShowData = this.trailShowData.concat(trailShowData)
+        // this.trailShowData = trailShowData
+
     },
-  //   onReady() {
-		// this.$store.commit('createBackBtn')  // 创建返回的按钮
-		
-		// uni.$on('showBackBtn',()=>{
-		// 	this.$store.commit("showBackBtn")
-		// })
-		
-  //       uni.$on('startLocation', () => {
-  //           // console.log('开始记录轨迹,执行startLocation');
-  //           this.$store.dispatch('startTimeCount'); // 开始时间记录
-  //           this.$store.dispatch('startGetLocation'); // 开始记录位置
-  //       });
-  //       uni.$on('endLocation', () => {
-  //           this.$store.commit('cleanTimeCount');
-  //           this.$store.dispatch('cleanGetLocation');
-  //       });
+    //   onReady() {
+    // this.$store.commit('createBackBtn')  // 创建返回的按钮
 
-  //       uni.$on('pauseRecord', () => {
-  //           this.$store.commit('cleanTimeCount');
-  //       });
+    // uni.$on('showBackBtn',()=>{
+    // 	this.$store.commit("showBackBtn")
+    // })
 
-  //       uni.$on('continueRecord', () => {
-  //           this.$store.dispatch('startTimeCount'); // 开始时间记录
-  //       });
-		
-		// setTimeout(()=>{
-		// 	this.addTrailShowData()
-		// },300)
-  //   },
+    //       uni.$on('startLocation', () => {
+    //           // console.log('开始记录轨迹,执行startLocation');
+    //           this.$store.dispatch('startTimeCount'); // 开始时间记录
+    //           this.$store.dispatch('startGetLocation'); // 开始记录位置
+    //       });
+    //       uni.$on('endLocation', () => {
+    //           this.$store.commit('cleanTimeCount');
+    //           this.$store.dispatch('cleanGetLocation');
+    //       });
+
+    //       uni.$on('pauseRecord', () => {
+    //           this.$store.commit('cleanTimeCount');
+    //       });
+
+    //       uni.$on('continueRecord', () => {
+    //           this.$store.dispatch('startTimeCount'); // 开始时间记录
+    //       });
+
+    // setTimeout(()=>{
+    // 	this.addTrailShowData()
+    // },300)
+    //   },
     methods: {
-        kmls(){ this.zz.href('/pages/comm/kmlPage') },
+        kmls() { this.zz.href('/pages/comm/kmlPage') },
         onCollect() {
-			// #ifdef APP-PLUS
-			this.zz.href('/pages/nav/navApp',0,1,'slide-in-bottom')
-			// #endif
+            // #ifdef APP-PLUS
+            this.zz.href('/pages/nav/navApp', 0, 1, 'slide-in-bottom')
+            // #endif
         },
         openMap() {
-            this.zz.href('/pages/planning/lineMap',0,0,'slide-in-bottom');
+            this.zz.href('/pages/planning/lineMap', 0, 0, 'slide-in-bottom');
         },
-		pub(){
-			uni.navigateTo({ url:'/pages/index/planningPub' })
-		},
+        pub() {
+            uni.navigateTo({ url: '/pages/index/planningPub' })
+        },
         doSearch: function (e) {
             let key = e ? e : this.searchKey;
             if (key == '') return;
             try {
                 this.$refs.top.goTop();
-            } catch (e) {}
+            } catch (e) { }
             this.list = [];
             let td = [];
             if (key == 1) {
@@ -229,22 +229,22 @@ export default {
             let o = this.tabs[this.tabCur].list[e.idx];
             this.zz.userEvent(e.t, e.tt, o);
         },
-		addTrailShowData(){
-			this.pageNum++;
-			let list = this.trailData.slice(this.pageSize * this.pageNum, this.pageSize * (this.pageNum + 1));
-			if (list.length < this.pageSize || list.length === 0) {
-			    this.isLoaded = true;
-			}
-			this.trailShowData = this.trailShowData.concat(list);
-		}
+        addTrailShowData() {
+            this.pageNum++;
+            let list = this.trailData.slice(this.pageSize * this.pageNum, this.pageSize * (this.pageNum + 1));
+            if (list.length < this.pageSize || list.length === 0) {
+                this.isLoaded = true;
+            }
+            this.trailShowData = this.trailShowData.concat(list);
+        }
     },
     // 触底加载，优化瀑布流
     onReachBottom: function () {
-		// console.log("触底加载");
+        // console.log("触底加载");
         if (this.isLoaded) {
             return;
         }
-		this.addTrailShowData()
+        this.addTrailShowData()
     },
     onPageScroll: function (e) {
         this.scrolled = e.scrollTop;

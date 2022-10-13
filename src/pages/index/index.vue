@@ -1,6 +1,6 @@
 <!-- 首页模板 -->
 <template>
-    <page-meta :root-font-size="globalData.zlbCfg.fontSize"></page-meta>
+    <page-meta :root-font-size="rootFontSize"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
@@ -299,12 +299,17 @@ export default {
                     name: '步道标识'
                 }
             ]
+        },
+        rootFontSize() {
+            console.log("getApp().globalData.zlbCfg.fontSize===============", this.globalData.zlbCfg.fontSize)
+            return this.globalData.zlbCfg.fontSize
         }
     },
     data() {
         return {
+            globalData: null,
+            // rootFontSize: '',
             bd: this.bd, // APP相关信息
-            globalData: getApp().globalData,
             focus: false,
             dict: uni.getStorageSync('sys_dict'),
             deptId: '',
@@ -393,6 +398,19 @@ export default {
     },
 
     async onLoad(option) {
+        // #ifdef H5-ZLB
+        this.globalData = getApp().globalData
+        // #endif
+
+        // #ifdef APP-PLUS
+        this.globalData = {
+            zlbCfg: {
+                fontSize: '10px',
+                appId: '2002281722'  // 应用的浙里办appId
+            }
+        }
+        // #endif
+
         // this.loginZlb()
         // header 添加 isTestUrl: '1'
         const obj = {
@@ -405,10 +423,20 @@ export default {
     },
     onReady() {
         this.cal()
-        // console.log("index===================globalData.zlbCfg.fontSize=========",this.globalData.zlbCfg.fontSize)
+        // #ifdef H5-ZLB
+        // this.globalData = getApp().globalData
+        // console.log("index===================globalData.zlbCfg.fontSize=========", this.globalData.zlbCfg.fontSize)
+        // this.rootFontSize = this.globalData.zlbCfg.fontSize
+        // #endif
     },
     onShow() {
         this.loadData()
+        // #ifdef H5-ZLB
+        // this.globalData = getApp().globalData
+        // console.log("index===================globalData.zlbCfg.fontSize=========", this.globalData.zlbCfg.fontSize)
+        // this.rootFontSize = this.globalData.zlbCfg.fontSize
+        // #endif
+
     },
     methods: {
         loginZlb() {
