@@ -107,6 +107,24 @@ const
 		})
 	},
 	chooseImage = async ({ sourceType = ['album', 'camera'], sizeType = ['compressed'], count = 1 }, save = false) => {
+		
+		
+		uni.chooseImage({  
+			count, //默认9
+			sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有。
+			sourceType: ['album', 'camera'], //从相册选择。
+			success(res) {  
+				console.log("res", res);
+				const arrayBuffer = new Uint8Array(res.tempFilePaths[0]); //将本地图片路径转换成array类型 
+				const base64Img = uni.arrayBufferToBase64(arrayBuffer);  //再转换成base64类型
+				console.log(base64Img)   //成品就在这里了
+			},
+			fail: (err) => {
+				console.log('err',err)
+			}
+		});
+		
+		
 		const [_, e] = await uni.chooseImage({ sourceType, sizeType, count })
 		if (e) {
 			uni.showLoading({ mask: true })
