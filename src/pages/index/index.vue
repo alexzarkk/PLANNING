@@ -419,13 +419,21 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
+            const servicecode = ''
+            // if (bIsAlipayMini) {
+            //     window.location.href =
+            //         "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode="接入码"&go=https://mapi.zjzwfw.gov.cn/web/***/index.html?debug=true";
+            // } else {
+            //     window.location.href =
+            //         "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode="接入码"&go=https://mapi.zjzwfw.gov.cn/web/***/index.html?debug=true";
+            // }
 
             if (bIsAlipayMini) {
-                // `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${ZLB_SERVICE_CODE}&redirectUrl=${ZLB_LOCAL_PAGE}&goto=${ZLB_LOCAL_PAGE}`
-                window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+                const str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${ZLB_SERVICE_CODE}&redirectUrl=${ZLB_LOCAL_PAGE}&goto=${ZLB_LOCAL_PAGE}`
+                // window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
             } else {
-                //  `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${ZLB_SERVICE_CODE}&redirectUrl=${ZLB_PROD_PAGE}&goto=${ZLB_LOCAL_PAGE}`
-                window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+                const str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${ZLB_SERVICE_CODE}&redirectUrl=${ZLB_PROD_PAGE}&goto=${ZLB_LOCAL_PAGE}`
+                // window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
             }
             // 或者使用replace()
             // window.location.replace('https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】');
