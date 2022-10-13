@@ -1,11 +1,10 @@
-
 // #ifdef H5-ZLB
 import { mgop } from '@aligov/jssdk-mgop'
 // #endif
-import { api, isDev, appKey } from '@/comm/bd'
+import { api, isDev, appKey, amapKey } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 
-const amapKey = 'daffb83c14428939221e09ebc785c89c',
+const 
 	rndInt = (min, max)=> { return Math.floor(Math.random() * (max - min + 1) ) + min },
 	toArr = (o) => {
 		let a = []
@@ -16,25 +15,33 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 	},
 	
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
-		// #ifdef APP-PLUS
 		authCemera()
-		// #endif
 		return new Promise((resolve, reject) => {
+			// #ifndef APP-PLUS
+			ZWJSBridge.scan({ type: "qrCode" }).then(e=>{ resolve(e) }).catch(e=>{ reject(e) })
+			// #endif
+			
+			// #ifdef APP-PLUS
 			uni.scanCode({
 				onlyFromCamera,
 				scanType,
-				success: (e) => {
+				success(e){
 					resolve(e)
 				},
-				fail: (e) => {
+				fail(e){
 					reject(e)
 				}
 			})
+			// #endif
 		})
 	},
-	// #ifdef APP-PLUS
-	authCemera = () => { if (uni.getAppAuthorizeSetting().cameraAuthorized == 'denied') zz.modal("请开启手机相机权限！") },
-	// #endif
+	
+	authCemera = () => {
+		// #ifdef APP-PLUS
+		if (uni.getAppAuthorizeSetting().cameraAuthorized == 'denied') zz.modal("请开启手机相机权限！")
+		// #endif
+	},
+	
 	checkNet = async () => {
 		return await zz.hadNet()
 	},
@@ -118,9 +125,7 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 
 			return e.tempFilePaths
 		} else {
-			// #ifdef APP-PLUS
 			authCemera()
-			// #endif
 		}
 	},
 	chooseVideo = async ({ sourceType = ['camera'], compressed = false, camera = 'back', maxDuration = 10 }, save = false) => {
@@ -140,11 +145,8 @@ const amapKey = 'daffb83c14428939221e09ebc785c89c',
 			uni.hideLoading()
 			return e
 		} else {
-			// #ifdef APP-PLUS
 			authCemera()
-			// #endif
 		}
-
 	},
 	/**
 	 * time:
@@ -417,6 +419,7 @@ async function req(params = {}, loading = false, t = 9999) {
 		return new Promise((resolve, reject) => {
 			tim = setTimeout(()=>{ reject('timedout') },9999)
 			const success = (e) => {
+				if (loading) uni.hideLoading()
 				clearTimeout(tim)
 				const { code, data, message } = e.data || e.result
 				switch (code) {
@@ -439,6 +442,7 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 			},
 				fail = (e) => {
+					if (loading) uni.hideLoading()
 					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
@@ -447,7 +451,7 @@ async function req(params = {}, loading = false, t = 9999) {
 				complete = (e) => {
 					params.$fn = fn
 					params.$url = url
-					if (loading) uni.hideLoading()
+					
 					// clearTimeout(tim)
 					// console.log(e);
 				}
@@ -614,7 +618,6 @@ function userEvent(t, tt, o, ref = '_id') {
 }
 
 const zz = {
-	amapKey,
 	rndInt,
 	math,
 	isSame,

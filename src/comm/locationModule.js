@@ -956,8 +956,6 @@ const temp = {
     ]
 ]}
 
-
-
 const locationModule = {
 		tim: null,
 		stopLocation(){

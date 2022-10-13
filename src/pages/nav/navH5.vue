@@ -195,7 +195,7 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		<mumu-get-qrcode ref="scan" @success='qrcodeSucess' />
+		<!-- <mumu-get-qrcode ref="scan" @success='qrcodeSucess' /> -->
 		
 		<!-- <image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image> -->
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
@@ -210,7 +210,9 @@ export default {
 		</block>
 		<block v-else>
 			<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
+			<!-- #ifndef H5-ZLB -->
 			<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
+			<!-- #endif -->
 			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" />
 		</block>
 		
@@ -219,7 +221,7 @@ export default {
 
 <script>
 const tts = {}
-import mumuGetQrcode from '@/uni_modules/mumu-getQrcode/components/mumu-getQrcode/mumu-getQrcode.vue'
+// import mumuGetQrcode from '@/uni_modules/mumu-getQrcode/components/mumu-getQrcode/mumu-getQrcode.vue'
 import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on, around } from '@/comm/nav'
 
@@ -231,7 +233,7 @@ import sync from '@/comm/sync'
 import fab from './components/fab'
 
 export default {
-	components: { fab, mumuGetQrcode },
+	components: { fab },
 	data() {
 		return {
 			sysInfo: uni.getStorageSync('sysInfo'),
@@ -436,7 +438,20 @@ export default {
 			}, 1000)
 		},
 		async start(){
-			// plus.geolocation.clearWatch(plus.wid)
+			// #ifndef H5-ZLB
+				//提示下载app
+				// const [_, ask] = await uni.showModal({
+				// 	title: '提示',
+				// 	content: '环浙步道app！',
+				// 	cancelText: '去设置',
+				// 	confirmText: '不再提醒'
+				// })
+				// if (ask.cancel) {
+				// 	return locationModule.gotoNativePage()
+				// } else {
+				// 	uni.setStorageSync('dontAskAndroid',1)
+				// }
+			// #endif
 			
 			let pt = (e) => { return {longitude: e[0], latitude: e[1]} },
 				init = () => {
@@ -671,8 +686,17 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				this.$refs.scan.createMsk()
-				this.$refs.scan.openScan()
+				let p = await scan(uni.getStorageSync('cur_loc_gcj02'))
+				// let p = await this.zz.scan(uni.getStorageSync('cur_loc_gcj02'))
+				// console.log('scanscanscanscanscanscanscanscan',p)
+				if(p) {
+					if(this.rec.line[1]) this.rec.line.splice(1,1)
+					
+					this.rec.t[p._id] = 1
+					this.point.splice(this.point.findIndex(x => x.id == p._id), 1)
+					this.point.push(createEle(p,1))
+					this.fly(trans(p.coord))
+				}
 			}
 			if(t=='position') {
 				this.getLoc(1)
@@ -707,14 +731,8 @@ export default {
 			}
 		},
 		qrcodeSucess(p) {
+			this.zz.modal(p)
 			this.scaned(p)
-			uni.showModal({
-				title: '成功',
-				content: p,
-				success: () => {
-					uni.navigateBack({})
-				}
-			})
 		},
 		onPuase(e){
 			console.log('onPuase', e);

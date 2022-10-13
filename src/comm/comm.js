@@ -4,58 +4,6 @@ import { dist, isSame, getLocation } from '@/comm/geotools'
 import grid from '@/comm/libs/grid'
 import { req } from '@/comm/zz'
 const comm = {
-	// key(k){return k? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : ''},
-	// async req(data={},fn='app',t=9999) {
-	// 	if(comm.hadNet()) {
-	// 		return new Promise((resolve, reject) => {
-	// 			let timer,x,e
-	// 			// #ifdef APP-PLUS
-	// 			x = new plus.net.XMLHttpRequest()
-	// 			// #endif
-	// 			// #ifndef APP-PLUS
-	// 			x = window.XMLHttpRequest? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP")
-	// 			// #endif
-					
-	// 			x.open('POST',api+fn,true)
-	// 			x.setRequestHeader("Content-type","application/json")
-	// 			x.setRequestHeader("authorization", comm.getStorage('210B33A_token'))
-	// 			x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
-	// 			x.send(JSON.stringify(data))
-				
-	// 			// console.log('ajax ------------',fn,data);
-				
-	// 			x.onreadystatechange = ()=>{
-	// 				clearInterval(timer)
-	// 				if (x.readyState === 4) {
-	// 					if (x.status >= 200 && x.status < 300 || x.status == 304) {
-	// 						e = JSON.parse(x.responseText)
-	// 						if(e.code==1000) {
-	// 							// console.log('success ------------',e.data);
-	// 							if(e.data) comm.setStorage(comm.key(fn+JSON.stringify(data)), e.data)
-	// 							resolve(e.data)
-	// 						} else{
-	// 							console.error('错误：', e.message)
-	// 							reject(e.message)
-	// 						}
-	// 					}else{
-	// 						console.log('request error',e.error)
-	// 						reject(e.error.message)
-	// 					}
-	// 				}
-	// 			}
-	// 			//超时
-	// 			if(t){
-	// 				timer = setInterval(()=>{
-	// 					console.info('timedout!')
-	// 					x.abort()
-	// 					clearInterval(timer)
-	// 				},t)
-	// 			}
-	// 		})
-	// 	} else {
-	// 		return comm.getStorage(comm.key(fn+JSON.stringify(data)))
-	// 	}
-	// },
 	req,
 	compare(k, n=1, t=0) {
 		return function (a, b) {

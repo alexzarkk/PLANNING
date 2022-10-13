@@ -1,7 +1,7 @@
 import { async } from 'regenerator-runtime'
 import zz from '@/comm/zz'
 
-import { isSame, uniqId, eqCoord, bearing, getDist, dist, trans, calData, fixNum, math } from '@/comm/geotools'
+import { isSame, uniqId, eqCoord, bearing, getLocation, getDist, dist, trans, calData, fixNum, math } from '@/comm/geotools'
 
 import comm from '@/comm/comm'
 import icon from '@/comm/libs/icon'
@@ -113,18 +113,19 @@ toDist = (cs, poi, cds) => {
 }
 
 
-async function scan(coord){
+async function scan(cd){
 	
 	let e = await zz.scan()
 	if(e) {
-		if(e.result.startsWith('https://z.szs.run')) {
-			if(!coord) {
-				const [_,c] = await uni.getLocation({type:'wgs84'})
-				coord = [fixNum(c.longitude), fixNum(c.latitude), ~~c.altitude]
+		let res = e.result || e.text
+		if(res.startsWith('https://z.szs.run')) {
+			if(!cd) {
+				let { coord } = await getLocation()
+				cd = coord
 			}
 			
-			let sn = zz.getQueryParam(e.result, 'o'),
-				code = { sn, coord, tim: zz.time2Date() },
+			let sn = zz.getQueryParam(res, 'o'),
+				code = { sn, coord:cd, tim: zz.time2Date() },
 				log = uni.getStorageSync('user_scan_log')||{temp:[]},
 				cps = comm.getStorage('sys_nav_cps')||{}
 				
@@ -133,9 +134,9 @@ async function scan(coord){
 				if(!x) return zz.modal('无效二维码！')
 				if(x.status<40) return zz.modal('此柱尚未开启打卡功能！')
 				cps[sn] = {_id: sn, t2: x.t2, coord: x.coord}
-				comm.setStorage('sys_nav_cps',cps)
+				comm.setStorage('sys_nav_cps', cps)
 			}
-			if(dist(cps[sn].coord, coord)>160) {
+			if(dist(cps[sn].coord, cd)>160) {
 				return zz.modal('错误：超出距离范围！（请确认手机定位功能已开启，并在【'+sn+'】柱子附近）')
 			}
 			

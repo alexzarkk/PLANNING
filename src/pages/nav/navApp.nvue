@@ -552,7 +552,6 @@ export default {
 		}
 	}
 };
-
 </script>
 <style>
 .start-f {

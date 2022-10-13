@@ -294,19 +294,19 @@
 			},
 			async amapAround(coord) {
 				let c = {
-					key: this.zz.amapKey,
+					key: this.bd.amapKey,
 					s: "rsx",
 					platform: "WEB",
-					appname: this.zz.amapKey,
+					appname: this.bd.amapKey,
 					sdkversion: "1.2.0",
 					logversion: "2.0"
 				}
 				let e = {
-					key: this.zz.amapKey,
+					key: this.bd.amapKey,
 					location: coord,
 					s: c.s,
 					platform: c.platform,
-					appname: this.zz.amapKey,
+					appname: this.bd.amapKey,
 					sdkversion: c.sdkversion,
 					logversion: c.logversion
 				};

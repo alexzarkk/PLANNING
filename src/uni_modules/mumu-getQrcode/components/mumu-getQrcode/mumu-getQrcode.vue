@@ -44,7 +44,6 @@
 					<view class="on1">相机权限被拒绝，请尝试如下操作：</view>
 					<view>· 刷新页面后重试；</view>
 					<view>· 在系统中检测当前App或浏览器的相机权限是否被禁用；</view>
-					<view>· 如果依然不能体验，建议在微信中打开链接；</view>
 				</view>
 			</slot>
 		</template>
@@ -102,10 +101,10 @@ export default {
 		this.windowHeight = this.size === 'whole' ? this.windowHeight : this.windowHeight / 2
 		this.isParse = true
 
-		this.$nextTick(() => {
-			this.createMsk()
-			this.openScan()
-		})
+		// this.$nextTick(() => {
+		// 	this.createMsk()
+		// 	this.openScan()
+		// })
 	},
 	destroyed() {
 		this.closeCamera()
@@ -260,6 +259,8 @@ page {
 }
 
 .canvasBox {
+	z-index: 99999;
+	position: fixed;
 	width: 100vw;
 	height: 100vh;
 	position: relative;
