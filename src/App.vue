@@ -36,6 +36,21 @@ export default {
         //     console.log("执行 document.documentElement.style.fontSize =16 ")
         //     document.documentElement.style.fontSize = "16px"
         // })
+
+        // 用来监听单点登录的返回
+        window.onpageshow = (event) => {
+            console.log("页面启动------------", event.persisted, window.performance.navigation.type == 2)
+            /**
+             * 0：网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载，相当于常数performance.navigation.TYPE_NAVIGATE。
+                1：网页通过“重新加载”按钮或者location.reload()方法加载，相当于常数performance.navigation.TYPE_RELOAD。
+                2：网页通过“前进”或“后退”按钮加载，相当于常数performance.navigation.TYPE_BACK_FORWARD。
+                255：任何其他来源的加载，相当于常数performance.navigation.TYPE_RESERVED。
+             */
+            // if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+            // ZWJSBridge.close();
+            // }
+            // isLoad();
+        }
         ZWJSBridge.onReady(() => {
             console.log('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
@@ -162,7 +177,7 @@ export default {
 
                 uni.setStorageSync('sysInfo', e)
                 comm.setStorage('clientInfo', {
-					OS: e.osName,
+                    OS: e.osName,
                     PLATFORM: e.uniPlatform || e.platform,
                     APPID: e.appId || '__UNI__210B33A',
                     deviceId: e.deviceId,
@@ -198,6 +213,8 @@ export default {
                 sync.go()
             }
         })
+
+
     },
     onHide() { },
     methods: {
