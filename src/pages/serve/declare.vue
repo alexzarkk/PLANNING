@@ -191,12 +191,10 @@
 import { getLocation, trans, dist } from "@/comm/geotools.js"
 // const amap = require('@/comm/libs/amap-wx.js')
 // const form = require("@/common/tui-validation.js")
-
 export default {
     data() {
         return {
 			modalName:'',
-            bd: this.bd,
             winH: this.WinHeight,
             cuBar: this.CustomBar,
             show: true,

@@ -84,14 +84,10 @@
 <script>
 	import { trans } from "@/comm/geotools.js"
 	
-	
-	
-	
 	export default {
 		data() {
 			return {
 				title:'周边服务',
-				bd: this.bd,
 				customBar: this.CustomBar,
 				tag:[
 					'公交站',

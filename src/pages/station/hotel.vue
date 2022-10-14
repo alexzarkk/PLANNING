@@ -27,7 +27,6 @@
 		components:{ cardBgimg },
 		data() {
 			return {
-				bd: this.bd,
 				gradualColor: ['red', '#4a67d6'],
 				scrolled: 0,
 				current: -1,
@@ -37,7 +36,7 @@
 		},
 		onLoad:async function(option) {
 			this.loading = true
-			let list = await this.zz.req({$url: 'public/poi/list', deptId: this.bd.sys.code, type: 4012 })
+			let list = await this.zz.req({$url: 'public/poi/list', deptId: bd.sys.code, type: 4012 })
 			// console.log('tab.list ----->', list);
 			await this.$refs.loc.onLoc(list)
 			this.list = list
