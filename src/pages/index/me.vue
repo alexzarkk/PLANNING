@@ -1,5 +1,6 @@
 <template name="basics">
 	<page-meta root-font-size="10px"></page-meta>
+    <!-- 测试16px -->
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->

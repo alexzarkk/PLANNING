@@ -139,7 +139,6 @@ export default {
     },
     onBackPress() { return true },
     onLoad(qr) {
-        // this.globalData = this.globalData
         let td = uni.getStorageSync('trailData');
         this.trailData = td.trailData;
         // console.log('trailData==========', this.trailData);

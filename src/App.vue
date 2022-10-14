@@ -9,33 +9,9 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-    // #ifndef H5-ZLB
-    globalData: {
-        zlbCfg: {
-            fontSize: '10px',
-            appId: '2002281722'  // 应用的浙里办appId
-        }
-    },
-    // #endif
     async onLaunch() {
-        let globalData = this.globalData
         // #ifdef H5-ZLB
         // 方案1 修改字体
-        this.$nextTick(function () {
-            console.log("执行 document.documentElement.style.fontSize =10 ", document)
-            let docEl = document.documentElement
-            console.warn("document.documentElement---------------", docEl)
-            console.warn("调整前基准font-size", document.documentElement.style.fontSize);
-            document.documentElement.style.fontSize = "10px"
-            console.warn("当前的基准fontSize---------------------", document.documentElement.style.fontSize);
-            // 方案2修改字体
-            let htmlFont = document.getElementsByTagName('html')[0];
-            console.log("根字体", htmlFont)
-            //htmlFont.style.fontSize = (pagew > 720 ? 720 : pagew) / 7.2 + "px";
-            htmlFont.style.fontSize = '10px'
-            // 暂时没有调试成功，动态调节字体= =
-        })
-
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
             console.log("页面启动------------", event.persisted, window.performance.navigation.type == 2)
@@ -50,17 +26,25 @@ export default {
             // }
             // isLoad();
         }
+
+        let _this = this;
         ZWJSBridge.onReady(() => {
             console.log('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
                 console.log("获取到的当前的style======", uiStyle)
                 // uiStyle = 'elder'
+                let fontSize = '10px'
                 if (uiStyle === 'elder') {
-                    globalData.zlbCfg.fontSize = '16px'
+                    fontSize = '16px'
                 } else {
-                    globalData.zlbCfg.fontSize = '10px'
+                    fontSize = '10px'
                 }
-                console.log("app-------------------globalData.zlbCfg.fontSize=========", globalData.zlbCfg.fontSize)
+                _this.$nextTick(function () {
+                    document.documentElement.style.fontSize = fontSize
+                    // 方案2修改字体
+                    let htmlFont = document.getElementsByTagName('html')[0];
+                    htmlFont.style.fontSize = fontSize  // 测试16px
+                })
             })
         })
         // #endif
