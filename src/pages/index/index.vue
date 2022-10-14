@@ -400,20 +400,28 @@ export default {
         // #ifdef H5-ZLB
         this.globalData = getApp().globalData
         console.log("index-----------------onLoad--------------------option-----------", option)
-
+		
         const ticket = this.getQuery("ticket");
         if (ticket) {
             console.log("获取到的ticket", ticket)
 			this.zz.req({$url:'/admin/comm/loginGov', ticket}).then(e=>{
-				console.log('获取到的获取到的获取到的获取到的',e);
+				console.log('获取到的获取到的获取到的获取到的',e)
 				if(e.token) {
 					this.zz.setAcc(e.user)
 					this.zz.setToken(e.token)
 				}
 			})
-			
         } else {
-            this.loginZlb()
+			//如果没有登录 || 登录已失效
+			let token = this.zz.getToken()
+			if(token) {
+				//过期
+				await this.zz.req({ $url: '/user/person/info' }).catch(e=>{
+					return this.loginZlb()
+				})
+			} else {
+				return this.loginZlb()
+			}
         }
         // #endif
 

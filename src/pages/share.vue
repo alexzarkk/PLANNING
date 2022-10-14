@@ -13,7 +13,6 @@
 	export default {
 		data() {
 			return {
-				bd: this.bd,
 				loading:true,
 				task : null,
 				login: false,
