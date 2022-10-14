@@ -421,8 +421,6 @@ export default {
             } catch (error) {
 
             }
-
-
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
@@ -436,10 +434,7 @@ export default {
             }
         }
         // #endif
-        // header 添加 isTestUrl: '1'
-        const obj = {
-            url: '/public/zz/test'
-        }
+		
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
