@@ -12,6 +12,31 @@ export default {
     async onLaunch() {
         // #ifdef H5-ZLB
         // 方案1 修改字体
+        let _this = this;
+        let setRem = (fontSize) => {
+            document.documentElement.style.fontSize = fontSize
+            // 方案2修改字体
+            let htmlFont = document.getElementsByTagName('html')[0];
+            htmlFont.style.fontSize = fontSize  // 测试16px
+            console.warn("changeFontSize----------------------", fontSize)
+        }
+        await ZWJSBridge.onReady(() => {
+            console.log('浙里办初始化完成，执行bridge方法')
+            ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
+                console.log("获取到的当前的style======", uiStyle)
+                // uiStyle = 'elder'
+                let fontSize = '10px'
+                if (uiStyle === 'elder') {
+                    fontSize = '16px'
+                } else {
+                    fontSize = '10px'
+                }
+                setRem(fontSize)
+                // this.$nextTick(function () {
+                // })
+            })
+        })
+
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
             console.log("页面启动------------", event.persisted, window.performance.navigation.type == 2)
@@ -26,27 +51,6 @@ export default {
             // }
             // isLoad();
         }
-
-        let _this = this;
-        ZWJSBridge.onReady(() => {
-            console.log('浙里办初始化完成，执行bridge方法')
-            ZWJSBridge.getUiStyle().then((uiStyle) => {  // 获取style,适老化配置
-                console.log("获取到的当前的style======", uiStyle)
-                // uiStyle = 'elder'
-                let fontSize = '10px'
-                if (uiStyle === 'elder') {
-                    fontSize = '16px'
-                } else {
-                    fontSize = '10px'
-                }
-                _this.$nextTick(function () {
-                    document.documentElement.style.fontSize = fontSize
-                    // 方案2修改字体
-                    let htmlFont = document.getElementsByTagName('html')[0];
-                    htmlFont.style.fontSize = fontSize  // 测试16px
-                })
-            })
-        })
         // #endif
 
         uni.getSystemInfo({

@@ -396,13 +396,33 @@ export default {
         const ticket = this.getQuery("ticket");
         if (ticket) {  // 登录回调地址里带有ticket
             console.log("获取到的ticket", ticket)
-            this.zz.req({ $url: '/admin/comm/loginGov', ticket }).then(e => {
-                console.log('获取到的获取到的获取到的获取到的', e)
-                if (e.token) {
-                    this.zz.setAcc(e.user)
-                    this.zz.setToken(e.token)
+            try {
+                const userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+                console.info("登录获取到的信息----------", userInfo)
+                if (userInfo.token) {
+                    this.zz.setAcc(userInfo.user)
+                    this.zz.setToken(userInfo.token)
                 }
-            })
+                // 登录埋点
+                // window.aplus_queue.push({
+                //     action: 'aplus.setMetaInfo',
+                //     arguments: ['_hold', 'BLOCK']
+                // })
+                // window.ZWJSBridge.getUUID().then(({ uuid }) => {
+                //     const { zlbUserid, zlbLoginname } = userInfo
+                //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlbLoginname] }) // 浙里办的loginname
+                //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlbUserid] }) // 浙里办的userid
+                //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+                //     window.aplus_queue.push({
+                //         action: 'aplus.setMetaInfo',
+                //         arguments: ['_hold', 'START']
+                //     })
+                // })
+            } catch (error) {
+
+            }
+
+
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
@@ -447,15 +467,17 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-            const { AccessKey, ZLB_LOCAL_PAGE, ZLB_PROD_DEBUG_PAGE, ZLB_PROD_PAGE } = this.db;
+            const { AccessKey, ZLB_LOCAL_PAGE, ZLB_PROD_DEBUG_PAGE, ZLB_PROD_PAGE } = this.bd;
+            console.log("AccessKey--------------", AccessKey)
+            console.log(this.bd)
             let str = ''
             if (bIsAlipayMini) { // 支付宝小程序
-                // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
-                str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`  // 线上调试
+                str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`  // 线上调试
                 // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}`  // 正式发布
             } else { // 浙里办APP
-                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
-                str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`   // 线上调试
+                str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`   // 线上调试
                 // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}` // 正式发布
             }
             window.location.replace(str)
