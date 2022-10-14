@@ -1,4 +1,5 @@
 <template>
+	<page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bg-color="bg-ztsgreen" :is-back="true">
             <block slot="content">我的足迹</block>

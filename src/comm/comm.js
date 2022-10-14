@@ -1,10 +1,63 @@
 import { async } from 'regenerator-runtime'
-import { api } from '@/comm/bd'
 import { dist, isSame, getLocation } from '@/comm/geotools'
 import grid from '@/comm/libs/grid'
+
+// #ifndef APP-PLUS
 import { req } from '@/comm/zz'
+// #endif
+
+// #ifdef APP-PLUS
+import { api, isDev } from '@/comm/bd'
+// #endif
+
 const comm = {
+	// #ifndef APP-PLUS
 	req,
+	// #endif
+	
+	// #ifdef APP-PLUS
+	async req(q, cache=true) {
+		let key=(k)=>{return k? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g,''):''},
+			fn = q.$fn,
+			param = JSON.stringify(q)
+		
+		if(!comm.hadNet()&&cache) return comm.getStorage(key(fn+param))
+		return new Promise((resolve, reject) => {
+			let t, x = new plus.net.XMLHttpRequest()
+			
+			x.open('POST', api[isDev]+(fn||'app'), true)
+			x.setRequestHeader("Content-type","application/json")
+			x.setRequestHeader("authorization", comm.getStorage('210B33A_token'))
+			x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
+			x.send(param)
+			
+			console.log('Ajax ------------------->', q)
+			
+			x.onreadystatechange = ()=>{
+				if (x.readyState === 4) {
+					let e = JSON.parse(x.responseText)
+					if (x.status >= 200 && x.status < 300 || x.status == 304) {
+						if(e.code==1000) {
+							clearTimeout(t)
+							if(e.data&&cache) {comm.setStorage(key(fn+param), e.data)}
+							resolve(e.data)
+						} else{
+							reject(e.message)
+						}
+					}else{
+						reject(e.error.message)
+					}
+				}
+			}
+			//超时
+			t = setTimeout(()=>{
+				x.abort()
+				reject('timedout')
+			},9999)
+		})
+	},
+	// #endif
+	
 	compare(k, n=1, t=0) {
 		return function (a, b) {
 			if (typeof a == 'object') {
@@ -94,7 +147,7 @@ const comm = {
 				})
 			}
 		}
-		console.log('comm.around ..............', c);
+		// console.log('comm.around ..............', c)
 		return arr.sort(comm.compare('dist'))
 	},
 	

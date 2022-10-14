@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+<!-- <page-meta root-font-size="10px"></page-meta> -->
 	<view>
 		<map id="amap"
 			:style="{width: '750rpx', height: winH + 'px' }"

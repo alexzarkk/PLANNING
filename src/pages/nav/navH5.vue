@@ -222,7 +222,6 @@ export default {
 
 <script>
 const tts = {}
-// import mumuGetQrcode from '@/uni_modules/mumu-getQrcode/components/mumu-getQrcode/mumu-getQrcode.vue'
 import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on, around } from '@/comm/nav'
 
@@ -688,8 +687,6 @@ export default {
 			}
 			if(t=='scan') {
 				let p = await scan(uni.getStorageSync('cur_loc_gcj02'))
-				// let p = await this.zz.scan(uni.getStorageSync('cur_loc_gcj02'))
-				// console.log('scanscanscanscanscanscanscanscan',p)
 				if(p) {
 					if(this.rec.line[1]) this.rec.line.splice(1,1)
 					
