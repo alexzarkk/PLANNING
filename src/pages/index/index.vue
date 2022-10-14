@@ -433,10 +433,7 @@ export default {
             }
         }
         // #endif
-        // header 添加 isTestUrl: '1'
-        const obj = {
-            url: '/public/zz/test'
-        }
+		
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
