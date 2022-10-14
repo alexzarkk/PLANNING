@@ -9,16 +9,16 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-	// #ifndef H5-ZLB
+    // #ifndef H5-ZLB
     globalData: {
         zlbCfg: {
             fontSize: '10px',
             appId: '2002281722'  // 应用的浙里办appId
         }
     },
-	// #endif
+    // #endif
     async onLaunch() {
-        
+        let globalData = this.globalData
         // #ifdef H5-ZLB
         // this.$nextTick(function () {
         //     console.log("执行 document.documentElement.style.fontSize =16 ")

@@ -3,7 +3,7 @@
     <!-- #ifdef H5-ZLB -->
     <page-meta root-font-size="10px"></page-meta>
     <!-- #endif -->
-    
+
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
@@ -400,18 +400,17 @@ export default {
         // #ifdef H5-ZLB
         this.globalData = getApp().globalData
         console.log("index-----------------onLoad--------------------option-----------", option)
-
         const ticket = this.getQuery("ticket");
         if (ticket) {
             console.log("获取到的ticket", ticket)
-			this.zz.req({$url:'/admin/comm/loginGov', ticket}).then(e=>{
-				console.log('获取到的获取到的获取到的获取到的',e);
-				if(e.token) {
-					this.zz.setAcc(e.user)
-					this.zz.setToken(e.token)
-				}
-			})
-			
+            this.zz.req({ $url: '/admin/comm/loginGov', ticket }).then(e => {
+                console.log('获取到的获取到的获取到的获取到的', e);
+                if (e.token) {
+                    this.zz.setAcc(e.user)
+                    this.zz.setToken(e.token)
+                }
+            })
+
         } else {
             this.loginZlb()
         }
@@ -453,7 +452,7 @@ export default {
         },
         getQuery(name) {
             let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            console.log("window.location-----------",window.location)
+            console.log("window.location-----------", window.location)
             let r = window.location.search.substr(1).match(reg);
             if (r != null) return unescape(r[2]);
             return null;

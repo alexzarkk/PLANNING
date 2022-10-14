@@ -42,22 +42,22 @@
             </tui-list-view>
 
             <tui-list-view margin-top="20rpx">
-				
+
                 <tui-list-cell arrow @click="clear">
                     <view class="justify-between flex padding-right align-center">
                         <text class="">清除缓存</text>
                         <text class="text-black">{{fileSizeString}}</text>
                     </view>
                 </tui-list-cell>
-				<block v-if="user">
-					<tui-list-cell arrow @click="openPage('/pages/comm/account/repsd')">
-					    <view class="justify-between flex padding-right align-center"><text class="">重置密码</text></view>
-					</tui-list-cell>
-					<!-- <tui-list-cell arrow @click="openPage('/pages/my/set/address/address')">
+                <block v-if="user">
+                    <tui-list-cell arrow @click="openPage('/pages/comm/account/repsd')">
+                        <view class="justify-between flex padding-right align-center"><text class="">重置密码</text></view>
+                    </tui-list-cell>
+                    <!-- <tui-list-cell arrow @click="openPage('/pages/my/set/address/address')">
 					    <view class="justify-between flex padding-right align-center"><text class="">我的收货地址</text></view>
 					</tui-list-cell> -->
-				</block>
-                	<!-- <tui-list-cell arrow @click="openPage('/pages/comm/doc/protocol')">
+                </block>
+                <!-- <tui-list-cell arrow @click="openPage('/pages/comm/doc/protocol')">
 					    <view class="justify-between flex padding-right align-center"><text class="">服务协议</text></view>
 					</tui-list-cell>
                 	<tui-list-cell arrow @click="openPage('/pages/comm/doc/privacy')">
@@ -71,40 +71,42 @@
                     <view class="justify-between flex padding-right align-center"><text class="">关于环浙步道</text></view>
                 </tui-list-cell>
             </tui-list-view>
-			
-			<block v-if="user">
-				<view class="padding response margin-top"><button class="cu-btn round bg-red lg response" @click="isLogoutShow = true">退出登录</button></view>
-				<view class="padding flex align-center justify-center" @click="goDelAccount">
-					<text class="text-grey">删除账户</text>
-				</view>
+            <!-- #ifndef H5-ZLB -->
+            <block v-if="user">
+                <view class="padding response margin-top"><button class="cu-btn round bg-red lg response" @click="isLogoutShow = true">退出登录</button></view>
+                <view class="padding flex align-center justify-center" @click="goDelAccount">
+                    <text class="text-grey">删除账户</text>
+                </view>
 
-				<zz-cu-modal title="退出登录" :show="isLogoutShow" @cancel="isLogoutShow = false" @confirm="logout">
-					<view class="bg-white padding">确定退出登录？</view>
-				</zz-cu-modal>
-			</block>
+                <zz-cu-modal title="退出登录" :show="isLogoutShow" @cancel="isLogoutShow = false" @confirm="logout">
+                    <view class="bg-white padding">确定退出登录？</view>
+                </zz-cu-modal>
+            </block>
+            <!-- #endif -->
         </view>
     </view>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
-			user: null,
+            user: null,
             isLogoutShow: false,
             fileSizeString: ''
         };
     },
     async onLoad() {
-		this.user = this.zz.getAcc()
-		this.formatSize()
+        this.user = this.zz.getAcc()
+        this.formatSize()
     },
     methods: {
         goDelAccount() {
             uni.navigateTo({
                 url: '/pages/comm/account/deleteAccount',
                 animationType: 'slide-in-bottom',
-                animationDuration:300
+                animationDuration: 300
             })
         },
         openPage(url) {
@@ -113,44 +115,44 @@ export default {
         // 退出登录
         logout() {
             this.isLogoutShow = false
-			this.zz.req({$url:'/admin/comm/logout'}).then(e=>{
-				this.zz.logOut()
-				this.zz.href('/pages/index/index')
-			})
+            this.zz.req({ $url: '/admin/comm/logout' }).then(e => {
+                this.zz.logOut()
+                this.zz.href('/pages/index/index')
+            })
         },
         // 计算缓存
         formatSize() {
-			const res = uni.getStorageInfoSync()
-			let size = res.currentSize
-			if (size < 1048576) {
-			    this.fileSizeString = size + "KB";
-			} else if (size < 1073741824) {
-				this.fileSizeString = (size / 1048576).toFixed(2) + "MB"
-			} else {
-				this.fileSizeString = (size / 1073741824).toFixed(2) + "GB"
-			}
+            const res = uni.getStorageInfoSync()
+            let size = res.currentSize
+            if (size < 1048576) {
+                this.fileSizeString = size + "KB";
+            } else if (size < 1073741824) {
+                this.fileSizeString = (size / 1048576).toFixed(2) + "MB"
+            } else {
+                this.fileSizeString = (size / 1073741824).toFixed(2) + "GB"
+            }
         },
-		clear(){
-			const res = uni.getStorageInfoSync()
-			console.log(res.keys);
-			console.log(res.currentSize);
-			
-			//系统保留缓存
-			let keep = [
-				'__LAST_DCLOUD_APPID', '__ETAG__CNA__ID__', '__DC_STAT_UUID', '__package_info__',
-				'getui_appid', 'getui_cid', 'getui_session', 'getui_api_time', 'getui_regid', 'getui_deviceid',
-				'210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
-				'sys_nav_cps', 'user_scan_log', 'sync_task', 'sync_files', 'tempfiles', 'nav_local_rec'
-				]
-			
-			for (let k of res.keys) {
-				if(!keep.includes(k)) {
-					console.log('removeStorageSync:', k)
-					uni.removeStorageSync(k)
-				}
-			}
-			this.zz.init()
-		},
+        clear() {
+            const res = uni.getStorageInfoSync()
+            console.log(res.keys);
+            console.log(res.currentSize);
+
+            //系统保留缓存
+            let keep = [
+                '__LAST_DCLOUD_APPID', '__ETAG__CNA__ID__', '__DC_STAT_UUID', '__package_info__',
+                'getui_appid', 'getui_cid', 'getui_session', 'getui_api_time', 'getui_regid', 'getui_deviceid',
+                '210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
+                'sys_nav_cps', 'user_scan_log', 'sync_task', 'sync_files', 'tempfiles', 'nav_local_rec'
+            ]
+
+            for (let k of res.keys) {
+                if (!keep.includes(k)) {
+                    console.log('removeStorageSync:', k)
+                    uni.removeStorageSync(k)
+                }
+            }
+            this.zz.init()
+        },
         // 清除缓存
         clearCache() {
             let that = this;
