@@ -1,7 +1,10 @@
 <template>
+    <page-meta root-font-size="10px"></page-meta>
     <!-- APP 版本以及帮助信息 -->
     <view>
-        <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">关于环浙步道</block></cu-custom>
+        <cu-custom bgColor="bg-ztsblue" :isBack="true">
+            <block slot="content">关于环浙步道</block>
+        </cu-custom>
         <view class="container">
             <!-- 图标 + 版本 -->
             <view class="header-block flex align-center flex-direction">
@@ -75,12 +78,12 @@ export default {
         };
     },
     methods: {
-        async loadData() {}
+        async loadData() { }
     },
     onLoad() {
         this.loadData();
     },
-    onReady() {}
+    onReady() { }
 };
 </script>
 

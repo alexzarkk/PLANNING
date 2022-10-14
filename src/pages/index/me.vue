@@ -1,7 +1,5 @@
 <template name="basics">
-	<!-- #ifdef H5-ZLB -->
 	<page-meta root-font-size="10px"></page-meta>
-	<!-- #endif -->
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->

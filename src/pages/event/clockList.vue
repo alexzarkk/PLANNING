@@ -20,6 +20,7 @@ https://s1.ax1x.com/2022/05/27/XegQC4.png  坐标点
  * 
 -->
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <view class="container">
         <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">打卡列表</block></cu-custom>
         <view>

@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<!-- 
 			@name:地方频道
 			@desc：用于创建新页面

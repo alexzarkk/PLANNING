@@ -2,6 +2,7 @@
     <!-- 身体信息   身高体重 
         https://ext.dcloud.net.cn/plugin?id=1322
     -->
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">身体数据</block>

@@ -1,6 +1,6 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <view class="container">
-
         <!--header-->
         <!-- <block v-if="!load"> -->
         <zz-header :opacity="opcity" :tabList="tabList" :scrolled="scrolled" :iconOpcity="iconOpcity" @openMenu="openMenu" @moveTo="moveTo"></zz-header>

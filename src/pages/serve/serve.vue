@@ -1,4 +1,5 @@
 <template name="basics">
+<page-meta root-font-size="10px"></page-meta>
     <view>
 		<!-- <view class="fixed">
 		    <cu-custom :isBack="true" bgColor=" bg-orange">

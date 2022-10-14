@@ -183,6 +183,7 @@ export default {
 }
 </script>
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
 		

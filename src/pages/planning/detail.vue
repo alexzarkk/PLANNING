@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <view class="bg-white">
         <!-- #ifndef APP-PLUS -->
         <view class="fixed text-white" :style="'opacity:' + (1 - headOpacity)">

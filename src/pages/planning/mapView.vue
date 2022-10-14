@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<view class="cu-bar bg-green search foot">
 			<view class="search-form round">

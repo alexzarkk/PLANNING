@@ -1,8 +1,5 @@
 <template>
-   <!-- #ifdef H5-ZLB -->
-   <page-meta root-font-size="10px"></page-meta>
-   <!-- #endif -->
-   
+    <page-meta root-font-size="10px"></page-meta>
     <view class="container">
         <cu-custom bgColor="bg-ztsblue">
             <block slot="left">

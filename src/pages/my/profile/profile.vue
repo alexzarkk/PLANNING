@@ -9,6 +9,7 @@
  * 
 -->
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <!-- <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">个人主页</block></cu-custom> -->
     <view class="container">
         <!-- 顶部 -->

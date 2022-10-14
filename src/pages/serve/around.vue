@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view class="maps-container">
 		<cu-custom bgColor="bg-ztsblue" :isBack="true">
 			<block slot="backText"></block>

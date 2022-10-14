@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <!-- 隐私设置 
         privacy:{
             friendVeri, //  friend veri  加好友是否需要验证

@@ -9,6 +9,7 @@
  * 
 -->
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<!-- 顶部地图 -->
 		<gaode-map v-if="trail.kml.lines" :line="trail.kml.lines" :point="trail.kml.points" :map-height="mapHeight" :center="center" @onLoc="getLocation()" />

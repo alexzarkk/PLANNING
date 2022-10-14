@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<!-- 指引柱详情 -->
 	<view>
 		<!-- #ifndef APP-PLUS -->

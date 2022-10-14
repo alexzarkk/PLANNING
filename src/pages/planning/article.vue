@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <view class="bg-white">
         <!-- #ifndef APP-PLUS -->
         <cu-custom bg-color="bg-ztsblue" :is-back="true">

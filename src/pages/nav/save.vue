@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsgreen">
             <block slot="content">{{t3?'保存记录':'选择运动类型'}}</block>

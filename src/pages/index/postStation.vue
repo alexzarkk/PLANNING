@@ -5,6 +5,7 @@
 			@date：2022-05-09
 			@author: 
 	 -->
+     <page-meta root-font-size="10px"></page-meta>
     <view>
         <!-- 
 			这里的导航栏是根据设备和  不同端自适应的  务必使用这个  nav-bar

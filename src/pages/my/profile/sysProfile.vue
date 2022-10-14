@@ -1,5 +1,6 @@
 
 <template>
+    <page-meta root-font-size="10px"></page-meta>
     <!-- 系统账户Profile -->
     <view>
         <view class="container">
@@ -74,7 +75,7 @@ export default {
     components: { pushCard },
     data() {
         return {
-            articleId:'',
+            articleId: '',
             person: {
                 fans: 0,  // 粉丝
                 follow: 0,  // 关注

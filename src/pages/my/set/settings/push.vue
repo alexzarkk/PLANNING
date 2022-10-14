@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <!-- 消息推送设置
     msg:{
         veri,  // 好友验证

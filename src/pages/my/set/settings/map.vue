@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 <!-- 地图 -->
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">地图设置</block></cu-custom>

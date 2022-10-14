@@ -1,9 +1,6 @@
 <!-- 首页模板 -->
 <template>
-    <!-- #ifdef H5-ZLB -->
     <page-meta root-font-size="10px"></page-meta>
-    <!-- #endif -->
-
     <view>
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>

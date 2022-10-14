@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <!-- 
 			@name:运动类型选择
 			@desc：出发前选择运动类型

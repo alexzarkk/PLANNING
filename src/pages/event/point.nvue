@@ -10,6 +10,7 @@
  * 
 -->
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<view class="status-bar" :style="{ height: statusBarHeight + 'rpx' }"></view>
 		<view class="header-bar" :style="{ height: headerBarHeight + 'rpx' }"><text class="header-bar-title">人气打卡点</text></view>

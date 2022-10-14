@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <view class="login">
         <view class="content">
             <image class="logo" src="https://zts.5618.co/repo/login.png" mode="heightFix"></image>

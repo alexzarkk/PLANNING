@@ -1,4 +1,5 @@
 <template>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <!-- <cu-custom bgColor="bg-ftblue" :home="false">
 			<block slot="backText"></block>
@@ -10,13 +11,7 @@
 
         <view id="t1" class="sticky-box bg-cyan margin-top fixed" :style="[{ top: customBar + 'px' }]">
             <scroll-view scroll-x class="bg-blue light nav text-center">
-                <view
-                    class="cu-item"
-                    :class="index == tabCur ? 'text-blue cur text-bold' : ''"
-                    v-for="(item, index) in tabs"
-                    :key="index"
-                    @click="tabSelect({ detail: { current: index } })"
-                >
+                <view class="cu-item" :class="index == tabCur ? 'text-blue cur text-bold' : ''" v-for="(item, index) in tabs" :key="index" @click="tabSelect({ detail: { current: index } })">
                     {{ item }}
                 </view>
             </scroll-view>

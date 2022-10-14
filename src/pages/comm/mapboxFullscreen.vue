@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<zz-map v-if="!loading" :pms="pms" :line="line" :point="point" :gon="gon" :refKml="refKml" :winH="winH"></zz-map>
 	</view>

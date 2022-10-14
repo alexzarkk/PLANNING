@@ -9,6 +9,7 @@
  * 
 -->
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">选择兴趣点类型</block></cu-custom>
 		<view class="container">

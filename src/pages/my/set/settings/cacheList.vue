@@ -1,5 +1,6 @@
 <template>
     <!-- 缓存列表以及清理缓存等功能 -->
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">清理缓存</block>

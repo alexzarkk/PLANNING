@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
     <!-- 
 			@name:我的线路
 			@desc：

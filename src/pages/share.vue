@@ -1,4 +1,5 @@
 <template>
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<block v-if="loading">
 			<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
