@@ -404,25 +404,22 @@ export default {
                     this.zz.setToken(userInfo.token)
                 }
                 // 登录埋点
-                // window.aplus_queue.push({
-                //     action: 'aplus.setMetaInfo',
-                //     arguments: ['_hold', 'BLOCK']
-                // })
-                // window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                //     const { zlbUserid, zlbLoginname } = userInfo
-                //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlbLoginname] }) // 浙里办的loginname
-                //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlbUserid] }) // 浙里办的userid
-                //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                //     window.aplus_queue.push({
-                //         action: 'aplus.setMetaInfo',
-                //         arguments: ['_hold', 'START']
-                //     })
-                // })
+                window.aplus_queue.push({
+                    action: 'aplus.setMetaInfo',
+                    arguments: ['_hold', 'BLOCK']
+                })
+                window.ZWJSBridge.getUUID().then(({ uuid }) => {
+                    const { zlb_id, zlb_name } = userInfo.user
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+                    window.aplus_queue.push({
+                        action: 'aplus.setMetaInfo',
+                        arguments: ['_hold', 'START']
+                    })
+                })
             } catch (error) {
-
             }
-
-
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
