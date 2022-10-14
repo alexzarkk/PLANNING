@@ -19,12 +19,12 @@
                         <text class="text-black">修改头像</text>
                     </view>
                 </tui-list-cell>
-                <tui-list-cell>
+                <!-- <tui-list-cell>
                     <view class="justify-between flex padding-right align-center">
                         <text class="">用户名</text>
                         <text class="text-black">{{ userInfo.username }}</text>
                     </view>
-                </tui-list-cell>
+                </tui-list-cell> -->
 
                 <tui-list-cell arrow>
                     <view class="justify-between flex padding-right align-center" :data-modelId="4" @click="showModal($event, 'nickName')">
@@ -77,6 +77,7 @@
                     </view>
                 </tui-list-cell>
             </tui-list-view> -->
+            <!-- #ifndef H5-ZLB -->
             <tui-list-view margin-top="20rpx">
                 <tui-list-cell arrow @click="changePhoneNumber()">
                     <view class="justify-between flex padding-right align-center">
@@ -85,7 +86,7 @@
                     </view>
                 </tui-list-cell>
             </tui-list-view>
-
+            <!-- #endif -->
             <!-- <tui-list-cell arrow>
                     <view class="justify-between flex padding-right align-center">
                         <text class=" ">领队认证</text>
@@ -148,6 +149,7 @@
 </template>
 
 <script>
+
 import { pathToBase64, base64ToPath } from '../../../js_sdk/mmmm-image-tools/index.js';
 export default {
     data() {

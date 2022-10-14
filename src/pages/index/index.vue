@@ -466,12 +466,12 @@ export default {
             console.log(this.bd)
             let str = ''
             if (bIsAlipayMini) { // 支付宝小程序
-                str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
-                // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`  // 线上调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
+                str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`  // 线上调试
                 // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}`  // 正式发布
             } else { // 浙里办APP
-                str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
-                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`   // 线上调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
+                str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`   // 线上调试
                 // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}` // 正式发布
             }
             window.location.replace(str)
