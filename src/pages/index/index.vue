@@ -413,10 +413,7 @@ export default {
                     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
                     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
                     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                    window.aplus_queue.push({
-                        action: 'aplus.setMetaInfo',
-                        arguments: ['_hold', 'START']
-                    })
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
                 })
             } catch (error) {
             }
