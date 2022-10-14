@@ -9,7 +9,7 @@
         <view class="cu-bar bg-ztsblue search fixed align-center" style="height:100rpx;" id="searchBar" :style="[{ top: customBar + 'px' }]">
             <view class="action text-white round padding-xs" @click="href('/pages/comm/region')">
                 <text class="cuIcon-locationfill"></text>
-                <text class="text-df">{{dict?dict.deps[deptId].name:''}}</text>
+                <text v-if="getDict" class="text-df">{{getDict?getDict.deps[deptId].name:''}}</text>
                 <text class="margin-left-xxs cuIcon-triangledownfill"></text>
             </view>
             <view class="search-form round" @click="href('/pages/planning/list?key=1')">
@@ -298,6 +298,11 @@ export default {
                     name: '步道标识'
                 }
             ]
+        },
+        getDict() {
+            let dict = uni.getStorageSync("sys_dict") || null
+            // console.log("获取的dict", dict)
+            return dict
         }
     },
     data() {
@@ -430,7 +435,7 @@ export default {
             }
         }
         // #endif
-		
+
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
@@ -476,8 +481,10 @@ export default {
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
-
-            if (!region || !dict) return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
+                // console.log("获取到的地理信息",deptId)
+            // if (!region || !dict) {
+            //     return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
+            // }
             this.dict = dict
             if (this.deptId != deptId) {
                 this.deptId = deptId
