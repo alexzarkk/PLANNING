@@ -302,11 +302,10 @@ export default {
     },
     data() {
         return {
-            normal: true,
-            rootFontSize: '10px',
-            globalData: null,
+            globalData:null,  // 全局数据
+            rootFontSize: '10px',  // 根字体
             bd: this.bd, // APP相关信息
-            focus: false,
+            focus: false,  
             dict: uni.getStorageSync('sys_dict'),
             deptId: '',
             scrolled: 0,
@@ -395,30 +394,27 @@ export default {
 
     async onLoad(option) {
         // #ifdef H5-ZLB
-        this.globalData = getApp().globalData
-        console.log("index-----------------onLoad--------------------option-----------", option)
-		
         const ticket = this.getQuery("ticket");
         if (ticket) {
             console.log("获取到的ticket", ticket)
-			this.zz.req({$url:'/admin/comm/loginGov', ticket}).then(e=>{
-				console.log('获取到的获取到的获取到的获取到的',e)
-				if(e.token) {
-					this.zz.setAcc(e.user)
-					this.zz.setToken(e.token)
-				}
-			})
+            this.zz.req({ $url: '/admin/comm/loginGov', ticket }).then(e => {
+                console.log('获取到的获取到的获取到的获取到的', e)
+                if (e.token) {
+                    this.zz.setAcc(e.user)
+                    this.zz.setToken(e.token)
+                }
+            })
         } else {
-			//如果没有登录 || 登录已失效
-			let token = this.zz.getToken()
-			if(token) {
-				//过期
-				await this.zz.req({ $url: '/user/person/info' }).catch(e=>{
-					return this.loginZlb()
-				})
-			} else {
-				return this.loginZlb()
-			}
+            //如果没有登录 || 登录已失效
+            let token = this.zz.getToken()
+            if (token) {
+                //过期
+                await this.zz.req({ $url: '/user/person/info' }).catch(e => {
+                    return this.loginZlb()
+                })
+            } else {
+                return this.loginZlb()
+            }
         }
         // #endif
 
@@ -449,13 +445,6 @@ export default {
         // #endif
     },
     methods: {
-        changeFontSize() {
-            // this.rootFontSize = this.rootFontSize === '10px' ? '16px' : '10px';
-            // uni.setStorageSync("rootFontSize", this.rootFontSize)
-            // uni.reLaunch({
-            //     url: 'pages/index/index'
-            // })
-        },
         getQuery(name) {
             let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             console.log("window.location-----------", window.location)
@@ -469,38 +458,18 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-            /**
-             * 
-             * servicecode等同于AccessKey（简称AK），servicepwd等同于SecretKey（简称SK）
-             * SecretKey BCDSGS_0f05ec12aa9be2b107edb2a07e66ae45
-                AccessKey BCDSGA_7d4388d47d989fef0eb063d9e63c0c53
-             */
-            const servicecode = 'BCDSGA_7d4388d47d989fef0eb063d9e63c0c53'
-            const ZLB_LOCAL_PAGE = "http://localhost:8080/"
-            const ZLB_PROD_PAGE = "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html?debug=true#/"
-            // if (bIsAlipayMini) {
-            //     window.location.href =
-            //         "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode="接入码"&go=https://mapi.zjzwfw.gov.cn/web/***/index.html?debug=true";
-            // } else {
-            //     window.location.href =
-            //         "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode="接入码"&go=https://mapi.zjzwfw.gov.cn/web/***/index.html?debug=true";
-            // }
+            const { AccessKey, ZLB_LOCAL_PAGE, ZLB_PROD_DEBUG_PAGE, ZLB_PROD_PAGE } = this.db;
             let str = ''
-            if (bIsAlipayMini) {
-                console.log('支付宝小程序------------------');
-                str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${servicecode}&redirectUrl=${ZLB_PROD_PAGE}&goto=${ZLB_LOCAL_PAGE}`
-                // window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
-            } else {
-                console.log('浙里办APP------------------');
-                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${servicecode}&redirectUrl=${ZLB_LOCAL_PAGE}&goto=${ZLB_LOCAL_PAGE}`
-                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${servicecode}&redirectUrl=${ZLB_PROD_PAGE}&goto=${ZLB_PROD_PAGE}`
-                str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${servicecode}&redirectUrl=${ZLB_LOCAL_PAGE}`
-                // window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
+            if (bIsAlipayMini) { // 支付宝小程序
+                str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`  // 线上调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}`  // 正式发布
+            } else { // 浙里办APP
+                str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`   // 线上调试
+                // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}` // 正式发布
             }
-            console.log("跳转的地址", str)
             window.location.replace(str)
-            // 或者使用replace()
-            // window.location.replace('https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】');
         },
         async loadData() {
             let { deptId, region } = this.zz.getDept(),

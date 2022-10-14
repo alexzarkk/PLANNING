@@ -20,10 +20,21 @@ export default {
     async onLaunch() {
         let globalData = this.globalData
         // #ifdef H5-ZLB
-        // this.$nextTick(function () {
-        //     console.log("执行 document.documentElement.style.fontSize =16 ")
-        //     document.documentElement.style.fontSize = "16px"
-        // })
+        // 方案1 修改字体
+        this.$nextTick(function () {
+            console.log("执行 document.documentElement.style.fontSize =10 ", document)
+            let docEl = document.documentElement
+            console.warn("document.documentElement---------------", docEl)
+            console.warn("调整前基准font-size", document.documentElement.style.fontSize);
+            document.documentElement.style.fontSize = "10px"
+            console.warn("当前的基准fontSize---------------------", document.documentElement.style.fontSize);
+            // 方案2修改字体
+            let htmlFont = document.getElementsByTagName('html')[0];
+            console.log("根字体", htmlFont)
+            //htmlFont.style.fontSize = (pagew > 720 ? 720 : pagew) / 7.2 + "px";
+            htmlFont.style.fontSize = '10px'
+            // 暂时没有调试成功，动态调节字体= =
+        })
 
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
