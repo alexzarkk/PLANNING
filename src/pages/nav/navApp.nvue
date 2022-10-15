@@ -13,7 +13,7 @@
 			:enable-rotate="false"
 			:enable-overlooking="false"
 			
-			:polyline="[...lines]"
+			:polyline="lines"
 			:markers="points"
 			
 			@regionchange="onchg"
@@ -94,6 +94,8 @@ export default {
 	computed: {
 		lines() {
 			return [...this.nav.line, ...this.line, ...this.rec.line]
+			// let _ = [...this.nav.line, ...this.line, ...this.rec.line]
+			// return this.sysInfo.platform == 'ios'?_:[..._]
 		},
 		points() {
 			return [...this.nav.point, ...this.point]
@@ -201,6 +203,9 @@ export default {
 			this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
 			
 			if(rec.coord.length<10 && !rec.point.length) return zz.modal('本次记录太短了！')
+			
+			rec.info = calData(rec.coord)
+			this.setRec()
 			zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
 		},
 		clock(){
@@ -343,9 +348,8 @@ export default {
 					notifyTitle: '环浙步道',
 					sysName: '环浙步道'
 				}, (xiaoming)=>{
-					console.log(xiaoming);
+					console.log('xiaoming -------->',xiaoming);
 					if (xiaoming.success) {
-						// console.log('xiaoming --------',xiaoming);
 						let _p = xiaoming.data,
 							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
 							line = rec.line[0],
@@ -476,6 +480,7 @@ export default {
 			if(t=='v' || t=='camera') {
 				let e = t=='v'? await zz.chooseVideo({}) : await zz.chooseImage({})
 				if(e) {
+					uni.showLoading()
 					let {coord} = await getLocation(),
 						poi = {
 								_id: uniqId(),
@@ -488,6 +493,7 @@ export default {
 								imgs: t=='v'? []:e,
 								video: t=='v'? e:null
 							}
+					uni.hideLoading()
 					zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 				}
 			}

@@ -475,7 +475,7 @@ export default {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
 
-            // if (!region || !dict) return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
+            if (!region || !dict) return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
             this.dict = dict
             if (this.deptId != deptId) {
                 this.deptId = deptId

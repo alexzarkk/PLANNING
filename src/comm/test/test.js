@@ -66,3 +66,10 @@ console.log(tk);
 for (var i = 2-1; i > 0; i--) {
 	console.log('‘',i);
 }
+
+let a1 = [1,1]
+let a2 = [2,2]
+let a3 = [3,3]
+
+let aa = a1.concat(a2).concat(a3)
+console.log('aa',aa);
