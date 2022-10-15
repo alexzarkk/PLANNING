@@ -460,7 +460,7 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				let p = await scan(trans(uni.getStorageSync('cur_loc_gcj02'), 'gcj02towgs84'))
+				let p = await scan()
 				if(p) {
 					if(this.rec.line[1]) this.rec.line.splice(1,1)
 					

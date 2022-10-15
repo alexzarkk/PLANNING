@@ -17,14 +17,8 @@
                             <text class="cuIcon-people"></text>
                         </view>
                         <view class="padding-left">
-                          <!-- #ifndef H5-ZLB -->
-                            <!-- #ifdef APP-PLUS || H5 -->
+							<!-- #ifndef H5-ZLB -->
                             <text>注册/登录</text>
-                            <!-- #endif -->
-                            <!-- #endif -->
-
-                            <!-- #ifdef H5-ZLB -->
-                            <text>授权/登录</text>
                             <!-- #endif -->
                         </view>
                         <view class="margin-left-xs cuIcon-right"></view>
@@ -116,7 +110,7 @@
             </view> -->
 			
 			<block v-for="(item,idx) of nav" :key="idx">
-				<tui-list-cell padding="0" :lineLeft="false" :arrow="true" @tap="href(item.url, item.veri || false)">
+				<tui-list-cell padding="0" :lineLeft="false" :arrow="true" @tap="href(item.url, null, 0)">
 					<view class="zz-list-cell">
 						<view class="content">
 							<text class="text-blue padding-lr-sm" :class="'cuIcon-'+item.icon"></text>
@@ -126,14 +120,6 @@
 				</tui-list-cell>
 			</block>
 
-            <!-- <view class="cu-item margin-top" @tap="href('/pages/my/set/settings',{},false)">
-                <view class="content">
-                    <text class="cuIcon-settings"></text>
-                    <text class="text-grey">
-                        设置
-                    </text>
-                </view>
-            </view> -->
         </view>
 		
 		
@@ -192,7 +178,6 @@ export default {
                 }
             ],
             order: [
-                // 订单信息
                 {
                     name: '待付款',
                     icon: 'pay',
@@ -226,11 +211,6 @@ export default {
             ],
             elements: [],
             nav: [
-            	// {
-            	// 	text:'技术文档',
-            	// 	url: '/pages/mine/faq/faqlist',
-            	// 	icon:'question'
-            	// },
             	{
             		text:'意见反馈',
             		url: '/pages/comm/feedback?path=profile',
@@ -250,18 +230,7 @@ export default {
             		text:'设置',
             		url: '/pages/my/set/settings',
             		icon:'settings'
-            	},
-            	// {
-            	// 	text:'地图',
-            	// 	url: '/pages/test/mapTest',
-            	// 	icon:'settings'
-            	// }
-            	// {
-            	// 	text:'分享测试',
-            	// 	url: '/pages/share/index',
-            	// 	icon:'settings'
-            	// 	// veri: true
-            	// }
+            	}
             ]
         };
     },
