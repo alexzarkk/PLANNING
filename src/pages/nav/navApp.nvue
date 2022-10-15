@@ -1,5 +1,5 @@
 <template>
-<!-- <page-meta root-font-size="10px"></page-meta> -->
+<page-meta root-font-size="10px"></page-meta>
 	<view>
 		<map id="amap"
 			:style="{width: '750rpx', height: winH + 'px' }"
@@ -13,7 +13,7 @@
 			:enable-rotate="false"
 			:enable-overlooking="false"
 			
-			:polyline="lines"
+			:polyline="[...lines]"
 			:markers="points"
 			
 			@regionchange="onchg"
@@ -94,8 +94,6 @@ export default {
 	computed: {
 		lines() {
 			return [...this.nav.line, ...this.line, ...this.rec.line]
-			// let _ = [...this.nav.line, ...this.line, ...this.rec.line]
-			// return this.sysInfo.platform == 'ios'?_:[..._]
 		},
 		points() {
 			return [...this.nav.point, ...this.point]
