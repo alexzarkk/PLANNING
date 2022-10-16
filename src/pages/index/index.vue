@@ -443,6 +443,7 @@ export default {
         this.loadData()
     },
     methods: {
+		// #ifdef H5-ZLB
         // 获取参数
         getQuery(name) {
             let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -471,6 +472,7 @@ export default {
             }
             window.location.replace(str)
         },
+		// #endif
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')

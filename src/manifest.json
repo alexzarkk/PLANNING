@@ -2,8 +2,8 @@
     "name" : "环浙步道",
     "appid" : "__UNI__210B33A",
     "description" : "环浙步道客户端app",
-    "versionName" : "1.0.9",
-    "versionCode" : 113,
+    "versionName" : "1.1.0",
+    "versionCode" : 114,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -125,8 +125,9 @@
                     "amap" : {
                         "__platform__" : [ "ios", "android" ],
                         "appkey_ios" : "480a8d963a6445a369c24a178da96376",
-                        "appkey_android" : "aabea8b5a59280989a8daecd30266181"
+                        "appkey_android" : "aabea8b5a59280989a8daecd30266181" // szsrun
                     },
+                    // "appkey_android" : "648c819375fb24e9b9a10eec618266e7" // zts_collect
                     "system" : {
                         "__platform__" : [ "ios", "android" ]
                     }
@@ -135,9 +136,10 @@
                     "amap" : {
                         "__platform__" : [ "ios", "android" ],
                         "appkey_ios" : "480a8d963a6445a369c24a178da96376",
-                        "appkey_android" : "aabea8b5a59280989a8daecd30266181"
+                        "appkey_android" : "aabea8b5a59280989a8daecd30266181" // szsrun
                     }
                 },
+                // "appkey_android" : "648c819375fb24e9b9a10eec618266e7" // zts_collect
                 "push" : {
                     "unipush" : {
                         "version" : "2",
@@ -158,7 +160,8 @@
                 "speech" : {
                     "ifly" : {}
                 },
-                "share" : {}
+                "share" : {},
+                "payment" : {}
             },
             "icons" : {
                 "android" : {
@@ -287,6 +290,9 @@
             "treeShaking" : {
                 "enable" : true
             }
+        },
+        "unipush" : {
+            "enable" : true
         }
     },
     // H5
