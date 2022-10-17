@@ -50,11 +50,9 @@ export default {
 	},
 	data() {
 		return {
-			stH: 0,
 			puase: false,
 			process: 0,
 
-			fabShow: false,
 			isShow: false,
 			sysInfo: uni.getStorageSync('sysInfo'),
 			CustomBar: this.CustomBar,
