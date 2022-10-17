@@ -50,18 +50,15 @@ const tts = uni.requireNativePlugin("nrb-tts-plugin")
 tts && tts.init({ "lang":"ZH", "country":"CN" })
 
 import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
-import { createEle, toDist, scan, on, around } from '@/comm/nav'
+import { createEle, toDist, scan, on } from '@/comm/nav'
 import icon from '@/comm/libs/icon'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
 import zz from '@/comm/zz'
 
 import fab from './components/fab'
-
 export default {
-	components: {
-		fab
-	},
+	components: { fab },
 	data() {
 		return {
 			sysInfo: uni.getStorageSync('sysInfo'),
@@ -83,7 +80,8 @@ export default {
 			puase: false,
 			tim: {H:0, M:0, S:0, MS:0},
 			nav: {line:[], point:[]}, // 基础
-			rec: {line:[], point:[]},
+			rec: {point:[],coord:[],t:{},info:{}},
+			rLine: [{width:8,arrowLine:true,points:[]}],
 			
 			timer: null,
 			lock: false,
@@ -93,7 +91,7 @@ export default {
 	},
 	computed: {
 		lines() {
-			return [...this.nav.line, ...this.line, ...this.rec.line]
+			return [...this.nav.line, ...this.line, ...this.rLine]
 		},
 		points() {
 			return [...this.nav.point, ...this.point]
@@ -201,6 +199,9 @@ export default {
 			this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
 			
 			if(rec.coord.length<10 && !rec.point.length) return zz.modal('本次记录太短了！')
+			
+			rec.info = calData(rec.coord)
+			this.setRec()
 			zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
 		},
 		clock(){
@@ -237,12 +238,12 @@ export default {
 					endTime: 0,
 					t: {},
 					point:[],
-					coord:[],
-					line: [{
-							width: 8,
-							arrowLine: true,
-							points: []
-						}]
+					coord:[]
+					// line: [{
+					// 		width: 8,
+					// 		arrowLine: true,
+					// 		points: []
+					// 	}]
 				},
 				say = () => {
 					if (tim.H && !rec.t['t'+tim.H]) {
@@ -294,13 +295,9 @@ export default {
 						for (let s of rec.point) {
 							this.point.push(createEle(s))
 						}
-						rec.line = [{
-								width: 8,
-								arrowLine: true,
-								points: []
-							}]
+						
 						for (let s of rec.coord) {
-							rec.line[0].points.push(pt(s))
+							this.rLine[0].points.push(pt(s))
 						}
 						
 						let T = uni.getStorageSync('nav_T_tim'+this.tmt)
@@ -317,8 +314,8 @@ export default {
 				init()
 			}
 			
-			if(this.cps.length && !rec.line[1]) {
-				rec.line[1] = {
+			if(this.cps.length && !this.rLine[1]) {
+				this.rLine[1] = {
 								weight: 1,
 								color: '#00ff7f',
 								dottedLine: true,
@@ -333,8 +330,9 @@ export default {
 			this.rec = rec
 			this.clock()
 			this.onRec = true
-			
 			this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
+			
+			// console.log('startLocation =====>',rec)
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
@@ -343,15 +341,14 @@ export default {
 					notifyTitle: '环浙步道',
 					sysName: '环浙步道'
 				}, (xiaoming)=>{
-					console.log(xiaoming);
+					// console.log('xiaoming ------------————————>',xiaoming);
 					if (xiaoming.success) {
-						// console.log('xiaoming --------',xiaoming);
 						let _p = xiaoming.data,
 							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
-							line = rec.line[0],
+							line = this.rLine[0],
 							size = rec.coord.length
 						
-						if(rec.line[1]) rec.line[1].points[0] = pt(c1)
+						if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
 						uni.setStorageSync('cur_loc_gcj02', c1)
 						
 						if(!this.puase) {
@@ -402,13 +399,13 @@ export default {
 								
 								let p = this.cps[0]
 								
-								// console.log(p,'checkcps .............',this.cps);
+								console.log(p,'checkcps .............',this.cps)
 								
-								if(rec.line[1]) {
+								if(this.rLine[1]) {
 									if(p.dist <= 500) {
-										rec.line[1].points[1] = pt(trans(p.coord))
+										this.rLine[1].points[1] = pt(trans(p.coord))
 									} else {
-										if(rec.line[1].points[1]) rec.line[1].points[1].splice(1,1)
+										if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
 									}
 								}
 								if(p.dist <= this.minDist && !rec.t[p._id]) {
@@ -460,9 +457,9 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				let p = await scan(trans(uni.getStorageSync('cur_loc_gcj02'), 'gcj02towgs84'))
+				let p = await scan()
 				if(p) {
-					if(this.rec.line[1]) this.rec.line.splice(1,1)
+					if(this.rLine[1]) this.rLine.splice(1,1)
 					
 					this.rec.t[p._id] = 1
 					this.point.splice(this.point.findIndex(x => x.id == p._id), 1)
@@ -476,6 +473,7 @@ export default {
 			if(t=='v' || t=='camera') {
 				let e = t=='v'? await zz.chooseVideo({}) : await zz.chooseImage({})
 				if(e) {
+					uni.showLoading()
 					let {coord} = await getLocation(),
 						poi = {
 								_id: uniqId(),
@@ -488,6 +486,7 @@ export default {
 								imgs: t=='v'? []:e,
 								video: t=='v'? e:null
 							}
+					uni.hideLoading()
 					zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 				}
 			}
@@ -523,7 +522,7 @@ export default {
 					
 					//删除
 					if (r.tapIndex == 1) {
-						const [__, m] = await uni.showModal({
+						const [_,m] = await uni.showModal({
 							title: '确认要删除吗？',
 							content: '删除将无法恢复！'
 						})

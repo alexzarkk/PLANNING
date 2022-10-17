@@ -173,57 +173,60 @@ async function scan(cd){
 }
 
 async function on(){
-	// #ifdef 
-		const getZoom = async()=>{
-			return new Promise((res) => {APP-PLUS})
-		},
-		center = async()=>{
-			return new Promise((res) => {
-				this.amap.getCenterLocation({
-					success(x){ res(x) }
-				})
+	// #ifdef APP-PLUS
+	
+	const getZoom = async()=>{
+		return new Promise((res) => {
+			this.amap.getScale({
+				success(x){ res(~~x.scale) }
 			})
-		},
-		getXY = async()=>{
-			return new Promise((res) => {
-				this.amap.getRegion({
-					success(x){ res(x) }
-				})
+		})
+	},
+	center = async()=>{
+		return new Promise((res) => {
+			this.amap.getCenterLocation({
+				success(x){ res(x) }
 			})
-		}
+		})
+	},
+	getXY = async()=>{
+		return new Promise((res) => {
+			this.amap.getRegion({
+				success(x){ res(x) }
+			})
+		})
+	}
+	
+	let nav = this.nav,
+		ct = await center(),
+		k = comm.nearst(trans([ct.longitude, ct.latitude], 'gcj02towgs84')),
+		zoom = await getZoom(),
+		x = await getXY(),
+		sw = x.southwest,
+		ne = x.northeast,
+		xy = ~~(math(~~(getDist(ne.longitude, ne.latitude, sw.longitude, sw.latitude)+(zoom>=15?8000:0))/10000,0) * 10000/0.5)||10000
+	if (!k||isSame(nav.k,[k,zoom,xy])||nav.busy) return
+	
+	nav.busy = true
+	nav.k = [k,zoom,xy]
+	if(zoom>19) zoom = 19
+	if(zoom<9) zoom = 9
+	
+	let kml = await comm.gridNet(k,xy,zoom),
+		line = [],
+		point = []
 		
-		let nav = this.nav,
-			ct = await center(),
-			k = comm.nearst(trans([ct.longitude, ct.latitude], 'gcj02towgs84')),
-			zoom = await getZoom(),
-			x = await getXY(),
-			sw = x.southwest,
-			ne = x.northeast,
-			xy = ~~(math(~~(getDist(ne.longitude, ne.latitude, sw.longitude, sw.latitude)+(zoom>=15?8000:0))/10000,0) * 10000/0.5)||10000
-		
-		if (!k||isSame(nav.k,[k,zoom,xy])||nav.busy) return
-		
-		// console.log('setnav ...............',k,zoom,xy);
-		
-		nav.busy = true
-		nav.k = [k,zoom,xy]
-		if(zoom>19) zoom = 19
-		if(zoom<9) zoom = 9
-		
-		let kml = await comm.gridNet(k,xy,zoom),
-			line = [],
-			point = []
-			
-		for (let s of kml.line) {
-			line.push(createEle(s,1))
-		}
-		for (let s of kml.point) {
-			point.push(createEle(s,1,icon[202]))
-		}
-		nav.line = line
-		nav.point = point
-		
-		nav.busy = false
+	for (let s of kml.line) {
+		line.push(createEle(s,1))
+	}
+	for (let s of kml.point) {
+		point.push(createEle(s,1,icon[202]))
+	}
+	nav.line = line
+	nav.point = point
+	
+	nav.busy = false
+	
 	// #endif
 }
 

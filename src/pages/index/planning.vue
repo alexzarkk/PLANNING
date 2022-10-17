@@ -54,8 +54,8 @@
         </view>
         <!-- 瀑布流 -->
 
-        <view class="padding-sm">
-            <tui-waterfall :type="2" :pageSize="5" :listData="trailShowData">
+        <view v-if="isReady" class="padding-sm">
+            <tui-waterfall :key="timer" :type="1" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
                 <!-- #ifdef MP -->
                 <!-- <template slot-scope="{ entity, index }" slot="left">
                     <t-goods-item :entity="entity"></t-goods-item>
@@ -103,6 +103,8 @@ export default {
 
     data() {
         return {
+            timer: new Date().getTime(),
+            isReady: false, // 数据准备
             trailData: [],
             bd: this.bd,
             td: {},
@@ -139,19 +141,19 @@ export default {
     },
     onBackPress() { return true },
     onLoad(qr) {
+
+    },
+    onReady() {
         let td = uni.getStorageSync('trailData');
         this.trailData = td.trailData;
-        // console.log('trailData==========', this.trailData);
-        this.trailShowData = td.trailData.slice(0, this.pageSize);
         if (td && td.tStyle) {
             this.tabs = td.tStyle;
         } else {
             this.tabs = tabsData;
         }
-
-        // this.trailShowData = this.trailShowData.concat(trailShowData)
-        // this.trailShowData = trailShowData
-
+        const list = td.trailData.slice(0, this.pageSize);
+        this.trailShowData  = this.trailShowData.concat(list)
+        this.isReady = true
     },
     //   onReady() {
     // this.$store.commit('createBackBtn')  // 创建返回的按钮

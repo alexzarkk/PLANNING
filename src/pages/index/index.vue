@@ -413,10 +413,7 @@ export default {
                     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
                     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
                     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                    window.aplus_queue.push({
-                        action: 'aplus.setMetaInfo',
-                        arguments: ['_hold', 'START']
-                    })
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
                 })
             } catch (error) {
             }
@@ -446,6 +443,7 @@ export default {
         this.loadData()
     },
     methods: {
+		// #ifdef H5-ZLB
         // 获取参数
         getQuery(name) {
             let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -462,8 +460,6 @@ export default {
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
             const { AccessKey, ZLB_LOCAL_PAGE, ZLB_PROD_DEBUG_PAGE, ZLB_PROD_PAGE } = this.bd;
-            console.log("AccessKey--------------", AccessKey)
-            console.log(this.bd)
             let str = ''
             if (bIsAlipayMini) { // 支付宝小程序
                 // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
@@ -476,6 +472,7 @@ export default {
             }
             window.location.replace(str)
         },
+		// #endif
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')

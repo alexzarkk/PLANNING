@@ -1,4 +1,5 @@
 <template>
+	<page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true">
             <block slot="content">更新兴趣点</block>

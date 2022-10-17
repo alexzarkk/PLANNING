@@ -24,8 +24,6 @@
 				</view>
 			</view>
 		</view>
-		
-		<zz-loc ref="loc"></zz-loc>
 	</view>
 </template>
 

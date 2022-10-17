@@ -19,16 +19,9 @@
                             <text class="cuIcon-people" />
                         </view>
                         <view class="padding-left">
-
-                            <!-- #ifndef H5-ZLB -->
-                            <!-- #ifdef APP-PLUS || H5 -->
-                            <text>注册/登录</text>
-                            <!-- #endif -->
-                            <!-- #endif -->
-
-                            <!-- #ifdef H5-ZLB -->
-                            <text>授权/登录</text>
-                            <!-- #endif -->
+                           <!-- #ifndef H5-ZLB -->
+                           <text>注册/登录</text>
+                           <!-- #endif -->
                         </view>
                         <view class="margin-left-xs cuIcon-right" />
                     </view>

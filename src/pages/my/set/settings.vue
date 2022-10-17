@@ -5,43 +5,44 @@
             <block slot="content">设置</block>
         </cu-custom>
         <view class="container">
-            <tui-list-view margin-top="20rpx">
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/push')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">消息推送</text>
-                        <!-- <text class="text-black  ">179cm,79kg</text> -->
-                    </view>
-                </tui-list-cell>
-            </tui-list-view>
+			<block v-if="user">
+				<tui-list-view margin-top="20rpx">
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/push')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">消息推送</text>
+							<!-- <text class="text-black  ">179cm,79kg</text> -->
+						</view>
+					</tui-list-cell>
+				</tui-list-view>
 
-            <tui-list-view margin-top="20rpx">
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/privacy')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">隐私设置</text>
-                    </view>
-                </tui-list-cell>
-                <!-- <tui-list-cell arrow @click="openPage('/pages/my/set/settings/record')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">记录设置</text>
-                    </view>
-                </tui-list-cell>
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/chat')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">聊天设置</text>
-                    </view>
-                </tui-list-cell>
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/map')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">地图设置</text>
-                    </view>
-                </tui-list-cell>
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/mobile')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">手机设置</text>
-                    </view>
-                </tui-list-cell> -->
-            </tui-list-view>
-
+				<tui-list-view margin-top="20rpx">
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/privacy')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">隐私设置</text>
+						</view>
+					</tui-list-cell>
+					<!-- <tui-list-cell arrow @click="openPage('/pages/my/set/settings/record')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">记录设置</text>
+						</view>
+					</tui-list-cell>
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/chat')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">聊天设置</text>
+						</view>
+					</tui-list-cell>
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/map')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">地图设置</text>
+						</view>
+					</tui-list-cell>
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/mobile')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">手机设置</text>
+						</view>
+					</tui-list-cell> -->
+				</tui-list-view>
+			</block>
             <tui-list-view margin-top="20rpx">
 
                 <tui-list-cell arrow @click="clear">
@@ -72,7 +73,8 @@
                     <view class="justify-between flex padding-right align-center"><text class="">关于环浙步道</text></view>
                 </tui-list-cell>
             </tui-list-view>
-            <!-- #ifndef H5-ZLB -->
+           
+			<!-- #ifndef H5-ZLB -->
             <block v-if="user">
                 <view class="padding response margin-top"><button class="cu-btn round bg-red lg response" @click="isLogoutShow = true">退出登录</button></view>
                 <view class="padding flex align-center justify-center" @click="goDelAccount">
@@ -89,7 +91,7 @@
 </template>
 
 <script>
-
+import comm from '@/comm/comm'
 export default {
     data() {
         return {
@@ -135,8 +137,6 @@ export default {
         },
         clear() {
             const res = uni.getStorageInfoSync()
-            console.log(res.keys);
-            console.log(res.currentSize);
 
             //系统保留缓存
             let keep = [
@@ -152,7 +152,32 @@ export default {
                     uni.removeStorageSync(k)
                 }
             }
-            this.zz.init()
+            this.formatSize()
+			
+			let dict = uni.getStorageSync('sys_dict') || {}
+			this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
+				if(e.v) {
+					Object.assign(dict, e)
+					uni.setStorageSync('sys_dict', dict)
+				}
+			})
+			
+			if (uni.getStorageSync('cur_deptId') == '') {
+			    uni.setStorageSync('cur_deptId', '330213')
+			    this.zz.setDept()
+			}
+			
+			// #ifdef APP-PLUS
+			comm.on()
+			// #endif
+			
+			// #ifndef APP-PLUS
+			comm.on([121, 29])
+			// #endif
+			
+			this.zz.req({ $url: 'public/trail/list', deptId: ['330213'], status: 10, type: 60 }).then(list => {
+			    uni.setStorageSync('trailData', { trailData: list })
+			})
         },
         // 清除缓存
         clearCache() {

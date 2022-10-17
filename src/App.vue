@@ -182,7 +182,6 @@ export default {
         uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
         // #endif
 
-        // uni.clearStorageSync()
         this.init()
     },
     onShow() {
@@ -204,14 +203,14 @@ export default {
     methods: {
         async init() {
             let dict = uni.getStorageSync('sys_dict') || {}
-
             this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
-                Object.assign(dict, e)
-                uni.setStorageSync('sys_dict', dict)
-                // console.log('dict ===============', dict)
+				if(e.v) {
+					Object.assign(dict, e)
+					uni.setStorageSync('sys_dict', dict)
+				}
             })
 
-            if (uni.getStorageSync('cur_deptId') == '') {
+            if (!uni.getStorageSync('cur_deptId')) {
                 uni.setStorageSync('cur_deptId', '330213')
                 this.zz.setDept()
             }

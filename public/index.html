@@ -8,14 +8,10 @@
 		<%= htmlWebpackPlugin.options.title %>
 	</title>
 	<script>
-		var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS
-			.supports('top: constant(a)'))
-		document.write(
-			'<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
-			(coverSupport ? ', viewport-fit=cover' : '') + '" />')
+		var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
+		document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' + (coverSupport ? ', viewport-fit=cover' : '') + '" />')
 	</script>
 	<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.0.1/zwjsbridge.js"></script>
-
 	<link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
 	<style>
 		#global-menu {

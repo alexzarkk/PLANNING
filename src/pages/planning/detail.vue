@@ -177,7 +177,7 @@
             <view class="sticky-box bg-cyan margin-top" :style="[{ top: customBar + 'px' }]">
                 <scroll-view class="nav text-center" scroll-x scroll-with-animation>
                     <view
-                        v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item text-sm" :class="item.sight ? 'cur text-bold  text-red' : ''"
+                        v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item text-lg" :class="item.sight ? 'cur text-bold  text-red' : ''"
                         @tap="moveTo"
                     >
                         {{ item.name }}
