@@ -14,8 +14,10 @@ const bd = {
 	SecretKey: 'BCDSGS_0f05ec12aa9be2b107edb2a07e66ae45',	//servicepwd
 	AccessKey: 'BCDSGA_7d4388d47d989fef0eb063d9e63c0c53',	//servicecode
 	ZLB_LOCAL_PAGE: "http://localhost:8080/",  // 本地测试的回调地址
-	ZLB_PROD_DEBUG_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html?debug=true#/",  // 调试环境地址
+	ZLB_PROD_DEBUG_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true",  // 调试环境地址
 	ZLB_PROD_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html",  // 正式环境地址，发布地址
+	// https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true
+	// https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true
 	/* 高德 */
 	amapKey: 'daffb83c14428939221e09ebc785c89c',
 
