@@ -388,9 +388,7 @@ export function getImageInfo(img, isH5PathToBase64, isReset = false) {
 					image.path = localReg.test(img) ?  `/${image.path}` : image.path;
 					// #endif
 					// #ifdef H5
-					// #ifndef H5-ZLB
-					image.path = image.path.replace(/^\./, window.location.origin)  // 浙里办代码块里禁止有 window.location
-					// #endif
+					image.path = image.path.replace(/^\./, window.location.origin)
 					// #endif
 					image.originSrc = img
 					cache[img] = image
