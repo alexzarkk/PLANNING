@@ -9,7 +9,7 @@
         <view class="cu-bar bg-ztsblue search fixed align-center" style="height:100rpx;" id="searchBar" :style="[{ top: customBar + 'px' }]">
             <view class="action text-white round padding-xs" @click="href('/pages/comm/region')">
                 <text class="cuIcon-locationfill"></text>
-                <text v-if="getDict" class="text-df">{{getDict?getDict.deps[deptId].name:''}}</text>
+                <text class="text-df">{{dict?dict.deps[deptId].name:''}}</text>
                 <text class="margin-left-xxs cuIcon-triangledownfill"></text>
             </view>
             <view class="search-form round" @click="href('/pages/planning/list?key=1')">
@@ -298,11 +298,6 @@ export default {
                     name: '步道标识'
                 }
             ]
-        },
-        getDict() {
-            let dict = uni.getStorageSync("sys_dict") || null
-            // console.log("获取的dict", dict)
-            return dict
         }
     },
     data() {
@@ -435,7 +430,7 @@ export default {
             }
         }
         // #endif
-
+		
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
@@ -448,6 +443,7 @@ export default {
         this.loadData()
     },
     methods: {
+		// #ifdef H5-ZLB
         // 获取参数
         getQuery(name) {
             let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -464,8 +460,6 @@ export default {
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
             const { AccessKey, ZLB_LOCAL_PAGE, ZLB_PROD_DEBUG_PAGE, ZLB_PROD_PAGE } = this.bd;
-            console.log("AccessKey--------------", AccessKey)
-            console.log(this.bd)
             let str = ''
             if (bIsAlipayMini) { // 支付宝小程序
                 // str = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_LOCAL_PAGE}`  // 本地调试
@@ -478,13 +472,12 @@ export default {
             }
             window.location.replace(str)
         },
+		// #endif
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
-                // console.log("获取到的地理信息",deptId)
-            // if (!region || !dict) {
-            //     return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
-            // }
+
+            if (!region || !dict) return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
             this.dict = dict
             if (this.deptId != deptId) {
                 this.deptId = deptId

@@ -54,7 +54,7 @@
 		
 		<view class="container solid-top">
             <!-- 使用路线 -->
-            <view v-if="rec" style="width: 350rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
+            <view v-if="rec" style="width: 380rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
                 <button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
                     <text class="zzIcon-distfill margin-right-sm" />
                     使用路线

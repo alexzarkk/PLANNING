@@ -13,16 +13,6 @@
 			<view v-if="isShow && process"><progress :percent="process" activeColor="#ff0000" /></view>
 		</view>
 
-		<view>
-			<!-- 普通弹窗 -->
-			<uni-popup ref="popup" background-color="#fff" @change="change">
-				<data-swiper :dataList="dataList1"></data-swiper>
-				<data-swiper></data-swiper>
-				<data-swiper></data-swiper>
-				<data-swiper></data-swiper>
-			</uni-popup>
-		</view>
-
 		<view class="uni-cursor-point">
 			<view class="uni-fab uni-fab--leftBottom" :style="{ opacity: isShow ? 1 : 0 }">
 				<view class="uni-fab__content--left uni-fab__content">
@@ -45,14 +35,10 @@ const d = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAA
 		'BERJREFUWEe9V12IG1UU/s5kU+pP9UVZ9Elt6YLUTGhXWJNJ60Lpg7qCaAXBHxC0D+pu7q4/WJDNoigKu7O7VbT6ZoVCrSj+QdeHVmeSim41E6vYVWsfpFWqD/5uNMkcuZOZOJmdJJNs8cI8zLnn57vnnnvPdwldDN1IXs/gW4hwHYBL3U96OCs/Zhwl0JsiUzwS1S11UtQXt1xmL1d2KUR3ANjYSd+dX7KZ9yvnxfeKwWNn2tm0BaDnE5PEdD8Dl0cM3KRGwGkmflmkS1Ot7FsC0E31IwCZZkNeJCgLzPjABp+uUvnMciXG569R+mPU16/Y9jYAIwDJLfIPQ2jW1jAQoQB0Qz0LwiU+A4OI57Lp0htRMjGbT9zKTGNNC2D8LDKWrJtglpoFuql+D+AKT2ozT01kSrkogYM600YipxBN+uSnhGZd6ddryoCeVw+AsfNcBPd86Hn1ITDmG0EJr4u0dbv33wAQRLualQczMWdcs8UmZTFsYQ4AedSoXF30qv1cBveCzhbUm9jGO/LfOR1r+wblEa0DyCcmweTtc8uKlbozpnpIKdfuzm4//lO3daHn1VfBuMuxI87J41kHYKrfAbjKkRPf1q7adVNlqceEp8bT1hPdgJj5UN1BMRxybU4KzVpP02byBgX8Xl1IJaEV1XZOPQCuzl8g5R6R/vxgVCC6mbQATkh9G3Qj6ab6EoBdroMXhGY92AUAT/WI0mc/PDb0xbFOQHRTfR7AA67eXgngEwDXOgKm4U6NJJCBYLw9y+W/p3Zv//qXVkBkQwPxYXf+UwmgcfHYjIGJjLXUQwb+M2HUmPDIuGbpYX6mDXWjQjjhzp2SAP4AcIEU/IPyRY9pJ35fFQDXmAGLFMqJVPEtv79nzYF1a7D2N1f2ZxOAXyuVdbnhrySglqPDFvjtvgQpuWCB5g5ffeHF8bi3SAdAYwsqVNvwaPq4PJI9AyBQjcFTQrOeDHPyXH7T+jjHvvVvQaMIbYXSE6lioWcATPspXhXZodaX1HQhmVJszjeKcMZQ54gwWhfwbqGVnukBQBFMotMJkn51M/E4QE870Rjz1Hws+KjQSqmoAAgos83jYmvpxXY2/jndTBQahIVp2LuK5bFw+F7Uq5gI89m0JUlH5BG4ipeEZg04AAKtuG0z0k11IdbH944OlX6IHNlV9Dcjr+P+f+3YSO5k4gNOloPtOCQLUmtUpK093a4yTH+msHkD2bVvvDk/32imZAEmrLA9OJbp3GDagZz9eFM/V2M/+nSatngFKw4yYlIwkk1Z7/aSiUDRASHMOJyWB5gxCPu4itfGt1kLUYA4gftwZ4P91I1WMGK3HsJdBhlyXYtKABtgOhj2MInZPMKEHWBsbvIaYML+ubZPM3k8Y0T3reZpVmN+pd27opvHqSSTDm+MME7azPtW/TgNBnL5482Ak+IVz3MAn9mgtye04vsRQDoq/wKJWwo9X2L8owAAAABJRU5ErkJggg==',
 	stop =
 		d +
-		'AndJREFUWEfNlz9oU1EUxr9z09wUBNd2qC8GlPdiRQQHR3VQ8Q84KK4ddHDRwcGCDraDRR3TxaEOXcWpVAUnwUVBQdD0JbQQ89qhXQtCc5O8I/clLzSveU1qam7feu873++cc8+55xIMf7RXfXds6LxIiIvwacQnHtX/C6Z1CN6o1XlhfK36dS82ewIopIczzP6EAG4xMN5F4DsDi0Ri3ilvlbrB7AqwbMkTPvgegyYAHI4YUwQsM+ADsAHIyPomgecF6NVxTy3FgcQCNMTxJvSYgRUG5oiwMsRwo0YLmZSNGmwQOwx+SKARLUpAXgC34yA6AuwU59lhIWcyv/+sdwrpxg9g6pwDcKkbxA6AqDgRXbXLlQ+9CEf3FCz5CMCL3SDaAKLijqfT3P9XsCTHQbQJFK1kjkH3m5KTjqde9i8PFNOpK8z8vgHBs7ZXfRDabQHoUgP7P5qn/aPjqcv7IR7acK1kjhrObYLE6bBEWwCuJacIeMrgDUqIc06pUtxPgNLRQ6NbfvUzAccImLI9Nd1MS0OmYMlvAM4AiA29huwFKuupjvuWLDkpgOe6NG1PnWwB5MeSZxOCvgTGmW44q5WFTkJhlHaDYGA6DsBNy5vEeBvI+P6F7FrtU5CCYlo+Y8bjwHCCnLjw9wugq6wO5APPCTN2WT1pABxJzTHxHQDK8VQqzsN+AZqprui2TUyv7dXK3QDAteQiAdcA/HQ8dep/AhQt+Uu3dwbeZT11/WAAGE+B8UNovAyNN6JmJQysFW9vVgfnMgoaksnrWAMYH0g6QQx0JAtbsNGhNB5igGN5O4Shh8n2G9HY06zjVGTicdrLHPive/4CfIfnMFwwuEwAAAAASUVORK5CYII=';
-
-import uniPopup from '@/uni_modules/uni-popup/components/uni-popup/uni-popup';
-import dataSwiper from './dataSwiper';
+		'AndJREFUWEfNlz9oU1EUxr9z09wUBNd2qC8GlPdiRQQHR3VQ8Q84KK4ddHDRwcGCDraDRR3TxaEOXcWpVAUnwUVBQdD0JbQQ89qhXQtCc5O8I/clLzSveU1qam7feu873++cc8+55xIMf7RXfXds6LxIiIvwacQnHtX/C6Z1CN6o1XlhfK36dS82ewIopIczzP6EAG4xMN5F4DsDi0Ri3ilvlbrB7AqwbMkTPvgegyYAHI4YUwQsM+ADsAHIyPomgecF6NVxTy3FgcQCNMTxJvSYgRUG5oiwMsRwo0YLmZSNGmwQOwx+SKARLUpAXgC34yA6AuwU59lhIWcyv/+sdwupXg9g6pwDcKkbxA6AqDgRXbXLlQ+9CEf3FCz5CMCL3SDaAKLijqfT3P9XsCTHQbQJFK1kjkH3m5KTjqde9i8PFNOpK8z8vgHBs7ZXfRDabQHoUgP7P5qn/aPjqcv7IR7acK1kjhrObYLE6bBEWwCuJacIeMrgDUqIc06pUtxPgNLRQ6NbfvUzAccImLI9Nd1MS0OmYMlvAM4AiA29huwFKuupjvuWLDkpgOe6NG1PnWwB5MeSZxOCvgTGmW44q5WFTkJhlHaDYGA6DsBNy5vEeBvI+P6F7FrtU5CCYlo+Y8bjwHCCnLjw9wugq6wO5APPCTN2WT1pABxJzTHxHQDK8VQqzsN+AZqprui2TUyv7dXK3QDAteQiAdcA/HQ8dep/AhQt+Uu3dwbeZT11/WAAGE+B8UNovAyNN6JmJQysFW9vVgfnMgoaksnrWAMYH0g6QQx0JAtbsNGhNB5igGN5O4Shh8n2G9HY06zjVGTicdrLHPive/4CfIfnMFwwuEwAAAAASUVORK5CYII=';
 
 export default {
 	name: 'UniFab',
-	components: { uniPopup, dataSwiper },
 	emits: ['fabClick', 'trigger'],
 	props: {
 		tim: {
@@ -72,7 +58,6 @@ export default {
 			isShow: false,
 			sysInfo: uni.getStorageSync('sysInfo'),
 			CustomBar: this.CustomBar,
-			type: 'bottom',
 
 			content: [
 				{
@@ -90,19 +75,6 @@ export default {
 					textColor: '#f9081f',
 					active: false,
 					type: 'end'
-				}
-			],
-
-			dataList1: [
-				{
-					title: '里程',
-					item: '0.01',
-					unit: '公里'
-				},
-				{
-					title: 'title',
-					item: 'item',
-					unit: 'unit'
 				}
 			]
 		};
@@ -199,7 +171,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	// bottom: 30px;
 	/* #ifdef H5 */
 	left: calc(15px + var(--window-left));
-	bottom: calc(60px + var(--window-bottom));
+	bottom: calc(30px + var(--window-bottom));
 	/* #endif */
 	// padding: 10px;
 }
@@ -225,7 +197,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	bottom: 90px;
 	/* #ifdef H5 */
 	left: calc(0px + var(--window-left));
-	bottom: calc(60px + var(--window-bottom));
+	bottom: calc(30px + var(--window-bottom));
 	/* #endif */
 }
 
@@ -266,7 +238,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	height: 55px;
 	opacity: 0;
 	transition: opacity 0.33s;
-	border-left: 3rpx solid #eee;
+	border-left: 3upx solid #eee;
 }
 
 .uni-fab__item--active {

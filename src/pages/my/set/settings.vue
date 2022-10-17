@@ -5,43 +5,44 @@
             <block slot="content">设置</block>
         </cu-custom>
         <view class="container">
-            <tui-list-view margin-top="20rpx">
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/push')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">消息推送</text>
-                        <!-- <text class="text-black  ">179cm,79kg</text> -->
-                    </view>
-                </tui-list-cell>
-            </tui-list-view>
+			<block v-if="user">
+				<tui-list-view margin-top="20rpx">
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/push')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">消息推送</text>
+							<!-- <text class="text-black  ">179cm,79kg</text> -->
+						</view>
+					</tui-list-cell>
+				</tui-list-view>
 
-            <tui-list-view margin-top="20rpx">
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/privacy')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">隐私设置</text>
-                    </view>
-                </tui-list-cell>
-                <!-- <tui-list-cell arrow @click="openPage('/pages/my/set/settings/record')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">记录设置</text>
-                    </view>
-                </tui-list-cell>
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/chat')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">聊天设置</text>
-                    </view>
-                </tui-list-cell>
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/map')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">地图设置</text>
-                    </view>
-                </tui-list-cell>
-                <tui-list-cell arrow @click="openPage('/pages/my/set/settings/mobile')">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">手机设置</text>
-                    </view>
-                </tui-list-cell> -->
-            </tui-list-view>
-
+				<tui-list-view margin-top="20rpx">
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/privacy')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">隐私设置</text>
+						</view>
+					</tui-list-cell>
+					<!-- <tui-list-cell arrow @click="openPage('/pages/my/set/settings/record')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">记录设置</text>
+						</view>
+					</tui-list-cell>
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/chat')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">聊天设置</text>
+						</view>
+					</tui-list-cell>
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/map')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">地图设置</text>
+						</view>
+					</tui-list-cell>
+					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/mobile')">
+						<view class="justify-between flex padding-right align-center">
+							<text class="">手机设置</text>
+						</view>
+					</tui-list-cell> -->
+				</tui-list-view>
+			</block>
             <tui-list-view margin-top="20rpx">
 
                 <tui-list-cell arrow @click="clear">

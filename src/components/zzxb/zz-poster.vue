@@ -82,7 +82,7 @@ export default {
 			Type:String,
 			default:'#b8b8b8'
 		},
-		Width:{			//画布宽度  (高度根据图片比例计算 单位rpx)
+		Width:{			//画布宽度  (高度根据图片比例计算 单位upx)
 			Type:String,
 			default:750
 		},
