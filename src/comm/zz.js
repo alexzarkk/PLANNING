@@ -492,7 +492,6 @@ async function req(params = {}, loading = false, t = 9999) {
 				complete = (e) => {
 					params.$fn = fn
 					params.$url = url
-					
 					// clearTimeout(tim)
 					// console.log(e);
 				}

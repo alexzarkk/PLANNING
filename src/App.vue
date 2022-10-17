@@ -37,7 +37,7 @@ export default {
 
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
-            console.log("页面启动------------", event.persisted, window.performance.navigation.type == 2)
+            console.log("页面启动------------", window.location,event.persisted, window.performance.navigation.type == 2)
             /**
              * 0：网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载，相当于常数performance.navigation.TYPE_NAVIGATE。
                 1：网页通过“重新加载”按钮或者location.reload()方法加载，相当于常数performance.navigation.TYPE_RELOAD。
@@ -87,62 +87,6 @@ export default {
                 e.uniPlatform = 'H5-ZLB'
                 Vue.prototype.platform = 'H5-ZLB'
                 Vue.prototype.CustomBar = e.statusBarHeight
-                // console.log('浙里办启动 H5-ZLB ---------------------->')
-
-
-                // const sUserAgent = window.navigator.userAgent.toLowerCase()
-                // // 浙里办APP
-                // const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
-                // // 浙里办支付宝小程序
-                // const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-                // // 单点登录跳转
-                // isLoad = () => {
-                //     if (bIsAlipayMini) {
-                //         window.location.href = "https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
-                //     } else {
-                //         window.location.href = "https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】";
-                //     }
-                //     // 或者使用replace()
-                //     // window.location.replace('https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&servicecode=【接入代码】&redirectUrl=【附带跳转地址，以sp参数返回】');
-                // }
-
-                // watchApp = () => {
-                //     window.onpageshow = (event) => {
-                //         if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
-                //             ZWJSBridge.close();
-                //         }
-                //         isLoad();
-                //     }
-                // }
-                // // 支付宝浙里办小程序判断页面进入状态
-                // watchApply = () => {
-                //     window.onpageshow = (event) => {
-                //         if (event.persisted || (window.performance && (window.performance.navigation.type == 1 || window.performance.navigation.type == 0))) {
-                //             isLoad();
-                //         } else {
-                //             // my.navigateBack();
-                //             // uni.navigateBack()
-                //         }
-                //     }
-                // }
-                // init = () => {
-                //     if (that.getQuery('ticket') == null && that.ticket == "") {
-                //         uni.showLoading({
-                //             title: '登录中',
-                //             mask: true
-                //         });
-                //         if (bIsDtDreamApp) {
-                //             watchApp();
-                //         } else if (bIsAlipayMini) {
-                //             watchApply();
-                //         }
-                //     } else {
-                //         that.ticket = that.getQuery('ticket');
-                //         uni.reLaunch({
-                //             url: `./index?ticket=${that.ticket}`
-                //         })
-                //     }
-                // }
                 // #endif
 
 
@@ -196,8 +140,6 @@ export default {
                 sync.go()
             }
         })
-
-
     },
     onHide() { },
     methods: {

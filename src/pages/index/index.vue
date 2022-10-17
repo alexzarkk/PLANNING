@@ -2,12 +2,6 @@
 <template>
     <page-meta root-font-size="10px"></page-meta>
     <view>
-		<block v-if="loading">
-			<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
-		</block>
-		<block v-else>
-			<tui-no-data :fixed="true" :imgUrl="bd.imgs.nodata"  btnText="重新加载" @tap="reload">点击重试~</tui-no-data>
-		</block>
 		
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
