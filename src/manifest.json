@@ -2,8 +2,8 @@
     "name" : "环浙步道",
     "appid" : "__UNI__210B33A",
     "description" : "环浙步道客户端app",
-    "versionName" : "1.1.0",
-    "versionCode" : 114,
+    "versionName" : "1.1.1",
+    "versionCode" : 115,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -210,20 +210,6 @@
             }
         },
         "nativePlugins" : {
-            "XM_Alive_Location" : {
-                "__plugin_info__" : {
-                    "name" : "保活定位插件",
-                    "description" : "后台保活，使用高德地图进行定位和定位上传",
-                    "platforms" : "Android,iOS",
-                    "url" : "",
-                    "android_package_name" : "",
-                    "ios_bundle_id" : "",
-                    "isCloud" : false,
-                    "bought" : -1,
-                    "pid" : "",
-                    "parameters" : {}
-                }
-            },
             "nrb-tts-plugin" : {
                 "__plugin_info__" : {
                     "name" : "语音合成TTS",
@@ -235,6 +221,20 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "4133",
+                    "parameters" : {}
+                }
+            },
+            "XM_Alive_Location" : {
+                "__plugin_info__" : {
+                    "name" : "保活定位插件",
+                    "description" : "后台保活，使用高德地图进行定位和定位上传",
+                    "platforms" : "Android,iOS",
+                    "url" : "",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : false,
+                    "bought" : -1,
+                    "pid" : "",
                     "parameters" : {}
                 }
             }

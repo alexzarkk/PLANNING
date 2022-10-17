@@ -341,7 +341,7 @@ export default {
 					notifyTitle: '环浙步道',
 					sysName: '环浙步道'
 				}, (xiaoming)=>{
-					// console.log('xiaoming ------------————————>',xiaoming);
+					console.log('xiaoming ------------————————>',xiaoming);
 					if (xiaoming.success) {
 						let _p = xiaoming.data,
 							c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
