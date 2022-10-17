@@ -171,7 +171,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	// bottom: 30px;
 	/* #ifdef H5 */
 	left: calc(15px + var(--window-left));
-	bottom: calc(60px + var(--window-bottom));
+	bottom: calc(30px + var(--window-bottom));
 	/* #endif */
 	// padding: 10px;
 }
@@ -197,7 +197,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	bottom: 90px;
 	/* #ifdef H5 */
 	left: calc(0px + var(--window-left));
-	bottom: calc(60px + var(--window-bottom));
+	bottom: calc(30px + var(--window-bottom));
 	/* #endif */
 }
 
@@ -238,7 +238,7 @@ $uni-shadow-base: 0 1px 5px 2px
 	height: 55px;
 	opacity: 0;
 	transition: opacity 0.33s;
-	border-left: 3rpx solid #eee;
+	border-left: 3upx solid #eee;
 }
 
 .uni-fab__item--active {
