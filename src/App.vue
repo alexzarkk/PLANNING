@@ -215,21 +215,19 @@ export default {
                 this.zz.setDept()
             }
 
-            // #ifdef APP-PLUS
-            comm.on()
-            // #endif
-
             // #ifndef APP-PLUS
             comm.on([121, 29])
             // #endif
 			
-			
+			// #ifdef APP-PLUS
+			comm.on()
 			locationModule.getOnceLocation({
 				locationMode: 'Device_Sensors'
 			}, (xiaoming) => {
 				console.log('小明定位结果 ------------------->',xiaoming);
 			})
-        }
+			// #endif
+		}
     }
 }
 </script>

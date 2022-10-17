@@ -383,8 +383,9 @@ const
 	 * @return Object || Object[key]
 	 */
 	getQueryParam = (url, k) => {
-		let u = url.split('?'),
-			arr = u[1].split('&'),
+		let u = url.split('?')
+		if(u.length==1)return ''
+		let	arr = u[1].split('&'),
 			o = { url: u[0] }
 
 		for (let v of arr) {

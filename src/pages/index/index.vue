@@ -2,6 +2,13 @@
 <template>
     <page-meta root-font-size="10px"></page-meta>
     <view>
+		<block v-if="loading">
+			<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
+		</block>
+		<block v-else>
+			<tui-no-data :fixed="true" :imgUrl="bd.imgs.nodata"  btnText="重新加载" @tap="reload">点击重试~</tui-no-data>
+		</block>
+		
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
         </cu-custom>
@@ -393,9 +400,9 @@ export default {
 
     async onLoad(option) {
         // #ifdef H5-ZLB
-        const ticket = this.getQuery("ticket");
-        if (ticket) {  // 登录回调地址里带有ticket
-            console.log("获取到的ticket", ticket)
+        const ticket = this.zz.getQueryParam(window.location.search,'ticket')
+        if (ticket) {  
+            // console.log("获取到的ticket", ticket)
             try {
                 const userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
                 console.info("登录获取到的信息----------", userInfo)
@@ -421,7 +428,7 @@ export default {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
             if (token) {
-                //过期
+                //是否过期
                 await this.zz.req({ $url: '/user/person/info' }).catch(e => {
                     return this.loginZlb()
                 })
@@ -444,14 +451,6 @@ export default {
     },
     methods: {
 		// #ifdef H5-ZLB
-        // 获取参数
-        getQuery(name) {
-            let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            console.log("window.location-----------", window.location)
-            let r = window.location.search.substr(1).match(reg);
-            if (r != null) return unescape(r[2]);
-            return null;
-        },
         // 登录浙里办
         loginZlb() {
             const sUserAgent = window.navigator.userAgent.toLowerCase()
