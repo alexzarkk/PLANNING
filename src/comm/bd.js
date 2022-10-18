@@ -2,6 +2,7 @@
 const bd = {
 	isDev: 1, //是否开发
 	api: ['https://ztsapi.5618.co/', 'https://dev.5618.co/'],
+	ZLB_ADDR: ['https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html', 'http://localhost:8080/'],
 
 	/* 浙里办资料 */
 	/**
@@ -12,11 +13,8 @@ const bd = {
 	appKey: '4kzz5t3t+2002281722+mzaaot', // 浙里办
 	SecretKey: 'BCDSGS_0f05ec12aa9be2b107edb2a07e66ae45',	//servicepwd
 	AccessKey: 'BCDSGA_7d4388d47d989fef0eb063d9e63c0c53',	//servicecode
-	ZLB_LOCAL_PAGE: "http://localhost:8080/",  // 本地测试的回调地址
-	ZLB_PROD_DEBUG_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true",  // 调试环境地址
-	ZLB_PROD_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html",  // 正式环境地址，发布地址
-	// https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true
-	// https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true
+	
+	// ZLB_PROD_DEBUG_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true",  // 调试环境地址
 	/* 高德 */
 	amapKey: 'daffb83c14428939221e09ebc785c89c',
 
