@@ -139,18 +139,6 @@ export default {
     onHide() { },
     methods: {
         async init() {
-            let dict = uni.getStorageSync('sys_dict') || {}
-            this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
-                if (e.v) {
-                    Object.assign(dict, e)
-                    uni.setStorageSync('sys_dict', dict)
-                }
-            })
-
-            if (!uni.getStorageSync('cur_deptId')) {
-                uni.setStorageSync('cur_deptId', '330213')
-                this.zz.setDept()
-            }
 
             // #ifndef APP-PLUS
             comm.on([121, 29])

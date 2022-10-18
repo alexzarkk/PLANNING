@@ -425,6 +425,19 @@ export default {
 		})
         // #endif
 		
+		if (!uni.getStorageSync('cur_deptId')) {
+		    uni.setStorageSync('cur_deptId', '330213')
+			await this.zz.setDept()
+		}
+		
+		let dict = uni.getStorageSync('sys_dict') || {}
+		this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
+		    if (e.v) {
+		        Object.assign(dict, e)
+		        uni.setStorageSync('sys_dict', dict)
+		    }
+		})
+		
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
@@ -445,8 +458,9 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-            const { AccessKey, ZLB_ADDR, isDev } = this.bd;
+			// const isWx = sUserAgent.indexOf("micromessenger") > -1
 			
+            const { AccessKey, ZLB_ADDR, isDev } = this.bd
             let url
             if (bIsAlipayMini) { // 支付宝小程序
                 url = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
