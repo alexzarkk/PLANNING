@@ -9,7 +9,10 @@
 		}
 	},
 	"pages": [
-		{"path": "pages/index/index"},
+		{"path": "pages/index/index",
+		"app-plus": {
+			"bounce": "none" //关闭窗口回弹效果
+		}},
 		{"path": "pages/index/planning", "style": { "onReachBottomDistance": 20 }},
 		{"path": "pages/index/planningPub", "style":{ "enablePullDownRefresh": true, "backgroundColorTop": "#1d50a2" }},
 		{"path": "pages/index/station"},

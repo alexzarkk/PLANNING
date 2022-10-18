@@ -2,6 +2,7 @@
 <template>
     <page-meta root-font-size="10px"></page-meta>
     <view>
+		
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
         </cu-custom>
@@ -201,7 +202,7 @@
                 </view>
             </view>
         </view>
-        <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+        <!-- <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer> -->
     </view>
 </template>
 <script>
@@ -393,35 +394,23 @@ export default {
 
     async onLoad(option) {
         // #ifdef H5-ZLB
-        const ticket = this.getQuery("ticket");
-        if (ticket) {  // 登录回调地址里带有ticket
+        let user = this.zz.getAcc(),
+			ticket = this.zz.getQueryParam(window.location.search,'ticket')
+        if (ticket) {
             console.log("获取到的ticket", ticket)
-            try {
-                const userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-                console.info("登录获取到的信息----------", userInfo)
-                if (userInfo.token) {
-                    this.zz.setAcc(userInfo.user)
-                    this.zz.setToken(userInfo.token)
-                }
-                // 登录埋点
-                window.aplus_queue.push({
-                    action: 'aplus.setMetaInfo',
-                    arguments: ['_hold', 'BLOCK']
-                })
-                window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                    const { zlb_id, zlb_name } = userInfo.user
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-                })
-            } catch (error) {
-            }
+			userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+			console.info("登录获取到的信息----------", user)
+			if (userInfo.token) {
+				user = userInfo.user
+				this.zz.setAcc(user)
+				this.zz.setToken(userInfo.token)
+			}
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
+			console.error(token, 'tokentokentokentokentokentokentokentokentoken');
             if (token) {
-                //过期
+                //是否过期
                 await this.zz.req({ $url: '/user/person/info' }).catch(e => {
                     return this.loginZlb()
                 })
@@ -429,6 +418,21 @@ export default {
                 return this.loginZlb()
             }
         }
+		
+		// 登录埋点
+		window.aplus_queue.push({
+		    action: 'aplus.setMetaInfo',
+		    arguments: ['_hold', 'BLOCK']
+		})
+		window.ZWJSBridge.getUUID().then(({ uuid }) => {
+			console.error(uuid, 'uuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuid');
+		    const { zlb_id, zlb_name } = user
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+		})
+		
         // #endif
 		
         setTimeout(() => {
@@ -444,14 +448,6 @@ export default {
     },
     methods: {
 		// #ifdef H5-ZLB
-        // 获取参数
-        getQuery(name) {
-            let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            console.log("window.location-----------", window.location)
-            let r = window.location.search.substr(1).match(reg);
-            if (r != null) return unescape(r[2]);
-            return null;
-        },
         // 登录浙里办
         loginZlb() {
             const sUserAgent = window.navigator.userAgent.toLowerCase()

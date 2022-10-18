@@ -383,8 +383,9 @@ const
 	 * @return Object || Object[key]
 	 */
 	getQueryParam = (url, k) => {
-		let u = url.split('?'),
-			arr = u[1].split('&'),
+		let u = url.split('?')
+		if(u.length==1)return ''
+		let	arr = u[1].split('&'),
 			o = { url: u[0] }
 
 		for (let v of arr) {
@@ -486,12 +487,11 @@ async function req(params = {}, loading = false, t = 9999) {
 					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
-					reject(e.message || e.data.message)
+					reject(e.message || e.data.message || '服务器错误！')
 				},
 				complete = (e) => {
 					params.$fn = fn
 					params.$url = url
-					
 					// clearTimeout(tim)
 					// console.log(e);
 				}

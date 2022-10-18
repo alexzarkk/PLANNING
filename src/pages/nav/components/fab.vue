@@ -13,16 +13,6 @@
 			<view v-if="isShow && process"><progress :percent="process" activeColor="#ff0000" /></view>
 		</view>
 
-		<view>
-			<!-- 普通弹窗 -->
-			<uni-popup ref="popup" background-color="#fff" @change="change">
-				<data-swiper :dataList="dataList1"></data-swiper>
-				<data-swiper></data-swiper>
-				<data-swiper></data-swiper>
-				<data-swiper></data-swiper>
-			</uni-popup>
-		</view>
-
 		<view class="uni-cursor-point">
 			<view class="uni-fab uni-fab--leftBottom" :style="{ opacity: isShow ? 1 : 0 }">
 				<view class="uni-fab__content--left uni-fab__content">
@@ -47,12 +37,8 @@ const d = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAA
 		d +
 		'AndJREFUWEfNlz9oU1EUxr9z09wUBNd2qC8GlPdiRQQHR3VQ8Q84KK4ddHDRwcGCDraDRR3TxaEOXcWpVAUnwUVBQdD0JbQQ89qhXQtCc5O8I/clLzSveU1qam7feu873++cc8+55xIMf7RXfXds6LxIiIvwacQnHtX/C6Z1CN6o1XlhfK36dS82ewIopIczzP6EAG4xMN5F4DsDi0Ri3ilvlbrB7AqwbMkTPvgegyYAHI4YUwQsM+ADsAHIyPomgecF6NVxTy3FgcQCNMTxJvSYgRUG5oiwMsRwo0YLmZSNGmwQOwx+SKARLUpAXgC34yA6AuwU59lhIWcyv/+sdwupXg9g6pwDcKkbxA6AqDgRXbXLlQ+9CEf3FCz5CMCL3SDaAKLijqfT3P9XsCTHQbQJFK1kjkH3m5KTjqde9i8PFNOpK8z8vgHBs7ZXfRDabQHoUgP7P5qn/aPjqcv7IR7acK1kjhrObYLE6bBEWwCuJacIeMrgDUqIc06pUtxPgNLRQ6NbfvUzAccImLI9Nd1MS0OmYMlvAM4AiA29huwFKuupjvuWLDkpgOe6NG1PnWwB5MeSZxOCvgTGmW44q5WFTkJhlHaDYGA6DsBNy5vEeBvI+P6F7FrtU5CCYlo+Y8bjwHCCnLjw9wugq6wO5APPCTN2WT1pABxJzTHxHQDK8VQqzsN+AZqprui2TUyv7dXK3QDAteQiAdcA/HQ8dep/AhQt+Uu3dwbeZT11/WAAGE+B8UNovAyNN6JmJQysFW9vVgfnMgoaksnrWAMYH0g6QQx0JAtbsNGhNB5igGN5O4Shh8n2G9HY06zjVGTicdrLHPive/4CfIfnMFwwuEwAAAAASUVORK5CYII=';
 
-import uniPopup from '@/uni_modules/uni-popup/components/uni-popup/uni-popup';
-import dataSwiper from './dataSwiper';
-
 export default {
 	name: 'UniFab',
-	components: { uniPopup, dataSwiper },
 	emits: ['fabClick', 'trigger'],
 	props: {
 		tim: {
@@ -64,15 +50,12 @@ export default {
 	},
 	data() {
 		return {
-			stH: 0,
 			puase: false,
 			process: 0,
 
-			fabShow: false,
 			isShow: false,
 			sysInfo: uni.getStorageSync('sysInfo'),
 			CustomBar: this.CustomBar,
-			type: 'bottom',
 
 			content: [
 				{
@@ -90,19 +73,6 @@ export default {
 					textColor: '#f9081f',
 					active: false,
 					type: 'end'
-				}
-			],
-
-			dataList1: [
-				{
-					title: '里程',
-					item: '0.01',
-					unit: '公里'
-				},
-				{
-					title: 'title',
-					item: 'item',
-					unit: 'unit'
 				}
 			]
 		};
