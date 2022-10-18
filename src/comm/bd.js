@@ -36,25 +36,6 @@ const bd = {
 		tel: '0574-88517758',
 		// #endif
 		
-
-
-		footer: {
-
-			// #ifdef H5-ZLB
-			content: "© 2022 浙江省体育局 宁波市奉化区文化和广电旅游体育局",
-			// tel: '服务咨询热线：0574-88517758'
-			// #endif
-
-			// #ifndef H5-ZLB
-			content: "© 2022 浙江体育科学研究所（浙江省反兴奋剂中心）",
-			// #endif
-
-			navigate: [{
-				url: "/pages/comm/about",
-				type: "navigate",
-				text: "环浙步道"
-			}]
-		}
 	},
 	imgs: {
 		nodata: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/687b11af-e7e2-4cef-80d8-b3e1744dd101.png',
