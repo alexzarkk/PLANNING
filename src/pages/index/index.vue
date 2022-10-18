@@ -408,6 +408,7 @@ export default {
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
+			console.error(token, 'tokentokentokentokentokentokentokentokentoken');
             if (token) {
                 //是否过期
                 await this.zz.req({ $url: '/user/person/info' }).catch(e => {
@@ -424,7 +425,7 @@ export default {
 		    arguments: ['_hold', 'BLOCK']
 		})
 		window.ZWJSBridge.getUUID().then(({ uuid }) => {
-			console.log(uuid, 'uuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuid');
+			console.error(uuid, 'uuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuid');
 		    const { zlb_id, zlb_name } = user
 		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
 		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
