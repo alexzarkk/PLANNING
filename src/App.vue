@@ -111,10 +111,6 @@ export default {
                     deviceId: e.deviceId,
                     deviceModel: e.model
                 })
-
-                // #ifdef APP-PLUS
-                if (e.platform == 'ios') locationModule.requestAlwaysAuthorization()
-                // #endif
             }
         })
 

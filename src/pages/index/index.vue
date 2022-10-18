@@ -394,30 +394,17 @@ export default {
 
     async onLoad(option) {
         // #ifdef H5-ZLB
-        const ticket = this.zz.getQueryParam(window.location.search,'ticket')
-        if (ticket) {  
-            // console.log("获取到的ticket", ticket)
-            try {
-                const userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-                console.info("登录获取到的信息----------", userInfo)
-                if (userInfo.token) {
-                    this.zz.setAcc(userInfo.user)
-                    this.zz.setToken(userInfo.token)
-                }
-                // 登录埋点
-                window.aplus_queue.push({
-                    action: 'aplus.setMetaInfo',
-                    arguments: ['_hold', 'BLOCK']
-                })
-                window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                    const { zlb_id, zlb_name } = userInfo.user
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-                })
-            } catch (error) {
-            }
+        let user = this.zz.getAcc(),
+			ticket = this.zz.getQueryParam(window.location.search,'ticket')
+        if (ticket) {
+            console.log("获取到的ticket", ticket)
+			userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+			console.info("登录获取到的信息----------", user)
+			if (userInfo.token) {
+				user = userInfo.user
+				this.zz.setAcc(user)
+				this.zz.setToken(userInfo.token)
+			}
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
@@ -430,6 +417,21 @@ export default {
                 return this.loginZlb()
             }
         }
+		
+		// 登录埋点
+		window.aplus_queue.push({
+		    action: 'aplus.setMetaInfo',
+		    arguments: ['_hold', 'BLOCK']
+		})
+		window.ZWJSBridge.getUUID().then(({ uuid }) => {
+			console.log(uuid, 'uuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuiduuid');
+		    const { zlb_id, zlb_name } = user
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+		})
+		
         // #endif
 		
         setTimeout(() => {

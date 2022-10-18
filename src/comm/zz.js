@@ -487,7 +487,7 @@ async function req(params = {}, loading = false, t = 9999) {
 					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
-					reject(e.message || e.data.message)
+					reject(e.message || e.data.message || '服务器错误！')
 				},
 				complete = (e) => {
 					params.$fn = fn

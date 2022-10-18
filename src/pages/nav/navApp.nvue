@@ -140,7 +140,6 @@ export default {
 			})
 		}
 		await this.around(this.center)
-		console.log(this.cps)
 	},
 	onReady() { this.amap = uni.createMapContext('amap', this) },
 	async onShow() {
@@ -239,11 +238,6 @@ export default {
 					t: {},
 					point:[],
 					coord:[]
-					// line: [{
-					// 		width: 8,
-					// 		arrowLine: true,
-					// 		points: []
-					// 	}]
 				},
 				say = () => {
 					if (tim.H && !rec.t['t'+tim.H]) {
@@ -331,8 +325,6 @@ export default {
 			this.clock()
 			this.onRec = true
 			this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
-			
-			// console.log('startLocation =====>',rec)
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
