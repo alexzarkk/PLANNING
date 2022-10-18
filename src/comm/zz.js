@@ -3,12 +3,12 @@ import { mgop } from '@aligov/jssdk-mgop'
 import { pathToBase64 } from '@/js_sdk/mmmm-image-tools'
 // #endif
 
-import { api, isDev, appKey, amapKey } from '@/comm/bd'
+import { api, isDev, appKey, amapKey, appid } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 
 
-const 
-	rndInt = (a=0,z=4)=> { return Math.floor(Math.random() * (z - a + 1) ) + a },
+const
+	rndInt = (a = 0, z = 4) => { return Math.floor(Math.random() * (z - a + 1)) + a },
 	toArr = (o) => {
 		let a = []
 		for (let k in o) {
@@ -16,35 +16,35 @@ const
 		}
 		return a
 	},
-	
+
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
 		authCemera()
 		return new Promise((resolve, reject) => {
 			// #ifndef APP-PLUS
-			ZWJSBridge.scan({ type: "qrCode" }).then(e=>{ resolve(e) }).catch(e=>{ reject(e) })
+			ZWJSBridge.scan({ type: "qrCode" }).then(e => { resolve(e) }).catch(e => { reject(e) })
 			// #endif
-			
+
 			// #ifdef APP-PLUS
 			uni.scanCode({
 				onlyFromCamera,
 				scanType,
-				success(e){
+				success(e) {
 					resolve(e)
 				},
-				fail(e){
+				fail(e) {
 					reject(e)
 				}
 			})
 			// #endif
 		})
 	},
-	
+
 	authCemera = () => {
 		// #ifdef APP-PLUS
 		if (uni.getAppAuthorizeSetting().cameraAuthorized == 'denied') zz.modal("请开启手机相机权限！")
 		// #endif
 	},
-	
+
 	checkNet = async () => {
 		return await zz.hadNet()
 	},
@@ -90,63 +90,63 @@ const
 	 */
 	upload = async (filePath, remove) => {
 		// #ifdef H5-ZLB
-			/* 用 http 请求上传 */
-			let base64 = [],
-				f = await pathToBase64(filePath)
-				
-			const put = (s,n=900000) =>{
-				if(s.length>n){
-					base64.push(s.substring(0,n))
-					put(s.substring(n,s.length))
-				}else{
-					base64.push(s)
-				}
+		/* 用 http 请求上传 */
+		let base64 = [],
+			f = await pathToBase64(filePath)
+
+		const put = (s, n = 900000) => {
+			if (s.length > n) {
+				base64.push(s.substring(0, n))
+				put(s.substring(n, s.length))
+			} else {
+				base64.push(s)
 			}
-			put(f.split(',')[1])
-			
-			let file = {
-				id: Date.now()+'',
-				sn: 1,
-				size: base64.length,
-				cloudPath: uni.getStorageSync(filePath)
+		}
+		put(f.split(',')[1])
+
+		let file = {
+			id: Date.now() + '',
+			sn: 1,
+			size: base64.length,
+			cloudPath: uni.getStorageSync(filePath)
+		}
+		for (let s of base64) {
+			let e = await zz.req({ $fn: 'sync' + rndInt(), $url: '/admin/comm/upload', dataUrl: s, ...file })
+			if (e) {
+				file.url = e.fileID
+				if (remove) uni.removeStorageSync(filePath)
 			}
-			for (let s of base64) {
-				let e = await zz.req({$fn:'sync'+ rndInt(), $url:'/admin/comm/upload', dataUrl: s, ...file})
-				if(e) {
-					file.url = e.fileID
-					if (remove) uni.removeStorageSync(filePath)
-				}
-				file.sn ++
-			}
-			
-			return new Promise((resolve, reject) => {
-				file.url? resolve(file.url) : reject(false)
-			})
+			file.sn++
+		}
+
+		return new Promise((resolve, reject) => {
+			file.url ? resolve(file.url) : reject(false)
+		})
 		// #endif
-		
+
 		// #ifndef H5-ZLB
-			return new Promise((resolve, reject) => {
-				uniCloud.uploadFile({
-					filePath,
-					cloudPath: filePath.startsWith('blob') ? 'szs_h5_' + uni.getStorageSync(filePath) : 'szs_' + filePath.replace('_doc/uniapp_save/', ''),
-					onUploadProgress(progressEvent) {
-						// let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-					},
-					success(e) {
-						if (remove) removeFile(filePath)
-						if (filePath.startsWith('blob')) uni.removeStorageSync(filePath)
-						resolve(e.fileID)
-					},
-					fail(err) {
-						console.error(filePath, "文件上传失败===", err)
-						reject(false)
-					}
-				})
+		return new Promise((resolve, reject) => {
+			uniCloud.uploadFile({
+				filePath,
+				cloudPath: filePath.startsWith('blob') ? 'szs_h5_' + uni.getStorageSync(filePath) : 'szs_' + filePath.replace('_doc/uniapp_save/', ''),
+				onUploadProgress(progressEvent) {
+					// let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+				},
+				success(e) {
+					if (remove) removeFile(filePath)
+					if (filePath.startsWith('blob')) uni.removeStorageSync(filePath)
+					resolve(e.fileID)
+				},
+				fail(err) {
+					console.error(filePath, "文件上传失败===", err)
+					reject(false)
+				}
 			})
+		})
 		// #endif
 	},
 	chooseImage = async ({ sourceType = ['album', 'camera'], sizeType = ['compressed'], count = 1 }, save = false) => {
-		
+
 		const [_, e] = await uni.chooseImage({ sourceType, sizeType, count })
 		if (e) {
 			uni.showLoading({ mask: true })
@@ -384,8 +384,8 @@ const
 	 */
 	getQueryParam = (url, k) => {
 		let u = url.split('?')
-		if(u.length==1)return ''
-		let	arr = u[1].split('&'),
+		if (u.length == 1) return ''
+		let arr = u[1].split('&'),
 			o = { url: u[0] }
 
 		for (let v of arr) {
@@ -458,7 +458,7 @@ async function req(params = {}, loading = false, t = 9999) {
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
 		return new Promise((resolve, reject) => {
-			tim = setTimeout(()=>{ reject('timedout') },9999)
+			tim = setTimeout(() => { reject('timedout') }, 9999)
 			const success = (e) => {
 				if (loading) uni.hideLoading()
 				clearTimeout(tim)
@@ -495,59 +495,59 @@ async function req(params = {}, loading = false, t = 9999) {
 					// clearTimeout(tim)
 					// console.log(e);
 				}
-			
-			 // #ifdef H5
-				let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
-				// #ifdef H5-ZLB
-					mgop({
-						api: 'mgop.zz.zts.' + fn, // 必填
-						host: 'https://mapi.zjzwfw.gov.cn/',
-						dataType: 'JSON',
-						type: 'POST',
-						appKey,
-						header: {
-							isTestUrl: isDev+'',
-							authorization: token,
-							clientinfo
-						},
-						data: params,
-						onSuccess: success,
-						onFail: fail
-					});
-				// #endif
-				
-				// #ifndef H5-ZLB
-					uni.request({
-						url: api[isDev] + fn,
-						timeout:10000,
-						header: {
-							'content-type': 'application/json',
-							authorization: token,
-							clientinfo
-						},
-						data: params,
-						method: 'POST',
-						success,
-						fail,
-						complete
-					})
-				// #endif
-				
-			 // #endif
-			
+
+			// #ifdef H5
+			let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
+			// #ifdef H5-ZLB
+			mgop({
+				api: 'mgop.zz.zts.' + fn, // 必填
+				host: 'https://mapi.zjzwfw.gov.cn/',
+				dataType: 'JSON',
+				type: 'POST',
+				appKey,
+				header: {
+					isTestUrl: isDev + '',
+					authorization: token,
+					clientinfo
+				},
+				data: params,
+				onSuccess: success,
+				onFail: fail
+			});
+			// #endif
+
+			// #ifndef H5-ZLB
+			uni.request({
+				url: api[isDev] + fn,
+				timeout: 10000,
+				header: {
+					'content-type': 'application/json',
+					authorization: token,
+					clientinfo
+				},
+				data: params,
+				method: 'POST',
+				success,
+				fail,
+				complete
+			})
+			// #endif
+
+			// #endif
+
 			// #ifdef APP-PLUS
-				delete params.$url
-				uniCloud.callFunction({
-					name: fn,
-					data: {
-						url,
-						params,
-						token
-					},
-					success,
-					fail,
-					complete
-				})
+			delete params.$url
+			uniCloud.callFunction({
+				name: fn,
+				data: {
+					url,
+					params,
+					token
+				},
+				success,
+				fail,
+				complete
+			})
 			// #endif
 		})
 	} else {
@@ -676,7 +676,7 @@ const zz = {
 	timeFrom,
 	formatDuring,
 
-	
+
 	req,
 	userEvent,
 	reGeo,
@@ -689,14 +689,14 @@ const zz = {
 	upload,
 	chooseImage,
 	chooseVideo,
-	
-	key(k){return k? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : ''},
+
+	key(k) { return k ? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : '' },
 	// #ifdef APP-PLUS
-	hadNet(){ return plus.networkinfo.getCurrentType()>1 },
+	hadNet() { return plus.networkinfo.getCurrentType() > 1 },
 	// #endif
-	
+
 	// #ifndef APP-PLUS
-	hadNet(){ return window.hadNet },
+	hadNet() { return window.hadNet },
 	// #endif
 
 	now() { return Date.now() },
@@ -760,24 +760,28 @@ const zz = {
 		const sdk = window.ZWJSBridge
 		const getLocation = sdk.getLocation()
 		const getUserType = sdk.getUserType()
+
 		Promise.all([getUserType, getLocation]).then(([userTypeData, locationData]) => {
+			// console.log("定位和用户类型-------", userTypeData, locationData)
 			const { userType } = userTypeData
 			const { longitude, latitude } = locationData
-			window.aplus_queue.push({
+			const params = {
 				action: 'aplus.sendPV',
 				arguments: [
 					{
 						is_auto: false
 					},
 					{
-						miniAppId: zlbAppId,
-						miniAppName: 'xxx',
+						miniAppId: appid,
+						miniAppName: '环浙步道',
 						long: longitude,
 						lati: latitude,
 						userType
 					}
 				]
-			})
+			}
+			// console.log("浙里办PV埋点-------", params)
+			window.aplus_queue.push(params)
 		})
 	},
 	// #endif
@@ -808,10 +812,11 @@ const zz = {
 			uni[t]({
 				url,
 				animationType,
-				success: () => {
+				success: (res) => {
 					// #ifdef H5-ZLB
+					console.log("页面跳转完成---------------------------", res)
 					// 添加pv埋点
-					// zz.sendZlbPV()
+					zz.sendZlbPV()
 					// #endif
 				},
 				fail: (err) => {

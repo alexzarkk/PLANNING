@@ -37,7 +37,7 @@ export default {
 
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
-            // console.log("页面启动------------", window.location,event.persisted, window.performance.navigation.type == 2)
+            // console.warn("onpageshow------------", window.location, event.persisted, window.performance.navigation.type == 2)
             /**
              * 0：网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载，相当于常数performance.navigation.TYPE_NAVIGATE。
                 1：网页通过“重新加载”按钮或者location.reload()方法加载，相当于常数performance.navigation.TYPE_RELOAD。
@@ -141,10 +141,10 @@ export default {
         async init() {
             let dict = uni.getStorageSync('sys_dict') || {}
             this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
-				if(e.v) {
-					Object.assign(dict, e)
-					uni.setStorageSync('sys_dict', dict)
-				}
+                if (e.v) {
+                    Object.assign(dict, e)
+                    uni.setStorageSync('sys_dict', dict)
+                }
             })
 
             if (!uni.getStorageSync('cur_deptId')) {
@@ -155,16 +155,16 @@ export default {
             // #ifndef APP-PLUS
             comm.on([121, 29])
             // #endif
-			
-			// #ifdef APP-PLUS
-			comm.on()
-			// locationModule.getOnceLocation({
-			// 	locationMode: 'Device_Sensors'
-			// }, (xiaoming) => {
-			// 	console.log('小明定位结果 ------------------->',xiaoming);
-			// })
-			// #endif
-		}
+
+            // #ifdef APP-PLUS
+            comm.on()
+            // locationModule.getOnceLocation({
+            // 	locationMode: 'Device_Sensors'
+            // }, (xiaoming) => {
+            // 	console.log('小明定位结果 ------------------->',xiaoming);
+            // })
+            // #endif
+        }
     }
 }
 </script>
