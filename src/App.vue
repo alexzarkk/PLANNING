@@ -158,11 +158,11 @@ export default {
 			
 			// #ifdef APP-PLUS
 			comm.on()
-			locationModule.getOnceLocation({
-				locationMode: 'Device_Sensors'
-			}, (xiaoming) => {
-				console.log('小明定位结果 ------------------->',xiaoming);
-			})
+			// locationModule.getOnceLocation({
+			// 	locationMode: 'Device_Sensors'
+			// }, (xiaoming) => {
+			// 	console.log('小明定位结果 ------------------->',xiaoming);
+			// })
 			// #endif
 		}
     }

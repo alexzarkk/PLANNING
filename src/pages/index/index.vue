@@ -396,9 +396,10 @@ export default {
         // #ifdef H5-ZLB
         let user = this.zz.getAcc(),
 			ticket = this.zz.getQueryParam(window.location.search,'ticket')
-        if (ticket) {
+			console.info("useruseruseruseruser----------", user)
+        if (!user && ticket) {
             console.log("获取到的ticket", ticket)
-			userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+			let userInfo = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
 			console.info("登录获取到的信息----------", user)
 			if (userInfo.token) {
 				user = userInfo.user
@@ -408,7 +409,7 @@ export default {
         } else {
             //如果没有登录 || 登录已失效
             let token = this.zz.getToken()
-			console.error(token, 'tokentokentokentokentokentokentokentokentoken');
+			console.error('tokentokentokentokentokentokentokentokentoken',token);
             if (token) {
                 //是否过期
                 await this.zz.req({ $url: '/user/person/info' }).catch(e => {
@@ -466,7 +467,7 @@ export default {
                 str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_DEBUG_PAGE}`   // 线上调试
                 // str = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_PROD_PAGE}` // 正式发布
             }
-            window.location.replace(str)
+            // window.location.replace(str)
         },
 		// #endif
         async loadData() {
