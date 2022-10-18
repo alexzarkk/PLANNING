@@ -204,7 +204,7 @@
 		</block>
 
 		<tui-scroll-top :scrollTop="scrolled"></tui-scroll-top>
-		<tui-footer :loginTip.sync="loginTip" :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+		<zz-footer/>
 	</view>
 </template>
 

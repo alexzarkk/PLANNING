@@ -83,8 +83,8 @@
             <zz-page-status :total="total" :needStatus="false" :length="commentList.length" msg="还没有评论"></zz-page-status>
         </view>
         <view v-if="showFooter" class="solid-top">
-            <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
-        </view>
+			<zz-footer/>
+		</view>
         <!-- 底部评论操作条 -->
         <view class="comment-bar" style="bottom:0;">
             <view class="cu-bar input comment-bar-wrapper">
@@ -158,7 +158,6 @@ export default {
     data() {
         return {
             isMy: false,
-            bd: this.bd,
             isLoginShow: false, // 登录modal提示
             isLogin: false,
             total: -1,

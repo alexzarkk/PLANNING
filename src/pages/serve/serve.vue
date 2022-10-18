@@ -63,7 +63,7 @@
 		<view class="tui-btn-back" @click="back">返回</view>
 		
         
-		<tui-footer :copyright="bd.sys.footer.content" :fixed="true" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+		<zz-footer/>
 
     </view>
 </template>
@@ -74,7 +74,6 @@ export default {
     data() {
         return {
             user: null,
-            bd: this.bd,
             CustomBar: this.CustomBar,
 			coord: '',
 			sn: '',

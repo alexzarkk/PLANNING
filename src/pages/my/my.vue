@@ -106,7 +106,7 @@
 			</view>
 			
 			<view class="cu-tabbar-height"></view>
-			<tui-footer :loginTip.sync="loginTip" :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+			<zz-footer/>
 		</view>
 	</view>
 </template>
@@ -116,7 +116,6 @@ export default {
 	data() {
 		return {
 			user: {},
-			bd: this.bd,
 			CustomBar: this.CustomBar,
 			isLogin: false,
 			loginTip: false,

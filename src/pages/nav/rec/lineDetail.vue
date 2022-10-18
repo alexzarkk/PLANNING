@@ -251,7 +251,7 @@
 		
 		<tui-scroll-top :scroll-top="scrolled" />
         <!-- 页面底部应用信息 -->
-        <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+        <zz-footer/>
     </view>
 </template>
 
@@ -269,7 +269,6 @@ export default {
 			
             customBar: this.CustomBar,
             weather: null,  // 天气信息
-            bd: this.bd, // APP相关信息
             isMy: false, // true:我自己的显示  false:别人的线路
             dict: uni.getStorageSync('sys_dict'),
             rec: null,  // 轨迹的信息

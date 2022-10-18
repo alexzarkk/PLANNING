@@ -592,7 +592,7 @@
         </tui-bottom-popup>
 
         <tui-nomore text="已经到最底了" backgroundColor="#f7f7f7"></tui-nomore>
-        <tui-footer :loginTip.sync="loginTip" :copyright="basicdata.sys.footer.content" :fixed="false" :navigate="basicdata.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+        <zz-footer/>
 
         <!--底部选择层-->
         <view v-show="!popupShow && !posterShow">

@@ -8,8 +8,8 @@
         </cu-custom>
 		<zz-kml-nav v-if="coord" :coord="[coord]" class="solid" @addr="addrInfo"></zz-kml-nav>
 		<zz-weather v-if="addr" :addr="addr"></zz-weather>
-        <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom" />
-    </view>
+        <zz-footer/>
+	</view>
 </template>
 
 <script>
@@ -17,8 +17,6 @@ import { getLocation } from "@/comm/geotools.js"
 export default {
     data() {
         return {
-            bd: this.bd,
-
             addr: null,
             coord: null,
             qr: {},

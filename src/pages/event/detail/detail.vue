@@ -480,7 +480,7 @@
 			<view class="cu-progress round margin-top xs"><view class="bg-red" style="width:0"></view></view>
 			<view v-show="!enrolleOpen"><tui-scroll-top :scrollTop="scrolled"></tui-scroll-top></view>
 
-			<tui-footer :copyright="basicdata.sys.footer.content" :fixed="false" :navigate="basicdata.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+			<zz-footer/>
 
 			<block v-if="event.timer.toEndEnroll">
 				<view class="cu-bar bg-white tabbar border shop foot">

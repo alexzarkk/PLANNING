@@ -143,7 +143,7 @@
 		
 		<tui-scroll-top :scrollTop="scrolled"></tui-scroll-top>
 		
-		<tui-footer class="solid-top" :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate"></tui-footer>
+		<zz-footer/>
 	</view>
 </template>
 

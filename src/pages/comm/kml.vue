@@ -297,7 +297,7 @@
             <zz-blog class="solid" :ver="ver" :tid="kml._id"></zz-blog>
 
             <!-- <tui-scroll-top :scrollTop="scrolled"></tui-scroll-top> -->
-            <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate"></tui-footer>
+            <zz-footer/>
 
         </block>
     </view>

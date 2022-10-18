@@ -278,7 +278,7 @@
 
             <tui-divider />
             <tui-scroll-top :scroll-top="scrolled" />
-            <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom" />
+			<zz-footer/>
         </block>
         <block v-else>
             <tui-loading :fixed="true" :index="3" type="green" />
@@ -306,7 +306,6 @@ export default {
             isWriter: false,  // 当前登录人是否是本详情作者
             mdone: false,
             platform: this.platform,
-            bd: this.bd,
             dict: uni.getStorageSync('sys_dict'),
             customBar: this.CustomBar,
             statusBar: this.StatusBar,

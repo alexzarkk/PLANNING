@@ -130,8 +130,7 @@
             </view>
         </view>
         <view class="cu-bar"></view>
-        <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
-        <!-- <tui-footer :copyright="bd.sys.footer.content" :fixed="false" tui-footer-class="tui-custom"></tui-footer> -->
+        <zz-footer/>
     </view>
 </template>
 
@@ -140,9 +139,7 @@ export default {
     data() {
         return {
             modalName: '',
-            // user: { ava: this.bd.sys.logo, name: '智慧小步' }, // 已登录用户信息
             user: null,
-            bd: this.bd, // APP相关信息
             CustomBar: this.CustomBar,
             isLogin: false, // 是否登录
             loginTip: false,

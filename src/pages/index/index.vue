@@ -202,7 +202,7 @@
                 </view>
             </view>
         </view>
-        <!-- <tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer> -->
+		<zz-footer/>
     </view>
 </template>
 <script>

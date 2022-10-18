@@ -24,7 +24,7 @@
                         </view>
                     </block>
                     <view class="solid-bottom text-left pre-line padding-sm">
-                        <text class="text-dark">本服务由【{{bd.sys.name}}】提供，【{{bd.sys.admin}}】负责技术运营。</text>
+                        <text class="text-dark">本服务由【{{bd.sys.copyright}}】提供，【{{bd.sys.admin}}】负责技术运营。</text>
                     </view>
                 </scroll-view>
 

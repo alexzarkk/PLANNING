@@ -22,7 +22,7 @@
 				是一款健身步道相关户外工具APP，提供浙江省范围的健身步道信息服务，及相关的自然人文、体育旅游等资源信息；提供户外轨迹导航和GPS记录轨迹记录功能。
 			</view>
 			
-			<view class="margin-top-sm padding-left text-grey text-sm">{{sys.footer.content}} </view>
+			<view class="margin-top-sm padding-left text-grey text-sm">{{sys.copyright}} </view>
 		</view>
 		
 		<!-- #ifndef H5-ZLB -->

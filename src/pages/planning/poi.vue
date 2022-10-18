@@ -89,7 +89,7 @@
 		</block>
 		<tui-divider></tui-divider>
 		<tui-scroll-top :scrollTop="scrolled"></tui-scroll-top>
-		<tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+		<zz-footer/>
 		
 		<block v-if="tabbar">
 			<view class="cu-tabbar-height"></view>
@@ -123,7 +123,6 @@ export default {
 	data() {
 		return {
 			qr: {},
-			bd: this.bd,
 			dict: uni.getStorageSync('sys_dict'),
 			loading: true,
 			scrolled: 0,

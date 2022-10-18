@@ -14,7 +14,7 @@
 		</block>
 		
 		<view class="padding-tb solid-top" v-if="list.length>10">
-			<tui-footer :copyright="bd.sys.footer.content" :fixed="false" :navigate="bd.sys.footer.navigate" tui-footer-class="tui-custom"></tui-footer>
+			<zz-footer/>
 		</view>
 		
 		<tui-scroll-top :scrollTop="scrolled"></tui-scroll-top>

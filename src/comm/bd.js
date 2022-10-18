@@ -3,6 +3,7 @@ const bd = {
 	isDev: 1, //是否开发
 	api: ['https://ztsapi.5618.co/', 'https://dev.5618.co/'],
 	ZLB_ADDR: ['https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html', 'http://localhost:8080/'],
+	// ZLB_PROD_DEBUG_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true",  // 调试环境地址
 
 	/* 浙里办资料 */
 	/**
@@ -14,7 +15,6 @@ const bd = {
 	SecretKey: 'BCDSGS_0f05ec12aa9be2b107edb2a07e66ae45',	//servicepwd
 	AccessKey: 'BCDSGA_7d4388d47d989fef0eb063d9e63c0c53',	//servicecode
 	
-	// ZLB_PROD_DEBUG_PAGE: "https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true",  // 调试环境地址
 	/* 高德 */
 	amapKey: 'daffb83c14428939221e09ebc785c89c',
 
@@ -25,11 +25,24 @@ const bd = {
 		admin: '宁波之之步道技术有限公司',
 		png: 'https://zts.5618.co/static/png/',
 		logo: "https://zts.5618.co/repo/logoIcon.png",
+		
+		// #ifdef H5-ZLB
+		copyright: '浙江省体育局、宁波市奉化区文化和广电旅游体育局',
+		tel: '0574-88517465',
+		// #endif
+		
+		// #ifndef H5-ZLB
+		copyright: "© 2022 浙江体育科学研究所（浙江省反兴奋剂中心）",
+		tel: '0574-88517758',
+		// #endif
+		
+
 
 		footer: {
 
 			// #ifdef H5-ZLB
 			content: "© 2022 浙江省体育局 宁波市奉化区文化和广电旅游体育局",
+			// tel: '服务咨询热线：0574-88517758'
 			// #endif
 
 			// #ifndef H5-ZLB
