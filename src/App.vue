@@ -37,7 +37,7 @@ export default {
 
         // 用来监听单点登录的返回
         window.onpageshow = (event) => {
-            console.log("页面启动------------", window.location,event.persisted, window.performance.navigation.type == 2)
+            // console.log("页面启动------------", window.location,event.persisted, window.performance.navigation.type == 2)
             /**
              * 0：网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载，相当于常数performance.navigation.TYPE_NAVIGATE。
                 1：网页通过“重新加载”按钮或者location.reload()方法加载，相当于常数performance.navigation.TYPE_RELOAD。
@@ -127,7 +127,6 @@ export default {
     onShow() {
         sync.go()
         uni.onNetworkStatusChange(e => {
-            // console.log(e,'onShow //////');
             // #ifndef APP-PLUS
             comm.setNet(e.networkType != 'none')
             // #endif

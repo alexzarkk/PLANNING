@@ -250,7 +250,7 @@ export default {
             }
         },
         async loadData(type) {
-            console.log("news-home-----------",type)
+            // console.log("news-home-----------",type)
             if (type === 'init') {
                 this.articleTabs[this.currentTab].list = []
                 this.articleTabs[this.currentTab].page = 1
@@ -270,7 +270,7 @@ export default {
                 type: [cur.value]  // 科普
             };
             this.zz.req(req1).then(({ pagination, list }) => {
-                console.log("/public/article/page--------------",pagination)
+                // console.log("/public/article/page--------------",pagination)
                 // console.log(pagination)
                 cur.total = pagination.total
                 list = list.map((item) => {
@@ -286,7 +286,7 @@ export default {
                 });
                 cur.page++
                 cur.list = cur.list.concat(list)
-                console.log("新list", cur)
+                // console.log("新list", cur)
                 this.$set(this.articleTabs, this.currentTab, cur)
                 // console.log('科普========', this.articleTabs[5].list);
                 // console.log('this.articleTabs', JSON.parse(JSON.stringify(this.articleTabs)));
