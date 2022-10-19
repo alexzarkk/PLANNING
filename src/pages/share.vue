@@ -42,20 +42,19 @@
 		},
 		methods: {
 			async init(t=0){
-				if(!uni.getStorageSync('sys_dict') || (this.login&&uni.getStorageSync('token')=='')){
-					t++
-					if(t<100){
-						return this.task = setTimeout(()=> { this.init(t) }, 100)
-					}else{
-						this.loading = false
-						this.zz.toast('网络故障，请稍候重试')
-					}
+				if(!uni.getStorageSync('sys_dict')) await this.zz.init()
+					
+					
+				if(this.login&&!this.zz.getToken()){
+					this.zz.href('/pages/comm/account/login',{path:this.path},0,'zoom-out','redirectTo')
 				}
-				clearTimeout(this.task)
-				if(this.deptId) {
-					uni.setStorageSync('cur_deptId', this.deptId)
-					await this.zz.setDept()
-				}
+				// t++
+				// if(t<100){
+				// 	return this.task = setTimeout(()=> { this.init(t) }, 100)
+				// }else{
+				// 	this.loading = false
+				// 	this.zz.toast('网络故障，请稍候重试')
+				// }
 				this.zz.href(this.path,0,this.login,'zoom-out','redirectTo')
 			},
 			reload(){

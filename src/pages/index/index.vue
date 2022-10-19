@@ -108,7 +108,7 @@
         </template>
 
         <!-- 赛事活动 -->
-        <template v-if="deptId=='330213'">
+        <template v-if="bd.isDev&&deptId=='330213'">
             <view class="cu-bar bg-white solid-top margin-top">
                 <view class="action">
                     <text class="cuIcon-titles text-ftorange"></text>
@@ -140,7 +140,6 @@
                 </swiper-item>
             </swiper>
         </template>
-
         <view class="padding-xs">
             <view class="bg-blue light" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpxs">
                 <view class="text-df text-ftblue text-bold padding-tb-xs">
@@ -156,7 +155,7 @@
             </view>
         </view>
 
-        <template v-if="deptId=='330213'">
+        <template v-if="bd.isDev&&deptId=='330213'">
             <view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333rpx" @click="href('/pages/mall/special')">
                 <view class="flex justify-end padding-top">
                     <view class="cu-tag bg-pink text-right">当季热销</view>
@@ -425,18 +424,7 @@ export default {
 		})
         // #endif
 		
-		if (!uni.getStorageSync('cur_deptId')) {
-		    uni.setStorageSync('cur_deptId', '330213')
-			await this.zz.setDept()
-		}
-		
-		let dict = uni.getStorageSync('sys_dict') || {}
-		this.zz.req({ $url: 'public/zz/dict', obj: true, v: dict.v }).then(e => {
-		    if (e.v) {
-		        Object.assign(dict, e)
-		        uni.setStorageSync('sys_dict', dict)
-		    }
-		})
+		await this.zz.init()
 		
         setTimeout(() => {
             // this.showTips = true
@@ -582,9 +570,9 @@ export default {
         //     }
         // }
         if (e.scrollTop >= this.videoBottom) {
-            this.pause();
+			if(this.deptId&&this.deptId!='330213') this.pause();
         } else if (e.scrollTop <= this.videoTop) {
-            this.videoContext.play();
+            if(this.deptId&&this.deptId!='330213') this.videoContext.play();
         }
     }
 };

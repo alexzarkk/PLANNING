@@ -700,10 +700,7 @@ const zz = {
 	// #endif
 
 	now() { return Date.now() },
-	async setAcc(u) {
-		// u.avatar = await saveFile(u.headImg)
-		uni.setStorageSync('210B33A_acc', u)
-	},
+	setAcc(u) { uni.setStorageSync('210B33A_acc', u) },
 	getAcc() { return uni.getStorageSync('210B33A_acc') },
 	setToken(token) { uni.setStorageSync('210B33A_token', token) },
 	getToken() { return uni.getStorageSync('210B33A_token') },
@@ -722,6 +719,19 @@ const zz = {
 		let id = uni.getStorageSync('cur_deptId'),
 			dept = uni.getStorageSync('sys_dept') || {}
 		return { deptId: id, dept, region: arr ? toArr(dept[id]) : dept[id] }
+	},
+	async init(){
+		if (!uni.getStorageSync('cur_deptId')) {
+		    uni.setStorageSync('cur_deptId', '330213')
+			await zz.setDept()
+		}
+		let dict = uni.getStorageSync('sys_dict') || {}
+		zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+		    if (e.v) {
+		        Object.assign(dict, e)
+		        uni.setStorageSync('sys_dict', dict)
+		    }
+		})
 	},
 
 	viewIMG(urls, i = 0) {

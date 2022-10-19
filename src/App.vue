@@ -161,13 +161,13 @@ export default {
 /*每个页面公共css */
 /* #ifndef APP-PLUS-NVUE */
 
-@import './comm/colorui/main.css';
-@import './comm/colorui/icon.css';
-@import './comm/colorui/animation.css';
-@import './comm/css/app.css';
-// @import './comm/css/zzIcon.css';  // 远程
-@import './comm/css/local/zzIcon.css'; // 本地
-@import './components/uParse/src/wxParse.css';
+@import '@/comm/colorui/main.css';
+@import '@/comm/colorui/icon.css';
+@import '@/comm/colorui/animation.css';
+@import '@/comm/css/app.css';
+// @import '@/comm/css/zzIcon.css';  // 远程
+@import '@/comm/css/local/zzIcon.css'; // 本地
+@import '@/components/uParse/src/wxParse.css';
 
 // view {
 //     font-size: 1.6rem;

@@ -51,6 +51,7 @@ export default {
             sys,
             loading: false,
             isBack: false, // 是否是返回上一页  否的话跳转到首页
+			path: '', // 返回路径
             form: {
                 username: '',
                 password: '',
@@ -104,8 +105,9 @@ export default {
     },
     onLoad({ v }) {
         if (v) {
-            const { back } = this.zz.getParam(v);
-            this.isBack = back;
+            const { back, path } = this.zz.getParam(v);
+            this.isBack = back
+			this.path = path
         }
         // #ifdef APP-PLUS
         this.sys = Object.assign(sys, plus.runtime);
@@ -142,12 +144,12 @@ export default {
 						})
 						if (ask.confirm) {
 							return uni.redirectTo({
-								url:'/pages/comm/account/repsd'
+								url: this.path || '/pages/comm/account/repsd'
 							})
 						}
 					}
 					
-                    uni.$emit('commentLogin');
+                    uni.$emit('commentLogin')
 					this.back()
                 } else {
                     this.getVerifyCode()
