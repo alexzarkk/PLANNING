@@ -32,7 +32,7 @@
                 <text class="text-white text-center" @click="back">返回{{ isBack ? '' : '首页' }}</text>
             </view>
 
-            <view class="padding-top text-dark text-sm">{{ sys.footer.content }}</view>
+            <view class="padding-top text-dark text-sm">{{ sys.copyright }}</view>
             <!-- #ifdef APP-PLUS -->
             <text class="padding-top text-center text-dark text-xs">当前版本：{{ sys.version + ' ' + sys.versionCode }}</text>
             <!-- #endif -->
@@ -144,7 +144,7 @@ export default {
 						})
 						if (ask.confirm) {
 							return uni.redirectTo({
-								url: this.path || '/pages/comm/account/repsd'
+								url: '/pages/comm/account/repsd'
 							})
 						}
 					}
@@ -189,9 +189,9 @@ export default {
         },
         back() {
 			if (this.isBack) {
-			    uni.navigateBack();
+			    uni.navigateBack()
 			} else {
-			    this.zz.href('/pages/index/index');
+			    this.zz.href(this.path || '/pages/index/index');
 			}
         }
     }

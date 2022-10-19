@@ -1,6 +1,5 @@
 import { getLocation } from '@/comm/geotools'
 
-
 const temp = {
 	t:0,
 	coord: [
@@ -962,13 +961,13 @@ const locationModule = {
 			clearTimeout(this.tim)
 		},
 		async startLocation(option, fn){
-			// let {p} = await getLocation()
-			temp.t ++
-			if(temp.t==temp.coord.length) temp.t = 0
-			let p = {
-				longitude: temp.coord[temp.t][0],
-				latitude: temp.coord[temp.t][1]
-			}
+			let {p} = await getLocation()
+			// temp.t ++
+			// if(temp.t==temp.coord.length) temp.t = 0
+			// let p = {
+			// 	longitude: temp.coord[temp.t][0],
+			// 	latitude: temp.coord[temp.t][1]
+			// }
 			
 			fn({data: p, success: true})
 			this.tim = setTimeout(()=>{

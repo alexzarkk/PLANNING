@@ -395,7 +395,7 @@ export default {
         // #ifdef H5-ZLB
         let user = this.zz.getAcc(),
 			ticket = this.zz.getQueryParam(window.location.search,'ticket')
-			
+		console.info("ticketticketticketticketticket----------", ticket)	
 		if(!ticket) return this.loginZlb()
         if (!user) {
 			let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })

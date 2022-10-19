@@ -156,7 +156,7 @@ export default {
 			mbtool.setKml(this.map, pms, line, point, gon)
 		},
 		
-		onLoc(){ mbtool.onLoc(this.map, 0);  this.setCurLoc() },
+		onLoc(){ mbtool.onLoc(this.map, 0) },
 		stopLoc(){ comm.stopWatch() },
 		fit(e){ mbtool.setActive(this.map,e) },
 		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
@@ -166,7 +166,7 @@ export default {
 		
 		setCurLoc(e){
 			console.log(this.map.getSource('_curLoc'));
-			this.onLoc()
+			// this.onLoc()
 			cur.features[0].geometry.coordinates = coord 
 			let src = map.getSource('_curLoc')
 			if(src) src.setData(cur)
@@ -255,7 +255,7 @@ export default {
 			puase: false,
 			tim: {H:0, M:0, S:0, MS:0},
 			nav: {line:[], point:[]}, // 基础
-			rec: {line:[], point:[]},
+			rLine: [{width:8,arrowLine:true,points:[]}],
 			
 			timer: null,
 			lock: false,
@@ -270,7 +270,7 @@ export default {
 	},
 	computed: {
 		lines() {
-			return [...this.nav.line, ...this.line, ...this.rec.line]
+			return [...this.nav.line, ...this.line, ...this.rLine]
 		},
 		points() {
 			return [...this.nav.point, ...this.point]
@@ -416,6 +416,9 @@ export default {
 			locationModule.stopLocation()
 			this.exec({m:'setTop', e:0})
 			if(rec.coord.length<10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
+			
+			rec.info = calData(rec.coord)
+			this.setRec()
 			this.zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
 		},
 		clock(){
@@ -465,12 +468,7 @@ export default {
 					endTime: 0,
 					t: {},
 					point:[],
-					coord:[],
-					line: [{
-							width: 8,
-							arrowLine: true,
-							points: []
-						}]
+					coord:[]
 				},
 				say = () => {
 					if (tim.H && !rec.t['t'+tim.H]) {

@@ -13,7 +13,7 @@ export default {
         // #ifdef H5-ZLB
         // 方案1 修改字体
         let _this = this;
-        await ZWJSBridge.onReady(() => {
+        ZWJSBridge.onReady(() => {
             console.log('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
                 console.log("获取到的当前的style======", uiStyle)
@@ -25,10 +25,10 @@ export default {
                 } else {
                     fontSize = '10px'
                 }
-                _this.$nextTick(function () {
+                _this.$nextTick(()=>{
                     document.documentElement.style.fontSize = fontSize
                     // 方案2修改字体
-                    let htmlFont = document.getElementsByTagName('html')[0];
+                    let htmlFont = document.getElementsByTagName('html')[0]
                     htmlFont.style.fontSize = fontSize  // 测试16px
                     console.warn("changeFontSize----------------------", fontSize)
                 })
