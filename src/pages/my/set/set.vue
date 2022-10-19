@@ -149,7 +149,7 @@
 </template>
 
 <script>
-
+import xss from 'xss';
 import { pathToBase64, base64ToPath } from '../../../js_sdk/mmmm-image-tools/index.js';
 export default {
     data() {
@@ -333,7 +333,7 @@ export default {
                 $url: 'user/user/update',
                 _id: this.userInfo._id
             };
-            requestParams[modify] = this.$data['t' + modify];
+            requestParams[modify] = xss(this.$data['t' + modify];)
             try {
                 const res = await this.zz.req(requestParams);
                 // console.log('修改的返回值===', res);
