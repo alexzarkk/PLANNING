@@ -395,6 +395,8 @@ export default {
         },
         useLine() {
             if (this.mdone) this.$refs.zmap.exec({ m: 'stopLoc' })
+			
+			return this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
 			// #ifdef APP-PLUS
 			this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
 			// #endif

@@ -25,10 +25,10 @@ export default {
                 } else {
                     fontSize = '10px'
                 }
-                _this.$nextTick(function () {
+                _this.$nextTick(()=>{
                     document.documentElement.style.fontSize = fontSize
                     // 方案2修改字体
-                    let htmlFont = document.getElementsByTagName('html')[0];
+                    let htmlFont = document.getElementsByTagName('html')[0]
                     htmlFont.style.fontSize = fontSize  // 测试16px
                     console.warn("changeFontSize----------------------", fontSize)
                 })

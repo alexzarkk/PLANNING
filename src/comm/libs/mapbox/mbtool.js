@@ -84,7 +84,7 @@ watchLoc = (map, cur, id)=>{
 			
 			window.wid = setTimeout(()=> { position() }, 6000)
 			
-			// console.log(window.wid, 'window.wid ----------- ', coord)
+			console.log(window.wid, 'window.wid ----------- ', coord)
 		}
 		position()
 	// #endif
