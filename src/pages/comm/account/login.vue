@@ -32,7 +32,8 @@
                 <text class="text-white text-center" @click="back">返回{{ isBack ? '' : '首页' }}</text>
             </view>
 
-            <view class="padding-top text-dark text-sm">{{ sys.footer.content }}</view>
+            <!-- <view class="padding-top text-dark text-sm">{{ sys.footer.content }}</view> -->
+            <zz-footer />
             <!-- #ifdef APP-PLUS -->
             <text class="padding-top text-center text-dark text-xs">当前版本：{{ sys.version + ' ' + sys.versionCode }}</text>
             <!-- #endif -->

@@ -497,6 +497,8 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5
+			let clientinfoStor = uni.getStorageSync('clientInfo')
+			console.info("客户端信息--------",clientinfoStor)
 			let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
 			// #ifdef H5-ZLB
 			mgop({
@@ -700,9 +702,15 @@ const zz = {
 	// #endif
 
 	now() { return Date.now() },
-	setAcc(u) { uni.setStorageSync('210B33A_acc', u) },
+	setAcc(u) {
+		console.info("setAcc----------", u)
+		uni.setStorageSync('210B33A_acc', u)
+	},
 	getAcc() { return uni.getStorageSync('210B33A_acc') },
-	setToken(token) { uni.setStorageSync('210B33A_token', token) },
+	setToken(token) {
+		console.log('setToken---------------', token);
+		uni.setStorageSync('210B33A_token', token)
+	},
 	getToken() { return uni.getStorageSync('210B33A_token') },
 	logOut() {
 		uni.removeStorageSync('210B33A_acc')
@@ -720,17 +728,17 @@ const zz = {
 			dept = uni.getStorageSync('sys_dept') || {}
 		return { deptId: id, dept, region: arr ? toArr(dept[id]) : dept[id] }
 	},
-	async init(){
+	async init() {
 		if (!uni.getStorageSync('cur_deptId')) {
-		    uni.setStorageSync('cur_deptId', '330213')
+			uni.setStorageSync('cur_deptId', '330213')
 			await zz.setDept()
 		}
 		let dict = uni.getStorageSync('sys_dict') || {}
 		zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-		    if (e.v) {
-		        Object.assign(dict, e)
-		        uni.setStorageSync('sys_dict', dict)
-		    }
+			if (e.v) {
+				Object.assign(dict, e)
+				uni.setStorageSync('sys_dict', dict)
+			}
 		})
 	},
 

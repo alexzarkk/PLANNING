@@ -2,7 +2,7 @@
 <template>
     <page-meta root-font-size="10px"></page-meta>
     <view>
-		
+
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
         </cu-custom>
@@ -201,7 +201,7 @@
                 </view>
             </view>
         </view>
-		<zz-footer/>
+        <zz-footer />
     </view>
 </template>
 <script>
@@ -394,38 +394,43 @@ export default {
     async onLoad(option) {
         // #ifdef H5-ZLB
         let user = this.zz.getAcc(),
-			ticket = this.zz.getQueryParam(window.location.search,'ticket')
-			
-		if(!ticket) return this.loginZlb()
+            ticket = this.zz.getQueryParam(window.location.search, 'ticket')
+        if (!ticket) {
+            return this.loginZlb()
+        }
         if (!user) {
-			let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-			user = u.user
-			this.zz.setAcc(user)
-			this.zz.setToken(u.token)
+            try {
+                let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+                user = u.user
+                this.zz.setAcc(user)
+                this.zz.setToken(u.token)
+            } catch (error) {
+                console.error("loginError---------", error)
+            }
         } else {
             //如果没有登录 || 登录已失效
-			await this.zz.req({ $url: '/user/person/info' }).catch(e => {
-				this.zz.logOut()
-				return this.loginZlb()
-			})
+            await this.zz.req({ $url: '/user/person/info' }).catch(e => {
+                this.zz.logOut()
+                return this.loginZlb()
+            })
         }
-		console.info("登录获取到的信息----------", user)
-		// 登录埋点
-		window.aplus_queue.push({
-		    action: 'aplus.setMetaInfo',
-		    arguments: ['_hold', 'BLOCK']
-		})
-		window.ZWJSBridge.getUUID().then(({ uuid }) => {
-		    const { zlb_id, zlb_name } = user
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-		})
+        console.info("登录获取到的信息----------", user)
+        // 登录埋点
+        window.aplus_queue.push({
+            action: 'aplus.setMetaInfo',
+            arguments: ['_hold', 'BLOCK']
+        })
+        window.ZWJSBridge.getUUID().then(({ uuid }) => {
+            const { zlb_id, zlb_name } = user
+            window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+            window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+            window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+            window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+        })
         // #endif
-		
-		await this.zz.init()
-		
+
+        await this.zz.init()
+
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
@@ -438,7 +443,7 @@ export default {
         this.loadData()
     },
     methods: {
-		// #ifdef H5-ZLB
+        // #ifdef H5-ZLB
         // 登录浙里办
         loginZlb() {
             const sUserAgent = window.navigator.userAgent.toLowerCase()
@@ -446,18 +451,18 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-			// const isWx = sUserAgent.indexOf("micromessenger") > -1
-			
+            // const isWx = sUserAgent.indexOf("micromessenger") > -1
             const { AccessKey, ZLB_ADDR, isDev } = this.bd
-            let url
+            let url = ''
             if (bIsAlipayMini) { // 支付宝小程序
                 url = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             } else { // 浙里办APP
                 url = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             }
+            console.log("登录回调URL---------", url)
             window.location.replace(url)
         },
-		// #endif
+        // #endif
         async loadData() {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
@@ -570,9 +575,9 @@ export default {
         //     }
         // }
         if (e.scrollTop >= this.videoBottom) {
-			if(this.deptId&&this.deptId!='330213') this.pause();
+            if (this.deptId && this.deptId != '330213') this.pause();
         } else if (e.scrollTop <= this.videoTop) {
-            if(this.deptId&&this.deptId!='330213') this.videoContext.play();
+            if (this.deptId && this.deptId != '330213') this.videoContext.play();
         }
     }
 };
