@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true">
             <block slot="content">发布动态</block>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+
+import xss from 'xss'
 export default {
     data() {
         return {
@@ -67,12 +69,12 @@ export default {
     },
     methods: {
         async loadData() {
-			let d = uni.getStorageSync('sys_dict')
-			
-			this.tagList = this.zz.toArr(d.article).filter(e => e.pub).map(tag => {
-				tag.active = false
-				return tag
-			})
+            let d = uni.getStorageSync('sys_dict')
+
+            this.tagList = this.zz.toArr(d.article).filter(e => e.pub).map(tag => {
+                tag.active = false
+                return tag
+            })
         },
         // 发布
         async sendPush() {
@@ -82,8 +84,8 @@ export default {
             this.loading = true;
             let req1 = {
                 $url: '/user/article/add',
-                content: this.content,
-				status: 1,
+                content: xss(this.content),  // 防xss注入攻击
+                status: 1,
                 imgs: []
             };
             const selectedTag = this.tagList.filter(tag => {
@@ -110,7 +112,7 @@ export default {
                     url: '/pages/my/discover'
                 });
             }).finally(() => {
-            this.loading = false;
+                this.loading = false;
             });
         },
         cancelTopic(index) {
