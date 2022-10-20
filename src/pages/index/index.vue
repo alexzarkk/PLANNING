@@ -10,7 +10,7 @@
         <view class="cu-bar bg-ztsblue search fixed align-center" style="height:100rpx;" id="searchBar" :style="[{ top: customBar + 'px' }]">
             <view class="action text-white round padding-xs" @click="href('/pages/comm/region')">
                 <text class="cuIcon-locationfill"></text>
-                <text class="text-df">{{dict?dict.deps[deptId].name:''}}</text>
+                <text class="text-df">{{dict?dict.deps[deptId||'330213'].name:''}}</text>
                 <text class="margin-left-xxs cuIcon-triangledownfill"></text>
             </view>
             <view class="search-form round" @click="href('/pages/planning/list?key=1')">
@@ -430,6 +430,9 @@ export default {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
         }, 1000)
+		
+		
+		
     },
     onReady() {
         this.cal()

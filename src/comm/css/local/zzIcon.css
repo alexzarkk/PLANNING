@@ -8,9 +8,9 @@
 
 @font-face {
   font-family: "zzIcon"; /* Project id 3351452 */
-  src: url('@/comm/css/local/iconfont.woff2?t=1663742976511') format('woff2'),
-       url('@/comm/css/local/iconfont.woff?t=1663742976511') format('woff'),
-       url('@/comm/css/local/iconfont.ttf?t=1663742976511') format('truetype');
+  src: url('@/comm/css/local/iconfont.woff2?t=166374297611') format('woff2'),
+       url('@/comm/css/local/iconfont.woff?t=166374297611') format('woff'),
+       url('@/comm/css/local/iconfont.ttf?t=166374297611') format('truetype');
 }
 
 .zzIcon {

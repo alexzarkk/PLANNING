@@ -161,7 +161,7 @@
             <view class="radius">
                 <!-- #ifdef APP-PLUS || H5 -->
                 <block v-if="trail._kml">
-                    <zz-map ref="zmap" :pms="trail._kml.children" @mapDone="mdone = true" />
+                    <zz-map ref="zmap" :pms="trail._kml.children" :winH="winHeight/2.4" @mapDone="mdone = true" />
                     <zz-kml-nav :kml="trail._kml" />
                 </block>
                 <block v-else>
@@ -396,7 +396,7 @@ export default {
         useLine() {
             if (this.mdone) this.$refs.zmap.exec({ m: 'stopLoc' })
 			
-			return this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
+			// return this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
 			// #ifdef APP-PLUS
 			this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
 			// #endif

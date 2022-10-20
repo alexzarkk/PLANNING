@@ -9,46 +9,43 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
+		
     async onLaunch() {
-        // #ifdef H5-ZLB
-        // 方案1 修改字体
-        let _this = this;
-        ZWJSBridge.onReady(() => {
-            console.log('浙里办初始化完成，执行bridge方法')
-            ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
-                console.log("获取到的当前的style======", uiStyle)
-                // uiStyle = 'elder'
-                let fontSize = '10px'
-                console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
-                if (uiStyle === 'elder') {
-                    fontSize = '16px'
-                } else {
-                    fontSize = '10px'
-                }
-                _this.$nextTick(()=>{
-                    document.documentElement.style.fontSize = fontSize
-                    // 方案2修改字体
-                    let htmlFont = document.getElementsByTagName('html')[0]
-                    htmlFont.style.fontSize = fontSize  // 测试16px
-                    console.warn("changeFontSize----------------------", fontSize)
-                })
-            })
-        })
-
-        // 用来监听单点登录的返回
-        window.onpageshow = (event) => {
-            // console.warn("onpageshow------------", window.location, event.persisted, window.performance.navigation.type == 2)
-            /**
-             * 0：网页通过点击链接、地址栏输入、表单提交、脚本操作等方式加载，相当于常数performance.navigation.TYPE_NAVIGATE。
-                1：网页通过“重新加载”按钮或者location.reload()方法加载，相当于常数performance.navigation.TYPE_RELOAD。
-                2：网页通过“前进”或“后退”按钮加载，相当于常数performance.navigation.TYPE_BACK_FORWARD。
-                255：任何其他来源的加载，相当于常数performance.navigation.TYPE_RESERVED。
-             */
-            // if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
-            // ZWJSBridge.close();
-            // }
-            // isLoad();
-        }
+		// #ifdef H5
+			// #ifdef H5-ZLB
+			// 方案1 修改字体
+			let _this = this;
+			ZWJSBridge.onReady(() => {
+				console.log('浙里办初始化完成，执行bridge方法')
+				ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
+					console.log("获取到的当前的style======", uiStyle)
+					// uiStyle = 'elder'
+					let fontSize = '10px'
+					console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
+					if (uiStyle === 'elder') {
+						fontSize = '16px'
+					} else {
+						fontSize = '10px'
+					}
+					_this.$nextTick(()=>{
+						document.documentElement.style.fontSize = fontSize
+						// 方案2修改字体
+						let htmlFont = document.getElementsByTagName('html')[0]
+						htmlFont.style.fontSize = fontSize  // 测试16px
+						console.warn("changeFontSize----------------------", fontSize)
+					})
+				})
+			})
+			// #endif
+			// #ifndef H5-ZLB
+			this.$nextTick(()=>{
+				let fontSize = '10px'
+				document.documentElement.style.fontSize = fontSize
+				let htmlFont = document.getElementsByTagName('html')[0]
+				htmlFont.style.fontSize = fontSize  // 测试16px
+				console.warn("changeFontSize----------------------", fontSize)
+			})
+			 // #endif
         // #endif
 
         uni.getSystemInfo({
@@ -139,9 +136,31 @@ export default {
     onHide() { },
     methods: {
         async init() {
-
+			
+			
+	
             // #ifndef APP-PLUS
             comm.on([121, 29])
+			// AMapLoader.load({
+			// 	key: this.bd.amapKey,
+			// 	version: "2.0",
+			// 	plugins:['AMap.Geolocation']
+			// }).then(e=>{
+			// 	window.amapGeo = new AMap.Geolocation({
+			// 		enableHighAccuracy: true,//是否使用高精度定位，默认:true
+			// 		noGeoLocation:1,		 //1: 手机设备禁止使用浏览器定位
+			// 		timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+			// 		maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+			// 		convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+			// 		showButton: false,        //显示定位按钮，默认：true
+			// 		buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+			// 		// buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+			// 		showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
+			// 		showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
+			// 		panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
+			// 		zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+			// 	})
+			// })
             // #endif
 
             // #ifdef APP-PLUS

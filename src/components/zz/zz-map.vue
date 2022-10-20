@@ -5,19 +5,42 @@
 	import comm from '@/comm/comm'
 	import icon from '@/comm/libs/icon'
 	// import AMapLoader from '@amap/amap-jsapi-loader'
-	import { CompassControl, LocationControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
+	import { CompassControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
 	import { trans } from '@/comm/geotools.js'
 	import { amapKey } from '@/comm/bd'
 	
 	import '@/comm/libs/mapbox/mapbox.css'
 	// import '@/comm/libs/mapbox/draw/mapbox-gl-draw.css'
 	
+	const geolocation = {
+		getCurrentPosition(_onSuccess){
+			uni.getLocation({
+				success(c){
+					_onSuccess({coords:c})
+				}
+			})
+		},
+		watchPosition(_onSuccess){
+			if(window.wid) clearInterval(window.wid)
+			uni.getLocation({
+				success(c){
+					_onSuccess({coords:c})
+					window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 3999)
+					return window.wid
+				}
+			})
+		},
+		clearWatch(wid){
+			clearInterval(wid||window.wid)
+		}
+	}
+			
 export default {
 	data() {
 		return {
 			map: null,
 			self: null,
-			
+			geolocate: {},
 			key: {
 				mb: 'pk.eyJ1IjoiYWxleHphcmtrIiwiYSI6ImNrcWdzNXdrcjI3NmEyb3F0cmVzd291amcifQ.tPuMJfthzboYHg3MzbKtKw',
 				tdt: '70ede380913047ef13bc4dc92ff4f75b',
@@ -34,6 +57,7 @@ export default {
 				pitch: 0,
 				maxPitch: 0
 			}
+			
 		}
 	},
 	async mounted() {
@@ -54,34 +78,37 @@ export default {
 			ct.style[e==1?'height':'width'] = document.body.clientWidth+'px'
 			this.map.resize()
 		},
-		newMb(){
+		async newMb(){
 			let map = new mapboxgl.Map(this.settings)
 			
 			map.addControl(new CompassControl(), 'bottom-right')
-			map.addControl(new LocationControl(), 'bottom-left')
+			// map.addControl(new LocationControl(), 'bottom-left')
+			this.geolocate = new mapboxgl.GeolocateControl({
+				positionOptions: { enableHighAccuracy: true, timeout: 10000, geocode: false },
+				trackUserLocation: true,
+				showUserHeading: true,
+				
+				// #ifdef APP-PLUS
+				geolocation: plus.geolocation
+				// #endif
+				 
+				// #ifdef H5
+				geolocation
+				// #endif
+			})
+			
+			map.addControl(this.geolocate, 'bottom-left')
+			this.geolocate.on('geolocate', _p => {
+				console.log('A geolocate event has occurred.', _p.coords.longitude, _p.coords.latitude, _p.coords.altitude)
+			})
 			
 			map.sid = 'default'
 			map.pm = {}
 			map.nav = {r:{}}
 			map._2p = []
 			this.map = map
-			
-			// window.map = map
-			this.initAmap()
 		},
-		async initAmap(){
-			// if(!window.Geocoder) {
-			// 	await AMapLoader.load({
-			// 	    key: this.key.amap,
-			// 	    version: "2.0",
-			// 		plugins:['AMap.Geocoder']
-			// 	}).then((AMap)=>{
-			// 		window.Geocoder = new AMap.Geocoder({})
-			// 	}).catch((e)=>{
-			// 		console.error(e)
-			// 	})
-			// }
-		},
+		
 		init(self,si,ct,isf,ctrl,t=1) {
 			
 			let map = this.map
@@ -182,12 +209,14 @@ export default {
 			for (let k in icon) {
 				map.loadImage(icon[k], (x,m)=>{ map.addImage(k, m) })
 			}
+			
 			map.on('load', (e) => {
 				ctrl.done()
 				map.init = true
 				self.callMethod('mapDone', true)
 				comm.setStorage('mbStyle', map.getStyle())
-				// this.onLoc()
+				
+				this.geolocate.trigger()
 			})
 			map.on('moveend', (e) => {
 				mbtool.on(map)
@@ -195,7 +224,9 @@ export default {
 			});
 			map.on('zoomend', () => {
 				mbtool.on(map)
-			});
+			})
+			
+			// document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0].style.display = ''
 		},
 		
 		async updateData({exec=null, sysInfo={}, center=null, pms=null, line=[], point=[], gon=[], isf=false}, ov, self) {
