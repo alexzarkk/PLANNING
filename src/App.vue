@@ -61,7 +61,7 @@ export default {
 
                 // #ifdef H5
                 window.model = e.model
-                e.platform = 'H5';
+                e.platform = 'H5'
                 Vue.prototype.platform = 'H5'
                 Vue.prototype.CustomBar = e.statusBarHeight //+ 44  // H5 端使用 
 

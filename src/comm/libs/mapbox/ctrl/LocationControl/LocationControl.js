@@ -27,7 +27,7 @@ export default class LocationControl extends Base {
 			})
 			this.map.flyTo({center: this.map.sid=='amap'? trans(p.coord):p.coord, zoom:16})
 			
-			window.mbAct({act:'onLoc'})
+			// window.mbAct({act:'onLoc'})
 		});
 		
         this.addButton(this.loc);

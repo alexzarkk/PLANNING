@@ -52,7 +52,7 @@ export default {
 				container: 'mbContainer',
 				center: [121,29],
 				zoom: 15,
-				minZoom: 5,
+				minZoom: 3,
 				maxZoom: 20,
 				pitch: 0,
 				maxPitch: 0

@@ -5,7 +5,7 @@
 	import comm from '@/comm/comm'
 	import icon from '@/comm/libs/icon'
 	import { CompassControl, LocationControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
-	import { trans } from '@/comm/geotools.js'
+	import { trans,fixNum } from '@/comm/geotools.js'
 	import '@/comm/libs/mapbox/mapbox.css'
 	
 export default {
@@ -56,19 +56,44 @@ export default {
 		},
 		newMb(){
 			let map = new mapboxgl.Map(this.settings)
+			const geolocation = {
+				getCurrentPosition(_onSuccess){
+					uni.getLocation({
+						success(c){
+							_onSuccess({coords:c})
+						}
+					})
+				},
+				watchPosition(_onSuccess){
+					if(window.wid) clearInterval(window.wid)
+					uni.getLocation({
+						success(c){
+							_onSuccess({coords:c})
+							window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 3999)
+							return window.wid
+						}
+					})
+				},
+				clearWatch(wid){
+					clearInterval(wid||window.wid)
+				}
+			}
+			this.geolocate = new mapboxgl.GeolocateControl({
+				positionOptions: { enableHighAccuracy: true, timeout: 10000, geocode: false },
+				trackUserLocation: true,
+				showUserHeading: true,
+				
+				// #ifdef APP-PLUS
+				geolocation: plus.geolocation
+				// #endif
+				 
+				// #ifdef H5
+				geolocation
+				// #endif
+			})
 			
+			map.addControl(this.geolocate, 'bottom-left')
 			map.addControl(new CompassControl(), 'bottom-right')
-			map.addControl(new mapboxgl.GeolocateControl({
-							positionOptions: {
-								enableHighAccuracy: true
-							},
-							// When active the map will receive updates to the device's location as it changes.
-							trackUserLocation: true,
-							// Draw an arrow next to the location dot to indicate which direction the device is heading.
-							showUserHeading: true
-							}), 'bottom-left')
-			// map.addControl(new LocationControl(), 'bottom-left')
-			// map.addControl(new mapboxgl.NavigationControl());
 			
 			map.sid = 'default'
 			map.pm = {}
@@ -140,11 +165,16 @@ export default {
 				map.loadImage(icon[k], (x,m)=>{ map.addImage(k, m) })
 			}
 			map.on('load', (e) => {
+				
 				ctrl.done()
 				map.init = true
 				self.callMethod('mapDone', true)
 				comm.setStorage('mbStyle', map.getStyle())
 				// this.onLoc()
+				document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0].style.display = 'none'
+				this.geolocate.on('geolocate', _p => {
+					this.self.callMethod('onLocating', [fixNum(_p.coords.longitude), fixNum(_p.coords.latitude), ~~(_p.coords.altitude || 0)])
+				})
 			})
 		},
 		
@@ -164,6 +194,17 @@ export default {
 				});
 			}
 			mbtool.setKml(this.map, pms, line, point, gon)
+		},
+		
+		trigger(on){
+			const top = (x) => { for (let s of x) { s.style.marginTop = (on?42:0)+'px' } }
+			top(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
+			top(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
+			if(on){
+				this.geolocate.trigger()
+			}else{
+				console.log('stop ....');
+			}
 		},
 		
 		onLoc(){ mbtool.onLoc(this.map, 0) },
@@ -208,12 +249,12 @@ export default {
 		</view>
 		<!-- <mumu-get-qrcode ref="scan" @success='qrcodeSucess' /> -->
 		
-		<!-- <image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image> -->
+		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
 		
 		<block v-if="!onRec">
 			<image @click="controltap('back')" src="@/static/back.png" class="back-img" :style="'top:'+(stH+20)+'px;'"></image>
-			<view class="start-f">
+			<view class="start-f" v-if="mdone">
 				<view class="start-btn" @click="start">
 					<text class="start-btn-name">开始记录</text>
 				</view>
@@ -411,8 +452,8 @@ export default {
 		async getLoc(ct,c){
 			if(!c){
 				let {coord} = await getLocation()
-				c = trans(coord)
-				uni.setStorageSync('cur_loc_gcj02', c)
+				c = coord
+				// uni.setStorageSync('cur_loc_gcj02', c)
 			}
 			if(ct) this.fly(c)
 			this.lock = true
@@ -424,7 +465,7 @@ export default {
 			let rec = this.rec
 			this.onRec = false
 			locationModule.stopLocation()
-			this.exec({m:'setTop', e:0})
+			this.exec({m:'trigger', e:0})
 			if(rec.coord.length<10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
 			
 			rec.info = calData(rec.coord)
@@ -449,6 +490,9 @@ export default {
 			   }
 			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
 			}, 1000)
+		},
+		onLocating(coord){
+			console.log('onLocating ---------->', coord)
 		},
 		async start(){
 			// #ifndef H5-ZLB
@@ -569,7 +613,10 @@ export default {
 			this.rec = rec
 			this.clock()
 			this.onRec = true
-			this.exec({m:'setTop', e:42})
+			this.exec({m:'trigger', e:1})
+			
+			return
+			
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
