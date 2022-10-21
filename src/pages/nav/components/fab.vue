@@ -17,7 +17,7 @@
 			<view class="uni-fab uni-fab--leftBottom" :style="{ opacity: isShow ? 1 : 0 }">
 				<view class="uni-fab__content--left uni-fab__content">
 					<view class="uni-fab__item uni-fab__item--first" />
-					<view v-if="isShow" v-for="(item, index) in content" :key="index" class="uni-fab__item uni-fab__item--active" @touchend="end(index, item)" @touchstart="onStartTouch(index, item)" @click="_onItemClick(index, item)">
+					<view v-if="isShow" v-for="(item, index) in content" :key="index" class="uni-fab__item uni-fab__item--active" @touchend="end(index, item)" @touchstart.stop="onStartTouch(index, item)" @click="_onItemClick(index, item)">
 						<image :src="item.active ? item.selectedIconPath : item.iconPath" class="uni-fab__item-image" mode="aspectFit" />
 						<text class="uni-fab__item-text" :style="{ color: item.textColor }">{{ item.text }}</text>
 					</view>

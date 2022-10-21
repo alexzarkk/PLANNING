@@ -295,7 +295,7 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		<!-- <mumu-get-qrcode ref="scan" @success='qrcodeSucess' /> -->
+		<mumu-get-qrcode ref="scan" @success='qrcodeSucess' />
 		
 		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
@@ -759,8 +759,13 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
+				// #ifdef H5-ZLB
 				let p = await scan()
 				this.scaned(p)
+				return
+				// #endif
+				this.$refs.scan.createMsk()
+				this.$refs.scan.openScan()
 			}
 			if(t=='position') {
 				this.getLoc(1)
@@ -783,7 +788,10 @@ export default {
 				}
 			}
 		},
-		qrcodeSucess(p) { this.scaned(p) },
+		qrcodeSucess(p) { 
+			console.log('qrcodeSucessqrcodeSucessqrcodeSucess',p)
+			this.scaned(p)
+		},
 		scaned(p){
 			if(p) {
 				if(this.rec.line[1]) this.rec.line.splice(1,1)

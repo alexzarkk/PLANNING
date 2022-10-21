@@ -142,7 +142,7 @@ export default {
             let keep = [
                 '__LAST_DCLOUD_APPID', '__ETAG__CNA__ID__', '__DC_STAT_UUID', '__package_info__',
                 'getui_appid', 'getui_cid', 'getui_session', 'getui_api_time', 'getui_regid', 'getui_deviceid',
-                // '210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
+                '210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
                 'sys_nav_cps', 'user_scan_log', 'sync_task', 'sync_files', 'tempfiles', 'nav_local_rec'
             ]
 

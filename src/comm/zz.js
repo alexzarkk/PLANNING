@@ -518,16 +518,27 @@ async function req(params = {}, loading = false, t = 9999) {
 			// #endif
 
 			// #ifndef H5-ZLB
-			uni.request({
-				url: api[isDev] + fn,
-				timeout: 10000,
-				header: {
-					'content-type': 'application/json',
-					authorization: token,
-					clientinfo
+			// uni.request({
+			// 	url: api[isDev] + fn,
+			// 	timeout: 10000,
+			// 	header: {
+			// 		'content-type': 'application/json',
+			// 		authorization: token,
+			// 		clientinfo
+			// 	},
+			// 	data: params,
+			// 	method: 'POST',
+			// 	success,
+			// 	fail,
+			// 	complete
+			// })
+			uniCloud.callFunction({
+				name: fn,
+				data: {
+					url,
+					params,
+					token
 				},
-				data: params,
-				method: 'POST',
 				success,
 				fail,
 				complete

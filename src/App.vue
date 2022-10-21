@@ -124,15 +124,15 @@ export default {
     onShow() {
 		
 		
-		uni.getNetworkType({
-			success(e) {
-				console.log('getNetworkType',e);
-			}
-		})
+		// uni.getNetworkType({
+		// 	success(e) {
+		// 		console.log('getNetworkType',e);
+		// 	}
+		// })
 		
         sync.go()
         uni.onNetworkStatusChange(e => {
-			console.log('onNetworkStatusChange xxxxxxx',e);
+			// console.log('onNetworkStatusChange xxxxxxx',e);
             // #ifndef APP-PLUS
             comm.setNet(e.networkType != 'none')
             // #endif

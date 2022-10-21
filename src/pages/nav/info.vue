@@ -1,14 +1,28 @@
 <template>
 <page-meta root-font-size="10px"></page-meta>
     <view>
-        <nav-custom bgColor="bg-ztsblue">
-            <block slot="content">数据统计</block>
-            <block slot="right">
-                <view class="padding-right">
-                    <button class="cu-btn bg-gray text-xl" @click="close"><text>地图</text></button>
-                </view>
-            </block>
-        </nav-custom>
+		<!-- #ifdef H5 -->
+		<nav-custom bgColor="bg-ztsblue">
+		    <block slot="content">数据统计</block>
+		    <block slot="right">
+		        <view class="padding-right">
+		            <button class="cu-btn bg-gray text-xl" @click="close"><text>地图</text></button>
+		        </view>
+		    </block>
+		</nav-custom>
+		<!-- #endif -->
+		
+		<!-- #ifdef APP-PLUS -->
+		<cu-custom bgColor="bg-ztsblue">
+		    <block slot="content">数据统计</block>
+		    <block slot="right">
+		        <view class="padding-right">
+		            <button class="cu-btn bg-gray text-xl" @click="close"><text>地图</text></button>
+		        </view>
+		    </block>
+		</cu-custom>
+		<!-- #endif -->
+        
 		<block v-if="rec">
 			<data-swiper :dataList="dataList1"></data-swiper>
 			<data-swiper :dataList="dataList2"></data-swiper>
