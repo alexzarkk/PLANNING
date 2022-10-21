@@ -55,52 +55,22 @@
         <!-- 瀑布流 -->
 
         <view v-if="isReady" class="padding-sm">
-            <tui-waterfall :key="timer" :type="1" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
-                <!-- #ifdef MP -->
-                <!-- <template slot-scope="{ entity, index }" slot="left">
-                    <t-goods-item :entity="entity"></t-goods-item>
-                </template>
-                <template slot-scope="{ entity, index }" slot="right">
-                    <t-goods-item :entity="entity"></t-goods-item>
-                </template> -->
-                <!-- #endif -->
-
-                <!-- #ifdef APP-PLUS || H5 -->
+            <tui-waterfall :type="2" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
                 <template v-slot:left="slotProps">
                     <zz-line-item :lineData="slotProps.entity"></zz-line-item>
-                    <!-- <t-goods-item :entity="slotProps.entity"></t-goods-item> -->
                 </template>
-                <template v-slot:right="sp">
-                    <zz-line-item :lineData="sp.entity"></zz-line-item>
-                    <!-- <t-goods-item :entity="sp.entity"></t-goods-item> -->
+                <template v-slot:right="slotProps">
+                    <zz-line-item :lineData="slotProps.entity"></zz-line-item>
                 </template>
-                <!-- #endif -->
             </tui-waterfall>
-            <!--加载loadding-->
             <tui-loadmore v-if="loadding" :index="3" type="red"></tui-loadmore>
-            <!-- <tui-nomore v-if="!pullUpOn" backgroundColor="#f7f7f7"></tui-nomore> -->
-            <!--加载loadding-->
         </view>
-
-        <!-- 线路列表  -->
-        <!-- <view class="cu-tabbar-height"></view> -->
-        <!-- <block v-if="tabs[tabCur].list"><zz-trail-list :dataList="tabs[tabCur].list" @detail="detail" @userEvent="userEvent"></zz-trail-list></block>
-		<block v-else>
-			<view class="cu-tabbar-height"></view>
-			<tui-nomore></tui-nomore>
-		</block> -->
-        <!-- 返回到轨迹记录的按钮 -->
-        <!-- <back-to-line-track></back-to-line-track> -->
-
         <tui-scroll-top ref="top" :scrollTop="scrolled"></tui-scroll-top>
     </view>
 </template>
 <script>
 import tabsData from '@/comm/test/json/line.json';
-
-
 export default {
-
     data() {
         return {
             timer: new Date().getTime(),
@@ -137,12 +107,9 @@ export default {
         };
     },
     onShow() {
-        // console.log("加载的tabs",this.tabs)
     },
     onBackPress() { return true },
-    onLoad(qr) {
-
-    },
+    onLoad(qr) {},
     onReady() {
         let td = uni.getStorageSync('trailData');
         this.trailData = td.trailData;
@@ -152,38 +119,9 @@ export default {
             this.tabs = tabsData;
         }
         const list = td.trailData.slice(0, this.pageSize);
-        this.trailShowData  = this.trailShowData.concat(list)
+        this.trailShowData = this.trailShowData.concat(list)
         this.isReady = true
     },
-    //   onReady() {
-    // this.$store.commit('createBackBtn')  // 创建返回的按钮
-
-    // uni.$on('showBackBtn',()=>{
-    // 	this.$store.commit("showBackBtn")
-    // })
-
-    //       uni.$on('startLocation', () => {
-    //           // console.log('开始记录轨迹,执行startLocation');
-    //           this.$store.dispatch('startTimeCount'); // 开始时间记录
-    //           this.$store.dispatch('startGetLocation'); // 开始记录位置
-    //       });
-    //       uni.$on('endLocation', () => {
-    //           this.$store.commit('cleanTimeCount');
-    //           this.$store.dispatch('cleanGetLocation');
-    //       });
-
-    //       uni.$on('pauseRecord', () => {
-    //           this.$store.commit('cleanTimeCount');
-    //       });
-
-    //       uni.$on('continueRecord', () => {
-    //           this.$store.dispatch('startTimeCount'); // 开始时间记录
-    //       });
-
-    // setTimeout(()=>{
-    // 	this.addTrailShowData()
-    // },300)
-    //   },
     methods: {
         kmls() { this.zz.href('/pages/comm/kmlPage') },
         onCollect() {

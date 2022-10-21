@@ -61,6 +61,9 @@
 </template>
 
 <script>
+
+import xss from 'xss'
+
 export default {
     data() {
         return {
@@ -104,8 +107,8 @@ export default {
 			if(!this.contact) return this.zz.toast('请输入联系方式~')
 			let args = {
 					$url:'/admin/comm/feedback', 
-					desc: this.desc,
-					contact: this.contact, 
+					desc: xss(this.desc),
+					contact: xss(this.contact), 
 					// video: this.video,
 					type: this.radio,
 					imgs: []
