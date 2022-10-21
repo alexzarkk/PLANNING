@@ -211,6 +211,7 @@ export default {
         // 保存兴趣点
         save() {
 			let poi = this.poi
+			delete poi.editble
 			if(!poi.imgs.length && !poi.video) return this.zz.modal('至少有一张照片或一段视频！')
 			
 			if(this.ov != JSON.stringify(poi)) {

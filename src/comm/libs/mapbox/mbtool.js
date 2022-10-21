@@ -567,6 +567,10 @@ setPoint = (map, point)=> {
 								`<p>经纬度：<b>${t.coord[0]}, ${t.coord[1]}</b></p>` +
 								`<p>海拔： <b>${t.coord[2] || 0 }</b>m</p><p>`
 								
+					if(t.editble){
+						html +=	"<a class='map-href' data="+JSON.stringify({act:'edit', id})+" onclick='window.mbAct(JSON.parse(this.getAttribute(\"data\")))'>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
+								"<a class='map-href' data="+JSON.stringify({act:'del', id})+" onclick='window.mbAct(JSON.parse(this.getAttribute(\"data\")))'>删除</a>"
+					}		
 								
 								// + `<p>地址：<span id="zddr"></span></p>`
 					
@@ -845,6 +849,8 @@ module.exports = {
 	
 	run,
 	setKml,
+	setLine,
+	setPoint,
 	setActive,
 	
 	getElevation,

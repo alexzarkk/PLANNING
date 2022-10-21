@@ -956,23 +956,42 @@ const temp = {
 ]}
 
 const locationModule = {
+		temp,
 		tim: null,
 		stopLocation(){
 			clearTimeout(this.tim)
 		},
 		async startLocation(option, fn){
-			let {p} = await getLocation()
-			// temp.t ++
-			// if(temp.t==temp.coord.length) temp.t = 0
-			// let p = {
-			// 	longitude: temp.coord[temp.t][0],
-			// 	latitude: temp.coord[temp.t][1]
-			// }
+			// let {p} = await getLocation()
+			temp.t ++
+			if(temp.t==temp.coord.length) temp.t = 0
+			let p = {
+				longitude: temp.coord[temp.t][0],
+				latitude: temp.coord[temp.t][1]
+			}
 			
 			fn({data: p, success: true})
 			this.tim = setTimeout(()=>{
 				this.startLocation(option, fn)
 			},option.intervalTime)
+		},
+		
+		
+		watchPosition(_onSuccess){
+			
+			temp.t ++
+			if(temp.t==temp.coord.length) temp.t = 0
+			
+			
+			console.log(temp.t,window);
+			_onSuccess({coords: {
+				longitude: temp.coord[temp.t][0],
+				latitude: temp.coord[temp.t][1],
+				altitude: temp.coord[temp.t][2]
+			}})
+			
+			window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 3999)
+			return window.wid
 		}
 	}
 	

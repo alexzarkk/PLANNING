@@ -1,14 +1,14 @@
 <template>
 <page-meta root-font-size="10px"></page-meta>
     <view>
-        <cu-custom bgColor="bg-ztsblue">
+        <nav-custom bgColor="bg-ztsblue">
             <block slot="content">数据统计</block>
             <block slot="right">
                 <view class="padding-right">
                     <button class="cu-btn bg-gray text-xl" @click="close"><text>地图</text></button>
                 </view>
             </block>
-        </cu-custom>
+        </nav-custom>
 		<block v-if="rec">
 			<data-swiper :dataList="dataList1"></data-swiper>
 			<data-swiper :dataList="dataList2"></data-swiper>
@@ -22,8 +22,10 @@
 import { trans } from '@/comm/geotools'
 import dataSwiper from './components/dataSwiper'
 
+import navCustom from '@/comm/colorui/components/nav-custom'
+
 export default {
-    components: { dataSwiper },
+    components: { dataSwiper, navCustom },
     data() {
         return {
             tim: {},

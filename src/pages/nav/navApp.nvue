@@ -350,19 +350,73 @@ export default {
 						if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
 						uni.setStorageSync('cur_loc_gcj02', c1)
 						
-						if(!this.puase) {
+						//保持地图中心
+						if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
+						if (!this.puase) {
+							const keepSync = (len) =>{
+								// 刷新附近cps
+								if((!len||len%77==0) && !rec.t['y'+len]) {
+									rec.t['y'+len] = 1
+									delete rec.t['y'+(len-77)]
+									comm.on(trans(c1, 'gcj02towgs84'))
+								}
+								// 更新打卡点距离
+								if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
+									rec.t['x'+len] = 1
+									delete rec.t['x'+(len-55)]
+									this.around(trans(c1, 'gcj02towgs84'))
+								}
+								
+								// 打卡提醒
+								if((!len||len%6==0) && !rec.t[len] &&this.cps.length) {
+									rec.t[len] = 1
+									delete rec.t[len-6]
+									
+									toDist(trans(c1, 'gcj02towgs84'), this.cps, this.tmt? this.way.coord:null)
+									this.cps.sort(zz.compare('dist'))
+									
+									console.log(p,'checkcps .............',this.cps)
+									
+									let p = this.cps[0]
+									
+									if(this.rLine[1]) {
+										if(p.dist <= 500) {
+											this.rLine[1].points[1] = pt(trans(p.coord))
+										} else {
+											if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
+										}
+									}
+									if(p.dist<=this.minDist && !rec.t[p._id]) {
+										rec.t[p._id] = true
+										tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
+										this.point.push(createEle(p,1, icon[90]))
+									}
+								}
+								
+								
+								// 同步服务器数据
+								if(len&&len%10==0&&!rec.t['z'+len]) {
+									rec.t['z'+len] = 1
+									delete rec.t['z'+(len-10)]
+									let task = {$url: '/user/rec/sync', coord:[], len, tim: this.tim, stopTime: rec.stopTime}
+									for (var i = (len-10); i < len; i++) {
+										task.coord.push(rec.coord[i])
+									}
+									sync.add(task)
+								}
+							}
+							
 							if (!size) {
-								size++
 								this.onLoc(true,c1)
 								rec.coord.push(c1)
 								line.points.push(pt(c1))
+								keepSync(0)
 							}else{
 								let c2 = rec.coord[size-1],
 									len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
 								
 								//大于6m 小于60m/每秒 判断有效
 								if(len>=6 && (len/((c1[3]-c2[3])*1000) < 60)) {
-									size++
 									rec.coord.push(c1)
 									line.points.push(pt(c1))
 									
@@ -378,68 +432,12 @@ export default {
 										if (~~Math.abs(b1 - b2) < 15) {
 											rec.coord.splice(size - 2, 1)
 											line.points.splice(size - 2, 1)
-											size--
 										}
 										console.info('去除漂移------1',b1,b2, ~~Math.abs((b1-b2)))
 									}
 								}
-								
-								//保持地图中心
-								if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
+								keepSync(rec.coord.length)
 							}
-							
-							// 打卡提醒 
-							if((!size || size%6==0) && !rec.t[size]) {
-								rec.t[size] = 1
-								delete rec.t[size-6]
-								
-								toDist(trans(c1, 'gcj02towgs84'), this.cps, this.tmt? this.way.coord:null)
-								this.cps.sort(zz.compare('dist'))
-								
-								let p = this.cps[0]
-								
-								console.log(p,'checkcps .............',this.cps)
-								if(p){
-									if(this.rLine[1]) {
-										if(p.dist <= 500) {
-											this.rLine[1].points[1] = pt(trans(p.coord))
-										} else {
-											if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
-										}
-									}
-									if(p.dist <= this.minDist && !rec.t[p._id]) {
-										rec.t[p._id] = true
-										tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
-										this.point.push(createEle(p,1, icon[90]))
-									}
-								}
-							}
-							
-							// 刷新cps
-							if(size%99==0 && !rec.t['y'+size]) {
-								rec.t['y'+size] = 1
-								delete rec.t['y'+(size-99)]
-								comm.on(trans(c1, 'gcj02towgs84'))
-							}
-							
-							//更新打卡点
-							if(!this.tmt && size%101==0 && !rec.t['x'+size]) {
-								rec.t['x'+size] = 1
-								delete rec.t['x'+(size-101)]
-								this.around(trans(c1, 'gcj02towgs84'))
-							}
-							
-							// 更新服务器数据
-							if(size%10==0 && !rec.t['z'+size]) {
-								rec.t['z'+size] = 1
-								delete rec.t['z'+(size-10)]
-								let task = {$url: '/user/rec/sync', coord:[], size, tim: this.tim, stopTime: rec.stopTime}
-								for (var i = (size-10); i < size; i++) {
-									task.coord.push(rec.coord[i])
-								}
-								sync.add(task)
-							}
-							
 							rec.info = calData(rec.coord)
 							say()
 							this.setRec()

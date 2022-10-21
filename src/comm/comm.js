@@ -126,7 +126,12 @@ const comm = {
 		return nav[k][xy+zoom]
 	},
 	
-	//附近柱子 arr
+	
+	/*
+	 附近柱子 根据坐标距离排序后 arr
+	 c coord
+	 d 距离范围
+	*/
 	async around(c,d=12000) {
 		if(!c) {
 			let { coord } = await getLocation()
@@ -151,7 +156,13 @@ const comm = {
 		return arr.sort(comm.compare('dist'))
 	},
 	
-	// 初始化网格信息
+	/*
+	 初始化网格附近柱子
+	 sys_nav_cps  = {
+		 W0000:{ t2: s[1], coord: s[2] }
+		 ...
+	 }
+	 */
 	async on(c){
 		if(!c) {
 			let { coord } = await getLocation()

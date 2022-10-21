@@ -99,7 +99,7 @@ export default {
 			
 			map.addControl(this.geolocate, 'bottom-left')
 			this.geolocate.on('geolocate', _p => {
-				console.log('A geolocate event has occurred.', _p.coords.longitude, _p.coords.latitude, _p.coords.altitude)
+				console.log('A geolocate event has occurred.', _p.timestamp ,_p.coords.longitude, _p.coords.latitude, _p.coords.altitude)
 			})
 			
 			map.sid = 'default'

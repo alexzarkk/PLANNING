@@ -5,6 +5,7 @@ import { pathToBase64 } from '@/js_sdk/mmmm-image-tools'
 
 import { api, isDev, appKey, amapKey, appid } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
+import { clearStorage } from 'mapbox-gl'
 
 
 const
@@ -497,8 +498,6 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5
-			let clientinfoStor = uni.getStorageSync('clientInfo')
-			console.info("客户端信息--------",clientinfoStor)
 			let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
 			// #ifdef H5-ZLB
 			mgop({
@@ -735,6 +734,7 @@ const zz = {
 		}
 		let dict = uni.getStorageSync('sys_dict') || {}
 		zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+			console.info("datadata ===========",e)
 			if (e.v) {
 				Object.assign(dict, e)
 				uni.setStorageSync('sys_dict', dict)
