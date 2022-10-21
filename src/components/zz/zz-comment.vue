@@ -83,8 +83,8 @@
             <zz-page-status :total="total" :needStatus="false" :length="commentList.length" msg="还没有评论"></zz-page-status>
         </view>
         <view v-if="showFooter" class="solid-top">
-			<zz-footer/>
-		</view>
+            <zz-footer />
+        </view>
         <!-- 底部评论操作条 -->
         <view class="comment-bar" style="bottom:0;">
             <view class="cu-bar input comment-bar-wrapper">
@@ -137,6 +137,9 @@
 </template>
 
 <script>
+
+import xss from 'xss'
+
 export default {
     props: {
         // 帖子的id
@@ -258,8 +261,6 @@ export default {
                     comment.isMy = comment.userId === this.userInfo._id
                     return comment
                 });
-
-
                 this.total = this.commentList.length
             }).catch((err) => {
                 console.error("评论 fail=======", err)
@@ -284,7 +285,7 @@ export default {
             this.loading = true;
             let requestParams = {
                 $url: 'user/blog/add',
-                content: this.comment
+                content: xss(this.comment)
             };
             if (this.replyObj.pid) {
                 requestParams.pid = this.replyObj.pid; // 主评论ID
@@ -301,14 +302,14 @@ export default {
                     });
                     mainComment.children.push({
                         rName: this.userInfo.nickName,
-                        content: this.comment,
+                        content: xss(this.comment),
                         userInfo: this.userInfo
                     });
                 } else {
                     const comment = {
                         _id: res.id,
                         children: [],
-                        content: this.comment,
+                        content: xss(this.comment),
                         like: 0,
                         status: 0,
                         tid: this.tid,

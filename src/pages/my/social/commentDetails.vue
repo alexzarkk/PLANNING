@@ -116,6 +116,9 @@
 </template>
 
 <script>
+
+import xss from 'xss'
+
 export default {
     data() {
         return {
@@ -259,7 +262,7 @@ export default {
             this.loading = true;
             let requestParams = {
                 $url: 'user/blog/add',
-                content: this.comment,
+                content: xss(this.comment),
                 pid: this.replyObj.pid,  // 一级评论的id,用来查询当前评论下的所有评论
                 rid: this.replyObj.rid  // 回复人的_id 用来查询个人资料
             };
@@ -274,7 +277,7 @@ export default {
                     userId: this.userInfo._id,  // 前端使用
                     rid: this.replyObj.rid,
                     rName: this.replyObj.rName,
-                    content: this.comment,
+                    content: xss(this.comment),
                     createTime: now
                 });
                 uni.$emit('modifyComment');
