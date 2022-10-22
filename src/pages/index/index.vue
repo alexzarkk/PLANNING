@@ -2,7 +2,7 @@
 <template>
     <page-meta root-font-size="10px"></page-meta>
     <view>
-		
+
         <cu-custom bgColor="bg-ztsblue">
             <view slot="content">运动浙江 户外天堂</view>
         </cu-custom>
@@ -20,7 +20,10 @@
             </view>
             <view class="action text-white text-df" @click="href('/pages/my/social/writeTopic',0,1)">
                 <text class="cuIcon-add"></text>
-                <view class="margin-left-xs">发布</view>
+                <view class="margin-left-xs">
+                    <!-- <uni-icons class="fab-circle-icon" type="circle-filled" color="#ff0000" size="42"></uni-icons> -->
+                    发布
+                </view>
             </view>
         </view>
         <view class="cu-tabbar-height"></view>
@@ -108,7 +111,7 @@
         </template>
 
         <!-- 赛事活动 -->
-       <!-- <template v-if="bd.isDev&&deptId=='330213'">
+        <!-- <template v-if="bd.isDev&&deptId=='330213'">
             <view class="cu-bar bg-white solid-top margin-top">
                 <view class="action">
                     <text class="cuIcon-titles text-ftorange"></text>
@@ -140,7 +143,7 @@
                 </swiper-item>
             </swiper>
         </template> -->
-		
+
         <view class="padding-xs">
             <view class="bg-blue light" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpxs">
                 <view class="text-df text-ftblue text-bold padding-tb-xs">
@@ -156,7 +159,7 @@
             </view>
         </view>
 
-       <!-- <template v-if="bd.isDev&&deptId=='330213'">
+        <!-- <template v-if="bd.isDev&&deptId=='330213'">
             <view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333rpx" @click="href('/pages/mall/special')">
                 <view class="flex justify-end padding-top">
                     <view class="cu-tag bg-pink text-right">当季热销</view>
@@ -202,7 +205,7 @@
                 </view>
             </view>
         </view>
-		<zz-footer/>
+        <zz-footer />
     </view>
 </template>
 <script>
@@ -395,36 +398,41 @@ export default {
     async onLoad() {
         // #ifdef H5-ZLB
         let user = this.zz.getAcc(),
-			ticket = this.zz.getQueryParam(window.location.search,'ticket')
-		console.info("ticketticketticketticketticket----------", ticket)	
-		if(!ticket) return this.loginZlb()
+            ticket = this.zz.getQueryParam(window.location.search, 'ticket')
+        console.info("ticketticketticketticketticket----------", ticket)
+        if (!ticket) return this.loginZlb()
         if (!user) {
-			let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-			user = u.user
-			this.zz.setAcc(user)
-			this.zz.setToken(u.token)
+            let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+            user = u.user
+            this.zz.setAcc(user)
+            this.zz.setToken(u.token)
         } else {
             //如果没有登录 || 登录已失效
-			await this.zz.req({ $url: '/user/person/info' }).catch(e => {
-				this.zz.logOut()
-				return this.loginZlb()
-			})
+            await this.zz.req({ $url: '/user/person/info' }).catch(e => {
+                this.zz.logOut()
+                return this.loginZlb()
+            })
         }
-		console.info("登录获取到的信息----------", user)
-		// 登录埋点
-		window.aplus_queue.push({
-		    action: 'aplus.setMetaInfo',
-		    arguments: ['_hold', 'BLOCK']
-		})
-		window.ZWJSBridge.getUUID().then(({ uuid }) => {
-		    const { zlb_id, zlb_name } = user
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-		})
+        console.info("登录获取到的信息----------", user)
+        // 登录埋点
+        try {
+            console.log(window.aplus_queue)
+            window.aplus_queue.push({
+                action: 'aplus.setMetaInfo',
+                arguments: ['_hold', 'BLOCK']
+            })
+            window.ZWJSBridge.getUUID().then(({ uuid }) => {
+                const { zlb_id, zlb_name } = user
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+            })
+        } catch (error) {
+            console.warn('埋点错误---- ', error);
+        }
         // #endif
-		
+
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
@@ -437,7 +445,7 @@ export default {
         this.loadData()
     },
     methods: {
-		// #ifdef H5-ZLB
+        // #ifdef H5-ZLB
         // 登录浙里办
         loginZlb() {
             const sUserAgent = window.navigator.userAgent.toLowerCase()
@@ -445,8 +453,8 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-			// const isWx = sUserAgent.indexOf("micromessenger") > -1
-			
+            // const isWx = sUserAgent.indexOf("micromessenger") > -1
+
             const { AccessKey, ZLB_ADDR, isDev } = this.bd
             let url
             if (bIsAlipayMini) { // 支付宝小程序
@@ -456,7 +464,7 @@ export default {
             }
             window.location.replace(url)
         },
-		// #endif
+        // #endif
         async loadData(init) {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
@@ -569,9 +577,9 @@ export default {
         //     }
         // }
         if (e.scrollTop >= this.videoBottom) {
-			if(this.deptId&&this.deptId!='330213') this.pause();
+            if (this.deptId && this.deptId != '330213') this.pause();
         } else if (e.scrollTop <= this.videoTop) {
-            if(this.deptId&&this.deptId!='330213') this.videoContext.play();
+            if (this.deptId && this.deptId != '330213') this.videoContext.play();
         }
     }
 };
