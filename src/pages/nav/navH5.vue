@@ -4,7 +4,7 @@
 	import mbtool from '@/comm/libs/mapbox/mbtool.js'
 	import comm from '@/comm/comm'
 	import icon from '@/comm/libs/icon'
-	import { CompassControl, LocationControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
+	import { CompassControl, TerrainControl, FullscreenControl } from '@/comm/libs/mapbox/ctrl/index.js'
 	import { trans,fixNum } from '@/comm/geotools.js'
 	import '@/comm/libs/mapbox/mapbox.css'
 	
@@ -285,7 +285,9 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
+		
+		<image v-if="locating" src="@/static/loading.gif" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
+		<image v-else @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
 		
 		<block v-if="!onRec">
@@ -346,7 +348,7 @@ export default {
 			lock: false,
 			
 			// isConn: true,
-			
+			locating:false,
 			mdone: false,
 			mb: {},
 			ver: 0,
@@ -481,7 +483,9 @@ export default {
 		},
 		async getLoc(ct,c){
 			if(!c){
+				this.locating = true
 				let {coord} = await getLocation()
+				this.locating = false
 				c = coord
 			}
 			if(ct) this.fly(c)
@@ -863,5 +867,7 @@ export default {
 	left: 6px;
 	width: 42px;
 	height: 42px;
+	border-radius: 50%;
+	background-color: #ffffff;
 }
 </style>
