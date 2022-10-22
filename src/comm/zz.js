@@ -497,9 +497,8 @@ async function req(params = {}, loading = false, t = 9999) {
 					// console.log(e);
 				}
 
-			// #ifdef H5
+			// #ifdef H5-ZLB
 				let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
-				// #ifdef H5-ZLB
 				mgop({
 					api: 'mgop.zz.zts.' + fn, // 必填
 					host: 'https://mapi.zjzwfw.gov.cn/',
@@ -515,35 +514,23 @@ async function req(params = {}, loading = false, t = 9999) {
 					onSuccess: success,
 					onFail: fail
 				});
-				// #endif
-
-				// #ifndef H5-ZLB
-				// uni.request({
-				// 	url: api[isDev] + fn,
-				// 	timeout: 10000,
-				// 	header: {
-				// 		'content-type': 'application/json',
-				// 		authorization: token,
-				// 		clientinfo
-				// 	},
-				// 	data: params,
-				// 	method: 'POST',
-				// 	success,
-				// 	fail,
-				// 	complete
-				// })
-				delete params.$url
-				uniCloud.callFunction({
-					name: fn,
-					data: { url, params, token },
-					success,
-					fail,
-					complete
-				})
-				// #endif
 			// #endif
 
-			// #ifdef APP-PLUS
+			// #ifndef H5-ZLB
+			// uni.request({
+			// 	url: api[isDev] + fn,
+			// 	timeout: 10000,
+			// 	header: {
+			// 		'content-type': 'application/json',
+			// 		authorization: token,
+			// 		clientinfo
+			// 	},
+			// 	data: params,
+			// 	method: 'POST',
+			// 	success,
+			// 	fail,
+			// 	complete
+			// })
 			delete params.$url
 			uniCloud.callFunction({
 				name: fn,
@@ -705,12 +692,12 @@ const zz = {
 
 	now() { return Date.now() },
 	setAcc(u) {
-		console.info("setAcc----------", u)
+		// console.info("setAcc----------", u)
 		uni.setStorageSync('210B33A_acc', u)
 	},
 	getAcc() { return uni.getStorageSync('210B33A_acc') },
 	setToken(token) {
-		console.log('setToken---------------', token);
+		// console.log('setToken---------------', token);
 		uni.setStorageSync('210B33A_token', token)
 	},
 	getToken() { return uni.getStorageSync('210B33A_token') },
@@ -737,7 +724,6 @@ const zz = {
 		}
 		let dict = uni.getStorageSync('sys_dict') || {}
 		zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-			console.info("datadata ===========",e)
 			if (e.v) {
 				Object.assign(dict, e)
 				uni.setStorageSync('sys_dict', dict)

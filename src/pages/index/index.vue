@@ -392,7 +392,7 @@ export default {
         }
     },
 
-    async onLoad(option) {
+    async onLoad() {
         // #ifdef H5-ZLB
         let user = this.zz.getAcc(),
 			ticket = this.zz.getQueryParam(window.location.search,'ticket')
@@ -424,14 +424,6 @@ export default {
 		    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
 		})
         // #endif
-		
-		await this.zz.init()
-		if(option.deptId) {
-			this.deptId = option.deptId+''
-			uni.setStorageSync('cur_deptId', this.deptId)
-			await this.zz.setDept()
-			this.loadData(1)
-		}
 		
         setTimeout(() => {
             // this.showTips = true

@@ -17,15 +17,18 @@
 				loading:true,
 				task : null,
 				login: false,
+				deptId:'',
 				path : ''
 			}
 		},
 		
-		// 	https://zts.5618.co/h5/index.html#/pages/share?path=/pages/planning/article&id=62b9409268cebc00011fdb23
-		//	https://zts.5618.co/h5/#/pages/share?path=/pages/planning/article&id=5eb7b88343f165004c6d2d52
-		//	https://zts.5618.co/h5/#/pages/share?path=/pages/comm/kml&_id=62b9409268cebc00011fdb23
-		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/poi&id=629497c49b54e30001d3e4eb
-		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/detail&id=60312b1fedb62e0001beeeac
+		//	https://zts.5618.co/h5/#/pages/share?deptId=330212&path=/pages/planning/article&id=5eb7b88343f165004c6d2d52
+		//	https://zts.5618.co/h5/#/pages/share?deptId=330212&path=/pages/comm/kml&_id=62b9409268cebc00011fdb23
+		//  https://zts.5618.co/h5/#/pages/share?deptId=330212
+		
+		//  http://localhost:8080/h5/#/pages/share?deptId=330212
+		//	http://localhost:8080/h5/#/pages/share?deptId=330212&path=/pages/planning/poi&id=629497c49b54e30001d3e4eb
+		//	http://localhost:8080/h5/#/pages/share?deptId=330212&path=/pages/planning/detail&id=60312b1fedb62e0001beeeac
 		   
 		onLoad ({path='/pages/index/index', deptId='', id ='', _id='', sn='', coord='', login=false}=q) {
 			path += '?deptId='+deptId
@@ -36,10 +39,11 @@
 			
 			this.path = path
 			this.login = login
+			this.deptId = deptId
 			this.init()
 		},
 		methods: {
-			init(t=0){
+			async init(t=0){
 				if(!uni.getStorageSync('sys_dict')){
 					t++
 					if(t<100){
@@ -51,6 +55,10 @@
 				}
 				clearTimeout(this.task)
 				
+				if(this.deptId) {
+					uni.setStorageSync('cur_deptId', this.deptId)
+					await this.zz.setDept()
+				}
 				if(this.login&&!this.zz.getToken()){
 					this.zz.href('/pages/comm/account/login',{path:this.path},0,'zoom-out','redirectTo')
 				}

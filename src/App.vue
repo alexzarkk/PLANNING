@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
+// import AMapLoader from '@amap/amap-jsapi-loader'
 
 // #ifdef APP-PLUS
 import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update'
@@ -10,6 +11,7 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 
 export default {
     async onLaunch() {
+		
 		// #ifdef H5
 			// #ifdef H5-ZLB
 			// 方案1 修改字体
@@ -122,39 +124,18 @@ export default {
         setTimeout(() => { checkUpdate() }, 3000)
         // #endif
 
-        // #ifndef APP-PLUS
-        uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
-        // #endif
-
         this.init()
     },
     onShow() {
-		
-		// uni.getNetworkType({
-		// 	success(e) {
-		// 		console.log('getNetworkType',e);
-		// 	}
-		// })
-		
-        sync.go()
-        uni.onNetworkStatusChange(e => {
-			console.log('onNetworkStatusChange xxxxxxx',e);
-            // #ifndef APP-PLUS
-            comm.setNet(e.networkType != 'none')
-            // #endif
-
-            if (e.isConnected) {
-				this.zz.init()
-				sync.go()
-            }
-        })
+        // #ifndef APP-PLUS
+        uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
+        // #endif
+		sync.go()
     },
     onHide() { },
     methods: {
         async init() {
 			
-			
-	
             // #ifndef APP-PLUS
             comm.on([121, 29])
 			// AMapLoader.load({
