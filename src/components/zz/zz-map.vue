@@ -68,7 +68,7 @@ export default {
 		window.addEventListener("popstate", (e)=> {
 			// console.log('popstate.back <<<<<<<<<<<')
 			window.removeEventListener('resize', this.resize)
-			this.stopLoc()
+			// this.stopLoc()
 		}, false)
 	},
 	methods: {
@@ -216,7 +216,7 @@ export default {
 				self.callMethod('mapDone', true)
 				comm.setStorage('mbStyle', map.getStyle())
 				
-				this.geolocate.trigger()
+				// this.geolocate.trigger()
 			})
 			map.on('moveend', (e) => {
 				mbtool.on(map)
@@ -225,8 +225,6 @@ export default {
 			map.on('zoomend', () => {
 				mbtool.on(map)
 			})
-			
-			// document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0].style.display = ''
 		},
 		
 		async updateData({exec=null, sysInfo={}, center=null, pms=null, line=[], point=[], gon=[], isf=false}, ov, self) {
@@ -235,15 +233,14 @@ export default {
 			if (!map) return
 			if (!map.init) return this.init(self, sysInfo, center, isf)
 			
-			// console.log('map.inited...')
 			// console.log('updateData:=======================', center,point,line);
 			// console.log('updateData.old:====',ov);
 			
 			mbtool.setKml(this.map, pms, line, point, gon)
 		},
 		
-		onLoc(){ mbtool.onLoc(this.map) },
-		stopLoc(){ comm.stopWatch() },
+		onLoc(){ this.geolocate.trigger() },
+		// stopLoc(){ comm.stopWatch() },
 		fit(e){ mbtool.setActive(this.map,e) },
 		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
 		runx(e){ mbtool.run(this.map,e) },

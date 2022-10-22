@@ -142,7 +142,15 @@
                         </view>
                     </view>
                 </view>
-
+				
+				<!-- 使用路线 -->
+				<view style="width: 380rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
+					<button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
+						<text class="zzIcon-distfill margin-right-sm" />
+						使用路线
+					</button>
+				</view>
+				
                 <view class="cu-bar bg-white solid-bottom">
                     <view class="action">
                         <text class="cuIcon-titles text-blue"></text>
@@ -400,6 +408,15 @@ export default {
             // console.log('follow', this.kml.userId)
             this.zz.toast('功能尚未启用！')
         },
+		useLine() {
+		    // #ifdef H5
+		    this.zz.href('/pages/nav/navH5', {kml:{...this.kml, children:[...this.kml.t1, ...this.kml.t2]}}, 1)
+		    // #endif
+		
+		    // #ifdef APP-PLUS
+			this.zz.href('/pages/nav/navApp',{kml:{...this.kml, children:[...this.kml.t1, ...this.kml.t2]}}, 1)
+		    // #endif
+		}
     },
     onPageScroll(e) {
         if (!this.isTabTap) {
@@ -460,5 +477,9 @@ body {
         right: -10rpx;
         position: absolute;
     }
+}
+.sticky-button-box {
+    position: sticky;
+    z-index: 999;
 }
 </style>

@@ -101,10 +101,10 @@ export default {
 		this.windowHeight = this.size === 'whole' ? this.windowHeight : this.windowHeight / 2
 		this.isParse = true
 
-		// this.$nextTick(() => {
-		// 	this.createMsk()
-		// 	this.openScan()
-		// })
+		this.$nextTick(() => {
+			this.createMsk()
+			this.openScan()
+		})
 	},
 	destroyed() {
 		this.closeCamera()

@@ -161,7 +161,7 @@
             <view class="radius">
                 <!-- #ifdef APP-PLUS || H5 -->
                 <block v-if="trail._kml">
-                    <zz-map ref="zmap" :pms="trail._kml.children" :winH="winHeight/2.4" @mapDone="mdone = true" />
+                    <zz-map :pms="trail._kml.children" :winH="winHeight/2.4" @mapDone="mdone = true" />
                     <zz-kml-nav :kml="trail._kml" />
                 </block>
                 <block v-else>
@@ -360,7 +360,6 @@ export default {
 
     },
     onHide() {
-        if (this.mdone) this.$refs.zmap.exec({ m: 'stopLoc' })
         if (this.videoContext) this.videoContext.pause()
         // this.trail = null
     },
@@ -394,9 +393,6 @@ export default {
             });
         },
         useLine() {
-            if (this.mdone) this.$refs.zmap.exec({ m: 'stopLoc' })
-			
-			return this.zz.href('/pages/nav/navH5', { kml: this.trail._kml, tmt: 0 }, 1)
 			// #ifdef APP-PLUS
 			this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
 			// #endif
@@ -404,7 +400,6 @@ export default {
 			// #ifndef APP-PLUS
 			this.zz.href('/pages/nav/navH5', { kml: this.trail._kml, tmt: 0 }, 1)
 			// #endif
-            
         },
         //获取文字信息
         moveTo: function (e) {

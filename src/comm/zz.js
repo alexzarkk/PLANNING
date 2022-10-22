@@ -498,64 +498,56 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5
-			let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
-			// #ifdef H5-ZLB
-			mgop({
-				api: 'mgop.zz.zts.' + fn, // 必填
-				host: 'https://mapi.zjzwfw.gov.cn/',
-				dataType: 'JSON',
-				type: 'POST',
-				appKey,
-				header: {
-					isTestUrl: isDev + '',
-					authorization: token,
-					clientinfo
-				},
-				data: params,
-				onSuccess: success,
-				onFail: fail
-			});
-			// #endif
+				let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
+				// #ifdef H5-ZLB
+				mgop({
+					api: 'mgop.zz.zts.' + fn, // 必填
+					host: 'https://mapi.zjzwfw.gov.cn/',
+					dataType: 'JSON',
+					type: 'POST',
+					appKey,
+					header: {
+						isTestUrl: isDev + '',
+						authorization: token,
+						clientinfo
+					},
+					data: params,
+					onSuccess: success,
+					onFail: fail
+				});
+				// #endif
 
-			// #ifndef H5-ZLB
-			// uni.request({
-			// 	url: api[isDev] + fn,
-			// 	timeout: 10000,
-			// 	header: {
-			// 		'content-type': 'application/json',
-			// 		authorization: token,
-			// 		clientinfo
-			// 	},
-			// 	data: params,
-			// 	method: 'POST',
-			// 	success,
-			// 	fail,
-			// 	complete
-			// })
-			uniCloud.callFunction({
-				name: fn,
-				data: {
-					url,
-					params,
-					token
-				},
-				success,
-				fail,
-				complete
-			})
-			// #endif
-
+				// #ifndef H5-ZLB
+				// uni.request({
+				// 	url: api[isDev] + fn,
+				// 	timeout: 10000,
+				// 	header: {
+				// 		'content-type': 'application/json',
+				// 		authorization: token,
+				// 		clientinfo
+				// 	},
+				// 	data: params,
+				// 	method: 'POST',
+				// 	success,
+				// 	fail,
+				// 	complete
+				// })
+				delete params.$url
+				uniCloud.callFunction({
+					name: fn,
+					data: { url, params, token },
+					success,
+					fail,
+					complete
+				})
+				// #endif
 			// #endif
 
 			// #ifdef APP-PLUS
 			delete params.$url
 			uniCloud.callFunction({
 				name: fn,
-				data: {
-					url,
-					params,
-					token
-				},
+				data: { url, params, token },
 				success,
 				fail,
 				complete

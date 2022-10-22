@@ -8,7 +8,7 @@
 	import { trans,fixNum } from '@/comm/geotools.js'
 	import '@/comm/libs/mapbox/mapbox.css'
 	
-	import {temp} from '@/comm/locationModule'
+	// import {temp} from '@/comm/test/locationModule'
 	
 export default {
 	data() {
@@ -128,11 +128,12 @@ export default {
 			let map = this.map
 			
 			if(t==1) {
+				this.si = si
 				this.self = self
 				ctrl = new TerrainControl(true, map.sid, si.platform)
 				map.addControl(ctrl, 'top-left')
 			}
-			this.setTop(10)
+			this.setTop(10 + si.statusBarHeight)
 			this.resize(0)
 				
 			//无网重试
@@ -195,8 +196,14 @@ export default {
 				this.geolocate.on('geolocate', _p => {
 					// console.log(_p);
 					this.self.callMethod('onLocating', [fixNum(_p.coords.longitude), fixNum(_p.coords.latitude), ~~(_p.coords.altitude || 0), (~~_p.timestamp||Date.now())])
-					// this.self.callMethod('onLocating', {coords:_p.coords})
 				})
+			})
+			map.on('moveend', (e) => {
+				mbtool.on(map)
+				self.callMethod('mbEvent', evt(e))
+			});
+			map.on('zoomend', () => {
+				mbtool.on(map)
 			})
 		},
 		
@@ -205,36 +212,19 @@ export default {
 			let map = this.map
 			if (!map) return
 			if (!map.init) return this.init(self, sysInfo, center)
-			
-			if(!pms) {
-				this.map.on('moveend', (e) => {
-					mbtool.on(map)
-				});
-				this.map.on('zoomend', () => {
-					mbtool.on(map)
-				});
-			}
 			mbtool.setKml(this.map, pms, line, point, gon, 0)
 		},
 		
 		trigger(on){
-			const top = (x) => { for (let s of x) { s.style.marginTop = (on?42:0)+'px' } }
-			top(document.getElementsByClassName('mapboxgl-ctrl-top-right'))
-			top(document.getElementsByClassName('mapboxgl-ctrl-top-left'))
-			if(on){
-				this.geolocate.trigger()
-			}else{
-				console.log('stop ....');
-			}
+			this.setTop(((on?42:0) + this.si.statusBarHeight))
+			this.onLoc()
 		},
-		
-		// onLoc(){ mbtool.onLoc(this.map, 0) },
-		// stopLoc(){ comm.stopWatch() },
+		onLoc(){ this.geolocate.trigger() },
 		fit(e){ mbtool.setActive(this.map,e) },
 		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
+		fly2(e){this.map.flyTo({center: this.map.sid=='amap'? trans(e.coord):e.coord, zoom:16})},
 		runx(e){ mbtool.run(this.map,e) },
 		getAround(e){ mbtool.getAround(this.map,null,e) },
-		fly2(e){this.map.flyTo({center: this.map.sid=='amap'? trans(e.coord):e.coord, zoom:16})},
 		setLine(e){
 			console.log('map.setLine',  e);
 			let map = this.map
@@ -295,8 +285,6 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		<mumu-get-qrcode ref="scan" @success='qrcodeSucess' />
-		
 		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
 		
@@ -324,7 +312,6 @@ const tts = {speak(){}}
 import { uniqId, bearing, getDist, getLocation, calData, fixNum } from '@/comm/geotools'
 import { toDist, scan } from '@/comm/nav'
 
-import locationModule from '@/comm/locationModule'
 import icon from '@/comm/libs/icon'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
@@ -345,7 +332,6 @@ export default {
 			way: {},
 			minDist: 60,
 			
-			amap: null,
 			mapHeight: 0,
 			center: [121,30],  //121.53537, 29.64611
 			scale: 15,
@@ -355,7 +341,6 @@ export default {
 			puase: false,
 			tim: {H:0, M:0, S:0, MS:0},
 			rec: {},
-			nav: {line:[], point:[]}, // 基础
 			
 			timer: null,
 			lock: false,
@@ -372,6 +357,7 @@ export default {
 	async onLoad({v}) {
 		this.stH = this.sysInfo.statusBarHeight + 60
 		this.mapHeight = this.winH
+		uni.removeStorageSync('cur_loc_wgs84')
 		
 		if(v) {
 			let { kml, tmt = 0 } = this.zz.getParam(v)
@@ -381,14 +367,11 @@ export default {
 			for (let s of kml.children) {
 				if(s.t1==1) {
 					this.way = s
-					
 					s.t2 = 199
-					// this.line.push(createEle(s,1))
 				}
 				if(s.t1==2) {
 					if(tmt) this.cps.push(s)
 					s.t2 = 201
-					// this.point.push(createEle(s,1))
 				}
 			}
 			
@@ -396,7 +379,6 @@ export default {
 			// let p = this.point[0]
 			// if(!p) p = this.way.coord[0]
 			this.center = this.way.coord[0]
-			
 		} else {
 			await this.getLoc(true)
 		}
@@ -423,17 +405,20 @@ export default {
 			let idx = this.rec.point.findIndex(e=>e._id==poi._id)
 			if(idx==-1) {
 				this.rec.point.push(poi)
-				// this.point.push(createEle(poi))
 				this.fly(poi.coord)
 			}else{
 				this.rec.point.splice(idx,1,poi)
-				// this.point.splice(this.point.findIndex(e=>e.id==poi._id),1,createEle(poi))
 			}
-			
 			poi.editble = 1
 			this.exec({m:'setPoi', e:{add:[poi]} })
 			this.setRec()
 			sync.go()
+		}
+		let qr = uni.getStorageSync('scanCode')
+		if(qr) {
+			uni.removeStorageSync('scanCode')
+			let p = await scan(uni.getStorageSync('cur_loc_wgs84'),{text:qr})
+			this.scaned(p)
 		}
 	},
 	onBackPress() { return this.onRec },
@@ -445,12 +430,6 @@ export default {
 					ver: this.ver++,
 				    center: this.center,
 					pms: this.kml.children
-				    // line: this.line,
-				    // point: this.point,
-				    // gon: this.gon
-				}
-				if(this.nav.line) {
-					setTimeout(()=> {this.exec({m:'setKml', e:this.nav})}, 3500)
 				}
 			} else {
 				this.mb = {
@@ -482,16 +461,18 @@ export default {
 				case 'chgStyle':
 					this.this.zz.toast(e.e)
 					this.setProp()
-					setTimeout(()=> {
-						this.exec({m:'setPoi', e:{add:this.rec.poi} })
-					}, 200)
-					break;
+					if(this.onRec) {
+						setTimeout(()=> {
+							this.exec({m:'setPoi', e:{add:this.rec.point} })
+						}, 200)
+					}
+					break
 				default:
 					this.markertap(e)
 					break;
 			}
 		},
-		
+		mbEvent(e) { this.lock = false },
 		setRec(){uni.setStorageSync('nav_rec'+this.tmt, this.rec)},
 		async around(c){
 			if(!this.tmt) {
@@ -506,13 +487,12 @@ export default {
 			if(ct) this.fly(c)
 			this.lock = true
 		},
-		fly(c){
-			this.exec({m:'fly2', e:{coord:c}})
-		},
+		fly(c){ this.exec({m:'fly2', e:{coord:c}}) },
 		stop(){
 			let rec = this.rec
 			this.onRec = false
 			this.exec({m:'trigger', e:0})
+			uni.removeStorageSync('cur_loc_wgs84')
 			if(rec.coord.length<10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
 			
 			rec.info = calData(rec.coord)
@@ -589,15 +569,11 @@ export default {
 					})
 					if (res.confirm) {
 						rec = nav_rec
-						// for (let s of rec.point) {
-						// 	this.point.push(createEle(s))
-						// }
 						let T = uni.getStorageSync('nav_T_tim'+this.tmt)
 						tim.MS = T[0]
 						tim.S = T[1]
 						tim.M = T[2]
 						tim.H = T[3]
-						
 					} else { //删除缓存和数据库
 						init()
 					}
@@ -759,13 +735,11 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				// #ifdef H5-ZLB
+				// #ifdef H5-ZLB || APP-PLUS
 				let p = await scan()
-				this.scaned(p)
-				return
+				return this.scaned(p)
 				// #endif
-				this.$refs.scan.createMsk()
-				this.$refs.scan.openScan()
+				uni.navigateTo({ url:'/pages/nav/scan', animationType:"slide-in-bottom" })
 			}
 			if(t=='position') {
 				this.getLoc(1)
@@ -787,10 +761,6 @@ export default {
 					this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 				}
 			}
-		},
-		qrcodeSucess(p) { 
-			console.log('qrcodeSucessqrcodeSucessqrcodeSucess',p)
-			this.scaned(p)
 		},
 		scaned(p){
 			if(p) {
@@ -850,9 +820,7 @@ export default {
 				//非采集坐标
 			}
 		},
-		mapTap(e) {
-			
-		},
+		
 		info() {
 			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
 		}

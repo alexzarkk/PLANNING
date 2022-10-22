@@ -8,9 +8,17 @@
 }
 @font-face {
   font-family: "zzIcon"; /* Project id 3351452 */
+  /* #ifdef APP-PLUS */
+	src: url('~@/comm/css/local/iconfont.woff2?t=16637429761') format('woff2'),
+		url('~@/comm/css/local/iconfont.woff?t=16637429761') format('woff'),
+		url('~@/comm/css/local/iconfont.ttf?t=16637429761') format('truetype');
+  /* #endif */
+  
+  /* #ifndef APP-PLUS */
   src: url('https://at.alicdn.com/t/c/font_3351452_it3ewaal1ai.woff2?t=1661993832729') format('woff2'),
        url('https://at.alicdn.com/t/c/font_3351452_it3ewaal1ai.woff?t=1661993832729') format('woff'),
        url('https://at.alicdn.com/t/c/font_3351452_it3ewaal1ai.ttf?t=1661993832729') format('truetype');
+  /* #endif */
 }
 
 .zzIcon {

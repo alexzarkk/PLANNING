@@ -9,7 +9,6 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
-		
     async onLaunch() {
 		// #ifdef H5
 			// #ifdef H5-ZLB
@@ -47,6 +46,14 @@ export default {
 			})
 			 // #endif
         // #endif
+		
+		// #ifdef APP-PLUS
+		uni.onNetworkStatusChange(e => {
+		    if (e.isConnected) {
+				uni.reLaunch({ url: '/pages/index/index' })
+		    }
+		})
+		// #endif
 
         uni.getSystemInfo({
             success: function (e) {
@@ -123,7 +130,6 @@ export default {
     },
     onShow() {
 		
-		
 		// uni.getNetworkType({
 		// 	success(e) {
 		// 		console.log('getNetworkType',e);
@@ -132,7 +138,7 @@ export default {
 		
         sync.go()
         uni.onNetworkStatusChange(e => {
-			// console.log('onNetworkStatusChange xxxxxxx',e);
+			console.log('onNetworkStatusChange xxxxxxx',e);
             // #ifndef APP-PLUS
             comm.setNet(e.networkType != 'none')
             // #endif
@@ -194,8 +200,8 @@ export default {
 @import '@/comm/colorui/icon.css';
 @import '@/comm/colorui/animation.css';
 @import '@/comm/css/app.css';
-// @import '@/comm/css/zzIcon.css';  // 远程
-@import '@/comm/css/local/zzIcon.css'; // 本地
+@import '@/comm/css/zzIcon.css';  // 远程
+// @import '@/comm/css/local/zzIcon.css'; // 本地
 @import '@/components/uParse/src/wxParse.css';
 
 // view {

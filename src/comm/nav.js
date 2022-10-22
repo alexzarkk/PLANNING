@@ -113,9 +113,8 @@ toDist = (cs, poi, cds) => {
 }
 
 
-async function scan(cd){
-	
-	let e = await zz.scan()
+async function scan(cd,e){
+	if(!e) e = await zz.scan()
 	if(e) {
 		let res = e.result || e.text
 		if(res.startsWith('https://z.szs.run')) {

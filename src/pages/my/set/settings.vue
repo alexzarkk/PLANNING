@@ -135,7 +135,7 @@ export default {
                 this.fileSizeString = (size / 1073741824).toFixed(2) + "GB"
             }
         },
-        clear() {
+        async clear() {
             const res = uni.getStorageInfoSync()
 
             //系统保留缓存
@@ -154,7 +154,7 @@ export default {
             }
             this.formatSize()
 			
-			this.zz.init()
+			await this.zz.init()
 			
 			// #ifdef APP-PLUS
 			comm.on()
@@ -163,7 +163,6 @@ export default {
 			// #ifndef APP-PLUS
 			comm.on([121, 29])
 			// #endif
-			
 			this.zz.req({ $url: 'public/trail/list', deptId: ['330213'], status: 10, type: 60 }).then(list => {
 			    uni.setStorageSync('trailData', { trailData: list })
 			})

@@ -49,6 +49,9 @@
 				{"path": "info"},
 				{"path": "point"},
 				{"path": "save"},
+				// #ifdef H5
+				{"path": "scan"},
+				// #endif
 				
 				{"path": "rec/line"},
 				{"path": "rec/lineDetail"},

@@ -108,7 +108,7 @@
         </template>
 
         <!-- 赛事活动 -->
-        <template v-if="bd.isDev&&deptId=='330213'">
+       <!-- <template v-if="bd.isDev&&deptId=='330213'">
             <view class="cu-bar bg-white solid-top margin-top">
                 <view class="action">
                     <text class="cuIcon-titles text-ftorange"></text>
@@ -139,7 +139,8 @@
                     </view>
                 </swiper-item>
             </swiper>
-        </template>
+        </template> -->
+		
         <view class="padding-xs">
             <view class="bg-blue light" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpxs">
                 <view class="text-df text-ftblue text-bold padding-tb-xs">
@@ -155,7 +156,7 @@
             </view>
         </view>
 
-        <template v-if="bd.isDev&&deptId=='330213'">
+       <!-- <template v-if="bd.isDev&&deptId=='330213'">
             <view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333rpx" @click="href('/pages/mall/special')">
                 <view class="flex justify-end padding-top">
                     <view class="cu-tag bg-pink text-right">当季热销</view>
@@ -165,7 +166,7 @@
                     <view class="padding-xs text-df">沉醉江南的味道</view>
                 </view>
             </view>
-        </template>
+        </template> -->
 
         <tui-divider :gradual="true" :gradualColor="['red', '#4a67d6']">环浙动态</tui-divider>
         <news-home v-if="dict" ref="newsHome" :stickyHeight="getStickyHeight" :scrollTop="scrollTop" :showMore="true"></news-home>
@@ -425,14 +426,17 @@ export default {
         // #endif
 		
 		await this.zz.init()
+		if(option.deptId) {
+			this.deptId = option.deptId+''
+			uni.setStorageSync('cur_deptId', this.deptId)
+			await this.zz.setDept()
+			this.loadData(1)
+		}
 		
         setTimeout(() => {
             // this.showTips = true
             // console.log("show 弹窗===============", this.showTips)
         }, 1000)
-		
-		
-		
     },
     onReady() {
         this.cal()
@@ -461,13 +465,13 @@ export default {
             window.location.replace(url)
         },
 		// #endif
-        async loadData() {
+        async loadData(init) {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')
 
-            if (!region || !dict) return setTimeout(async () => { await this.loadData() }, 100) //尚未初始化
+            if (!region || !dict) return setTimeout(() => { this.loadData() }, 100) //尚未初始化
             this.dict = dict
-            if (this.deptId != deptId) {
+            if (init || this.deptId != deptId) {
                 this.deptId = deptId
 
                 let hots = [

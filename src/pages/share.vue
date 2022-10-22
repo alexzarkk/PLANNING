@@ -17,7 +17,6 @@
 				loading:true,
 				task : null,
 				login: false,
-				deptId: '',
 				path : ''
 			}
 		},
@@ -28,7 +27,7 @@
 		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/poi&id=629497c49b54e30001d3e4eb
 		//	http://localhost:8081/h5/#/pages/share?path=/pages/planning/detail&id=60312b1fedb62e0001beeeac
 		   
-		onLoad ({path='/pages/index/index',deptId='', id ='', _id='', sn='', coord='', login=false}=q) {
+		onLoad ({path='/pages/index/index', deptId='', id ='', _id='', sn='', coord='', login=false}=q) {
 			path += '?deptId='+deptId
 			path += '&id='+id
 			if(_id) path += '&_id='+_id
@@ -37,24 +36,24 @@
 			
 			this.path = path
 			this.login = login
-			this.deptId = deptId
 			this.init()
 		},
 		methods: {
-			async init(t=0){
-				if(!uni.getStorageSync('sys_dict')) await this.zz.init()
-					
-					
+			init(t=0){
+				if(!uni.getStorageSync('sys_dict')){
+					t++
+					if(t<100){
+						return this.task = setTimeout(()=> { this.init(t) }, 100)
+					}else{
+						this.loading = false
+						this.zz.toast('网络故障，请稍候重试')
+					}
+				}
+				clearTimeout(this.task)
+				
 				if(this.login&&!this.zz.getToken()){
 					this.zz.href('/pages/comm/account/login',{path:this.path},0,'zoom-out','redirectTo')
 				}
-				// t++
-				// if(t<100){
-				// 	return this.task = setTimeout(()=> { this.init(t) }, 100)
-				// }else{
-				// 	this.loading = false
-				// 	this.zz.toast('网络故障，请稍候重试')
-				// }
 				this.zz.href(this.path,0,this.login,'zoom-out','redirectTo')
 			},
 			reload(){
