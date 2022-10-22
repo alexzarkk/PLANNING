@@ -105,7 +105,7 @@ export default {
 				showUserHeading: true,
 				
 				// #ifdef APP-PLUS
-				geolocation: plus.geolocation,
+				geolocation: plus.geolocation
 				// #endif
 				 
 				// #ifdef H5
@@ -285,8 +285,8 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		
-		<image v-if="locating" src="@/static/loading.gif" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
+
+		<image v-if="locating" class="back-img loading" :style="'top:'+(stH+312)+'px;'"></image>
 		<image v-else @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
 		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
 		
@@ -868,6 +868,11 @@ export default {
 	width: 42px;
 	height: 42px;
 	border-radius: 50%;
-	background-color: #ffffff;
+}
+.loading {
+	/* background-color: #ffffff; */
+	width: 38px;
+	height: 38px;
+	left: 8px;
 }
 </style>
