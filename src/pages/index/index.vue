@@ -302,7 +302,10 @@ export default {
                     name: '步道标识'
                 }
             ]
-        }
+        },
+        getDict() {
+
+        },
     },
     data() {
         return {
@@ -397,52 +400,56 @@ export default {
 
     async onLoad() {
         // #ifdef H5-ZLB
-        let user = this.zz.getAcc(),
-            ticket = this.zz.getQueryParam(window.location.search, 'ticket')
-        console.info("ticketticketticketticketticket----------", ticket)
-        if (!ticket) return this.loginZlb()
-        if (!user) {
-            let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-            user = u.user
-            this.zz.setAcc(user)
-            this.zz.setToken(u.token)
-        } else {
-            //如果没有登录 || 登录已失效
-            await this.zz.req({ $url: '/user/person/info' }).catch(e => {
-                this.zz.logOut()
-                return this.loginZlb()
-            })
+        console.log('ZWJSBridge---', ZWJSBridge);
+        if (ZWJSBridge) {
+            let user = this.zz.getAcc(),
+                ticket = this.zz.getQueryParam(window.location.search, 'ticket')
+            if (user) {  // 有用户，去判断是否失效
+                //如果没有登录 || 登录已失效
+                await this.zz.req({ $url: '/user/person/info' }).catch(e => {
+                    this.zz.logOut()
+                    return this.loginZlb()
+                })
+            } else { // 没有用户，去走单点
+                if (ticket) {  // 有票据直接后台登录
+                    let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+                    user = u.user
+                    this.zz.setAcc(user)
+                    this.zz.setToken(u.token)
+                } else { // 没有票据去获取票据
+                    return this.loginZlb()  // 去单点登录
+                }
+            }
+            console.info("登录获取到的信息----------", user)
         }
-        console.info("登录获取到的信息----------", user)
         // 登录埋点
-        try {
-            console.log(window.aplus_queue)
-            window.aplus_queue.push({
-                action: 'aplus.setMetaInfo',
-                arguments: ['_hold', 'BLOCK']
-            })
-            window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                const { zlb_id, zlb_name } = user
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-            })
-        } catch (error) {
-            console.warn('埋点错误---- ', error);
-        }
+        // try {
+        //     console.log(window.aplus_queue)
+        //     window.aplus_queue.push({
+        //         action: 'aplus.setMetaInfo',
+        //         arguments: ['_hold', 'BLOCK']
+        //     })
+        //     window.ZWJSBridge.getUUID().then(({ uuid }) => {
+        //         const { zlb_id, zlb_name } = user
+        //         window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+        //         window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+        //         window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+        //         window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+        //     })
+        // } catch (error) {
+        //     console.warn('埋点错误---- ', error);
+        // }
         // #endif
 
-        setTimeout(() => {
-            // this.showTips = true
-            // console.log("show 弹窗===============", this.showTips)
-        }, 1000)
+
+
+
     },
     onReady() {
         this.cal()
     },
     onShow() {
-        this.loadData()
+        // this.loadData()
     },
     methods: {
         // #ifdef H5-ZLB
@@ -465,12 +472,17 @@ export default {
             window.location.replace(url)
         },
         // #endif
-        async loadData(init) {
-            let { deptId, region } = this.zz.getDept(),
-                dict = uni.getStorageSync('sys_dict')
 
-            if (!region || !dict) return setTimeout(() => { this.loadData() }, 100) //尚未初始化
+        async loadData(init) {
+            let { deptId, region } = this.zz.getDept();
+            let dict = uni.getStorageSync('sys_dict');
+            if (!region || !dict) {
+                return setTimeout(() => {
+                    this.loadData()
+                }, 100) //尚未初始化
+            }
             this.dict = dict
+            console.log("dict---------", dict)
             if (init || this.deptId != deptId) {
                 this.deptId = deptId
 

@@ -11,52 +11,57 @@ const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 
 export default {
     async onLaunch() {
-		
-		// #ifdef H5
-			// #ifdef H5-ZLB
-			// 方案1 修改字体
-			let _this = this;
-            console.log("ZWJSBridge------",ZWJSBridge)
-			ZWJSBridge.onReady(() => {
-				console.log('浙里办初始化完成，执行bridge方法')
-				ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
-					console.log("获取到的当前的style======", uiStyle)
-					// uiStyle = 'elder'
-					let fontSize = '10px'
-					console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
-					if (uiStyle === 'elder') {
-						fontSize = '16px'
-					} else {
-						fontSize = '10px'
-					}
-					_this.$nextTick(()=>{
-						document.documentElement.style.fontSize = fontSize
-						// 方案2修改字体
-						let htmlFont = document.getElementsByTagName('html')[0]
-						htmlFont.style.fontSize = fontSize  // 测试16px
-						console.warn("changeFontSize----------------------", fontSize)
-					})
-				})
-			})
-			// #endif
-			// #ifndef H5-ZLB
-			this.$nextTick(()=>{
-				let fontSize = '10px'
-				document.documentElement.style.fontSize = fontSize
-				let htmlFont = document.getElementsByTagName('html')[0]
-				htmlFont.style.fontSize = fontSize  // 测试16px
-				console.warn("changeFontSize----------------------", fontSize)
-			})
-			 // #endif
+        // #ifndef APP-PLUS
+        // this.initNetWork()
+
         // #endif
-		
-		// #ifdef APP-PLUS
-		uni.onNetworkStatusChange(e => {
-		    if (e.isConnected) {
-				uni.reLaunch({ url: '/pages/index/index' })
-		    }
-		})
-		// #endif
+
+        this.initDict() // 应用启动，初始化字典
+        // #ifdef H5
+        // #ifdef H5-ZLB
+        // 方案1 修改字体
+        let _this = this;
+        console.log("ZWJSBridge------", ZWJSBridge)
+        ZWJSBridge.onReady(() => {
+            console.log('浙里办初始化完成，执行bridge方法')
+            ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
+                console.log("获取到的当前的style======", uiStyle)
+                // uiStyle = 'elder'
+                let fontSize = '10px'
+                console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
+                if (uiStyle === 'elder') {
+                    fontSize = '16px'
+                } else {
+                    fontSize = '10px'
+                }
+                _this.$nextTick(() => {
+                    document.documentElement.style.fontSize = fontSize
+                    // 方案2修改字体
+                    let htmlFont = document.getElementsByTagName('html')[0]
+                    htmlFont.style.fontSize = fontSize  // 测试16px
+                    console.warn("changeFontSize----------------------", fontSize)
+                })
+            })
+        })
+        // #endif
+        // #ifndef H5-ZLB
+        this.$nextTick(() => {
+            let fontSize = '10px'
+            document.documentElement.style.fontSize = fontSize
+            let htmlFont = document.getElementsByTagName('html')[0]
+            htmlFont.style.fontSize = fontSize  // 测试16px
+            console.warn("changeFontSize----------------------", fontSize)
+        })
+        // #endif
+        // #endif
+
+        // #ifdef APP-PLUS
+        uni.onNetworkStatusChange(e => {
+            if (e.isConnected) {
+                uni.reLaunch({ url: '/pages/index/index' })
+            }
+        })
+        // #endif
 
         uni.getSystemInfo({
             success: function (e) {
@@ -128,37 +133,60 @@ export default {
         this.init()
     },
     onShow() {
-        // #ifndef APP-PLUS
-        uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
-        // #endif
-		sync.go()
+        sync.go()
     },
     onHide() { },
     methods: {
+        // initNetWork() {
+        //     return new Promise((resolve, reject) => {
+        //         uni.getNetworkType({
+        //              success(e) { comm.setNet(e.networkType != 'none') } 
+        //         })
+        //     })
+        // },
+        // 初始化字典和地区
+        async initDict() {
+            console.log("***********************")
+            console.log("应用启动，初始化字典和地区")
+            console.log("***********************")
+            // console.warn("zz----req----", this.zz.req)
+            let cur_deptId = uni.getStorageSync('cur_deptId')
+            if (!cur_deptId) {
+                uni.setStorageSync('cur_deptId', '330213')  // 设置默认
+                await this.zz.setDept()
+            }
+            let dict = uni.getStorageSync('sys_dict') || {}
+            await this.zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+                console.log('获取到全局字典-----', e);
+                if (e.v) {
+                    Object.assign(dict, e)
+                    uni.setStorageSync('sys_dict', dict)
+                }
+            })
+        },
         async init() {
-			
             // #ifndef APP-PLUS
             comm.on([121, 29])
-			// AMapLoader.load({
-			// 	key: this.bd.amapKey,
-			// 	version: "2.0",
-			// 	plugins:['AMap.Geolocation']
-			// }).then(e=>{
-			// 	window.amapGeo = new AMap.Geolocation({
-			// 		enableHighAccuracy: true,//是否使用高精度定位，默认:true
-			// 		noGeoLocation:1,		 //1: 手机设备禁止使用浏览器定位
-			// 		timeout: 10000,          //超过10秒后停止定位，默认：无穷大
-			// 		maximumAge: 0,           //定位结果缓存0毫秒，默认：0
-			// 		convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-			// 		showButton: false,        //显示定位按钮，默认：true
-			// 		buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
-			// 		// buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-			// 		showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
-			// 		showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
-			// 		panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
-			// 		zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-			// 	})
-			// })
+            // AMapLoader.load({
+            // 	key: this.bd.amapKey,
+            // 	version: "2.0",
+            // 	plugins:['AMap.Geolocation']
+            // }).then(e=>{
+            // 	window.amapGeo = new AMap.Geolocation({
+            // 		enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            // 		noGeoLocation:1,		 //1: 手机设备禁止使用浏览器定位
+            // 		timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            // 		maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+            // 		convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+            // 		showButton: false,        //显示定位按钮，默认：true
+            // 		buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+            // 		// buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            // 		showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
+            // 		showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
+            // 		panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
+            // 		zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            // 	})
+            // })
             // #endif
 
             // #ifdef APP-PLUS
@@ -182,7 +210,7 @@ export default {
 @import '@/comm/colorui/icon.css';
 @import '@/comm/colorui/animation.css';
 @import '@/comm/css/app.css';
-@import '@/comm/css/zzIcon.css';  // 远程
+@import '@/comm/css/zzIcon.css'; // 远程
 // @import '@/comm/css/local/zzIcon.css'; // 本地
 @import '@/components/uParse/src/wxParse.css';
 

@@ -436,12 +436,14 @@ const
  * return data
  */
 async function req(params = {}, loading = false, t = 9999) {
+	console.log("zz------req---------", params)
 	let tim,
 		fn = params.$fn || 'app',
 		veri = params.$veri || false,
 		url = params.$url,
 		token = zz.getToken(),
-		net = zz.hadNet(),
+		// net = await zz.hadNet(),
+		net = true,
 		toLogin = () => {
 			zz.href('/pages/comm/account/login', 0, { back: 1 })
 		}
@@ -454,13 +456,14 @@ async function req(params = {}, loading = false, t = 9999) {
 			toLogin()
 		}, true)
 	}
-	console.info("requestPrams ===========", params, api[isDev] + fn)
-
+	// console.info("requestPrams ===========", params, api[isDev] + fn)
+	console.log("网络net情况", net)
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
 		return new Promise((resolve, reject) => {
 			tim = setTimeout(() => { reject('timedout') }, 9999)
 			const success = (e) => {
+				console.log("request-------success-----", e)
 				if (loading) uni.hideLoading()
 				clearTimeout(tim)
 				const { code, data, message } = e.data || e.result
@@ -498,25 +501,27 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5-ZLB
-				let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
-				mgop({
-					api: 'mgop.zz.zts.' + fn, // 必填
-					host: 'https://mapi.zjzwfw.gov.cn/',
-					dataType: 'JSON',
-					type: 'POST',
-					appKey,
-					header: {
-						isTestUrl: isDev + '',
-						authorization: token,
-						clientinfo
-					},
-					data: params,
-					onSuccess: success,
-					onFail: fail
-				});
+			console.log("zlb---------request----------", params)
+			let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
+			mgop({
+				api: 'mgop.zz.zts.' + fn, // 必填
+				host: 'https://mapi.zjzwfw.gov.cn/',
+				dataType: 'JSON',
+				type: 'POST',
+				appKey,
+				header: {
+					isTestUrl: isDev + '',
+					authorization: token,
+					clientinfo
+				},
+				data: params,
+				onSuccess: success,
+				onFail: fail
+			});
 			// #endif
 
 			// #ifndef H5-ZLB
+			console.log("uniCloud----request")
 			// uni.request({
 			// 	url: api[isDev] + fn,
 			// 	timeout: 10000,
@@ -687,7 +692,23 @@ const zz = {
 	// #endif
 
 	// #ifndef APP-PLUS
-	hadNet() { return window.hadNet },
+	hadNet() {
+		return new Promise((resolve, reject) => {
+			uni.getNetworkType({
+				success: (e) => {
+					console.log("网络信息", e)
+					return !e.networkType === 'none'  // 无网络返回false，不然返回true
+					// if(networkType==='none'){
+					// 	return false
+					// }else{
+					// }
+					// {errMsg: "getNetworkType:ok", networkType: "unknown"}
+					// comm.setNet(e.networkType != 'none')
+				}
+			})
+		})
+		// return window.hadNet 
+	},
 	// #endif
 
 	now() { return Date.now() },
@@ -705,8 +726,9 @@ const zz = {
 		uni.removeStorageSync('210B33A_acc')
 		uni.removeStorageSync('210B33A_token')
 	},
+	// 设置地区
 	async setDept() {
-		let { deptId, dept } = this.getDept()
+		let { deptId, dept } = this.getDept()  // 
 		if (!dept[deptId]) {
 			dept[deptId] = await req({ $url: 'public/zz/depts', pid: deptId })
 			uni.setStorageSync('sys_dept', dept)
@@ -715,21 +737,26 @@ const zz = {
 	getDept(arr) {
 		let id = uni.getStorageSync('cur_deptId'),
 			dept = uni.getStorageSync('sys_dept') || {}
-		return { deptId: id, dept, region: arr ? toArr(dept[id]) : dept[id] }
-	},
-	async init() {
-		if (!uni.getStorageSync('cur_deptId')) {
-			uni.setStorageSync('cur_deptId', '330213')
-			await zz.setDept()
+		return {
+			deptId: id,
+			dept,
+			region: arr ? toArr(dept[id]) : dept[id]
 		}
-		let dict = uni.getStorageSync('sys_dict') || {}
-		zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-			if (e.v) {
-				Object.assign(dict, e)
-				uni.setStorageSync('sys_dict', dict)
-			}
-		})
 	},
+	// async init() {
+	// 	if (!uni.getStorageSync('cur_deptId')) {
+	// 		uni.setStorageSync('cur_deptId', '330213')
+	// 		await zz.setDept()
+	// 	}
+	// 	let dict = uni.getStorageSync('sys_dict') || {}
+	// 	zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+	// 		console.log('获取dict',e);
+	// 		if (e.v) {
+	// 			Object.assign(dict, e)
+	// 			uni.setStorageSync('sys_dict', dict)
+	// 		}
+	// 	})
+	// },
 
 	viewIMG(urls, i = 0) {
 		uni.previewImage({

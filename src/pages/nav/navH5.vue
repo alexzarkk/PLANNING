@@ -105,7 +105,7 @@ export default {
 				showUserHeading: true,
 				
 				// #ifdef APP-PLUS
-				geolocation: plus.geolocation
+				geolocation: plus.geolocation,
 				// #endif
 				 
 				// #ifdef H5
