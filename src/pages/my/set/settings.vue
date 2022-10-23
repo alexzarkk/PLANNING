@@ -142,7 +142,8 @@ export default {
             let keep = [
                 '__LAST_DCLOUD_APPID', '__ETAG__CNA__ID__', '__DC_STAT_UUID', '__package_info__',
                 'getui_appid', 'getui_cid', 'getui_session', 'getui_api_time', 'getui_regid', 'getui_deviceid',
-                '210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
+                '210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'mbStyle', 'cur_deptId', 'sys_dept', 'sys_dict', 'trailData',
+
                 'sys_nav_cps', 'user_scan_log', 'sync_task', 'sync_files', 'tempfiles', 'nav_local_rec'
             ]
 
@@ -154,8 +155,6 @@ export default {
             }
             this.formatSize()
 			
-			await this.zz.init()
-			
 			// #ifdef APP-PLUS
 			comm.on()
 			// #endif
@@ -163,9 +162,9 @@ export default {
 			// #ifndef APP-PLUS
 			comm.on([121, 29])
 			// #endif
-			this.zz.req({ $url: 'public/trail/list', deptId: ['330213'], status: 10, type: 60 }).then(list => {
-			    uni.setStorageSync('trailData', { trailData: list })
-			})
+			// this.zz.req({ $url: 'public/trail/list', deptId: ['330213'], status: 10, type: 60 }).then(list => {
+			//     uni.setStorageSync('trailData', { trailData: list })
+			// })
         },
         // 清除缓存
         clearCache() {

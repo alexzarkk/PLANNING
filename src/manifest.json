@@ -271,39 +271,18 @@
     },
     "vueVersion" : "2",
     //浙里办
-    // "h5" : {
-    //     "title" : "环浙步道",
-    //     "appkey" : "4kzz5t3t+2002281722+mzaaot",
-    //     "publicPath" : "./",
-    //     "router" : {
-    //         "base" : "./",
-    //         "mode" : "hash"
-    //     },
-    //     "sdkConfigs" : {
-    //         "maps" : {
-    //             "qqmap" : {
-    //                 "key" : "5VZBZ-WNO6Q-R4I55-GRABZ-P3NVO-RPFZC"
-    //             }
-    //         }
-    //     },
-    //     "optimization" : {
-    //         "treeShaking" : {
-    //             "enable" : true
-    //         }
-    //     }
-    // },
-    //普通H5
     "h5" : {
         "title" : "环浙步道",
         "appkey" : "4kzz5t3t+2002281722+mzaaot",
+        "publicPath" : "./",
         "router" : {
-            "base" : "/h5/",
+            "base" : "./",
             "mode" : "hash"
         },
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
-                    "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ"
+                    "key" : "5VZBZ-WNO6Q-R4I55-GRABZ-P3NVO-RPFZC"
                 }
             }
         },
@@ -311,11 +290,32 @@
             "treeShaking" : {
                 "enable" : true
             }
-        },
-        "unipush" : {
-            "enable" : true
         }
     },
+    //普通H5
+    // "h5" : {
+    //     "title" : "环浙步道",
+    //     "appkey" : "4kzz5t3t+2002281722+mzaaot",
+    //     "router" : {
+    //         "base" : "/h5/",
+    //         "mode" : "hash"
+    //     },
+    //     "sdkConfigs" : {
+    //         "maps" : {
+    //             "qqmap" : {
+    //                 "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ"
+    //             }
+    //         }
+    //     },
+    //     "optimization" : {
+    //         "treeShaking" : {
+    //             "enable" : true
+    //         }
+    //     },
+    //     "unipush" : {
+    //         "enable" : true
+    //     }
+    // },
     "locale" : "zh-Hans",
     "fallbackLocale" : "zh-Hans"
 }

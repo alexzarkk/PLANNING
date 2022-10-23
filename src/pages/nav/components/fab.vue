@@ -23,7 +23,11 @@
 					</view>
 				</view>
 			</view>
-			<view class="uni-fab__circle uni-fab__circle--leftBottom" :style="{ opacity: isShow ? 1 : 0.5 }" @click="_onClick"><uni-icons class="fab-circle-icon" type="circle-filled" color="#ff0000" size="42"></uni-icons></view>
+			<view class="uni-fab__circle uni-fab__circle--leftBottom" :style="{ opacity: isShow ? 1 : 0.5 }" @click="_onClick">
+				<!-- <uni-icons class="fab-circle-icon" type="circle-filled" color="#ff0000" size="42"></uni-icons> -->
+				
+				<text class="cuIcon-radioboxfill text-red" style="font-size:42px"></text>
+			</view>
 		</view>
 	</view>
 </template>

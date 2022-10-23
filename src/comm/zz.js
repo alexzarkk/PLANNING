@@ -5,7 +5,6 @@ import { pathToBase64 } from '@/js_sdk/mmmm-image-tools'
 
 import { api, isDev, appKey, amapKey, appid } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
-import { clearStorage } from 'mapbox-gl'
 
 
 const
@@ -717,19 +716,19 @@ const zz = {
 			dept = uni.getStorageSync('sys_dept') || {}
 		return { deptId: id, dept, region: arr ? toArr(dept[id]) : dept[id] }
 	},
-	async init() {
-		if (!uni.getStorageSync('cur_deptId')) {
-			uni.setStorageSync('cur_deptId', '330213')
-			await zz.setDept()
-		}
-		let dict = uni.getStorageSync('sys_dict') || {}
-		zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-			if (e.v) {
-				Object.assign(dict, e)
-				uni.setStorageSync('sys_dict', dict)
-			}
-		})
-	},
+	// async init() {
+	// 	if (!uni.getStorageSync('cur_deptId')) {
+	// 		uni.setStorageSync('cur_deptId', '330213')
+	// 		await zz.setDept()
+	// 	}
+	// 	let dict = uni.getStorageSync('sys_dict') || {}
+	// 	zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+	// 		if (e.v) {
+	// 			Object.assign(dict, e)
+	// 			uni.setStorageSync('sys_dict', dict)
+	// 		}
+	// 	})
+	// },
 
 	viewIMG(urls, i = 0) {
 		uni.previewImage({

@@ -67,6 +67,7 @@ export default {
         } catch (error) {}
     },
     mounted() {
+		console.log(this.lineData);
 	},
     methods: {
         openDetails() {

@@ -49,17 +49,9 @@ export default {
 			})
 			 // #endif
         // #endif
-		
-		// #ifdef APP-PLUS
-		uni.onNetworkStatusChange(e => {
-		    if (e.isConnected) {
-				uni.reLaunch({ url: '/pages/index/index' })
-		    }
-		})
-		// #endif
 
-        uni.getSystemInfo({
-            success: function (e) {
+        await uni.getSystemInfo({
+            success(e){
                 Vue.prototype.WinHeight = e.windowHeight
                 Vue.prototype.WinWidth = e.windowWidth
                 Vue.prototype.StatusBar = e.statusBarHeight
@@ -124,18 +116,44 @@ export default {
         // #ifdef APP-PLUS
         setTimeout(() => { checkUpdate() }, 3000)
         // #endif
-
-        this.init()
+		
+		// #ifndef APP-PLUS
+		await uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
+		// #endif
+		
+		uni.onNetworkStatusChange(e => {
+			// #ifdef H5
+			comm.setNet(e.isConnected)
+			// #endif
+		    if (e.isConnected) {
+				if(!uni.getStorageSync('sysInited')) {
+					uni.removeStorageSync('cur_deptId')
+					uni.reLaunch({ url: '/pages/index/index' })
+				}
+				sync.go()
+		    }
+		})
+		this.init()
     },
     onShow() {
-        // #ifndef APP-PLUS
-        uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
-        // #endif
 		sync.go()
     },
     onHide() { },
     methods: {
         async init() {
+			if (!uni.getStorageSync('cur_deptId')) {
+				uni.setStorageSync('cur_deptId', '330213')
+				await this.zz.setDept()
+			}
+			let dict = uni.getStorageSync('sys_dict') || {}
+			this.zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+				if (e.v) {
+					Object.assign(dict, e)
+					uni.setStorageSync('sys_dict', dict)
+					uni.setStorageSync('sysInited',1)
+				}
+			})
+			
 			
             // #ifndef APP-PLUS
             comm.on([121, 29])
@@ -183,7 +201,6 @@ export default {
 @import '@/comm/colorui/animation.css';
 @import '@/comm/css/app.css';
 @import '@/comm/css/zzIcon.css';  // 远程
-// @import '@/comm/css/local/zzIcon.css'; // 本地
 @import '@/components/uParse/src/wxParse.css';
 
 // view {
