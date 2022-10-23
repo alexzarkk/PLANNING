@@ -4,8 +4,8 @@ const bd = {
 	api: ['https://ztsapi.5618.co/', 'https://dev.5618.co/'],
 	ZLB_ADDR: [
 		'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html',
-		'http://localhost:8080/' //政务中台调试
-		// 'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true' //irs线上调试
+		// 'http://localhost:8080/' //政务中台调试
+		'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true' //irs线上调试
 		],
 
 	/* 浙里办资料 */

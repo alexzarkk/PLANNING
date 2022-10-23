@@ -407,11 +407,11 @@ export default {
             this.zz.setAcc(user)
             this.zz.setToken(u.token)
         } else {
-            //如果没有登录 || 登录已失效
-            await this.zz.req({ $url: '/user/person/info' }).catch(e => {
-                this.zz.logOut()
-                return this.loginZlb()
-            })
+            //如果登录失效 （超过5小时）
+			if((Date.now() - user.t) > 5*3600) {
+				this.zz.logOut()
+				return this.loginZlb()
+			}
         }
         console.info("登录获取到的信息----------", user)
         // 登录埋点
