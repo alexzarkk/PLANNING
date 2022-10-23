@@ -12,7 +12,7 @@
 		methods: {
 			qrcodeSucess(data) {
 				uni.setStorageSync('scanCode', data)
-				uni.navigateBack({})
+				uni.navigateBack()
 				// uni.showModal({
 				// 	title: '成功',
 				// 	content: data,

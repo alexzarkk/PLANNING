@@ -72,7 +72,6 @@ const comm = {
 		}
 	},
 	// #ifdef APP-PLUS
-	stopWatch(){ plus.geolocation.clearWatch(plus.wid) },
 	setStorage:(k,v)=> {
 		plus.storage.setItem(k, typeof v=='object'? JSON.stringify(v):v)
 	},
@@ -85,7 +84,6 @@ const comm = {
 	// #endif
 	
 	// #ifndef APP-PLUS
-	stopWatch(){ clearTimeout(window.wid) },
 	setStorage:(k,v)=> { uni.setStorageSync(k,v) },
 	getStorage:(k)=>{ return uni.getStorageSync(k) },
 	setNet:(e)=>{ window.hadNet = e },

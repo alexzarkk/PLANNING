@@ -290,7 +290,10 @@ export default {
         };
     },
 	onLoad({ v }) {
+		// #ifdef APP-PLUS
 		this.$scope.$getAppWebview().setStyle({'popGesture':'none'})
+		// #endif
+		
 		let { tmt } = this.zz.getParam(v),
 			dict = uni.getStorageSync('sys_dict')
 			

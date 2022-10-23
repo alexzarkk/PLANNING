@@ -98,9 +98,9 @@ export default {
 			})
 			
 			map.addControl(this.geolocate, 'bottom-left')
-			this.geolocate.on('geolocate', _p => {
-				console.log('A geolocate event has occurred.', _p.timestamp ,_p.coords.longitude, _p.coords.latitude, _p.coords.altitude)
-			})
+			// this.geolocate.on('geolocate', _p => {
+			// 	console.log('A geolocate event has occurred.', _p.timestamp ,_p.coords.longitude, _p.coords.latitude, _p.coords.altitude)
+			// })
 			
 			map.sid = 'default'
 			map.pm = {}
@@ -240,7 +240,6 @@ export default {
 		},
 		
 		onLoc(){ this.geolocate.trigger() },
-		// stopLoc(){ comm.stopWatch() },
 		fit(e){ mbtool.setActive(this.map,e) },
 		setKml(e) { mbtool.setKml(this.map, null, e.line, e.point, e.gon, 0) },
 		runx(e){ mbtool.run(this.map,e) },

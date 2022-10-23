@@ -58,6 +58,10 @@ export default {
 		newMb(){
 			let map = new mapboxgl.Map(this.settings)
 			// #ifdef H5
+			
+			// #ifdef H5-ZLB
+			// #endif
+			
 			const geolocation = {
 				getCurrentPosition(_onSuccess){
 					uni.getLocation({
@@ -217,7 +221,11 @@ export default {
 		
 		trigger(on){
 			this.setTop(((on?42:0) + this.si.statusBarHeight))
-			this.onLoc()
+			if(on) {
+				this.onLoc()
+			}else{
+				this.geolocate.options.geolocation.clearWatch()
+			}
 		},
 		onLoc(){ this.geolocate.trigger() },
 		fit(e){ mbtool.setActive(this.map,e) },
@@ -226,7 +234,7 @@ export default {
 		runx(e){ mbtool.run(this.map,e) },
 		getAround(e){ mbtool.getAround(this.map,null,e) },
 		setLine(e){
-			console.log('map.setLine',  e);
+			// console.log('map.setLine',  e);
 			let map = this.map
 			const darw = (coord, id, t2, name)=>{
 				if(coord.length<2) return mbtool.removeObj(map, id)
@@ -257,7 +265,7 @@ export default {
 			}
 		},
 		setPoi(e){
-			console.log('map.setPoisetPoisetPoisetPoi',e);
+			// console.log('map.setPoisetPoisetPoisetPoi',e);
 			if(e.add) mbtool.setPoint(this.map, e.add)
 			if(e.del) mbtool.removeObj(this.map, e.del)
 		},
@@ -276,6 +284,7 @@ export default {
 	<view>
 		<view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
 		
+		<!-- #ifndef H5-ZLB -->
 		<view class="cu-modal" :class="video ? 'show' : ''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
@@ -285,6 +294,7 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
+		<!-- #endif -->
 
 		<image v-if="locating" class="back-img loading" :style="'top:'+(stH+312)+'px;'"></image>
 		<image v-else @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
@@ -398,7 +408,7 @@ export default {
 			})
 		}
 		await this.around(this.center)
-		console.log(this.cps)
+		console.log(this.cps.length)
 	},
 	async onShow() {
 		let poi = uni.getStorageSync('nav_poi')
@@ -455,13 +465,13 @@ export default {
 					uni.hideLoading()
 					break;
 				case 'viewImg':
-					this.this.zz.viewIMG(e.imgs,e.idx)
+					this.zz.viewIMG(e.imgs,e.idx)
 					break;
 				case 'viewVideo':
 					this.video = e.url
 					break;
 				case 'chgStyle':
-					this.this.zz.toast(e.e)
+					this.zz.toast(e.e)
 					this.setProp()
 					if(this.onRec) {
 						setTimeout(()=> {
@@ -592,11 +602,12 @@ export default {
 			this.rec = rec
 			this.onRec = true
 			this.clock()
-			this.exec({m:'trigger',e:1})
+			this.exec({m:'setPoi', e:{add:rec.point} })
+			setTimeout(()=>{this.exec({m:'trigger',e:1})}, 100)
 		},
 		onLocating(c1){
 			uni.setStorageSync('cur_loc_wgs84', c1)
-			console.log('onLocating ---------->', c1)
+			// console.log('onLocating ---------->', c1)
 			//保持地图中心
 			if (this.lock) this.fly(c1)
 			
@@ -630,7 +641,6 @@ export default {
 							rec.t['y'+len] = 1
 							delete rec.t['y'+(len-77)]
 							comm.on(c1)
-							console.log('刷新cpscpscpscpscpscps');
 						}
 						// 更新打卡点距离
 						if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
@@ -731,7 +741,7 @@ export default {
 				say()
 				this.setRec()
 				this.exec({m:'setLine', e:{coord:rec.coord,line:rec.line}})
-				console.info(rec)
+				// console.info(rec)
 			}
 		},
 		async controltap(t) {
