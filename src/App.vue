@@ -128,7 +128,6 @@ export default {
 		    if (e.isConnected) {
 				if(!uni.getStorageSync('sysInited')) {
 					uni.removeStorageSync('cur_deptId')
-					console.log('reLaunchreLaunchreLaunchreLaunchreLaunch');
 					this.init()
 					uni.reLaunch({ url: '/pages/index/index' })
 				}
