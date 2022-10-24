@@ -145,7 +145,8 @@ export default {
     onHide() { },
     methods: {
         async init() {
-			if (!uni.getStorageSync('cur_deptId')) {
+			let deptId = uni.getStorageSync('cur_deptId')
+			if (!deptId) {
 				// #ifdef H5-ZLB
 					// city: "宁波市"
 					// cityName: "宁波市"
@@ -155,20 +156,17 @@ export default {
 					// region: "奉化区"
 					// townCode: "330213"
 					let {townCode} = await ZWJSBridge.getLocation()
-					uni.setStorageSync('cur_deptId', e.townCode)
+					deptId = townCode
 				// #endif
 				
 				// #ifndef H5-ZLB
-					try{
-						let [_,e] = await uni.getLocation(),
-							addr = await this.zz.reGeo([e.longitude,e.latitude])
-						
-						uni.setStorageSync('cur_deptId', addr.addressComponent.adcode+'')		
-					}catch(e){
-						uni.setStorageSync('cur_deptId', '330213')
-					}
+					let [_,e] = await uni.getLocation(),
+						addr = await this.zz.reGeo([e.longitude,e.latitude])
+					deptId = addr.addressComponent.adcode+''
 				// #endif
 				
+				//是否浙江地区
+				uni.setStorageSync('cur_deptId', deptId.startsWith('33')?deptId:'330213')
 				await this.zz.setDept()
 			}
 			let dict = uni.getStorageSync('sys_dict') || {}
