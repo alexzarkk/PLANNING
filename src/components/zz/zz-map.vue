@@ -15,14 +15,17 @@
 	const geolocation = {
 		getCurrentPosition(_onSuccess){
 			uni.getLocation({
+				isHighAccuracy: true,
+				altitude: true,
 				success(c){
 					_onSuccess({coords:c})
 				}
 			})
 		},
 		watchPosition(_onSuccess){
-			if(window.wid) clearInterval(window.wid)
 			uni.getLocation({
+				isHighAccuracy: true,
+				altitude: true,
 				success(c){
 					_onSuccess({coords:c})
 					window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 3999)
@@ -31,7 +34,7 @@
 			})
 		},
 		clearWatch(wid){
-			clearInterval(wid||window.wid)
+			clearTimeout(wid||window.wid)
 		}
 	}
 			

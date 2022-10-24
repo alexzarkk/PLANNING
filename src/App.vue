@@ -2,7 +2,10 @@
 import Vue from 'vue'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
-// import AMapLoader from '@amap/amap-jsapi-loader'
+
+// #ifdef H5
+import AMapLoader from '@amap/amap-jsapi-loader'
+// #endif
 
 // #ifdef APP-PLUS
 import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update'
@@ -155,29 +158,29 @@ export default {
 				}
 			})
 			
-			
             // #ifndef APP-PLUS
             comm.on([121, 29])
-			// AMapLoader.load({
-			// 	key: this.bd.amapKey,
-			// 	version: "2.0",
-			// 	plugins:['AMap.Geolocation']
-			// }).then(e=>{
-			// 	window.amapGeo = new AMap.Geolocation({
-			// 		enableHighAccuracy: true,//是否使用高精度定位，默认:true
-			// 		noGeoLocation:1,		 //1: 手机设备禁止使用浏览器定位
-			// 		timeout: 10000,          //超过10秒后停止定位，默认：无穷大
-			// 		maximumAge: 0,           //定位结果缓存0毫秒，默认：0
-			// 		convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-			// 		showButton: false,        //显示定位按钮，默认：true
-			// 		buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
-			// 		// buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-			// 		showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
-			// 		showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
-			// 		panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
-			// 		zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-			// 	})
-			// })
+			AMapLoader.load({
+				key: this.bd.amapKey,
+				version: "2.0",
+				plugins:['AMap.Geolocation']
+			}).then(e=>{
+				window.amapGeo = new AMap.Geolocation({
+					enableHighAccuracy: true, //是否使用高精度定位，默认:true
+					noIpLocate: 3,				//3: 所有终端禁止使用IP定位
+					noGeoLocation:0,		  //1: 手机设备禁止使用浏览器定位
+					// timeout: 10000,           //超过10秒后停止定位，默认：无穷大
+					maximumAge: 0,            //定位结果缓存0毫秒，默认：0
+					convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+					showButton: false,        //显示定位按钮，默认：true
+					// buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+					// buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+					showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
+					showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
+					panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
+					zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+				})
+			})
             // #endif
 
             // #ifdef APP-PLUS

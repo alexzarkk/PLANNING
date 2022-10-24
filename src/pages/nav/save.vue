@@ -343,8 +343,15 @@ export default {
 							_id: uniqId(),
 							t1:1,
 							t2:10,
+							
 							name: rec.name,
+							// #ifdef APP-PLUS
 							coord: trans(rec.coord, 'gcj02towgs84')
+							// #endif
+							
+							// #ifndef APP-PLUS
+							coord: rec.coord
+							// #endif
 						},
 					point:[]
 				}
@@ -360,7 +367,13 @@ export default {
 						delete p.video.tempFilePath
 					}
 				}
+				// #ifdef APP-PLUS
 				kml.point.push({...p, coord: trans(p.coord, 'gcj02towgs84')})
+				// #endif
+				
+				// #ifndef APP-PLUS
+				kml.point.push(p)
+				// #endif
 			}
 			this.kml = kml
 			this.rec = rec

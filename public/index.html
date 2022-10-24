@@ -11,7 +11,7 @@
 		var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
 		document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' + (coverSupport ? ', viewport-fit=cover' : '') + '" />')
 	</script>
-	<!-- <script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script> -->
+	<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script>
 	<link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
 	<style>
 		#global-menu {
@@ -46,7 +46,7 @@
 	</noscript>
 	<div id="app"></div>
 	<div id="global-menu"></div>
-	<!-- <script>
+	<script>
 			(function (w, d, s, q, i) {
 				w[q] = w[q] || [];
 				var f = d.getElementsByTagName(s)[0],
@@ -72,7 +72,7 @@
 			arguments: ['appId', '2002281722']  // 这里修改app id
 		});
 		const homeList = ['#/pages/index/index', '#/pages/index/planning', '#/pages/index/event', '#/pages/index/postStation', '#/pages/index/me']
-	</script> -->
+	</script>
 </body>
 
 </html>

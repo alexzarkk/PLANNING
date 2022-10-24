@@ -38,15 +38,10 @@ const
 			// #endif
 		})
 	},
-
 	authCemera = () => {
 		// #ifdef APP-PLUS
 		if (uni.getAppAuthorizeSetting().cameraAuthorized == 'denied') zz.modal("请开启手机相机权限！")
 		// #endif
-	},
-
-	checkNet = async () => {
-		return await zz.hadNet()
 	},
 	saveFile = async (u) => {
 		// if(u.startsWith('http')) { uni.getImageInfo({ src:u, success(e){ u = e.path } }) }
@@ -401,11 +396,10 @@ const
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: 'https://restapi.amap.com/v3/geocode/regeo?key=' + amapKey + '&s=rsv3&language=zh_cn&location=' + loc,
-				success: (e) => {
-					resolve(e.data.regeocode);
+				success(e){
+					resolve(e.data.regeocode)
 				},
-				fail: (e) => {
-					console.error("reGeo=================", e);
+				fail(e) {
 					reject(e)
 				}
 			})
@@ -415,11 +409,10 @@ const
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: 'https://restapi.amap.com/v3/weather/weatherInfo?s=rsv3&city=' + code + '&extensions=' + ex + '&key=' + amapKey,
-				success: (e) => {
+				success(e) {
 					resolve(e.data)
 				},
-				fail: (e) => {
-					console.error("weatherInfo======error", e);
+				fail(e) {
 					reject(e)
 				}
 			})
@@ -497,7 +490,6 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5-ZLB
-				let clientinfo = JSON.stringify(uni.getStorageSync('clientInfo'))
 				mgop({
 					api: 'mgop.zz.zts.' + fn, // 必填
 					host: 'https://mapi.zjzwfw.gov.cn/',
@@ -507,7 +499,7 @@ async function req(params = {}, loading = false, t = 9999) {
 					header: {
 						isTestUrl: isDev + '',
 						authorization: token,
-						clientinfo
+						clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
 					},
 					data: params,
 					onSuccess: success,
@@ -522,7 +514,7 @@ async function req(params = {}, loading = false, t = 9999) {
 			// 	header: {
 			// 		'content-type': 'application/json',
 			// 		authorization: token,
-			// 		clientinfo
+			// 		clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
 			// 	},
 			// 	data: params,
 			// 	method: 'POST',
@@ -673,7 +665,6 @@ const zz = {
 	weatherInfo,
 
 	scan,
-	checkNet,
 	saveFile,
 	removeFile,
 	upload,
@@ -691,12 +682,10 @@ const zz = {
 
 	now() { return Date.now() },
 	setAcc(u) {
-		// console.info("setAcc----------", u)
 		uni.setStorageSync('210B33A_acc', u)
 	},
 	getAcc() { return uni.getStorageSync('210B33A_acc') },
 	setToken(token) {
-		// console.log('setToken---------------', token);
 		uni.setStorageSync('210B33A_token', token)
 	},
 	getToken() { return uni.getStorageSync('210B33A_token') },
@@ -716,19 +705,6 @@ const zz = {
 			dept = uni.getStorageSync('sys_dept') || {}
 		return { deptId: id, dept, region: arr ? toArr(dept[id]) : dept[id] }
 	},
-	// async init() {
-	// 	if (!uni.getStorageSync('cur_deptId')) {
-	// 		uni.setStorageSync('cur_deptId', '330213')
-	// 		await zz.setDept()
-	// 	}
-	// 	let dict = uni.getStorageSync('sys_dict') || {}
-	// 	zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-	// 		if (e.v) {
-	// 			Object.assign(dict, e)
-	// 			uni.setStorageSync('sys_dict', dict)
-	// 		}
-	// 	})
-	// },
 
 	viewIMG(urls, i = 0) {
 		uni.previewImage({

@@ -5,9 +5,14 @@
 			<block slot="backText"></block>
 			<block slot="content">mapbox</block>
 		</cu-custom>
-		<block v-if="!loading">
-			<zz-map :pms="kml.children" :winH="winH" @add2bl="add2bl"></zz-map>
-		</block>
+		<!-- <zz-map :winH="winH"></zz-map> -->
+		
+		<button class="cu-btn round bg-ztsgreen" @click="getLoc">getLoc</button> 
+		<button class="cu-btn round bg-ztsgreen" @click="watch">watch</button> 
+		<v-html v-if="center">
+			{{JSON.stringify(center)}}
+		</v-html>
+		
 	</view>
 </template>
 
@@ -16,23 +21,42 @@
 	export default {
 		data() {
 			return {
-				loading: true,
-				// winH: 600,
-				winH: this.WinHeight,
+				winH: 400,
 				kml: {},
 				line: [],
 				point: [],
-				center: [],
+				center: null,
+				cur: null,
 				gon: []
 			}
 		},
-		onLoad() {
-			this.loadData()
-		},
-		mounted() {
-			
-		},
+		onLoad() {},
+		mounted() {},
 		methods: {
+			getLoc(){
+				window.amapGeo.getCurrentPosition((_,e)=>{
+					this.center = [e.position.getLng(), e.position.getLat(), ~~(e.altitude || 0)]
+					this.cur = {
+						_id:'curposi',
+						t1:2,
+						t2:200,
+						coord: e.position,
+						name:'当前位置'
+					}
+				})
+			},
+			watch(){
+				window.amapGeo.watchPosition((_,e)=>{
+					this.center = e
+					this.cur = {
+						_id:'curposi',
+						t1:2,
+						t2:200,
+						coord: e.position,
+						name:'当前位置'
+					}
+				})
+			},
 			
 			//三都 622c331943315700013877e7
 			//笔架山 628a3dd2c9881500011de64b
@@ -47,23 +71,6 @@
 				// console.log('kml：',this.line, this.point);
 			},
 			href(u){ this.zz.href(u)},
-			
-			async add2bl(e){
-				
-				let o = uni.getStorageSync('_2bl'+e.pid)
-				
-				console.log(o);
-				let t1 = this.zz.clone(o.line[e.i])
-				
-				console.log(e,t1);
-				delete t1.info
-				delete t1.t2
-				t1.t2 = 110
-				t1.kmlId = this.kml._id
-				
-				// await this.zz.req({ $url: 'public/placemark/add', ...t1 }, true)
-				this.loadData()
-			}
 		}
 	}
 </script>

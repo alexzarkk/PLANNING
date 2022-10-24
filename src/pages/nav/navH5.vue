@@ -59,47 +59,97 @@ export default {
 			let map = new mapboxgl.Map(this.settings)
 			// #ifdef H5
 			
-			// #ifdef H5-ZLB
-			// #endif
+			// watchPosition(_onSuccess){
+			// 	temp.t ++
+			// 	_onSuccess({
+			// 		timestamp: Date.now(),
+			// 		coords: {
+			// 			longitude: temp.coord[temp.coord.length-temp.t][0],
+			// 			latitude: temp.coord[temp.coord.length-temp.t][1],
+			// 			altitude: temp.coord[temp.coord.length-temp.t][2]
+			// 		}
+			// 	})
+				
+			// 	window.wid = setTimeout(()=> { 
+			// 		if(temp.t==temp.coord.length) temp.t = 0
+			// 		geolocation.watchPosition(_onSuccess) 
+			// 	}, 3999)
+				
+			// 	return window.wid
+			// },
 			
 			const geolocation = {
-				getCurrentPosition(_onSuccess){
-					uni.getLocation({
-						success(c){
-							_onSuccess({coords:c})
-						}
-					})
-				},
-				// watchPosition(_onSuccess){
-				// 	temp.t ++
-				// 	_onSuccess({
-				// 		timestamp: Date.now(),
-				// 		coords: {
-				// 			longitude: temp.coord[temp.coord.length-temp.t][0],
-				// 			latitude: temp.coord[temp.coord.length-temp.t][1],
-				// 			altitude: temp.coord[temp.coord.length-temp.t][2]
+				// uniapp
+				// getCurrentPosition(_onSuccess){
+					// isHighAccuracy: true,
+					// altitude: true,
+				// 	uni.getLocation({
+				// 		success(c){
+				// 			_onSuccess({coords:c})
 				// 		}
 				// 	})
-					
-				// 	window.wid = setTimeout(()=> { 
-				// 		if(temp.t==temp.coord.length) temp.t = 0
-				// 		geolocation.watchPosition(_onSuccess) 
-				// 	}, 3999)
-					
-				// 	return window.wid
 				// },
-				watchPosition(_onSuccess){
-					if(window.wid) clearInterval(window.wid)
-					uni.getLocation({
-						success(c){
-							_onSuccess({coords:c})
-							window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 3999)
-							return window.wid
+				// watchPosition(_onSuccess){
+				// 	uni.getLocation({
+						// isHighAccuracy: true,
+						// altitude: true,
+				// 		success(c){
+				// 			_onSuccess({coords:c})
+				// 			window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 3999)
+				// 			return window.wid
+				// 		}
+				// 	})
+				// },
+				// clearWatch(wid){
+				// 	clearTimeout(wid||window.wid)
+				// },
+				
+				
+				
+				// e = {
+				// 	"status":0,
+				// 	"code":0,
+				// 	"info":"SUCCESS",
+				// 	"position":[121.426994,29.675487],
+				// 	"location_type":"html5",
+				// 	"message":"Get geolocation success .Convert Success.",
+				// 	"accuracy":38.09866002522623,
+				// 	"isConverted":false,
+				// 	"altitude":6.052378177642822,
+				// 	"altitudeAccuracy":5.624858856201172,
+				// 	"heading":null,
+				// 	"speed":null
+				// }
+				//amap
+				getCurrentPosition(_onSuccess){
+					window.amapGeo.getCurrentPosition((_,e)=>{
+						let c = trans([e.position.getLng(), e.position.getLat(), ~~(e.altitude || 0)],'gcj02towgs84')
+						e.coords = {
+							longitude: c[0],
+							latitude: c[1],
+							altitude: c[2]
 						}
+						e.timestamp = Date.now()
+						_onSuccess(e)
+					})
+				},
+				watchPosition(_onSuccess){
+					window.amapGeo.getCurrentPosition((_,e)=>{
+						let c = trans([e.position.getLng(), e.position.getLat(), ~~(e.altitude || 0)],'gcj02towgs84')
+						e.coords = {
+							longitude: c[0],
+							latitude: c[1],
+							altitude: c[2]
+						}
+						e.timestamp = Date.now()
+						_onSuccess(e)
+						window.wid = setTimeout(()=> { geolocation.watchPosition(_onSuccess) }, 4000)
+						return window.wid
 					})
 				},
 				clearWatch(wid){
-					clearInterval(wid||window.wid)
+					// clearInterval(wid||window.wid)
+					clearTimeout(wid||window.wid)
 				}
 			}
 			// #endif

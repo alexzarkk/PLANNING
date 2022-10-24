@@ -408,7 +408,7 @@ export default {
             this.zz.setToken(u.token)
         } else {
             //如果登录失效 （超过5小时）
-			if((Date.now() - user.t) > 5*3600) {
+			if((Date.now() - user.t) > 1000*60*60*5) {
 				this.zz.logOut()
 				return this.loginZlb()
 			}
