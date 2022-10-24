@@ -146,7 +146,29 @@ export default {
     methods: {
         async init() {
 			if (!uni.getStorageSync('cur_deptId')) {
-				uni.setStorageSync('cur_deptId', '330213')
+				// #ifdef H5-ZLB
+					// city: "宁波市"
+					// cityName: "宁波市"
+					// detailAddress: "浙江省宁波市奉化区斗门北路197号"
+					// latitude: 29.677769971311186
+					// longitude: 121.42248984154213
+					// region: "奉化区"
+					// townCode: "330213"
+					let {townCode} = await ZWJSBridge.getLocation()
+					uni.setStorageSync('cur_deptId', e.townCode)
+				// #endif
+				
+				// #ifndef H5-ZLB
+					try{
+						let [_,e] = await uni.getLocation(),
+							addr = await this.zz.reGeo([e.longitude,e.latitude])
+						
+						uni.setStorageSync('cur_deptId', addr.addressComponent.adcode+'')		
+					}catch(e){
+						uni.setStorageSync('cur_deptId', '330213')
+					}
+				// #endif
+				
 				await this.zz.setDept()
 			}
 			let dict = uni.getStorageSync('sys_dict') || {}

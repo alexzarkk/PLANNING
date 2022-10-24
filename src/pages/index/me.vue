@@ -100,7 +100,7 @@
         </view>
         <view class="cu-list menu shadow-lg radius solid">
             <!-- <view class="cu-item margin-top" @click="openScan()"> -->
-            <!-- <view class="cu-item margin-top" @tap="href('/pages/test/index',{},false)">
+           <!-- <view class="cu-item margin-top" @tap="href('/pages/test/index',{},false)">
                 <view class="content">
                     <text class="cuIcon-scan" />
                     <text class="text-grey">

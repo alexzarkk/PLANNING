@@ -50,8 +50,15 @@
 			let ap = await AMapLoader.load({
 			    key: amapKey,  // 申请好的Web端开发者Key，首次调用 load 时必填
 			    version: "2.0",   	// 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-				plugins:['AMap.MapType','AMap.Geolocation','AMap.PlaceSearch']           // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+				plugins:['AMap.MapType','AMap.Geolocation','AMap.Weather', 'AMap.Geocoder']           // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+			}).then(e=>{
+				
+				
+				console.log(e);
 			})
+			
+			
+			
 			let map = new AMap.Map('container', {
 					zoom:11,//级别
 					center: [120, 30],//中心点坐标
