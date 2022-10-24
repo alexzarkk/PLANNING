@@ -12,14 +12,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
 
-import lineTrack from './modules/lineTrack.js';
-import timeCount from './modules/timeCount';
 // console.log("引入的模块====",lineTrack)
 
 const store = new Vuex.Store({
     modules: {
-        lineTrack: lineTrack,
-        timeCount: timeCount
     }
 });
 export default store;
