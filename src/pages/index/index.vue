@@ -397,23 +397,28 @@ export default {
 
     async onLoad() {
         // #ifdef H5-ZLB
-        let user = this.zz.getAcc(),
-            ticket = this.zz.getQueryParam(window.location.search, 'ticket')
-        console.info("ticketticketticketticketticket----------", ticket)
-        if (!ticket) return this.loginZlb()
-        if (!user) {
-            let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-            user = u.user
-            this.zz.setAcc(user)
-            this.zz.setToken(u.token)
-        } else {
-            //如果登录失效 （超过5小时）
-			if((Date.now() - user.t) > 5*3600) {
-				this.zz.logOut()
-				return this.loginZlb()
-			}
+        console.log('ZWJSBridge---', ZWJSBridge);
+        if (ZWJSBridge) {
+            let user = this.zz.getAcc(),
+                ticket = this.zz.getQueryParam(window.location.search, 'ticket')
+            if (user) {  // 有用户，去判断是否失效
+                //如果没有登录 || 登录已失效
+                await this.zz.req({ $url: '/user/person/info' }).catch(e => {
+                    this.zz.logOut()
+                    return this.loginZlb()
+                })
+            } else { // 没有用户，去走单点
+                if (ticket) {  // 有票据直接后台登录
+                    let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+                    user = u.user
+                    this.zz.setAcc(user)
+                    this.zz.setToken(u.token)
+                } else { // 没有票据去获取票据
+                    return this.loginZlb()  // 去单点登录
+                }
+            }
+            console.info("登录获取到的信息----------", user)
         }
-        console.info("登录获取到的信息----------", user)
         // 登录埋点
         try {
             console.log(window.aplus_queue)
