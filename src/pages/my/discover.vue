@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bg-color="bg-ztsblue" :is-back="true">
             <block slot="content">
@@ -105,9 +105,9 @@ export default {
         // await this.loadTag()
         // this.loadData('init');
         uni.$on("deletePush", () => {
-            this.loadData('init');
+            console.log('push---------refresh');
+            this.$refs.push.loadData('init');
         })
-
     },
     onShow() {
         // this.loadData('init');
@@ -115,9 +115,12 @@ export default {
     },
     methods: {
     },
+    onUnload() {
+        uni.$off("deletePush")
+    },
     onPullDownRefresh() {
         // this.loadData('init', true)
-        this.$refs.push.loadData('init',true)
+        this.$refs.push.loadData('init', true)
     },
     onReachBottom() {
         this.$refs.push.loadData('add')

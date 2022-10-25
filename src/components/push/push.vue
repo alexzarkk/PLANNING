@@ -65,7 +65,7 @@ export default {
         this.loadData('init');
     },
     mounted() {
-        // console.log("push-------------------------------------------------------")
+
         // console.log("push----------------userId----------------------",this.userId)
         // console.log("push-------------------------------------------------------")
     },

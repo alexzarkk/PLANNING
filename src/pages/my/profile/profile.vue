@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <!-- <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">个人主页</block></cu-custom> -->
     <view class="container">
         <!-- 顶部 -->
@@ -88,7 +88,7 @@
         </view>
         <view v-if="userInfo">
             <!-- <push-card v-if="" :details="item" :header="false" :articleId="articleId"></push-card> -->
-            <push :userId="userInfo._id"></push>
+            <push ref="push" :userId="userInfo._id"></push>
         </view>
 
         <!-- <view class="bg-white solid-bottom" @click="openPage('/pages/my/social/pushDetails')">
@@ -229,7 +229,7 @@ export default {
     },
     async onLoad(option) {
         const myUserInfo = this.zz.getAcc()
-        if ( option.id && option.id !== myUserInfo._id) {
+        if (option.id && option.id !== myUserInfo._id) {
             // 点击加载别人的个人主页
             this.profileId = option.id
             const req1 = {
@@ -261,11 +261,17 @@ export default {
             this.userInfo = myUserInfo
             this.profileId = myUserInfo._id
             this.isMy = true;
-            console.log("我的主页============================",this.profileId)
+            console.log("我的主页============================", this.profileId)
             //  我自己的主页
         }
         this.loadData();
         console.log('主页id===========', this.profileId);
+
+        uni.$on("deletePush", () => {
+            console.log('push---------refresh');
+            this.$refs.push.loadData('init');
+        })
+        console.log("push-------------------------------------------------------uni.$on")
     },
     methods: {
         async loadData() {
@@ -335,7 +341,9 @@ export default {
         },
         onClickBtn() { }
     },
-
+    onUnload() {
+        uni.$off("deletePush")
+    },
     onPageScroll(e) {
         // console.log(e)
         this.scrollTop = e.scrollTop;
