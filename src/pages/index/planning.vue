@@ -54,7 +54,7 @@
         </view>
         <!-- 瀑布流 -->
 
-        <view v-if="isReady" class="padding-sm">
+        <view v-if="isReady && trailShowData.length > 0" class="padding-sm">
             <tui-waterfall :type="2" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
                 <template v-slot:left="slotProps">
                     <zz-line-item :lineData="slotProps.entity"></zz-line-item>
@@ -65,17 +65,23 @@
             </tui-waterfall>
             <tui-loadmore v-if="loadding" :index="3" type="red"></tui-loadmore>
         </view>
+        <view v-else class="flex justify-center align-center"  style="height:500rpx; padding-top:100rpx;">
+            <tui-no-data :imgWidth="300" :imgHeight="300" :fixed="true" :imgUrl="bd.imgs.nodata">
+                <!-- <text class="tui-color__black">{{ msg }}</text> -->
+            </tui-no-data>
+        </view>
         <tui-scroll-top ref="top" :scrollTop="scrolled"></tui-scroll-top>
     </view>
 </template>
 <script>
-import tabsData from '@/comm/test/json/line.json';
+// import tabsData from '@/comm/test/json/line.json';
 export default {
     data() {
         return {
             timer: new Date().getTime(),
             isReady: false, // 数据准备
-            trailData: [],
+            trailData: [],  // 总共线路
+            deptId: '', // 部门信息
             bd: this.bd,
             td: {},
             pageSize: 5, // 当前的数量
@@ -107,22 +113,40 @@ export default {
         };
     },
     onShow() {
+        let { deptId } = this.zz.getDept()
+        if (deptId === this.deptId) {
+
+        } else {
+            this.deptId = deptId
+            this.loadData('init')
+        }
+
     },
     onBackPress() { return true },
-    onLoad(qr) {},
-    onReady() {
-        let td = uni.getStorageSync('trailData');
-        this.trailData = td.trailData;
-        if (td && td.tStyle) {
-            this.tabs = td.tStyle;
-        } else {
-            this.tabs = tabsData;
-        }
-        const list = td.trailData.slice(0, this.pageSize);
-        this.trailShowData = this.trailShowData.concat(list)
-        this.isReady = true
+    onLoad(qr) {
+        // this.loadData()
     },
     methods: {
+        loadData(type) {
+            if (type === "init") {
+                this.isReady = false
+                this.trailShowData = []
+                this.trailData = []
+            }
+            let td = uni.getStorageSync('trailData');
+            this.trailData = td.trailData;
+            if (td && td.tStyle) {
+                this.tabs = td.tStyle;
+            }
+            /**
+             *  else {
+                this.tabs = tabsData;
+            }
+             */
+            const list = td.trailData.slice(0, this.pageSize);
+            this.trailShowData = this.trailShowData.concat(list)
+            this.isReady = true
+        },
         kmls() { this.zz.href('/pages/comm/kmlPage') },
         onCollect() {
             // #ifdef APP-PLUS
@@ -200,7 +224,8 @@ body {
 }
 
 .container {
-    height: 100%;
+    // height: 100%;
+    // min-height: calc(100vh - 100rpx);
     background-color: #f1f1f1;
 }
 
