@@ -65,8 +65,8 @@
             </tui-waterfall>
             <tui-loadmore v-if="loadding" :index="3" type="red"></tui-loadmore>
         </view>
-        <view v-else class="flex justify-center align-center"  style="height:500rpx; padding-top:100rpx;">
-            <tui-no-data :imgWidth="300" :imgHeight="300" :fixed="true" :imgUrl="bd.imgs.nodata">
+        <view v-else class="flex justify-center align-center">
+            <tui-no-data :imgWidth="300" :imgHeight="300" :fixed="false" :imgUrl="bd.imgs.nodata">
                 <!-- <text class="tui-color__black">{{ msg }}</text> -->
             </tui-no-data>
         </view>
