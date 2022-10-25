@@ -16,11 +16,13 @@
                     动态详情
                 </view>
             </block>
-            <view slot="right">
-                <view class="padding-right" @click="showMoreAction">
-                    <text class="cuIcon-moreandroid"></text>
-                </view>
-            </view>
+			<!-- #ifdef APP-PLUS -->
+			<view slot="right" v-if="userInfo && details.userInfo && userInfo._id == details.userInfo._id">
+			    <view class="padding-right" @click="showMoreAction">
+			        <text class="cuIcon-moreandroid"></text>
+			    </view>
+			</view>
+			<!-- #endif -->
         </cu-custom>
         <view class="container" :style="'min-height:calc(100vh - '+CustomBar+'px)'">
             <!-- 头像 + 昵称 + 时间 + 关注 -->
@@ -239,7 +241,7 @@ export default {
                     this.isMy = true
                 }
                 this.isReady = true;
-                // console.log("详情================",this.details)
+                console.log("详情================",this.details)
             });
         },
         // 动态点赞

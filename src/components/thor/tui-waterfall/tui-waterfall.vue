@@ -168,7 +168,6 @@
 			async render(item,i) {
 				this.sleep(50)
 				let obj = await this.getContainerHeight();
-				console.log(obj,'-----------',obj.leftHeight==0 && obj.rightHeight==0);
 				return await new Promise((resolve, reject) => {
 					if (obj && typeof obj.leftHeight === 'number') {
 						if(obj.leftHeight==0 && obj.rightHeight==0){
@@ -200,7 +199,6 @@
 							const rects = res[0];
 							const leftHeight = rects[0].height;
 							const rightHeight = rects[1].height;
-							
 							resolve({
 								leftHeight: leftHeight,
 								rightHeight: rightHeight
