@@ -24,9 +24,12 @@
 				</view>
 			</view>
 			<view class="uni-fab__circle uni-fab__circle--leftBottom" :style="{ opacity: isShow ? 1 : 0.5 }" @click="_onClick">
-				<!-- <uni-icons class="fab-circle-icon" type="circle-filled" color="#ff0000" size="42"></uni-icons> -->
-				
+				<!-- #ifdef APP-PLUS -->
+				<uni-icons class="fab-circle-icon" type="circle-filled" color="#ff0000" size="42"></uni-icons>
+				<!-- #endif -->
+				<!-- #ifndef APP-PLUS -->
 				<text class="cuIcon-radioboxfill text-red" style="font-size:42px"></text>
+				<!-- #endif -->
 			</view>
 		</view>
 	</view>

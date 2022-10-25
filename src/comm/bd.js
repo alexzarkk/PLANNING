@@ -44,7 +44,6 @@ const bd = {
 		nodata: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/687b11af-e7e2-4cef-80d8-b3e1744dd101.png',
 		// nodata: 		'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-996909cb-e5ca-4be8-8150-b60ae2422186/b680fa73-eff8-4ca4-b9f2-78e568e3be46.png',
 		icon_moments: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/87a505b0-a1d0-11ea-b43d-2358b31b6ce6.png',
-		icon_qq: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/879e27e0-a1d0-11ea-b997-9918a5dda011.png',
 		icon_sina: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/879e9d10-a1d0-11ea-b94e-47f67ecf8268.png',
 		icon_wechat: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/87926810-a1d0-11ea-b997-9918a5dda011.png',
 		success: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/9f4e8750-a71f-11ea-8bd0-2998ac5bbf7e.png',

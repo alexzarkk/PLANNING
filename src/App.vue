@@ -115,11 +115,7 @@ export default {
                 })
             }
         })
-
-        // #ifdef APP-PLUS
-        setTimeout(() => { checkUpdate() }, 3000)
-        // #endif
-		
+       
 		// #ifndef APP-PLUS
 		await uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
 		// #endif
@@ -138,6 +134,10 @@ export default {
 		    }
 		})
 		this.init()
+		
+		// #ifdef APP-PLUS
+		setTimeout(() => { checkUpdate() }, 3000)
+		// #endif
     },
     onShow() {
 		sync.go()
