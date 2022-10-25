@@ -150,8 +150,11 @@
 			async getArrayByHeight() {
 				if (!this.listData && this.listData.length === 0) return;
 				let data = this.getDiffList();
-				for (let item of data) {
-					await this.render(item);
+				// for (let item of data) {
+				// 	await this.render(item);
+				// }
+				for (var i = 0; i < data.length; i++) {
+					await this.render(data[i],i);
 				}
 			},
 			sleep(millisecond) {
@@ -162,19 +165,25 @@
 					if (now.getTime() > exitTime) return;
 				}
 			},
-			async render(item) {
+			async render(item,i) {
 				this.sleep(50)
 				let obj = await this.getContainerHeight();
+				console.log(obj,'-----------',obj.leftHeight==0 && obj.rightHeight==0);
 				return await new Promise((resolve, reject) => {
 					if (obj && typeof obj.leftHeight === 'number') {
-						if (obj.leftHeight <= obj.rightHeight) {
+						if(obj.leftHeight==0 && obj.rightHeight==0){
+							if (i % 2 == 0) {
+								this.leftList.push(item);
+								this.leftListConst.push(item);
+							} else {
+								this.rightList.push(item);
+							}
+						}else if (obj.leftHeight <= obj.rightHeight) {
 							this.leftList.push(item);
 							this.leftListConst.push(item);
 						} else {
 							this.rightList.push(item);
 						}
-						// console.log("左边列表===",this.leftList)
-						// console.log("右边列表",this.rightList);
 						resolve(true);
 					} else {
 						reject(false);
@@ -191,6 +200,7 @@
 							const rects = res[0];
 							const leftHeight = rects[0].height;
 							const rightHeight = rects[1].height;
+							
 							resolve({
 								leftHeight: leftHeight,
 								rightHeight: rightHeight

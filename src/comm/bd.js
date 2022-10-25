@@ -1,6 +1,6 @@
 //BasicData
 const bd = {
-	isDev: 1, //是否开发
+	isDev: 0, //是否开发
 	api: ['https://ztsapi.5618.co/', 'https://dev.5618.co/'],
 	ZLB_ADDR: [
 		'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html',

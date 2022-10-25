@@ -55,7 +55,7 @@
         <!-- 瀑布流 -->
 
         <view v-if="isReady && trailShowData.length > 0" class="padding-sm">
-            <tui-waterfall :type="2" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
+            <tui-waterfall :type="2" :pageSize="6" columnGap="0rpx" :listData="trailShowData">
                 <template v-slot:left="slotProps">
                     <zz-line-item :lineData="slotProps.entity"></zz-line-item>
                 </template>
