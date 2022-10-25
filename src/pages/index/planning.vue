@@ -55,7 +55,7 @@
         <!-- 瀑布流 -->
 
         <view v-if="isReady && trailShowData.length > 0" class="padding-sm">
-            <tui-waterfall :type="2" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
+            <tui-waterfall :type="waterType" :pageSize="5" columnGap="0rpx" :listData="trailShowData">
                 <template v-slot:left="slotProps">
                     <zz-line-item :lineData="slotProps.entity"></zz-line-item>
                 </template>
@@ -78,6 +78,7 @@
 export default {
     data() {
         return {
+            waterType: 2, // 瀑布流
             timer: new Date().getTime(),
             isReady: false, // 数据准备
             trailData: [],  // 总共线路
@@ -124,6 +125,11 @@ export default {
     },
     onBackPress() { return true },
     onLoad(qr) {
+        const res = uni.getSystemInfoSync();
+        console.log("平台---------", res.platform);
+        if (res.platform === 'ios') {
+            this.waterType = 1
+        }
         // this.loadData()
     },
     methods: {
