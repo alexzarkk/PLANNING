@@ -31,7 +31,8 @@
                 {{ details.title || details.content }}
             </view>
             <view class="image-box padding">
-                <tui-lazyload-img v-if="details && details.cover" mode="aspectFill" width="100%" radius="20rpx" :src="details.cover.url || 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/01acf825-4f59-4592-8034-295d16e69c7e.png'"></tui-lazyload-img>
+                <!-- <tui-lazyload-img v-if="details && details.cover" mode="aspectFill" width="100%" radius="20rpx" :src="details.cover.url || 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/01acf825-4f59-4592-8034-295d16e69c7e.png'"></tui-lazyload-img> -->
+                <tui-lazyload-img v-if="details && details.imgs.length > 0" mode="aspectFill" width="100%" radius="20rpx" :src="details.imgs[0]"></tui-lazyload-img>
             </view>
         </view>
         <!-- 照片拍摄时间 -->
@@ -73,7 +74,7 @@ export default {
         }
     },
     mounted() {
-        // console.log("动态详情=========", this.details)
+        console.log("动态详情=========", this.details)
         // console.log('动态详情================', JSON.parse(JSON.stringify(this.details)));
         const timestamp = this.zz.date2Time(this.details.createTime)
         this.article_time = this.zz.timeFrom(timestamp)  // 个性化显示时间

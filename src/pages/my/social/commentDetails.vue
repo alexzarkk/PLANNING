@@ -1,4 +1,6 @@
 <template>
+
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">评论详情</block>
@@ -49,13 +51,13 @@
             <view v-for="(item) in details.children" :key="item._id" style="position:relative;" class="padding bg-white flex justify-between">
                 <view class="flex">
                     <view class="margin-right">
-                        <view v-if="isReady" class="cu-avatar round" :style="'background-image:url(' + item.userInfo.headImg + ')'"></view>
+                        <view v-if="isReady" class="cu-avatar round" :style="'background-image:url(' + item.userInfo.headImg + ')'" @click="openProfile(item.userInfo._id)"></view>
                     </view>
                     <view class="flex flex-direction flex-start padding-top-xs">
                         <view class="flex align-center">
-                            <view v-if="isReady" class="margin-right-xs">{{ item.userInfo.nickName }}</view>
+                            <view v-if="isReady" class="margin-right-xs" @click="openProfile(item.userInfo._id)">{{ item.userInfo.nickName }}</view>
                             <view class="margin-right-xs text-gray" @click="replayComment(item)">回复</view>
-                            <view @click="userProfile(item.rid)">{{ item.rName }}</view>
+                            <view @click="openProfile(item.rid)">{{ item.rName }}</view>
                         </view>
                         <view class="margin-bottom">
                             <view v-if="isReady" class="padding-top">{{ item.content }}</view>
@@ -345,6 +347,10 @@ export default {
                 }
                 this.isDeleteShow = false;
             });
+        },
+        // 打开个人主页
+        openProfile(userId) {
+            this.zz.profile(userId)
         },
         // 键盘的高度控制
         keyboardheightchange(event) {

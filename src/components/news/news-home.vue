@@ -286,7 +286,7 @@ export default {
                 });
                 cur.page++
                 cur.list = cur.list.concat(list)
-                // console.log("新list", cur)
+                console.log("新list", cur)
                 this.$set(this.articleTabs, this.currentTab, cur)
                 // console.log('科普========', this.articleTabs[5].list);
                 // console.log('this.articleTabs', JSON.parse(JSON.stringify(this.articleTabs)));
