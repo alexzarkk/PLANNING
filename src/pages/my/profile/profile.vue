@@ -267,7 +267,7 @@ export default {
         this.loadData();
         console.log('主页id===========', this.profileId);
 
-        uni.$on("deletePush", () => {
+        uni.$on("pushChange", () => {
             console.log('push---------refresh');
             this.$refs.push.loadData('init');
         })
@@ -342,7 +342,7 @@ export default {
         onClickBtn() { }
     },
     onUnload() {
-        uni.$off("deletePush")
+        uni.$off("pushChange")
     },
     onPageScroll(e) {
         // console.log(e)

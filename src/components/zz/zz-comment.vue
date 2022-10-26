@@ -128,6 +128,7 @@
         <zz-cu-modal :loading="false" :show="isDeleteShow" title="提示" @confirm="confirmDelete" @cancel="isDeleteShow=false">
             <view class="padding bg-white">删除评论后将不可恢复，是否继续?</view>
         </zz-cu-modal>
+        <!-- 登录确认框 -->
         <zz-cu-modal :loading="false" :show="isLoginShow" title="提示" @confirm="openPage('/pages/comm/account/login',{back:true},false)" @cancel="isLoginShow=false">
             <view class="padding bg-white">当前未登录，点击确定去登录</view>
         </zz-cu-modal>
@@ -399,20 +400,29 @@ export default {
                 this.contentComment()
             });
         },
-        // 修改回复对象到本文章|内容
+        // 对当前主评论回复
         contentComment() {
-            // 对内容的评价没有回复的具体的人
-            this.replyObj = {};
-            this.activeComment = !this.activeComment;
+            if (!this.isLogin) {
+                this.zz.showLoginModal()
+                // this.isLoginShow = true
+            } else {
+                // 对内容的评价没有回复的具体的人
+                this.replyObj = {};
+                this.activeComment = !this.activeComment;
+            }
         },
         replayComment(item) {
-            // console.log('回复对象=======', item);
-            this.replyObj = {
-                pid: item._id,
-                rName: item.userInfo.nickName
-            };
-            // console.log("回复对象==========", this.replyObj)
-            this.activeComment = !this.activeComment;
+            if (!this.isLogin) {
+                this.zz.showLoginModal()
+            } else {
+                // console.log('回复对象=======', item);
+                this.replyObj = {
+                    pid: item._id,
+                    rName: item.userInfo.nickName
+                };
+                // console.log("回复对象==========", this.replyObj)
+                this.activeComment = !this.activeComment;
+            }
         },
         likeComment(item) {
             // 给评论点赞
@@ -424,7 +434,8 @@ export default {
         inputFocus(event) {
             // this.userInfo = this.zz.getAcc()
             if (!this.isLogin) {
-                this.isLoginShow = true
+                // this.isLoginShow = true
+                this.zz.showLoginModal()
             } else {
                 this.activeComment = true
             }

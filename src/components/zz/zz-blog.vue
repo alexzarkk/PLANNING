@@ -89,6 +89,10 @@
         <zz-cu-modal :isLoading="loading" :show="isDeleteShow" title="提示" @confirm="confirmDeleteComment" @cancel="isDeleteShow = false">
             <view class="padding bg-white">删除评论后将不可恢复，是否继续?</view>
         </zz-cu-modal>
+        <!-- 登录确认框 -->
+        <zz-cu-modal :loading="false" :show="isLoginShow" title="提示" @confirm="openPage('/pages/comm/account/login',{back:true},false)" @cancel="isLoginShow=false">
+            <view class="padding bg-white">当前未登录，点击确定去登录</view>
+        </zz-cu-modal>
     </view>
 </template>
 
@@ -98,6 +102,8 @@ export default {
     name: 'zzBlog',
     data() {
         return {
+            isLogin: false,
+            isLoginShow: false,
             isDeleteShow: false,
             isMyMenuShow: false,
             myMenuList: [
@@ -127,17 +133,27 @@ export default {
     },
     mounted() {
         this.userInfo = this.zz.getAcc();
+        if (this.userInfo) {
+            this.isLogin = true
+        }
+        uni.$on("commentLogin", () => {
+            this.isLogin = true
+            this.userInfo = this.zz.getAcc()
+        })
         this.init();
     },
     methods: {
         async init() {
-			this.list = []
-			this.list = await this.zz.req({ $url: '/public/blog/list', tid: this.tid })
+            this.list = []
+            this.list = await this.zz.req({ $url: '/public/blog/list', tid: this.tid })
         },
         // 跳转到编写评论的页面
         writeComment() {
-            // this.zz.toast("功能暂未启用")
-            this.zz.href('/pages/my/blog/edit?tid=' + this.tid);
+            if (this.isLogin) {
+                this.zz.href('/pages/my/blog/edit?tid=' + this.tid);
+            } else {
+                this.zz.showLoginModal()
+            }
         },
         // 作者回复评论
         replyComment(item) {
@@ -162,6 +178,10 @@ export default {
         moreAction(item) {
             this.currentComment = item;
             this.isMyMenuShow = true; //作者 || 我的评论
+        },
+        openPage(url, value, verify = true) {
+            this.isLoginShow = false
+            this.zz.href(url, value, verify);
         },
         confirmMyMenu({ cmd }) {
             // 删除评论后将不可恢复，是否继续

@@ -48,7 +48,8 @@
 		<!-- 评论 blog-->
 		<template v-if="TabCur===1">
 			<view v-for="(item, index) in page[TabCur].list" :key="index">
-				<view class="padding bg-white flex justify-between margin-bottom-sm" style="position: relative" @click="detail(item._id)">
+                <!-- @click="detail(item.tid)"      评论如果需要跳转，则需要 携带内容的id 和 内容的类型-->
+				<view class="padding bg-white flex justify-between margin-bottom-sm" style="position: relative" >
 					<view class="flex">
 						<view class="margin-right">
 							<view v-if="item.userInfo" class="cu-avatar round lg" :style="'background-image:url(' + item.userInfo.headImg + ')'"></view>

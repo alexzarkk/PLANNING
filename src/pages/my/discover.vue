@@ -104,7 +104,7 @@ export default {
         this.userInfo = this.zz.getAcc();
         // await this.loadTag()
         // this.loadData('init');
-        uni.$on("deletePush", () => {
+        uni.$on("pushChange", () => {
             console.log('push---------refresh');
             this.$refs.push.loadData('init');
         })
@@ -116,7 +116,7 @@ export default {
     methods: {
     },
     onUnload() {
-        uni.$off("deletePush")
+        uni.$off("pushChange")
     },
     onPullDownRefresh() {
         // this.loadData('init', true)

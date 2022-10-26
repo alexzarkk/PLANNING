@@ -91,13 +91,13 @@ export default {
     mounted() {
         const timestamp = this.zz.date2Time(this.details.createTime)
         this.article_time = this.zz.timeFrom(timestamp)  // 个性化显示时间
+        // console.log("详情----------", this.details)
     },
     methods: {
         openDetails() {
             if (this.stopClick) {
                 return;
             }
-
             const isPush = this.details.type.some(res => {
                 return res === 30
             })
@@ -106,15 +106,12 @@ export default {
             } else {  // 跳转到文章
                 this.zz.href(`/pages/planning/article?id=${this.details._id}`)
             }
-
         },
         // 打开主页
         openProfile() {
             this.zz.profile(this.details.userInfo._id)
         },
         followUser() {
-            // console.log('关注用户');
-            // this.zz.userEvent()
             this.zz.toast("功能暂未开启", 1000)
         }
     }
