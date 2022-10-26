@@ -91,7 +91,7 @@
                 <view class="search-form round">
                     <input v-model="comment" :disabled="true" :adjust-position="false" :placeholder="replayInfo" class="solid-bottom" maxlength="50" cursor-spacing="10" confirm-type="send" type="text" @click="inputFocus">
                 </view>
-                <view class="action text-df" @click="replyMainComment">
+                <view class="action text-df" @click="contentComment">
                     <text class="cuIcon-comment text-grey margin-rgiht-xs"></text>
                     <text>{{ total=== -1 ? '0' : total }}</text>
                 </view>
@@ -400,19 +400,15 @@ export default {
                 this.contentComment()
             });
         },
-        // 修改回复对象到本文章|内容
+        // 对当前主评论回复
         contentComment() {
-            // 对内容的评价没有回复的具体的人
-            this.replyObj = {};
-            this.activeComment = !this.activeComment;
-        },
-        // 评论操作栏的主评论回复
-        replyMainComment() {
             if (!this.isLogin) {
                 this.zz.showLoginModal()
                 // this.isLoginShow = true
             } else {
-                this.contentComment()
+                // 对内容的评价没有回复的具体的人
+                this.replyObj = {};
+                this.activeComment = !this.activeComment;
             }
         },
         replayComment(item) {
@@ -438,7 +434,8 @@ export default {
         inputFocus(event) {
             // this.userInfo = this.zz.getAcc()
             if (!this.isLogin) {
-                this.isLoginShow = true
+                // this.isLoginShow = true
+                this.zz.showLoginModal()
             } else {
                 this.activeComment = true
             }
