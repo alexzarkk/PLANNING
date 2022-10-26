@@ -250,7 +250,7 @@ export default {
             }
         },
         async loadData(type) {
-            // console.log("news-home-----------",type)
+            console.log("news-home-----------",type)
             if (type === 'init') {
                 this.articleTabs[this.currentTab].list = []
                 this.articleTabs[this.currentTab].page = 1

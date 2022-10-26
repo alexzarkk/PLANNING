@@ -439,12 +439,9 @@ export default {
             // console.log("show 弹窗===============", this.showTips)
         }, 1000)
 
-        uni.$on("deletePush", () => {
-            this.$refs.newsHome.loadData('init')
-            // console.log('push---------refresh');
-            // this.$refs.push.loadData('init');
+        uni.$on("pushChange", () => {
+            this.refreshNewsHome()
         })
-
     },
     onReady() {
         this.cal()
@@ -453,6 +450,12 @@ export default {
         this.loadData()
     },
     methods: {
+
+        // 刷新动态
+        refreshNewsHome(){
+            console.log("刷新动态--------")
+            this.$refs.newsHome.loadData('init')
+        },
         // #ifdef H5-ZLB
         // 登录浙里办
         loginZlb() {

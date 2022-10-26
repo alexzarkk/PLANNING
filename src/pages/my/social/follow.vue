@@ -90,12 +90,12 @@ export default {
             this.loading = true;
             const req1 = {
                 $url: '/user/ue/page',
-				ui:1,
+				ui:true,
                 t: 60, // 事件：关注
                 tt: 60, // 对象: 用户
                 page: this.pageNum,
                 size: this.pageSize,
-                uid: this.userId
+                my:true
             }
             this.zz.req(req1).then(({ pagination, list }) => {
                 // console.log(list);

@@ -303,7 +303,7 @@ export default {
                 .req(requestParams)
                 .then((res) => {
                     this.zz.toast('删除成功');
-                    uni.$emit("deletePush")
+                    uni.$emit("pushChange")
                     setTimeout(() => {
                         uni.navigateBack();
                     }, 1000);

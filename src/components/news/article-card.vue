@@ -74,7 +74,7 @@ export default {
         }
     },
     mounted() {
-        console.log("动态详情=========", this.details)
+        // console.log("动态详情=========", this.details)
         // console.log('动态详情================', JSON.parse(JSON.stringify(this.details)));
         const timestamp = this.zz.date2Time(this.details.createTime)
         this.article_time = this.zz.timeFrom(timestamp)  // 个性化显示时间

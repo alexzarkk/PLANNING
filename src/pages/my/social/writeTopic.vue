@@ -108,9 +108,17 @@ export default {
             }
             // console.log("动态参数======", req1)
             this.zz.req(req1).then((res) => {
-                uni.redirectTo({
-                    url: '/pages/my/discover'
-                });
+                let pages = getCurrentPages(); //当前页面栈  
+                if (pages.length > 1) {
+                    let beforePage = pages[pages.length - 2]; //获取上一个页面实例对象  
+                    beforePage.$vm.refreshNewsHome(); //触发父页面中的方法change()  
+                }
+                setTimeout(() => {
+                    uni.redirectTo({
+                        url: '/pages/my/discover'
+                    });
+                }, 500)
+
             }).finally(() => {
                 this.loading = false;
             });
