@@ -5,7 +5,7 @@
     3. 图片
 
  -->
- <page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bg-color="bg-ztsblue" :is-back="true">
             <block slot="content">
@@ -16,13 +16,13 @@
                     动态详情
                 </view>
             </block>
-			<!-- #ifdef APP-PLUS -->
-			<view slot="right" v-if="userInfo && details.userInfo && userInfo._id == details.userInfo._id">
-			    <view class="padding-right" @click="showMoreAction">
-			        <text class="cuIcon-moreandroid"></text>
-			    </view>
-			</view>
-			<!-- #endif -->
+            <!-- #ifdef APP-PLUS -->
+            <view slot="right" v-if="userInfo && details.userInfo && userInfo._id == details.userInfo._id">
+                <view class="padding-right" @click="showMoreAction">
+                    <text class="cuIcon-moreandroid"></text>
+                </view>
+            </view>
+            <!-- #endif -->
         </cu-custom>
         <view class="container" :style="'min-height:calc(100vh - '+CustomBar+'px)'">
             <!-- 头像 + 昵称 + 时间 + 关注 -->
@@ -30,9 +30,9 @@
                 <view class="cu-item shadow">
                     <view class="cu-list menu-avatar">
                         <view class="cu-item">
-                            <view v-if="details && details.userInfo && details.userInfo.headImg" class="cu-avatar round lg" :style="'background-image:url(' + details.userInfo.headImg + ')'"></view>
-                            <view v-else class="cu-avatar round lg" style="background-image:url(https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/01acf825-4f59-4592-8034-295d16e69c7e.png)"></view>
-                            <view class="content flex-sub">
+                            <view v-if="details && details.userInfo && details.userInfo.headImg" @click="openProfile" class="cu-avatar round lg" :style="'background-image:url(' + details.userInfo.headImg + ')'"></view>
+                            <view v-else class="cu-avatar round lg" @click="openProfile" style="background-image:url(https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/01acf825-4f59-4592-8034-295d16e69c7e.png)"></view>
+                            <view class="content flex-sub" @click="openProfile">
                                 <view v-if="isReady">
                                     {{ details.userInfo.nickName || details.author }}
                                 </view>
@@ -241,8 +241,11 @@ export default {
                     this.isMy = true
                 }
                 this.isReady = true;
-                console.log("详情================",this.details)
+                console.log("详情================", this.details)
             });
+        },
+        openProfile() {
+            this.zz.profile(this.details.userInfo._id)
         },
         // 动态点赞
         async likePush() {

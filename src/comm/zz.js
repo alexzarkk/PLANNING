@@ -396,7 +396,7 @@ const
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: 'https://restapi.amap.com/v3/geocode/regeo?key=' + amapKey + '&s=rsv3&language=zh_cn&location=' + loc,
-				success(e){
+				success(e) {
 					resolve(e.data.regeocode)
 				},
 				fail(e) {
@@ -490,21 +490,21 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5-ZLB
-				mgop({
-					api: 'mgop.zz.zts.' + fn, // 必填
-					host: 'https://mapi.zjzwfw.gov.cn/',
-					dataType: 'JSON',
-					type: 'POST',
-					appKey,
-					header: {
-						isTestUrl: isDev + '',
-						authorization: token,
-						clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
-					},
-					data: params,
-					onSuccess: success,
-					onFail: fail
-				});
+			mgop({
+				api: 'mgop.zz.zts.' + fn, // 必填
+				host: 'https://mapi.zjzwfw.gov.cn/',
+				dataType: 'JSON',
+				type: 'POST',
+				appKey,
+				header: {
+					isTestUrl: isDev + '',
+					authorization: token,
+					clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
+				},
+				data: params,
+				onSuccess: success,
+				onFail: fail
+			});
 			// #endif
 
 			// #ifndef H5-ZLB
@@ -555,19 +555,28 @@ async function req(params = {}, loading = false, t = 9999) {
    t: 事件类型
    20, 30, {...}
 */
-function userEvent(t, tt, o, ref = '_id') {
-	let user = zz.getAcc()
+
+
+// 未登录提示去登录
+
+function showLoginModal() {
 	const toLogin = () => {
 		zz.href('/pages/comm/account/login', 0, { back: 1 })
 	}
+	zz.modal('您尚未登录，请登录后操作', (flag) => {
+		if (flag) {
+			return toLogin()
+		} else {
+			return;
+		}
+	}, true)
+}
+
+function userEvent(t, tt, o, ref = '_id') {
+	let user = zz.getAcc()
+
 	if (!user && t !== 20) {  // 未登录
-		zz.modal('您尚未登录，请登录后操作', (flag) => {
-			if (flag) {
-				return toLogin()
-			} else {
-				return;
-			}
-		}, true)
+		showLoginModal() // 展示未登录弹窗
 		return new Promise((resolve, reject) => {
 			reject('未登录')
 		});
@@ -660,6 +669,7 @@ const zz = {
 
 
 	req,
+	showLoginModal,
 	userEvent,
 	reGeo,
 	weatherInfo,
@@ -807,6 +817,7 @@ const zz = {
 			})
 		}
 	},
+
 	profile(id) {
 		let d = uni.getStorageSync('sys_dict')
 		this.href(`/pages/my/profile/${d.sysUser[id] ? 'sysProfile' : 'profile'}?id=${id}`)

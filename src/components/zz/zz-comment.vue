@@ -91,7 +91,7 @@
                 <view class="search-form round">
                     <input v-model="comment" :disabled="true" :adjust-position="false" :placeholder="replayInfo" class="solid-bottom" maxlength="50" cursor-spacing="10" confirm-type="send" type="text" @click="inputFocus">
                 </view>
-                <view class="action text-df" @click="contentComment">
+                <view class="action text-df" @click="replyMainComment">
                     <text class="cuIcon-comment text-grey margin-rgiht-xs"></text>
                     <text>{{ total=== -1 ? '0' : total }}</text>
                 </view>
@@ -128,6 +128,7 @@
         <zz-cu-modal :loading="false" :show="isDeleteShow" title="提示" @confirm="confirmDelete" @cancel="isDeleteShow=false">
             <view class="padding bg-white">删除评论后将不可恢复，是否继续?</view>
         </zz-cu-modal>
+        <!-- 登录确认框 -->
         <zz-cu-modal :loading="false" :show="isLoginShow" title="提示" @confirm="openPage('/pages/comm/account/login',{back:true},false)" @cancel="isLoginShow=false">
             <view class="padding bg-white">当前未登录，点击确定去登录</view>
         </zz-cu-modal>
@@ -405,14 +406,27 @@ export default {
             this.replyObj = {};
             this.activeComment = !this.activeComment;
         },
+        // 评论操作栏的主评论回复
+        replyMainComment() {
+            if (!this.isLogin) {
+                this.zz.showLoginModal()
+                // this.isLoginShow = true
+            } else {
+                this.contentComment()
+            }
+        },
         replayComment(item) {
-            // console.log('回复对象=======', item);
-            this.replyObj = {
-                pid: item._id,
-                rName: item.userInfo.nickName
-            };
-            // console.log("回复对象==========", this.replyObj)
-            this.activeComment = !this.activeComment;
+            if (!this.isLogin) {
+                this.zz.showLoginModal()
+            } else {
+                // console.log('回复对象=======', item);
+                this.replyObj = {
+                    pid: item._id,
+                    rName: item.userInfo.nickName
+                };
+                // console.log("回复对象==========", this.replyObj)
+                this.activeComment = !this.activeComment;
+            }
         },
         likeComment(item) {
             // 给评论点赞
