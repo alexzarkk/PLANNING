@@ -296,7 +296,9 @@ export default {
         
         
         
-        
+        copyLoc(){
+			
+		},
         pickDate(e) {
             this.dateType = e
             this.$refs.dateTime.show();

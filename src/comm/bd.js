@@ -29,16 +29,16 @@ const bd = {
 		png: 'https://zts.5618.co/static/png/',
 		logo: "https://zts.5618.co/repo/logoIcon.png",
 		
+		
 		// #ifdef H5-ZLB
 		copyright: '浙江省体育局、宁波市奉化区文化和广电旅游体育局',
-		tel: '0574-88517465',
+		tel: '0574-88517465'
 		// #endif
 		
 		// #ifndef H5-ZLB
 		copyright: "© 2022 浙江体育科学研究所（浙江省反兴奋剂中心）",
-		tel: '0574-88517758',
+		tel: '0574-88517758'
 		// #endif
-		
 	},
 	imgs: {
 		nodata: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/687b11af-e7e2-4cef-80d8-b3e1744dd101.png',
