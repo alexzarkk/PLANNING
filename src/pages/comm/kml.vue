@@ -336,7 +336,6 @@ export default {
             ver: 0,
             current: -1,
             scrollWin: [0, 0]
-
         }
     },
     async onLoad({ _id, sn, v } = q) {
@@ -401,12 +400,15 @@ export default {
             this.zz.userEvent(t, this.kml.type == 99 ? 99 : 100, this.kml)
         },
         userInfo() {
-            // console.log('userInfo', this.kml.userId)
-            this.zz.toast('功能尚未启用！')
+			this.zz.profile(this.kml.userId)
         },
-        follow() {
-            // console.log('follow', this.kml.userId)
-            this.zz.toast('功能尚未启用！')
+        async follow() {
+			const ueRes = await this.zz.userEvent(60, 60, this.kml.userInfo)
+			if (this.kml.userInfo.isFollow) {
+				this.zz.toast('关注成功~')
+			} else {
+				this.zz.toast('已取消关注')
+			}
         },
 		useLine() {
 		    // #ifdef H5
