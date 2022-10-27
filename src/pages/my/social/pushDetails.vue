@@ -16,13 +16,13 @@
                     动态详情
                 </view>
             </block>
-            <!-- #ifdef APP-PLUS -->
-            <view slot="right" v-if="userInfo && details.userInfo && userInfo._id == details.userInfo._id">
-                <view class="padding-right" @click="showMoreAction">
-                    <text class="cuIcon-moreandroid"></text>
-                </view>
-            </view>
-            <!-- #endif -->
+			<!-- #ifdef APP-PLUS -->
+			<view slot="right" v-if="userInfo && !loading && userInfo._id == details.userInfo._id">
+			    <view class="padding-right" @click="showMoreAction">
+			        <text class="cuIcon-moreandroid"></text>
+			    </view>
+			</view>
+			<!-- #endif -->
         </cu-custom>
         <view class="container" :style="'min-height:calc(100vh - '+CustomBar+'px)'">
             <!-- 头像 + 昵称 + 时间 + 关注 -->
@@ -41,14 +41,22 @@
                                     <!-- {{ details.dateInfo.year }}年{{ details.dateInfo.month }}月{{ details.dateInfo.day }}日 -->
                                 </view>
                             </view>
-                            <view v-if="!isMy" class="padding-right">
-                                <button v-if="details.isFollow" class="cu-btn line-ztsgreen" @click="followUser">
-                                    取消关注
-                                </button>
-                                <button v-else class="cu-btn bg-ztsgreen" @click="followUser">
-                                    关注
-                                </button>
-                            </view>
+							
+							<template v-if="!loading">
+								<view v-if="!isMy" class="padding-right">
+									<button v-if="details.isFollow" class="cu-btn line-ztsgreen" @click="followUser">
+										取消关注
+									</button>
+									<button v-else class="cu-btn bg-ztsgreen" @click="followUser">
+										关注
+									</button>
+								</view>
+								<view v-else>
+									<!-- #ifdef H5 -->
+									<text class="cuIcon-delete" @click="showMoreAction"></text>
+									<!-- #endif -->
+								</view>
+							</template>
                         </view>
                     </view>
                     <!-- <view class="padding-top"> -->
@@ -139,7 +147,7 @@
             <!-- 确认删除对话框 -->
             <zz-cu-modal :loading="false" :show="isDeleteShow" title="提示" @confirm="confirmDelete" @cancel="isDeleteShow = false">
                 <view class="padding bg-white">
-                    删除评论后将不可恢复，是否继续?
+                    删除后将不可恢复，是否继续?
                 </view>
             </zz-cu-modal>
         </view>
@@ -154,6 +162,7 @@ export default {
     data() {
         return {
             isMy: false,
+			loading: true,
             userInfo: null,
             CustomBar: this.CustomBar,
             btnBottom: 0,
@@ -226,7 +235,9 @@ export default {
                 $url: 'public/moment/info',
                 _id: momentId
             };
+			this.loading = true
             this.zz.req(req2).then((res) => {
+				this.loading = false
                 this.details = res;
                 this.details.dateInfo = this.zz.time2Date(res.createTime, 'CN-ymd');
                 if (this.details.type) {

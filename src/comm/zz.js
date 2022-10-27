@@ -583,6 +583,7 @@ function userEvent(t, tt, o, ref = '_id') {
 	}
 	let e = {
 		$url: 'user/ue/action',
+		$veri:1,
 		t,
 		tt,
 		tid: o[ref]

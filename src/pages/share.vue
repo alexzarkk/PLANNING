@@ -25,6 +25,7 @@
 		//	https://zts.5618.co/h5/#/pages/share?deptId=330212&path=/pages/planning/article&id=5eb7b88343f165004c6d2d52
 		//	https://zts.5618.co/h5/#/pages/share?deptId=330212&path=/pages/comm/kml&_id=62b9409268cebc00011fdb23
 		//	https://zts.5618.co/h5/#/pages/share?path=/pages/comm/kml&_id=63579d52fcf4a30001e8d369
+		//	http://localhost:8080/h5/#/pages/share?path=/pages/comm/kml&_id=63579d52fcf4a30001e8d369
 		
 		//  https://zts.5618.co/h5/#/pages/share?deptId=330212
 		 

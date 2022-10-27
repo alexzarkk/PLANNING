@@ -10,7 +10,7 @@
 			
 			<!-- #ifdef APP-PLUS -->
 			<text class="padding text-center text-gray">当前版本：{{sys.version +' '+ sys.versionCode}}</text>
-			<view class="margin-top-sm padding-left text-gray">当前版本未内部开发测试版本，部分页面和功能尚未启用</view>
+			<view class="margin-top-sm padding-left text-gray" v-if="bd.isDev">当前版本未内部开发测试版本，部分页面和功能尚未启用</view>
 			<view class="padding-lr-xl flex flex-direction align-center">
 				<button class="cu-btn lg round lines bg-blue response" @tap="checkVersion">
 					<view class="text-dark">检查更新</view>
@@ -22,11 +22,15 @@
 				是一款健身步道相关户外工具APP，提供浙江省范围的健身步道信息服务，及相关的自然人文、体育旅游等资源信息；提供户外轨迹导航和GPS记录轨迹记录功能。
 			</view>
 			
-			<view class="margin-top-sm padding-left text-grey text-sm">{{sys.copyright}} </view>
+			<view class="margin-top-sm padding-left text-grey text-sm text-center">{{sys.copyright}} </view>
+			<view class="margin-top-xs text-sm text-gray text-center">
+				服务咨询热线：
+				<text class="text-centertext-bold text-blue" @click="call">{{sys.tel}}</text>
+			</view>
 		</view>
 		
 		<!-- #ifndef H5-ZLB -->
-		<view class="cu-bar bg-gray margin-top-sm solid-top">
+		<!-- <view class="cu-bar bg-gray margin-top-sm solid-top">
 			<view class="action">
 				<text class="cuIcon-titles text-grey"></text>
 				<text class="text-grey">【技术联系】</text>
@@ -40,7 +44,7 @@
 		</view>
 		<view class="padding-lr text-grey pre-line margin-top-sm">
 			联系人: 徐小辉
-		</view>
+		</view> -->
 		<!-- #endif -->
 		
 		<view class="padding-lr text-grey">
@@ -53,10 +57,12 @@
 </template>
 <script>
 import checkUpdate from "@/uni_modules/uni-upgrade-center-app/utils/check-update"
+
+import bd from '@/comm/bd'
 export default {
 	data() {
 		return {
-				sys: this.bd.sys
+				sys: bd.sys
 			};
 	},
 	onLoad() {
@@ -74,6 +80,13 @@ export default {
 					// console.log('checkVersion -------',this.zz,this.sys.versionCode, res.result.version);
 					this.zz.modal('已经是最新版本')
 				}
+			})
+		},
+		call(){
+			uni.makePhoneCall({
+			    phoneNumber: bd.sys.tel,
+			    success: (res) => { },
+			    fail: (err) => { }
 			})
 		}
 	}

@@ -149,11 +149,7 @@ export default {
         },
         // 跳转到编写评论的页面
         writeComment() {
-            if (this.isLogin) {
-                this.zz.href('/pages/my/blog/edit?tid=' + this.tid);
-            } else {
-                this.zz.showLoginModal()
-            }
+			this.zz.href('/pages/my/blog/edit?tid=' + this.tid,null,1);
         },
         // 作者回复评论
         replyComment(item) {

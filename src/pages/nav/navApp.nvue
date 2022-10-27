@@ -326,6 +326,8 @@ export default {
 			this.onRec = true
 			if(this.sysInfo.platform == 'ios') this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
 			
+			tts.speak('轨迹记录已开始，请保持手机后台定位权限已开启')
+			
 			locationModule.startLocation({
 					intervalTime: 5000,
 					distanceFilter: 5,
@@ -506,9 +508,11 @@ export default {
 				r.name = zz.time2Date()
 				r.endTime = zz.now()
 				clearInterval(this.timer)
+				tts.speak('记录已暂停')
 			} else {
 				r.stopTime += zz.now() - r.endTime
 				this.clock()
+				tts.speak('记录已恢复')
 			}
 			this.setRec()
 		},
