@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bg-color="bg-ztsgreen" :is-back="true">
             <block slot="content">粉丝</block>
@@ -57,10 +57,12 @@ export default {
         async loadData(type, stopPullDown) {
             const req1 = {
                 $url: '/user/ue/page',
-				ui: 1,
+                ui: 1,
                 t: 60, // 事件：关注
                 tt: 60, // 对象: 用户
-                tid: this.zz.getAcc()._id, // 查看我的关注
+                fans: true,
+                // my: true,
+                // tid: this.zz.getAcc()._id, // 查看我的关注
                 page: this.pageNum,
                 size: this.pageSize
             }
