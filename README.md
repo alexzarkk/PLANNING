@@ -30,5 +30,7 @@ _id: "62f464b5826b9e00010f894c"
 1. 发布浙里办需要修改的东西
 - 请求 取消header isTestUrl:"1"
 - 单点登录修改回调地址
+- manifest.json 修改环境
+- index.html 查看js引入
 
 浙里办 @dcloudio  35320220729001
