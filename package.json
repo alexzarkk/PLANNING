@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"serve": "npm run dev:custom h5-zlb",
-		"build": "cross-env UNI_OUTPUT_DIR='build' NODE_ENV=production uniapp-cli custom h5-zlb",
+		"build": "cross-env UNI_OUTPUT_DIR='build' NODE_ENV=production uniapp-cli custom h5-zlb --mode zlb",
 		"lint": "vue-cli-service lint",
 		"build:app-plus": "cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build",
 		"build:custom": "cross-env UNI_OUTPUT_DIR='build' NODE_ENV=production uniapp-cli custom",

@@ -10,15 +10,13 @@
 	<% if (process.env.VUE_APP_ENV === 'zlb' ) { %>
         <script>
             console.log("当前是浙里办环境-------------")
-
 			document.write('<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"><\/script>')
         </script>
-    <% } %>
+	<% } %>
 	<script>
 		var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
 		document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' + (coverSupport ? ', viewport-fit=cover' : '') + '" />')
 	</script>
-	
 	
 	<link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
 	<style>
@@ -54,33 +52,35 @@
 	</noscript>
 	<div id="app"></div>
 	<div id="global-menu"></div>
-	<!-- <script>
-			(function (w, d, s, q, i) {
-				w[q] = w[q] || [];
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s);
-				j.async = true;
-				j.id = 'beacon-aplus';
-				j.src = 'https://d.alicdn.com/alilog/mlog/aplus.js?id=202951085';
-				f.parentNode.insertBefore(j, f);
-			})(window, document, 'script', 'aplus_queue');
-		// 添加埋点的js
+	<% if (process.env.VUE_APP_ENV === 'zlb' ) { %>
+		<script>
+				(function (w, d, s, q, i) {
+					w[q] = w[q] || [];
+					var f = d.getElementsByTagName(s)[0],
+						j = d.createElement(s);
+					j.async = true;
+					j.id = 'beacon-aplus';
+					j.src = 'https://d.alicdn.com/alilog/mlog/aplus.js?id=202951085';
+					f.parentNode.insertBefore(j, f);
+				})(window, document, 'script', 'aplus_queue');
+			// 添加埋点的js
 
-		aplus_queue.push({
-			action: 'aplus.setMetaInfo',
-			arguments: ['aplus-rhost-v', 'alog.zjzwfw.gov.cn']
-		});
-		aplus_queue.push({
-			action: 'aplus.setMetaInfo',
-			arguments: ['aplus-rhost-g', 'alog.zjzwfw.gov.cn']
-		});
+			aplus_queue.push({
+				action: 'aplus.setMetaInfo',
+				arguments: ['aplus-rhost-v', 'alog.zjzwfw.gov.cn']
+			});
+			aplus_queue.push({
+				action: 'aplus.setMetaInfo',
+				arguments: ['aplus-rhost-g', 'alog.zjzwfw.gov.cn']
+			});
 
-		aplus_queue.push({
-			action: 'aplus.setMetaInfo',
-			arguments: ['appId', '2002281722']  // 这里修改app id
-		});
-		const homeList = ['#/pages/index/index', '#/pages/index/planning', '#/pages/index/event', '#/pages/index/postStation', '#/pages/index/me']
-	</script> -->
+			aplus_queue.push({
+				action: 'aplus.setMetaInfo',
+				arguments: ['appId', '2002281722']  // 这里修改app id
+			});
+			const homeList = ['#/pages/index/index', '#/pages/index/planning', '#/pages/index/event', '#/pages/index/postStation', '#/pages/index/me']
+		</script>
+	<% } %>
 </body>
 
 </html>
