@@ -490,17 +490,26 @@ async function req(params = {}, loading = false, t = 9999) {
 				}
 
 			// #ifdef H5-ZLB
+
+			// console.log("请求的内容",)
+			// console.log("当前isDev------------", isDev)
+			let header = {
+				// isTestUrl: isDev + '',
+				authorization: token,
+				clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
+			}
+
+			if (isDev) {
+				header.isTestUrl = 1
+			}
+			// console.log('header================================', header);
 			mgop({
 				api: 'mgop.zz.zts.' + fn, // 必填
 				host: 'https://mapi.zjzwfw.gov.cn/',
 				dataType: 'JSON',
 				type: 'POST',
 				appKey,
-				header: {
-					isTestUrl: isDev + '',
-					authorization: token,
-					clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
-				},
+				header,
 				data: params,
 				onSuccess: success,
 				onFail: fail
@@ -583,7 +592,7 @@ function userEvent(t, tt, o, ref = '_id') {
 	}
 	let e = {
 		$url: 'user/ue/action',
-		$veri:1,
+		$veri: 1,
 		t,
 		tt,
 		tid: o[ref]
