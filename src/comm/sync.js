@@ -27,7 +27,7 @@ const sync = {
 			let tk = this.get(),
 				now = Date.now()
 				
-			console.log((now-tk.r),'task.start --->', tk);
+			// console.log((now-tk.r),'task.start --->', tk);
 			
 			if((now-tk.r)>=20000) {
 				tk.r = now
@@ -85,7 +85,7 @@ const sync = {
 				tk.r-=20000
 				this.set(tk)
 			}
-			console.log(Date.now() - now,'task.finish --->', tk);
+			// console.log(Date.now() - now,'task.finish --->', tk);
 		}
 	}
 }

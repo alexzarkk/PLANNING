@@ -21,7 +21,7 @@ export default {
 			let _this = this;
             console.log("ZWJSBridge------",ZWJSBridge)
 			ZWJSBridge.onReady(() => {
-				console.log('浙里办初始化完成，执行bridge方法')
+				console.info('浙里办初始化完成，执行bridge方法')
 				ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
 					console.log("获取到的当前的style======", uiStyle)
 					// uiStyle = 'elder'

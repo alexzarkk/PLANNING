@@ -484,7 +484,6 @@ export default {
             this.dict = dict
             if (init || this.deptId != deptId) {
                 this.deptId = deptId
-
                 let hots = [
                     { _id: '627911aac2b3040001747310', name: '环浙样板线' },
                     { _id: '609805434c73e7000189c405', name: '奉城屋基' },

@@ -816,7 +816,7 @@ const zz = {
 				animationType,
 				success: (res) => {
 					// #ifdef H5-ZLB
-					console.log("页面跳转完成---------------------------", res)
+					// console.log("页面跳转完成---------------------------", res)
 					// 添加pv埋点
 					zz.sendZlbPV()
 					// #endif
