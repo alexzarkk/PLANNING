@@ -1,12 +1,14 @@
 <template>
-    <view class="root" :style="{width,height}">
-        <image :style="{width,height}" class="posterImg" :src="posterUrl" mode="aspectFit"></image>
-        <view :style="{width,height}" @click="state=!state" class="box">
-            <image class="playIcon" src="@/static/play.png" mode="widthFix"></image>
-        </view>
-        <video :id="videoId" :style="{height,width:state?'740rpx':'0rpx'}" @pause="state=0" @timeupdate="timeupdate" @fullscreenchange="fullscreenchange" class="video" :src="url"></video>
-        <!-- <progress :style="{'top':height,width}" class="progress" :percent="currentTime?parseInt(currentTime/duration*100):0" show-info border-radius="5" active></progress> -->
-    </view>
+<view class="flex align-center flex-direction">
+	<view class="root" :style="{width,height}">
+	    <image :style="{width,height}" class="posterImg" :src="posterUrl" mode="aspectFit"></image>
+	    <view :style="{width,height}" @click="state=!state" class="box">
+	        <image class="playIcon" src="@/static/play.png" mode="widthFix"></image>
+	    </view>
+	    <video :id="videoId" :style="{height,width:state?'740rpx':'0rpx'}" @pause="state=0" @timeupdate="timeupdate" @fullscreenchange="fullscreenchange" class="video" :src="url"></video>
+	    <!-- <progress :style="{'top':height,width}" class="progress" :percent="currentTime?parseInt(currentTime/duration*100):0" show-info border-radius="5" active></progress> -->
+	</view>
+</view>
 </template>
 
 <script>
@@ -60,17 +62,23 @@ export default {
                     this.VideoContext.requestFullScreen({ direction: this.direction })
                 })
             }
-        }
+        },
+		video(state, oldValue) {
+		    this.init()
+		}
     },
     created() {
         this.videoId = Date.now() + Math.ceil(Math.random() * 10000000) + "";
     },
     mounted() {
-        Object.assign(this, this.video)
-        if (this.video.tempFilePath) this.url = this.video.tempFilePath
-        this.VideoContext = uni.createVideoContext(this.videoId)
+       this.init()
     },
     methods: {
+		init(){
+			Object.assign(this, this.video)
+			if (this.video.tempFilePath) this.url = this.video.tempFilePath
+			this.VideoContext = uni.createVideoContext(this.videoId)
+		},
         fullscreenchange(e) {
             // console.log(e.detail.fullScreen);
             this.state = e.detail.fullScreen
@@ -87,7 +95,7 @@ export default {
 <style lang="scss" scoped>
 .root {
     position: relative;
-    width: 700rpx;
+    width: 750rpx;
     height: 300px;
     overflow: hidden;
 }

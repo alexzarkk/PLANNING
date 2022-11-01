@@ -25,9 +25,11 @@
 		//	https://zts.5618.co/h5/#/pages/share?deptId=330212&path=/pages/planning/article&id=5eb7b88343f165004c6d2d52
 		//	https://zts.5618.co/h5/#/pages/share?deptId=330212&path=/pages/comm/kml&_id=62b9409268cebc00011fdb23
 		//	https://zts.5618.co/h5/#/pages/share?path=/pages/comm/kml&_id=63579d52fcf4a30001e8d369
-		//	http://localhost:8080/h5/#/pages/share?path=/pages/comm/kml&_id=63579d52fcf4a30001e8d369
-		
+		//	http://localhost:8080/h5/#/pages/share?path=/pages/comm/kml&_id=635fae307d78ff00012edf57 //庙后-~~
 		//  https://zts.5618.co/h5/#/pages/share?deptId=330212
+		//	http://localhost:8080/h5/#/pages/share?path=/pages/comm/kml&_id=63579d52fcf4a30001e8d369 //第一件完工巡查
+		
+		
 		 
 		//  http://localhost:8080/h5/#/pages/share?deptId=330212
 		//	http://localhost:8080/h5/#/pages/share?deptId=330212&path=/pages/planning/poi&id=629497c49b54e30001d3e4eb

@@ -58,7 +58,7 @@
             <!-- <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/comm/nodata',null,1)"> -->
             <view class="text-orange flex flex-sub flex-direction solid-right">
                 <view class="flex align-end justify-center">
-                    <view class="text-xxl">{{num.poi}}</view>
+                    <view class="text-xxl">{{num.scan}}</view>
                     <view class="text-df text-gray">/</view>
                     <view class="text-sm">{{num.tCount}}</view>
                 </view>
@@ -112,6 +112,7 @@ export default {
         return {
             tNum: 99999,
             num: {
+				scan: 0, //扫码
                 event: 0, //  赛事
                 top: 0, //  登顶
                 rec: 0,  // 轨迹

@@ -363,7 +363,7 @@ export default {
 			<!-- #ifndef H5-ZLB -->
 			<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
 			<!-- #endif -->
-			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" />
+			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" @changeMap="changeMap" @share="share" />
 		</block>
 		
 	</view>
@@ -371,7 +371,7 @@ export default {
 
 <script>
 const tts = {speak(){}}
-import { uniqId, bearing, getDist, getLocation, calData, fixNum } from '@/comm/geotools'
+import { uniqId, bearing, getDist, trans, getLocation, calData, fixNum } from '@/comm/geotools'
 import { toDist, scan } from '@/comm/nav'
 
 import icon from '@/comm/libs/icon'
@@ -399,6 +399,7 @@ export default {
 			scale: 15,
 			point: [],
 			line: [],
+			onRun: false,
 			onRec: false,
 			puase: false,
 			tim: {H:0, M:0, S:0, MS:0},
@@ -422,7 +423,7 @@ export default {
 		uni.removeStorageSync('cur_loc_wgs84')
 		
 		if(v) {
-			let { kml, tmt = 0 } = this.zz.getParam(v)
+			let { kml, onRun=0, tmt=0 } = this.zz.getParam(v)
 			
 			this.kml = kml
 			this.tmt = tmt
@@ -440,7 +441,8 @@ export default {
 			//设定地图center
 			// let p = this.point[0]
 			// if(!p) p = this.way.coord[0]
-			this.center = this.way.coord[0]
+			if(this.way.coord) this.center = this.way.coord[0]
+			this.onRun = onRun
 		} else {
 			await this.getLoc(true)
 		}
@@ -457,6 +459,7 @@ export default {
 				}
 			})
 		}
+		
 		await this.around(this.center)
 		console.log(this.cps.length)
 	},
@@ -504,6 +507,7 @@ export default {
 		mapDone(e) {
 			this.mdone = e
 			this.setProp()
+			if(this.onRun) this.start(1)
 		},
 		mapDo(e) {
 			// console.log('mapDo ------ >', e)
@@ -582,7 +586,7 @@ export default {
 			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
 			}, 1000)
 		},
-		async start(){
+		async start(onRun){
 			// #ifndef H5-ZLB
 				//提示下载app
 				// const [_, ask] = await uni.showModal({
@@ -613,33 +617,50 @@ export default {
 					line: []
 				}
 				
-			// 安卓设备需要主动开启后台定位
+			
+			// #ifndef APP-PLUS
+			// H5提示
 			const [_, ask] = await uni.showModal({
 				title: '提示',
 				content: '为确保轨迹正常记录，请勿退出页面或关闭屏幕！',
 				// cancelText: '知道了',
 				confirmText: '知道了'
 			})
+			// #endif
 			
 			// 查询本地是否有未完成的轨迹记录
 			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
 			if (nav_rec) {
-				if(this.zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
-					init()
-				}else{
-					const [_, res] = await uni.showModal({
-						title: "是否继续上次轨迹记录?",
-						content: "取消后，上次记录将会被删除！"
-					})
-					if (res.confirm) {
-						rec = nav_rec
-						let T = uni.getStorageSync('nav_T_tim'+this.tmt)
-						tim.MS = T[0]
-						tim.S = T[1]
-						tim.M = T[2]
-						tim.H = T[3]
-					} else { //删除缓存和数据库
+				const keepGoing = (tran)=>{
+					Object.assign(rec, nav_rec)
+					if(tran) {
+						for (let s of rec.point) {
+							s.coord = trans(s.coord,'gcj02towgs84')
+						}
+						rec.coord = trans(rec.coord,'gcj02towgs84')
+					}
+					
+					let T = uni.getStorageSync('nav_T_tim'+this.tmt)
+					tim.MS = T[0]
+					tim.S = T[1]
+					tim.M = T[2]
+					tim.H = T[3]
+				}
+				if(onRun){
+					keepGoing(1)
+				} else {
+					if(this.zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
 						init()
+					}else{
+						const [_, res] = await uni.showModal({
+							title: "是否继续上次轨迹记录?",
+							content: "取消后，上次记录将会被删除！"
+						})
+						if (res.confirm) {
+							keepGoing()
+						} else { //删除缓存和数据库
+							init()
+						}
 					}
 				}
 			} else { //新建
@@ -657,7 +678,7 @@ export default {
 		},
 		onLocating(c1){
 			uni.setStorageSync('cur_loc_wgs84', c1)
-			// console.log('onLocating ---------->', c1)
+			console.log('onLocating ---------->', c1)
 			//保持地图中心
 			if (this.lock) this.fly(c1)
 			
@@ -835,20 +856,7 @@ export default {
 			}
 		},
 		
-		onPuase(e){
-			console.log('onPuase', e);
-			this.puase = e
-			let r = this.rec
-			if(e){
-				r.name = this.zz.time2Date()
-				r.endTime = this.zz.now()
-				clearInterval(this.timer)
-			} else {
-				r.stopTime += this.zz.now() - r.endTime
-				this.clock()
-			}
-			this.setRec()
-		},
+		
 		
 		async markertap(e) {
 			let rec = this.rec,
@@ -884,7 +892,27 @@ export default {
 				//非采集坐标
 			}
 		},
-		
+		onPuase(e){
+			console.log('onPuase', e);
+			this.puase = e
+			let r = this.rec
+			if(e){
+				r.name = this.zz.time2Date()
+				r.endTime = this.zz.now()
+				clearInterval(this.timer)
+			} else {
+				r.stopTime += this.zz.now() - r.endTime
+				this.clock()
+			}
+			this.setRec()
+		},
+		changeMap(e) {
+			this.setRec()
+			this.zz.href('/pages/nav/nav'+(this.amap?'H5':'App'), {onRun:1, kml:this.kml})
+		},
+		share(e) {
+			
+		},
 		info() {
 			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
 		}
