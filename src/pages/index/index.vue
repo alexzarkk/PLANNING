@@ -417,7 +417,7 @@ export default {
         console.info("登录获取到的信息----------", user)
         // 登录埋点
         try {
-            console.log(window.aplus_queue)
+            // console.log(window.aplus_queue)
             window.aplus_queue.push({
                 action: 'aplus.setMetaInfo',
                 arguments: ['_hold', 'BLOCK']
@@ -453,7 +453,7 @@ export default {
 
         // 刷新动态
         refreshNewsHome(){
-            console.log("刷新动态--------")
+            // console.log("刷新动态--------")
             this.$refs.newsHome.loadData('init')
         },
         // #ifdef H5-ZLB

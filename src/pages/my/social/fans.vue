@@ -27,7 +27,7 @@
                             <view v-if="item.desc" class="desc">{{ item.desc }}</view>
                         </view>
                     </view>
-                    <view class="right-box" @click.stop="followUser">
+                    <view class="right-box" @click.stop="followUser(item,index)">
                         <view v-if="!item.isLink" class="foolow-btn">关注</view>
                         <view v-else class="foolow-btn">互相关注</view>
                     </view>
@@ -95,13 +95,17 @@ export default {
             // console.log("处理搜索", event)
         },
         async followUser(item, index) {  // 关注或者取消关注
+            console.log('item,,,,,,,,,index,,,,,,,,,', item, index);
+            console.log('this.userList-----------', this.userList);
             // this.userList[index].isLink = !this.userList[index].isLink
-            await this.zz.userEvent(60, 60, this.userList[index]).then(res => {
+
+            console.log("this.userList[index]---------------", this.userList[index])
+            await this.zz.userEvent(60, 60, this.userList[index], 'uid').then(res => {
                 console.log("关注或取消关注用户===", res)
-                //  原始值 isLink的话,取消关注则取消isLink
-                // 恢复关注则恢复isLink
-                // 如果isLink 是false 的话,则不需要改变
             })
+            //  原始值 isLink的话,取消关注则取消isLink
+            // 恢复关注则恢复isLink
+            // 如果isLink 是false 的话,则不需要改变
         }
         // async followUser() {
         // const ueRes = await this.zz.userEvent(60, 60, this.details, 'userId');  // 这里修改isFollow
