@@ -3,7 +3,11 @@
 		<!-- { paddingTop: sysInfo.statusBarHeight + 'px'} -->
 		<view class="record" :style="recordStyle">
 			<view class="record-title" style="height:44px;">
-				<!-- <button class="cu-btn bg-gray" type="default" @click="tools"><text>工具</text></button> -->
+				
+				<!-- #ifdef APP-PLUS -->
+				<button class="cu-btn bg-gray" type="default" @click="tools"><text>工具</text></button>
+				<!-- #endif -->
+				
 				<view style="display: flex;flex-direction: row; justify-content: center; ">
 					<text style="width: 250rpx; text-align: center; color: #55ff00; font-weight: bold;">{{ (tim.H > 9 ? tim.H : '0' + tim.H) + ':' + (tim.M > 9 ? tim.M : '0' + tim.M) + ':' + (tim.S > 9 ? tim.S : '0' + tim.S) }}</text>
 					<text v-if="isShow" style="text-align: center; color: #ff0000; font-weight: bold;">已暂停</text>
@@ -32,17 +36,28 @@
 				<!-- #endif -->
 			</view>
 		</view>
+		
+		<uni-drawer ref="showRight" mode="right">
+			<view :style="recordStyle">
+				<view class="padding">
+					<button type="default" plain="true" @click="changeMap">切换地图</button>
+				</view>
+				<view class="padding">
+					<button type="default" plain="true" @click="share">共享实时位置</button>
+				</view>
+				<view class="padding">
+					<button :type="tbl?'primary':''" :plain="tbl" @click="_2bl">{{tbl?'关闭':'开启'}}路网</button>
+				</view>
+			</view>
+		</uni-drawer>
+		
 	</view>
 </template>
 
 <script>
 const d = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAA',
-	play =
-		d +
-		'BERJREFUWEe9V12IG1UU/s5kU+pP9UVZ9Elt6YLUTGhXWJNJ60Lpg7qCaAXBHxC0D+pu7q4/WJDNoigKu7O7VbT6ZoVCrSj+QdeHVmeSim41E6vYVWsfpFWqD/5uNMkcuZOZOJmdJJNs8cI8zLnn57vnnnvPdwldDN1IXs/gW4hwHYBL3U96OCs/Zhwl0JsiUzwS1S11UtQXt1xmL1d2KUR3ANjYSd+dX7KZ9yvnxfeKwWNn2tm0BaDnE5PEdD8Dl0cM3KRGwGkmflmkS1Ot7FsC0E31IwCZZkNeJCgLzPjABp+uUvnMciXG569R+mPU16/Y9jYAIwDJLfIPQ2jW1jAQoQB0Qz0LwiU+A4OI57Lp0htRMjGbT9zKTGNNC2D8LDKWrJtglpoFuql+D+AKT2ozT01kSrkogYM600YipxBN+uSnhGZd6ddryoCeVw+AsfNcBPd86Hn1ITDmG0EJr4u0dbv33wAQRLualQczMWdcs8UmZTFsYQ4AedSoXF30qv1cBveCzhbUm9jGO/LfOR1r+wblEa0DyCcmweTtc8uKlbozpnpIKdfuzm4//lO3daHn1VfBuMuxI87J41kHYKrfAbjKkRPf1q7adVNlqceEp8bT1hPdgJj5UN1BMRxybU4KzVpP02byBgX8Xl1IJaEV1XZOPQCuzl8g5R6R/vxgVCC6mbQATkh9G3Qj6ab6EoBdroMXhGY92AUAT/WI0mc/PDb0xbFOQHRTfR7AA67eXgngEwDXOgKm4U6NJJCBYLw9y+W/p3Zv//qXVkBkQwPxYXf+UwmgcfHYjIGJjLXUQwb+M2HUmPDIuGbpYX6mDXWjQjjhzp2SAP4AcIEU/IPyRY9pJ35fFQDXmAGLFMqJVPEtv79nzYF1a7D2N1f2ZxOAXyuVdbnhrySglqPDFvjtvgQpuWCB5g5ffeHF8bi3SAdAYwsqVNvwaPq4PJI9AyBQjcFTQrOeDHPyXH7T+jjHvvVvQaMIbYXSE6lioWcATPspXhXZodaX1HQhmVJszjeKcMZQ54gwWhfwbqGVnukBQBFMotMJkn51M/E4QE870Rjz1Hws+KjQSqmoAAgos83jYmvpxXY2/jndTBQahIVp2LuK5bFw+F7Uq5gI89m0JUlH5BG4ipeEZg04AAKtuG0z0k11IdbH944OlX6IHNlV9Dcjr+P+f+3YSO5k4gNOloPtOCQLUmtUpK093a4yTH+msHkD2bVvvDk/32imZAEmrLA9OJbp3GDagZz9eFM/V2M/+nSatngFKw4yYlIwkk1Z7/aSiUDRASHMOJyWB5gxCPu4itfGt1kLUYA4gftwZ4P91I1WMGK3HsJdBhlyXYtKABtgOhj2MInZPMKEHWBsbvIaYML+ubZPM3k8Y0T3reZpVmN+pd27opvHqSSTDm+MME7azPtW/TgNBnL5482Ak+IVz3MAn9mgtye04vsRQDoq/wKJWwo9X2L8owAAAABJRU5ErkJggg==',
-	stop =
-		d +
-		'AndJREFUWEfNlz9oU1EUxr9z09wUBNd2qC8GlPdiRQQHR3VQ8Q84KK4ddHDRwcGCDraDRR3TxaEOXcWpVAUnwUVBQdD0JbQQ89qhXQtCc5O8I/clLzSveU1qam7feu873++cc8+55xIMf7RXfXds6LxIiIvwacQnHtX/C6Z1CN6o1XlhfK36dS82ewIopIczzP6EAG4xMN5F4DsDi0Ri3ilvlbrB7AqwbMkTPvgegyYAHI4YUwQsM+ADsAHIyPomgecF6NVxTy3FgcQCNMTxJvSYgRUG5oiwMsRwo0YLmZSNGmwQOwx+SKARLUpAXgC34yA6AuwU59lhIWcyv/+sdwupXg9g6pwDcKkbxA6AqDgRXbXLlQ+9CEf3FCz5CMCL3SDaAKLijqfT3P9XsCTHQbQJFK1kjkH3m5KTjqde9i8PFNOpK8z8vgHBs7ZXfRDabQHoUgP7P5qn/aPjqcv7IR7acK1kjhrObYLE6bBEWwCuJacIeMrgDUqIc06pUtxPgNLRQ6NbfvUzAccImLI9Nd1MS0OmYMlvAM4AiA29huwFKuupjvuWLDkpgOe6NG1PnWwB5MeSZxOCvgTGmW44q5WFTkJhlHaDYGA6DsBNy5vEeBvI+P6F7FrtU5CCYlo+Y8bjwHCCnLjw9wugq6wO5APPCTN2WT1pABxJzTHxHQDK8VQqzsN+AZqprui2TUyv7dXK3QDAteQiAdcA/HQ8dep/AhQt+Uu3dwbeZT11/WAAGE+B8UNovAyNN6JmJQysFW9vVgfnMgoaksnrWAMYH0g6QQx0JAtbsNGhNB5igGN5O4Shh8n2G9HY06zjVGTicdrLHPive/4CfIfnMFwwuEwAAAAASUVORK5CYII=';
+	play = d + 'BERJREFUWEe9V12IG1UU/s5kU+pP9UVZ9Elt6YLUTGhXWJNJ60Lpg7qCaAXBHxC0D+pu7q4/WJDNoigKu7O7VbT6ZoVCrSj+QdeHVmeSim41E6vYVWsfpFWqD/5uNMkcuZOZOJmdJJNs8cI8zLnn57vnnnvPdwldDN1IXs/gW4hwHYBL3U96OCs/Zhwl0JsiUzwS1S11UtQXt1xmL1d2KUR3ANjYSd+dX7KZ9yvnxfeKwWNn2tm0BaDnE5PEdD8Dl0cM3KRGwGkmflmkS1Ot7FsC0E31IwCZZkNeJCgLzPjABp+uUvnMciXG569R+mPU16/Y9jYAIwDJLfIPQ2jW1jAQoQB0Qz0LwiU+A4OI57Lp0htRMjGbT9zKTGNNC2D8LDKWrJtglpoFuql+D+AKT2ozT01kSrkogYM600YipxBN+uSnhGZd6ddryoCeVw+AsfNcBPd86Hn1ITDmG0EJr4u0dbv33wAQRLualQczMWdcs8UmZTFsYQ4AedSoXF30qv1cBveCzhbUm9jGO/LfOR1r+wblEa0DyCcmweTtc8uKlbozpnpIKdfuzm4//lO3daHn1VfBuMuxI87J41kHYKrfAbjKkRPf1q7adVNlqceEp8bT1hPdgJj5UN1BMRxybU4KzVpP02byBgX8Xl1IJaEV1XZOPQCuzl8g5R6R/vxgVCC6mbQATkh9G3Qj6ab6EoBdroMXhGY92AUAT/WI0mc/PDb0xbFOQHRTfR7AA67eXgngEwDXOgKm4U6NJJCBYLw9y+W/p3Zv//qXVkBkQwPxYXf+UwmgcfHYjIGJjLXUQwb+M2HUmPDIuGbpYX6mDXWjQjjhzp2SAP4AcIEU/IPyRY9pJ35fFQDXmAGLFMqJVPEtv79nzYF1a7D2N1f2ZxOAXyuVdbnhrySglqPDFvjtvgQpuWCB5g5ffeHF8bi3SAdAYwsqVNvwaPq4PJI9AyBQjcFTQrOeDHPyXH7T+jjHvvVvQaMIbYXSE6lioWcATPspXhXZodaX1HQhmVJszjeKcMZQ54gwWhfwbqGVnukBQBFMotMJkn51M/E4QE870Rjz1Hws+KjQSqmoAAgos83jYmvpxXY2/jndTBQahIVp2LuK5bFw+F7Uq5gI89m0JUlH5BG4ipeEZg04AAKtuG0z0k11IdbH944OlX6IHNlV9Dcjr+P+f+3YSO5k4gNOloPtOCQLUmtUpK093a4yTH+msHkD2bVvvDk/32imZAEmrLA9OJbp3GDagZz9eFM/V2M/+nSatngFKw4yYlIwkk1Z7/aSiUDRASHMOJyWB5gxCPu4itfGt1kLUYA4gftwZ4P91I1WMGK3HsJdBhlyXYtKABtgOhj2MInZPMKEHWBsbvIaYML+ubZPM3k8Y0T3reZpVmN+pd27opvHqSSTDm+MME7azPtW/TgNBnL5482Ak+IVz3MAn9mgtye04vsRQDoq/wKJWwo9X2L8owAAAABJRU5ErkJggg==',
+	stop = d + 'AndJREFUWEfNlz9oU1EUxr9z09wUBNd2qC8GlPdiRQQHR3VQ8Q84KK4ddHDRwcGCDraDRR3TxaEOXcWpVAUnwUVBQdD0JbQQ89qhXQtCc5O8I/clLzSveU1qam7feu873++cc8+55xIMf7RXfXds6LxIiIvwacQnHtX/C6Z1CN6o1XlhfK36dS82ewIopIczzP6EAG4xMN5F4DsDi0Ri3ilvlbrB7AqwbMkTPvgegyYAHI4YUwQsM+ADsAHIyPomgecF6NVxTy3FgcQCNMTxJvSYgRUG5oiwMsRwo0YLmZSNGmwQOwx+SKARLUpAXgC34yA6AuwU59lhIWcyv/+sdwupXg9g6pwDcKkbxA6AqDgRXbXLlQ+9CEf3FCz5CMCL3SDaAKLijqfT3P9XsCTHQbQJFK1kjkH3m5KTjqde9i8PFNOpK8z8vgHBs7ZXfRDabQHoUgP7P5qn/aPjqcv7IR7acK1kjhrObYLE6bBEWwCuJacIeMrgDUqIc06pUtxPgNLRQ6NbfvUzAccImLI9Nd1MS0OmYMlvAM4AiA29huwFKuupjvuWLDkpgOe6NG1PnWwB5MeSZxOCvgTGmW44q5WFTkJhlHaDYGA6DsBNy5vEeBvI+P6F7FrtU5CCYlo+Y8bjwHCCnLjw9wugq6wO5APPCTN2WT1pABxJzTHxHQDK8VQqzsN+AZqprui2TUyv7dXK3QDAteQiAdcA/HQ8dep/AhQt+Uu3dwbeZT11/WAAGE+B8UNovAyNN6JmJQysFW9vVgfnMgoaksnrWAMYH0g6QQx0JAtbsNGhNB5igGN5O4Shh8n2G9HY06zjVGTicdrLHPive/4CfIfnMFwwuEwAAAAASUVORK5CYII=';
 
 export default {
 	name: 'UniFab',
@@ -59,10 +74,11 @@ export default {
 		return {
 			puase: false,
 			process: 0,
+			rightDrawer: false,
 
+			tbl: false,
 			isShow: false,
 			sysInfo: uni.getStorageSync('sysInfo'),
-			CustomBar: this.CustomBar,
 
 			content: [
 				{
@@ -87,15 +103,15 @@ export default {
 	computed: {
 		recordStyle() {
 			if (this.isShow && this.process) {
-				this.CustomBar = this.sysInfo.statusBarHeight + 50;
+				this.CustomBar = this.sysInfo.statusBarHeight + 50
 			} else {
-				this.CustomBar = this.sysInfo.statusBarHeight + 44;
+				this.CustomBar = this.sysInfo.statusBarHeight + 44
 			}
 			let style = {
 				paddingTop: this.sysInfo.statusBarHeight + 'px',
 				height: this.CustomBar + 'px'
 			};
-			return style;
+			return style
 		}
 	},
 	mounted() {},
@@ -134,12 +150,15 @@ export default {
 			this.process = 0;
 			clearInterval(this.touch);
 		},
-		tools() {
-			console.log('tools');
+		tools() { 
+			this.$refs.showRight.open()
 		},
-		info() {
-			this.$emit('info');
-		}
+		closeDrawer(){ this.$refs.showRight.close() },
+		changeMap(){ this.$emit('changeMap') },
+		share(){ this.$emit('share') },
+		_2bl(){ this.tbl=!this.tbl; this.$emit('tbl', this.tbl) },
+		
+		info() { this.$emit('info') }
 	}
 };
 </script>
@@ -286,4 +305,8 @@ $uni-shadow-base: 0 1px 5px 2px
 	justify-content: space-between;
 	align-items: center;
 }
+
+.padding{
+	padding: 10px 20px;
+} 
 </style>

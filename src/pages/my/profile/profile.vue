@@ -264,7 +264,7 @@ export default {
             console.log("我的主页============================", this.profileId)
             //  我自己的主页
         }
-        this.loadData();
+        // this.loadData();
         console.log('主页id===========', this.profileId);
 
         uni.$on("pushChange", () => {

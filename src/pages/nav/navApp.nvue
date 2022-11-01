@@ -38,7 +38,7 @@
 				<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
 				<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
 			<!-- </block> -->
-			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" />
+			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" @changeMap="changeMap" @share="share" @tbl="_2bl"/>
 		</block>
 		
 	</view>
@@ -66,6 +66,7 @@ export default {
 			stH: 0,
 			kml: {children:[]},
 			tmt: 0,
+			tbl: false,
 			cps: [],
 			way: {},
 			minDist: 60,
@@ -103,7 +104,7 @@ export default {
 		this.mapHeight = this.winH
 		
 		if(v) {
-			let { kml, tmt = 0 } = zz.getParam(v)
+			let { kml, onRun=0, tmt=0 } = zz.getParam(v)
 			
 			this.kml = kml
 			this.tmt = tmt
@@ -123,10 +124,12 @@ export default {
 			if(!p) p = this.line[0].points[0]
 			this.center = [p.longitude, p.latitude]
 			
+			if(onRun) {
+				this.start(1)
+			}
 		} else {
 			await this.onLoc(true)
 		}
-		
 		//是否赛事
 		if(this.tmt) {
 			// this.start()
@@ -222,7 +225,7 @@ export default {
 			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
 			}, 1000)
 		},
-		async start(){
+		async start(onRun=0){
 			// plus.geolocation.clearWatch(plus.wid)
 			
 			let pt = (e) => { return {longitude: e[0], latitude: e[1]} },
@@ -260,7 +263,7 @@ export default {
 				}
 			
 			// 安卓设备需要主动开启后台定位
-			if (this.sysInfo.platform == 'android' && uni.getStorageSync('dontAskAndroid')=='') {
+			if (!onRun&&this.sysInfo.platform=='android' && uni.getStorageSync('dontAskAndroid')=='') {
 				const [_, ask] = await uni.showModal({
 					title: '提示',
 					content: '为确保轨迹在熄屏后的持续记录，请授权手机的电池和后台运行权限！',
@@ -277,31 +280,38 @@ export default {
 			// 查询本地是否有未完成的轨迹记录
 			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
 			if (nav_rec) {
-				if(zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
-					init()
-				}else{
-					const [_, res] = await uni.showModal({
-						title: "是否继续上次轨迹记录?",
-						content: "取消后，上次记录将会被删除！"
-					})
-					if (res.confirm) {
-						rec = nav_rec
-						for (let s of rec.point) {
-							this.point.push(createEle(s))
-						}
-						
-						for (let s of rec.coord) {
-							this.rLine[0].points.push(pt(s))
-						}
-						
-						let T = uni.getStorageSync('nav_T_tim'+this.tmt)
-						tim.MS = T[0]
-						tim.S = T[1]
-						tim.M = T[2]
-						tim.H = T[3]
-						
-					} else { //删除缓存和数据库
+				const keepGoing = (tran)=>{
+					Object.assign(rec, nav_rec)
+					if(tran) { rec.coord = trans(rec.coord) }
+					for (let s of rec.point) {
+						if(tran) { s.coord = trans(s.coord) }
+						this.point.push(createEle(s))
+					}
+					for (let s of rec.coord) {
+						this.rLine[0].points.push(pt(s))
+					}
+					
+					let T = uni.getStorageSync('nav_T_tim'+this.tmt)
+					tim.MS = T[0]
+					tim.S = T[1]
+					tim.M = T[2]
+					tim.H = T[3]
+				}
+				if(onRun){
+					keepGoing(1)
+				} else {
+					if(zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
 						init()
+					}else{
+						const [_, res] = await uni.showModal({
+							title: "是否继续上次轨迹记录?",
+							content: "取消后，上次记录将会被删除！"
+						})
+						if (res.confirm) {
+							keepGoing(0)
+						} else { //删除缓存和数据库
+							init()
+						}
 					}
 				}
 			} else { //新建
@@ -326,7 +336,10 @@ export default {
 			this.onRec = true
 			if(this.sysInfo.platform == 'ios') this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
 			
-			tts.speak('轨迹记录已开始，请保持手机后台定位权限已开启')
+			if(!rec.t['0']) {
+				rec.t['0'] = 1
+				tts.speak('轨迹记录已开始，请保持手机后台定位权限已开启')
+			}
 			
 			locationModule.startLocation({
 					intervalTime: 5000,
@@ -500,23 +513,6 @@ export default {
 				}
 			}
 		},
-		onPuase(e){
-			console.log('onPuase', e);
-			this.puase = e
-			let r = this.rec
-			if(e){
-				r.name = zz.time2Date()
-				r.endTime = zz.now()
-				clearInterval(this.timer)
-				tts.speak('记录已暂停')
-			} else {
-				r.stopTime += zz.now() - r.endTime
-				this.clock()
-				tts.speak('记录已恢复')
-			}
-			this.setRec()
-		},
-		
 		async markertap(e) {
 			let rec = this.rec,
 				point = this.point,
@@ -556,6 +552,34 @@ export default {
 			}
 		},
 		mapTap(e) {
+			
+		},
+		onPuase(e){
+			this.puase = e
+			let r = this.rec
+			if(e){
+				r.name = zz.time2Date()
+				r.endTime = zz.now()
+				clearInterval(this.timer)
+				tts.speak('记录已暂停')
+			} else {
+				r.stopTime += zz.now() - r.endTime
+				this.clock()
+				tts.speak('记录已恢复')
+			}
+			this.setRec()
+		},
+		changeMap(e) {
+			// #ifdef APP-PLUS
+			locationModule.stopLocation()
+			// #endif
+			this.setRec()
+			zz.href('/pages/nav/nav'+(this.amap?'H5':'APP'), {onRun:1, kml:this.kml})
+		},
+		_2bl(e){
+			this.tbl = e
+		},
+		share(e) {
 			
 		},
 		info() {

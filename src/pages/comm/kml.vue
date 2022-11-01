@@ -412,11 +412,11 @@ export default {
         },
 		useLine() {
 		    // #ifdef H5
-		    this.zz.href('/pages/nav/navH5', {kml:{...this.kml, children:[...this.kml.t1, ...this.kml.t2]}}, 1)
+		    this.zz.href('/pages/nav/navH5', {kml:{...this.kml, children:[...this.kml.t1]}}, 1)
 		    // #endif
 		
 		    // #ifdef APP-PLUS
-			this.zz.href('/pages/nav/navApp',{kml:{...this.kml, children:[...this.kml.t1, ...this.kml.t2]}}, 1)
+			this.zz.href('/pages/nav/navApp',{kml:{...this.kml, children:[...this.kml.t1]}}, 1)
 		    // #endif
 		}
     },

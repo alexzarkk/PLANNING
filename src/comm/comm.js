@@ -116,12 +116,14 @@ const comm = {
 	
 	//路网 {time,line,point}
 	async gridNet(k,xy,zoom){
-		let nav = comm.getGrid()
-		if (!nav[k][xy+zoom] || !nav[k][xy+zoom].time || (Date.now() - nav[k][xy+zoom].time) > (1000*60*60*24 * 5)) {
-			nav[k][xy+zoom] = await comm.req({$url: 'on', $fn:'zz', center: k, zoom, xy }) || {line:[],point:[]}
+		let nav = comm.getGrid(),
+			p = xy+zoom
+		
+		if (!nav[k][p] || !nav[k][p].time || (Date.now() - nav[k][p].time) > (1000*60*60*24 * 7)) {
+			nav[k][p] = await comm.req({$url: 'on', $fn:'zz', center: k, zoom, xy }) || {line:[],point:[]}
 			comm.setStorage('sys_nav', nav)
 		}
-		return nav[k][xy+zoom]
+		return nav[k][p]
 	},
 	
 	

@@ -370,11 +370,11 @@ export default {
 		
         useLine() {
             // #ifdef H5
-            this.zz.href('/pages/nav/navH5', {kml:{...this.rec, children:[...this.line, ...this.point]}}, true)
+            this.zz.href('/pages/nav/navH5', {kml:{...this.rec, children:[...this.line]}}, true)
             // #endif
 
             // #ifdef APP-PLUS
-			this.zz.href('/pages/nav/navApp',{kml:{...this.rec, children:[...this.line, ...this.point]}}, 1)
+			this.zz.href('/pages/nav/navApp',{kml:{...this.rec, children:[...this.line]}}, 1)
             // #endif
         },
         

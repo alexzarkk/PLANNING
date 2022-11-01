@@ -592,7 +592,6 @@ function userEvent(t, tt, o, ref = '_id') {
 	}
 	let e = {
 		$url: 'user/ue/action',
-		$veri: 1,
 		t,
 		tt,
 		tid: o[ref]
@@ -603,7 +602,10 @@ function userEvent(t, tt, o, ref = '_id') {
 		} else {
 			o.view++
 		}
+	} else {
+		e.$veri = 1
 	}
+	
 	if (t == 30) {  // 点赞
 		if (!o.like) o.like = 0
 		if (!o.isLike) {
@@ -796,6 +798,9 @@ const zz = {
 	 * @returns 
 	 */
 	href(url, v, veri, animationType, t = 'navigateTo') {
+		
+		console.log('href',url);
+		
 		if (url.startsWith('/pages/index')) return uni.switchTab({ url })
 
 		if (v) {
