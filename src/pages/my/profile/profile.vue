@@ -298,20 +298,20 @@ export default {
             });
         },
         // 关注当前的用户
-        followUser() {
+        async followUser() {
             if (this.followObj.loading) {
                 return;
             }
             this.followObj.loading = true
-            this.zz.userEvent(60, 60, this.followObj).then(res => {
+            await this.zz.userEvent(60, 60, this.followObj).then(res => {
                 // console.log("关注或者取消关注")
                 if (this.followObj.isFollow) {
                     this.zz.toast("关注成功", 1000)
                 } else {
                     this.zz.toast("已取消关注", 1000)
                 }
-                this.followObj.loading = false
             })
+			this.followObj.loading = false
         },
         // 预览头像
         previewHeadImg() {

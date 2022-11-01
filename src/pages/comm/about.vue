@@ -8,6 +8,16 @@
 		<view class="padding flex flex-direction justify-center">
 			<view class="text-center"><image src="https://zts.5618.co/repo/logo-1024x1024.png"></image></view>
 			
+			<!-- #ifndef APP-PLUS -->
+			<!-- #ifndef H5-ZLB -->
+			<view class="padding flex flex-direction align-center">
+				<button class="cu-btn lg round lines bg-blue response" @tap="downloadApp">
+					<view class="text-ztsblue">【环浙步道】APP下载</view>
+				</button>
+			</view>
+			<!-- #endif -->
+			<!-- #endif -->
+			
 			<!-- #ifdef APP-PLUS -->
 			<text class="padding text-center text-gray">当前版本：{{sys.version +' '+ sys.versionCode}}</text>
 			<view class="margin-top-sm padding-left text-gray" v-if="bd.isDev">当前版本未内部开发测试版本，部分页面和功能尚未启用</view>
@@ -17,7 +27,8 @@
 				</button>
 			</view>
 			<!-- #endif -->
-			<view class="padding margin-top-sm">
+			
+			<view class="padding">
 				<text>【{{sys.name}}】</text>
 				是一款健身步道相关户外工具APP，提供浙江省范围的健身步道信息服务，及相关的自然人文、体育旅游等资源信息；提供户外轨迹导航和GPS记录轨迹记录功能。
 			</view>
@@ -46,6 +57,7 @@
 			联系人: 徐小辉
 		</view> -->
 		<!-- #endif -->
+		
 		
 		<view class="padding-lr text-grey">
 			<view class="padding flex flex-direction" @tap="zz.href('/pages/comm/feedback?path=about',true)">
@@ -81,6 +93,9 @@ export default {
 					this.zz.modal('已经是最新版本')
 				}
 			})
+		},
+		downloadApp(){
+			window.open('https://zts.5618.co/repo/zts_run.html',"_blank")
 		},
 		call(){
 			uni.makePhoneCall({

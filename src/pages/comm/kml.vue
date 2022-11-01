@@ -42,10 +42,10 @@
                             <view class="flex align-center justify-between">
                                 <view @click="userInfo">
                                     <view>
-                                        <text class="text-xl text-bold">{{ kml.userInfo.name }}</text>
+                                        <text class="text-xl text-bold">{{ kml.userInfo.name||kml.userInfo.nickName }}</text>
                                     </view>
                                     <view class="padding-top-xs">
-                                        <text class="text-sm text-gray">{{ kml.userInfo.desc||kml.userInfo.nickName }}</text>
+                                        <text class="text-sm text-gray">{{ kml.userInfo.desc||bd.sys.desc }}</text>
                                     </view>
                                 </view>
                                 <view class="padding-right">
@@ -353,7 +353,7 @@ export default {
                 this.refKml = await this.zz.req({ $url: 'public/layout/around', _id: this.kml.t1[0]._id })
             }, 3500)
         }
-        // console.log(this.kml);
+        console.log(this.kml);
     },
     mounted() { },
     onShow() { this.ver = uni.getStorageSync('VER') || 0 },
@@ -411,13 +411,17 @@ export default {
 			}
         },
 		useLine() {
+			let url = '/pages/nav/nav'
+			
 		    // #ifdef H5
-		    this.zz.href('/pages/nav/navH5', {kml:{...this.kml, children:[...this.kml.t1]}}, 1)
+			url+='H5'
 		    // #endif
 		
 		    // #ifdef APP-PLUS
-			this.zz.href('/pages/nav/navApp',{kml:{...this.kml, children:[...this.kml.t1]}}, 1)
+			url+='App'
 		    // #endif
+			let t200 = this.kml.t2.filter(e=>e.t2==200)
+			this.zz.href(url, {kml:{...this.kml, children:[...this.kml.t1, ...t200]}}, 1)
 		}
     },
     onPageScroll(e) {
