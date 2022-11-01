@@ -568,24 +568,22 @@ async function req(params = {}, loading = false, t = 9999) {
 
 // 未登录提示去登录
 
-function showLoginModal() {
-	const toLogin = () => {
-		zz.href('/pages/comm/account/login', 0, { back: 1 })
-	}
-	zz.modal('您尚未登录，请登录后操作', (flag) => {
-		if (flag) {
-			return toLogin()
-		} else {
-			return;
-		}
-	}, true)
-}
+
 
 function userEvent(t, tt, o, ref = '_id') {
 	let user = zz.getAcc()
 
 	if (!user && t !== 20) {  // 未登录
-		showLoginModal() // 展示未登录弹窗
+		const toLogin = () => {
+			zz.href('/pages/comm/account/login', 0, { back: 1 })
+		}
+		zz.modal('您尚未登录，请登录后操作', (flag) => {
+			if (flag) {
+				return toLogin()
+			} else {
+				return;
+			}
+		}, true)
 		return new Promise((resolve, reject) => {
 			reject('未登录')
 		});
@@ -605,7 +603,7 @@ function userEvent(t, tt, o, ref = '_id') {
 	} else {
 		e.$veri = 1
 	}
-	
+
 	if (t == 30) {  // 点赞
 		if (!o.like) o.like = 0
 		if (!o.isLike) {
@@ -681,7 +679,6 @@ const zz = {
 
 
 	req,
-	showLoginModal,
 	userEvent,
 	reGeo,
 	weatherInfo,
@@ -798,9 +795,9 @@ const zz = {
 	 * @returns 
 	 */
 	href(url, v, veri, animationType, t = 'navigateTo') {
-		
-		console.log('href',url);
-		
+
+		console.log('href', url);
+
 		if (url.startsWith('/pages/index')) return uni.switchTab({ url })
 
 		if (v) {
