@@ -230,58 +230,12 @@ async function on(){
 }
 async function _2bl(){
 	// #ifdef APP-PLUS
-	
-	const getZoom = async()=>{
-		return new Promise((res) => {
-			this.amap.getScale({
-				success(x){ res(~~x.scale) }
-			})
-		})
-	},
-	center = async()=>{
-		return new Promise((res) => {
-			this.amap.getCenterLocation({
-				success(x){ res(x) }
-			})
-		})
-	},
-	getXY = async()=>{
-		return new Promise((res) => {
-			this.amap.getRegion({
-				success(x){ res(x) }
-			})
-		})
-	}
-	
 	let nav = this.nav,
-		ct = await center(),
-		k = comm.nearst(trans([ct.longitude, ct.latitude], 'gcj02towgs84')),
-		zoom = await getZoom(),
-		x = await getXY(),
-		sw = x.southwest,
-		ne = x.northeast,
-		xy = ~~(math(~~(getDist(ne.longitude, ne.latitude, sw.longitude, sw.latitude)+(zoom>=15?8000:0))/10000,0) * 10000/0.5)||10000
-	if (!k||isSame(nav.k,[k,zoom,xy])||nav.busy) return
-	
-	nav.busy = true
-	nav.k = [k,zoom,xy]
-	if(zoom>19) zoom = 19
-	if(zoom<9) zoom = 9
-	
-	let kml = await comm.gridNet(k,xy,zoom),
-		line = [],
-		point = []
+		k = comm.nearst(trans([ct.longitude, ct.latitude], 'gcj02towgs84'))
 		
-	for (let s of kml.line) {
-		line.push(createEle(s,1))
-	}
-	for (let s of kml.point) {
-		point.push(createEle(s,1,icon[202]))
-	}
-	nav.line = line
-	nav.point = point
+	if (!k||isSame(nav.k,k)) return
 	
-	nav.busy = false
+	
 	
 	// #endif
 }

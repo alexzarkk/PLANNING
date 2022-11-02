@@ -795,9 +795,6 @@ const zz = {
 	 * @returns 
 	 */
 	href(url, v, veri, animationType, t = 'navigateTo') {
-
-		console.log('href', url);
-
 		if (url.startsWith('/pages/index')) return uni.switchTab({ url })
 
 		if (v) {
