@@ -417,7 +417,7 @@ export default {
         console.info("登录获取到的信息----------", user)
         // 登录埋点
         try {
-            console.log(window.aplus_queue)
+            // console.log(window.aplus_queue)
             window.aplus_queue.push({
                 action: 'aplus.setMetaInfo',
                 arguments: ['_hold', 'BLOCK']
@@ -453,7 +453,7 @@ export default {
 
         // 刷新动态
         refreshNewsHome(){
-            console.log("刷新动态--------")
+            // console.log("刷新动态--------")
             this.$refs.newsHome.loadData('init')
         },
         // #ifdef H5-ZLB
@@ -484,7 +484,6 @@ export default {
             this.dict = dict
             if (init || this.deptId != deptId) {
                 this.deptId = deptId
-
                 let hots = [
                     { _id: '627911aac2b3040001747310', name: '环浙样板线' },
                     { _id: '609805434c73e7000189c405', name: '奉城屋基' },

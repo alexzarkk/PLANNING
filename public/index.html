@@ -8,10 +8,7 @@
 		<%= htmlWebpackPlugin.options.title %>
 	</title>
 	<% if (process.env.VUE_APP_ENV === 'zlb' ) { %>
-        <script>
-            console.log("当前是浙里办环境-------------")
-			document.write('<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"><\/script>')
-        </script>
+		<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script>
 	<% } %>
 	<script>
 		var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))

@@ -331,6 +331,18 @@ export default {
                 this.loading = false;
             });
         },
+        showLoginModal() {
+            const toLogin = () => {
+                this.zz.href('/pages/comm/account/login', 0, { back: 1 })
+            }
+            this.zz.modal('您尚未登录，请登录后操作', (flag) => {
+                if (flag) {
+                    return toLogin()
+                } else {
+                    return;
+                }
+            }, true)
+        },
         openProfile(item) {
             // console.log('用户信息=======',item);
             this.zz.href(`/pages/my/profile/profile?id=${item.userInfo._id}`)
@@ -403,7 +415,7 @@ export default {
         // 对当前主评论回复
         contentComment() {
             if (!this.isLogin) {
-                this.zz.showLoginModal()
+                this.showLoginModal()
                 // this.isLoginShow = true
             } else {
                 // 对内容的评价没有回复的具体的人
@@ -413,7 +425,7 @@ export default {
         },
         replayComment(item) {
             if (!this.isLogin) {
-                this.zz.showLoginModal()
+                this.showLoginModal()
             } else {
                 // console.log('回复对象=======', item);
                 this.replyObj = {
@@ -435,7 +447,7 @@ export default {
             // this.userInfo = this.zz.getAcc()
             if (!this.isLogin) {
                 // this.isLoginShow = true
-                this.zz.showLoginModal()
+                this.showLoginModal()
             } else {
                 this.activeComment = true
             }
