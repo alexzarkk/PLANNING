@@ -445,16 +445,20 @@ export default {
     },
     onReady() {
         this.cal()
+        this.refreshNewsHome()
     },
     onShow() {
         this.loadData()
+        this.refreshNewsHome()
     },
     methods: {
-
         // 刷新动态
-        refreshNewsHome(){
+        refreshNewsHome() {
+            if (this.$refs.newsHome) {
+                this.$refs.newsHome.loadData('init')
+            }
             // console.log("刷新动态--------")
-            this.$refs.newsHome.loadData('init')
+
         },
         // #ifdef H5-ZLB
         // 登录浙里办

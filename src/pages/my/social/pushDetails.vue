@@ -32,7 +32,7 @@
                         <view class="cu-item">
                             <view v-if="details && details.userInfo && details.userInfo.headImg" @click="openProfile" class="cu-avatar round lg" :style="'background-image:url(' + details.userInfo.headImg + ')'"></view>
                             <view v-else class="cu-avatar round lg" @click="openProfile" style="background-image:url(https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/01acf825-4f59-4592-8034-295d16e69c7e.png)"></view>
-                            <view class="content flex-sub" @click="openProfile">
+                            <view class="content" @click="openProfile">
                                 <view v-if="isReady">
                                     {{ details.userInfo.nickName || details.author }}
                                 </view>
@@ -51,7 +51,7 @@
 										关注
 									</button>
 								</view>
-								<view v-else>
+								<view class="padding-right" v-else>
 									<!-- #ifdef H5 -->
 									<text class="cuIcon-delete" @click="showMoreAction"></text>
 									<!-- #endif -->
