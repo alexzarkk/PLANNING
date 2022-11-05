@@ -17,7 +17,7 @@ const comm = {
 	
 	// #ifdef APP-PLUS
 	async req(q, cache=true) {
-		let key=(k)=>{return k? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g,''):''},
+		let key=(k)=>{return k? JSON.stringify(k).replace(/[`~!@#$%^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g,''):''},
 			fn = q.$fn,
 			param = JSON.stringify(q)
 		

@@ -690,7 +690,7 @@ const zz = {
 	chooseImage,
 	chooseVideo,
 
-	key(k) { return k ? JSON.stringify(k).replace(/[`~!@#$^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : '' },
+	key(k) { return k ? JSON.stringify(k).replace(/[`~!@#$%^&*()=|{}':;',\\\[\]\.<>\/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g, '') : '' },
 	// #ifdef APP-PLUS
 	hadNet() { return plus.networkinfo.getCurrentType() > 1 },
 	// #endif
