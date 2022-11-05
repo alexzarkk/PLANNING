@@ -445,16 +445,20 @@ export default {
     },
     onReady() {
         this.cal()
+        this.refreshNewsHome()
     },
     onShow() {
         this.loadData()
+        this.refreshNewsHome()
     },
     methods: {
-
         // 刷新动态
-        refreshNewsHome(){
+        refreshNewsHome() {
+            if (this.$refs.newsHome) {
+                this.$refs.newsHome.loadData('init')
+            }
             // console.log("刷新动态--------")
-            this.$refs.newsHome.loadData('init')
+
         },
         // #ifdef H5-ZLB
         // 登录浙里办
@@ -465,10 +469,11 @@ export default {
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
             // const isWx = sUserAgent.indexOf("micromessenger") > -1
+            const weChartApply = sUserAgent.indexOf("micromessenger") > -1; //微信小程序
 
             const { AccessKey, ZLB_ADDR, isDev } = this.bd
             let url
-            if (bIsAlipayMini) { // 支付宝小程序
+            if (bIsAlipayMini || weChartApply) { // 支付宝小程序或者 微信小程序
                 url = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             } else { // 浙里办APP
                 url = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`

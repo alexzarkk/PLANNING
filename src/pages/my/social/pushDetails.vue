@@ -16,13 +16,13 @@
                     动态详情
                 </view>
             </block>
-			<!-- #ifdef APP-PLUS -->
-			<view slot="right" v-if="userInfo && !loading && userInfo._id == details.userInfo._id">
-			    <view class="padding-right" @click="showMoreAction">
-			        <text class="cuIcon-moreandroid"></text>
-			    </view>
-			</view>
-			<!-- #endif -->
+            <!-- #ifdef APP-PLUS -->
+            <view slot="right" v-if="userInfo && !loading && userInfo._id == details.userInfo._id">
+                <view class="padding-right" @click="showMoreAction">
+                    <text class="cuIcon-moreandroid"></text>
+                </view>
+            </view>
+            <!-- #endif -->
         </cu-custom>
         <view class="container" :style="'min-height:calc(100vh - '+CustomBar+'px)'">
             <!-- 头像 + 昵称 + 时间 + 关注 -->
@@ -32,7 +32,7 @@
                         <view class="cu-item">
                             <view v-if="details && details.userInfo && details.userInfo.headImg" @click="openProfile" class="cu-avatar round lg" :style="'background-image:url(' + details.userInfo.headImg + ')'"></view>
                             <view v-else class="cu-avatar round lg" @click="openProfile" style="background-image:url(https://vkceyugu.cdn.bspapp.com/VKCEYUGU-699d1eb1-ee53-4c66-bddd-06cda80d1231/01acf825-4f59-4592-8034-295d16e69c7e.png)"></view>
-                            <view class="content flex-sub" @click="openProfile">
+                            <view class="content" @click="openProfile">
                                 <view v-if="isReady">
                                     {{ details.userInfo.nickName || details.author }}
                                 </view>
@@ -41,22 +41,22 @@
                                     <!-- {{ details.dateInfo.year }}年{{ details.dateInfo.month }}月{{ details.dateInfo.day }}日 -->
                                 </view>
                             </view>
-							
-							<template v-if="!loading">
-								<view v-if="!isMy" class="padding-right">
-									<button v-if="details.isFollow" class="cu-btn line-ztsgreen" @click="followUser">
-										取消关注
-									</button>
-									<button v-else class="cu-btn bg-ztsgreen" @click="followUser">
-										关注
-									</button>
-								</view>
-								<view v-else>
-									<!-- #ifdef H5 -->
-									<text class="cuIcon-delete" @click="showMoreAction"></text>
-									<!-- #endif -->
-								</view>
-							</template>
+
+                            <template v-if="!loading">
+                                <view v-if="!isMy" class="padding-right">
+                                    <button v-if="details.isFollow" class="cu-btn line-ztsgreen" @click="followUser">
+                                        取消关注
+                                    </button>
+                                    <button v-else class="cu-btn bg-ztsgreen" @click="followUser">
+                                        关注
+                                    </button>
+                                </view>
+                                <!-- #ifdef H5 -->
+                                <view class="padding-right" v-else>
+                                    <text class="cuIcon-delete" @click="showMoreAction"></text>
+                                </view>
+                                <!-- #endif -->
+                            </template>
                         </view>
                     </view>
                     <!-- <view class="padding-top"> -->
@@ -162,7 +162,7 @@ export default {
     data() {
         return {
             isMy: false,
-			loading: true,
+            loading: true,
             userInfo: null,
             CustomBar: this.CustomBar,
             btnBottom: 0,
@@ -235,9 +235,9 @@ export default {
                 $url: 'public/moment/info',
                 _id: momentId
             };
-			this.loading = true
+            this.loading = true
             this.zz.req(req2).then((res) => {
-				this.loading = false
+                this.loading = false
                 this.details = res;
                 this.details.dateInfo = this.zz.time2Date(res.createTime, 'CN-ymd');
                 if (this.details.type) {
