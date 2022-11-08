@@ -414,7 +414,7 @@ export default {
                 return this.loginZlb()  // 去单点登录
             }
         }
-        console.info("登录获取到的信息----------", user)
+        
         // 登录埋点
         try {
             // console.log(window.aplus_queue)
@@ -442,6 +442,9 @@ export default {
         uni.$on("pushChange", () => {
             this.refreshNewsHome()
         })
+		
+		console.info("登录信息 ---------->", user)
+		console.log(this.bd.isDev,this.bd.ZLB_ADDR[this.bd.isDev]);
     },
     onReady() {
         this.cal()
