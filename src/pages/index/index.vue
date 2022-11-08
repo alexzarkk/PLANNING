@@ -397,6 +397,7 @@ export default {
 
     async onLoad() {
         // #ifdef H5-ZLB
+		this.t1 = Date.now()
         let user = this.zz.getAcc()
         if (user) {  // 有用户，去判断是否失效
             if ((Date.now() - user.t) > 1000 * 60 * 60 * 5) {
@@ -436,6 +437,7 @@ export default {
     onShow() {
         this.loadData()
         this.refreshNewsHome()
+		this.t0 = Date.now()
     },
     methods: {
         // 刷新动态
@@ -466,6 +468,39 @@ export default {
             } catch (error) {
                 console.warn('埋点错误---- ', error);
             }
+			
+			// const { AccessKey, appKey, SecretKey, appid } = this.bd
+			// const { zlb_id, zlb_name } = user
+			// // 在声明 Zwlog 对象实例时，可以传入一些 app 或者用户信息
+			// const zwlog = new ZwLog({
+			// 	_user_id: zlb_id,
+			// 	_user_nick: zlb_name
+			// })
+			// //onReady 表示 zwlog 加载完成后的函数，它接收一个匿名函数，而 sendPV 与 record 方法均要
+			// // 在匿名函数内调用。eg:
+			// zwlog.onReady(function () {
+			// 	zwlog.sendPV({
+			// 			miniAppId: appid, //'IRS 服务侧应用 appid',
+			// 			Page_duration: '用户从进入到离开当前页面的时长',
+			// 			t2: '页面启动到加载完成的时间',
+			// 			t0: '页面启动到页面响应完成的时间',
+			// 			log_status: appid//'IRS 服务侧应用 appid'
+			// 		});
+			// 		//record⽅法将发送⼀条事件⽇志，它接收三个参数：
+			// 		//trackerEventCode：为注册的事件编码. 当上报的事件为 PV 事件时,trackerEventCode 可传
+			// 		// 空值或'PageView'常量；
+			// 		//eventType：时间类型 取值为'EXP':⾃定义曝光事件/'CLK':⾃定义点击事件/'OTHER': 其他
+			// 		// ⾃定义事件；
+			// 		//eventParams： 为本次事件中上报的事件参数. 其取值为⼀个 JSON 对象（平铺的简单对象，
+			// 		// 不能多层嵌套）；
+			// 		//JSON 中的 key 不能是以下保留属性：
+			// 		// uidaplus,spm-url,spm-pre,spm_cnt,pvid,_dev_id,_anony_id,_user_id,_user_nick,_sessio
+			// 		// n_id
+			// 		zwlog.record('yourTrackerEventCode', 'CLK', {
+			// 		Test1: '测试参数 1',
+			// 	});
+			// 	let { metaInfo } = zwlog; // SDK 元配置的当前设置
+			// })
         },
         // 去登录系统，使用ticket  
         // return: user:用户
@@ -497,8 +532,28 @@ export default {
             console.log('回调地址', url);
             if (weChartApply) {
                 console.log("微信端，不跳转地址----------", window.location.search)
-                let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
-				this.loginSys(null,ticketId)
+				
+				if(ZWJSBridge.ssoTicket){
+					const ssoFlag = await ZWJSBridge.ssoTicket({})
+					if(ssoFlag&& ssoFlag.result === true){
+						//使用 IRS“浙里办”单点登录组件
+						if(ssoFlag.ticketId){
+							// TODO 应用方服务端单点登录接口
+							this.loginSys(null,ssoFlag.ticketId)
+						}else{
+							//当“浙里办”单点登录失败或登录态失效时调用 ZWJSBridge.openLink 方法重
+							// 新获取 ticketId。
+							ZWJSBridge.openLink({type: "reload"}).then(res=>{res.ticketId})
+						}
+					} else {
+					//使用 IRS【个人/法人单点登录】组件
+					}
+				}else{
+				//使用 IRS【个人/法人单点登录】组件
+				}
+				
+    //             let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
+				// this.loginSys(null,ticketId)
 				
                 // 使用ticketId调用接口获取 ticket 
                 // const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
