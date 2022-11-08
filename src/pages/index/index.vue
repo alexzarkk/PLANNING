@@ -406,32 +406,16 @@ export default {
         } else { // 没有用户，去走单点
             let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
             if (ticket) {  // 有票据直接后台登录
-                let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-                user = u.user
-                this.zz.setAcc(user)
-                this.zz.setToken(u.token)
+                user = this.loginSys(ticket)  // user，用于后面埋点使用
+                // let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+                // user = u.user
+                // this.zz.setAcc(user)
+                // this.zz.setToken(u.token)
             } else { // 没有票据去获取票据
-                return this.loginZlb()  // 去单点登录
+                return this.loginZlb()  // 去单点登录 （或者微信的登录流程
             }
         }
-        
-        // 登录埋点
-        try {
-            // console.log(window.aplus_queue)
-            window.aplus_queue.push({
-                action: 'aplus.setMetaInfo',
-                arguments: ['_hold', 'BLOCK']
-            })
-            window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                const { zlb_id, zlb_name } = user
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-            })
-        } catch (error) {
-            console.warn('埋点错误---- ', error);
-        }
+        this.addLoginQuene(user)  // 添加登录埋点
         // #endif
 
         setTimeout(() => {
@@ -442,9 +426,9 @@ export default {
         uni.$on("pushChange", () => {
             this.refreshNewsHome()
         })
-		
-		console.info("登录信息 ---------->", user)
-		console.log(this.bd.isDev,this.bd.ZLB_ADDR[this.bd.isDev]);
+
+        console.info("登录信息 ---------->", user)
+        console.log(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev]);
     },
     onReady() {
         this.cal()
@@ -464,8 +448,37 @@ export default {
 
         },
         // #ifdef H5-ZLB
+        // 添加登录埋点
+        addLoginQuene(user) {
+            // 登录埋点
+            try {
+                // console.log(window.aplus_queue)
+                window.aplus_queue.push({
+                    action: 'aplus.setMetaInfo',
+                    arguments: ['_hold', 'BLOCK']
+                })
+                window.ZWJSBridge.getUUID().then(({ uuid }) => {
+                    const { zlb_id, zlb_name } = user
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+                })
+            } catch (error) {
+                console.warn('埋点错误---- ', error);
+            }
+        },
+        // 去登录系统，使用ticket  
+        // return: user:用户
+        async loginSys(ticket) {
+            let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
+            let user = u.user
+            this.zz.setAcc(user) // 用户载入到缓存
+            this.zz.setToken(u.token) // token 载入到缓存
+            return user
+        },
         // 登录浙里办
-        loginZlb() {
+        async loginZlb() {
             const sUserAgent = window.navigator.userAgent.toLowerCase()
             // 浙里办APP
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
@@ -482,13 +495,20 @@ export default {
             } else { // 浙里办APP
                 url = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             }
-            console.log('回调地址',url);
-            if(weChartApply){
-                console.log("微信端，不跳转地址----------",window.location.search)
-            }else{
+            console.log('回调地址', url);
+            if (weChartApply) {
+                console.log("微信端，不跳转地址----------", window.location.search)
+                let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
+                // 使用ticketId调用接口获取 ticket 
+                // const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
+                // 使用接口获取到的ticket 去登录系统
+                // const user = this.loginSys(ticket)
+                // 添加埋点
+                // this.addLoginQuene(user)
+            } else {
                 window.location.replace(url)
             }
-            
+
         },
         // #endif
         async loadData(init) {
