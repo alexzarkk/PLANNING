@@ -499,12 +499,14 @@ export default {
             if (weChartApply) {
                 console.log("微信端，不跳转地址----------", window.location.search)
                 let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
+                console.info("ticketId-------",ticketId)
                 // 使用ticketId调用接口获取 ticket 
                 const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
+                console.info("后端获取ticket-----",ticket)
                 // 使用接口获取到的ticket 去登录系统
-                const user = this.loginSys(ticket)
+                // const user = this.loginSys(ticket)
                 // 添加埋点
-                this.addLoginQuene(user)
+                // this.addLoginQuene(user)
             } else {
                 window.location.replace(url)
             }
