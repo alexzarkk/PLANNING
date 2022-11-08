@@ -485,6 +485,7 @@ export default {
             console.log('回调地址',url);
             if(weChartApply){
                 console.log("微信端，不跳转地址----------",window.location.search)
+				
             }else{
                 window.location.replace(url)
             }
