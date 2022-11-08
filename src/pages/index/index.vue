@@ -406,7 +406,7 @@ export default {
         } else { // 没有用户，去走单点
             let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
             if (ticket) {  // 有票据直接后台登录
-                user = this.loginSys(ticket)  // user，用于后面埋点使用
+                user = await this.loginSys(ticket)  // user，用于后面埋点使用
                 // let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
                 // user = u.user
                 // this.zz.setAcc(user)
@@ -415,7 +415,6 @@ export default {
                 return this.loginZlb()  // 去单点登录 （或者微信的登录流程
             }
         }
-        this.addLoginQuene(user)  // 添加登录埋点
         // #endif
 
         setTimeout(() => {
@@ -470,11 +469,11 @@ export default {
         },
         // 去登录系统，使用ticket  
         // return: user:用户
-        async loginSys(ticket) {
-            let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-            let user = u.user
+        async loginSys(ticket, ticketId) {
+            let { user } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
             this.zz.setAcc(user) // 用户载入到缓存
             this.zz.setToken(u.token) // token 载入到缓存
+			this.addLoginQuene(user)  // 添加登录埋点
             return user
         },
         // 登录浙里办
@@ -500,11 +499,11 @@ export default {
                 console.log("微信端，不跳转地址----------", window.location.search)
                 let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
                 // 使用ticketId调用接口获取 ticket 
-                const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
+                // const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
                 // 使用接口获取到的ticket 去登录系统
-                const user = this.loginSys(ticket)
+                this.loginSys(ticketId)
                 // 添加埋点
-                this.addLoginQuene(user)
+                // this.addLoginQuene(user)
             } else {
                 window.location.replace(url)
             }
