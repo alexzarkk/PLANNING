@@ -443,7 +443,8 @@ export default {
             this.refreshNewsHome()
         })
 		
-		console.info("登录获取到的信息----------", user)
+		console.info("登录信息 ---------->", user)
+		console.log(this.bd.isDev,this.bd.ZLB_ADDR[this.bd.isDev]);
     },
     onReady() {
         this.cal()
