@@ -470,9 +470,9 @@ export default {
         // 去登录系统，使用ticket  
         // return: user:用户
         async loginSys(ticket, ticketId) {
-            let { user } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
+            let { user, token } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
             this.zz.setAcc(user) // 用户载入到缓存
-            this.zz.setToken(u.token) // token 载入到缓存
+            this.zz.setToken(token) // token 载入到缓存
 			this.addLoginQuene(user)  // 添加登录埋点
             return user
         },
@@ -498,7 +498,6 @@ export default {
             if (weChartApply) {
                 console.log("微信端，不跳转地址----------", window.location.search)
                 let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
-                console.info("ticketId-------",ticketId)
 				this.loginSys(null,ticketId)
 				
                 // 使用ticketId调用接口获取 ticket 
@@ -512,7 +511,6 @@ export default {
             } else {
                 window.location.replace(url)
             }
-
         },
         // #endif
         async loadData(init) {
