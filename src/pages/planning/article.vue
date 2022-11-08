@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view class="bg-white">
         <!-- #ifndef APP-PLUS -->
         <cu-custom bg-color="bg-ztsblue" :is-back="true">
@@ -27,7 +27,7 @@
                         {{ article.createTime }}
                     </text>
                 </view>
-                <view class="margin-right-xs">
+                <view class="margin-right-xs" @click="viewClick()">
                     <text class="cuIcon-attention margin-right-xs"></text>
                     <text class="text-sm text-gray margin-right-xs">
                         {{ article.view }}
@@ -92,11 +92,28 @@ export default {
         setTimeout(() => {
             this.zz.userEvent(20, 10, this.article)
         }, 100)
+
+        console.info("article监听键盘高度变化")
+        // 软键盘弹起的时候弹起input框
+        uni.onKeyboardHeightChange((res) => {
+            console.info('article监听键盘高度变化-------', res);
+            // console.log("软键盘弹起=========", res)
+            // _this.btnBottom = res.height;
+        });
+    },
+    onUnload() {
+        uni.offKeyboardHeightChange((event) => {
+            console.info("article键盘监听事件取消", event)
+        })
     },
     onHide() {
         if (this.videoContext) this.videoContext.pause();
     },
     methods: {
+        viewClick() {
+            console.log('viewClick==========');
+            this.$refs.comment.contentComment()
+        },
         openProfile() {
             let pages = getCurrentPages(); //获取所有页面栈实例列表
             let prevPage = pages[pages.length - 2]; //上一页页面实例

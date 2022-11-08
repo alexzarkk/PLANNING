@@ -219,6 +219,9 @@ export default {
     watch: {
         commentList(newVal, oldVal) {
             this.$emit("commentChange", newVal)  // 评论变化
+        },
+        activeComment(val) {
+            console.info("键盘是否激活----------", val)
         }
     },
     mounted() {
@@ -228,11 +231,13 @@ export default {
         if (this.userInfo) {
             this.isLogin = true
         }
+        console.info("zz-comment监听键盘高度变化")
         // 软键盘弹起的时候弹起input框
-        // uni.onKeyboardHeightChange((res) => {
-        //     console.log("软键盘弹起=========", res)
-        //     _this.btnBottom = res.height;
-        // });
+        uni.onKeyboardHeightChange((res) => {
+            console.info('zz-comment监听键盘高度变化-------', res);
+            // console.log("软键盘弹起=========", res)
+            // _this.btnBottom = res.height;
+        });
         uni.$on("commentLogin", () => {
             this.isLogin = true
             this.userInfo = this.zz.getAcc()
@@ -242,7 +247,7 @@ export default {
     },
     beforeDestroy() {
         uni.offKeyboardHeightChange((event) => {
-            // console.log("键盘监听事件取消", event)
+            console.info("键盘监听事件取消", event)
         })
         // console.log("销毁")
     },
@@ -388,6 +393,7 @@ export default {
             })
         },
         shareActive() {
+            // this.activeComment = !this.activeComment
             this.zz.toast("分享暂未开启", 1000)
         },
         // 删除当前操作的评论
@@ -453,7 +459,7 @@ export default {
             }
         },
         textareaKeyboardHeightChange(event) {
-            // console.log("多行文本的键盘高度变化", event)
+            console.log("多行文本的键盘高度变化", event)
             if (event.height === 0) {
                 // this.btnBottom = 0;
                 this.activeComment = false;

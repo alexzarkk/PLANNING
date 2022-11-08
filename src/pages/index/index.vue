@@ -475,13 +475,20 @@ export default {
             const weChartApply = sUserAgent.indexOf("micromessenger") > -1; //微信小程序
 
             const { AccessKey, ZLB_ADDR, isDev } = this.bd
-            let url
+            console.info("ZLB_ADDR-----------------", ZLB_ADDR)
+            let url = ''
             if (bIsAlipayMini || weChartApply) { // 支付宝小程序或者 微信小程序
                 url = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             } else { // 浙里办APP
                 url = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             }
-            window.location.replace(url)
+            console.log('回调地址',url);
+            if(weChartApply){
+                console.log("微信端，不跳转地址----------",window.location.search)
+            }else{
+                window.location.replace(url)
+            }
+            
         },
         // #endif
         async loadData(init) {

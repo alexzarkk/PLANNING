@@ -465,13 +465,16 @@ async function req(params = {}, loading = false, t = 9999) {
 					// 登录失效
 					case 1002:
 						zz.logOut()
+						// console.log()
 						zz.toast(message)
+						console.info("接口错误----------",e)
 						reject()
 						// return toLogin()
 						break
 					// 失败
 					default:
 						zz.toast(message)
+						console.info("接口错误----------",e)
 						reject(e.data || e.result)
 				}
 			},
@@ -502,7 +505,7 @@ async function req(params = {}, loading = false, t = 9999) {
 			if (isDev) {
 				header.isTestUrl = '1'
 			}
-			// console.log('header================================', header);
+			console.log('header================================', header);
 			mgop({
 				api: 'mgop.zz.zts.' + fn, // 必填
 				host: 'https://mapi.zjzwfw.gov.cn/',
