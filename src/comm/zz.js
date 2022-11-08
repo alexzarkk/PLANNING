@@ -500,7 +500,7 @@ async function req(params = {}, loading = false, t = 9999) {
 			}
 
 			if (isDev) {
-				header.isTestUrl = 1
+				header.isTestUrl = '1'
 			}
 			// console.log('header================================', header);
 			mgop({
