@@ -501,7 +501,7 @@ export default {
                 // 使用ticketId调用接口获取 ticket 
                 // const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
                 // 使用接口获取到的ticket 去登录系统
-                this.loginSys(ticketId)
+                this.loginSys(null,ticketId)
                 // 添加埋点
                 // this.addLoginQuene(user)
             } else {
