@@ -408,10 +408,6 @@ export default {
             let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
             if (ticket) {  // 有票据直接后台登录
                 user = await this.loginSys(ticket)  // user，用于后面埋点使用
-                // let u = await this.zz.req({ $url: '/admin/comm/loginGov', ticket })
-                // user = u.user
-                // this.zz.setAcc(user)
-                // this.zz.setToken(u.token)
             } else { // 没有票据去获取票据
                 return this.loginZlb()  // 去单点登录 （或者微信的登录流程
             }
@@ -428,7 +424,7 @@ export default {
         })
 
         console.info("登录信息 ---------->", user)
-        console.log(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev]);
+        console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev]);
     },
     onReady() {
         this.cal()
@@ -451,25 +447,16 @@ export default {
         // #ifdef H5-ZLB
         // 添加登录埋点
         addLoginQuene(user) {
+			const { zlb_id, zlb_name } = user
             // 登录埋点
-            try {
-                // console.log(window.aplus_queue)
-                window.aplus_queue.push({
-                    action: 'aplus.setMetaInfo',
-                    arguments: ['_hold', 'BLOCK']
-                })
-                window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                    const { zlb_id, zlb_name } = user
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                    window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-                })
-            } catch (error) {
-                console.warn('埋点错误---- ', error);
-            }
+			window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'BLOCK'] })
+			window.ZWJSBridge.getUUID().then(({ uuid }) => {
+				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+			})
 			
-			// const { AccessKey, appKey, SecretKey, appid } = this.bd
 			// const { zlb_id, zlb_name } = user
 			// // 在声明 Zwlog 对象实例时，可以传入一些 app 或者用户信息
 			// const zwlog = new ZwLog({
@@ -551,18 +538,6 @@ export default {
 				}else{
 				//使用 IRS【个人/法人单点登录】组件
 				}
-				
-    //             let ticketId = this.zz.getQueryParam(window.location.search, 'ticketId')
-				// this.loginSys(null,ticketId)
-				
-                // 使用ticketId调用接口获取 ticket 
-                // const ticket = await this.zz.req({ $url: '/admin/comm/loginGov', ticketId })
-                // 使用接口获取到的ticket 去登录系统
-                
-                // 使用接口获取到的ticket 去登录系统
-                // const user = this.loginSys(ticket)
-                // 添加埋点
-                // this.addLoginQuene(user)
             } else {
                 window.location.replace(url)
             }
