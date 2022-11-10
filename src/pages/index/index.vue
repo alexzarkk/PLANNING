@@ -306,6 +306,9 @@ export default {
     },
     data() {
         return {
+            defaultPhoneHeight: '',
+            newPhoneHeight: '',
+            testText: '',
             rootFontSize: '10px',  // 根字体
             bd: this.bd, // APP相关信息
             focus: false,
@@ -394,10 +397,24 @@ export default {
             ]
         }
     },
-
     async onLoad() {
+        // 安卓键盘使用resize方案
+        // window.onresize=()=>{
+        //     console.log("android resize------")
+        //     this.zz.toast("resize",500)
+        // }
+        // uni.hideTabBar()
+        // ios h5键盘使用事件监听方案
+        // document.body.addEventListener('focusin', () => {
+        //     this.zz.toast("键盘弹起")
+        // })
+        // document.body.addEventListener('focusout', () => {
+        //     this.zz.toast("键盘收回")
+        //     this.showText = false
+        // })
+
         // #ifdef H5-ZLB
-		this.t1 = Date.now()
+        this.t1 = Date.now()
         let user = this.zz.getAcc()
         if (user) {  // 有用户，去判断是否失效
             if ((Date.now() - user.t) > 1000 * 60 * 60 * 5) {
@@ -413,19 +430,21 @@ export default {
             }
         }
         // #endif
-
-        setTimeout(() => {
-            // this.showTips = true
-            // console.log("show 弹窗===============", this.showTips)
-        }, 1000)
-
-        uni.$on("pushChange", () => {
+        uni.$on("pushChange", () => {  // 文章动态发生改变
             this.refreshNewsHome()
         })
-
         console.info("登录信息 ---------->", user)
         console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev]);
     },
+    // onUnload() {
+    //     document.body.removeEventListener('focusin', () => {
+    //         console.info('卸载键盘弹起监听器')
+    //     })
+
+    //     document.body.removeEventListener('focusout', () => {
+    //         console.info('卸载键盘收回监听器')
+    //     })
+    // },
     onReady() {
         this.cal()
         this.refreshNewsHome()
@@ -433,7 +452,7 @@ export default {
     onShow() {
         this.loadData()
         this.refreshNewsHome()
-		this.t0 = Date.now()
+        this.t0 = Date.now()
     },
     methods: {
         // 刷新动态
@@ -441,53 +460,19 @@ export default {
             if (this.$refs.newsHome) {
                 this.$refs.newsHome.loadData('init')
             }
-            // console.log("刷新动态--------")
-
         },
         // #ifdef H5-ZLB
         // 添加登录埋点
         addLoginQuene(user) {
-			const { zlb_id, zlb_name } = user
+            const { zlb_id, zlb_name } = user
             // 登录埋点
-			window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'BLOCK'] })
-			window.ZWJSBridge.getUUID().then(({ uuid }) => {
-				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-				window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-			})
-			
-			// const { zlb_id, zlb_name } = user
-			// // 在声明 Zwlog 对象实例时，可以传入一些 app 或者用户信息
-			// const zwlog = new ZwLog({
-			// 	_user_id: zlb_id,
-			// 	_user_nick: zlb_name
-			// })
-			// //onReady 表示 zwlog 加载完成后的函数，它接收一个匿名函数，而 sendPV 与 record 方法均要
-			// // 在匿名函数内调用。eg:
-			// zwlog.onReady(function () {
-			// 	zwlog.sendPV({
-			// 			miniAppId: appid, //'IRS 服务侧应用 appid',
-			// 			Page_duration: '用户从进入到离开当前页面的时长',
-			// 			t2: '页面启动到加载完成的时间',
-			// 			t0: '页面启动到页面响应完成的时间',
-			// 			log_status: appid//'IRS 服务侧应用 appid'
-			// 		});
-			// 		//record⽅法将发送⼀条事件⽇志，它接收三个参数：
-			// 		//trackerEventCode：为注册的事件编码. 当上报的事件为 PV 事件时,trackerEventCode 可传
-			// 		// 空值或'PageView'常量；
-			// 		//eventType：时间类型 取值为'EXP':⾃定义曝光事件/'CLK':⾃定义点击事件/'OTHER': 其他
-			// 		// ⾃定义事件；
-			// 		//eventParams： 为本次事件中上报的事件参数. 其取值为⼀个 JSON 对象（平铺的简单对象，
-			// 		// 不能多层嵌套）；
-			// 		//JSON 中的 key 不能是以下保留属性：
-			// 		// uidaplus,spm-url,spm-pre,spm_cnt,pvid,_dev_id,_anony_id,_user_id,_user_nick,_sessio
-			// 		// n_id
-			// 		zwlog.record('yourTrackerEventCode', 'CLK', {
-			// 		Test1: '测试参数 1',
-			// 	});
-			// 	let { metaInfo } = zwlog; // SDK 元配置的当前设置
-			// })
+            window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'BLOCK'] })
+            window.ZWJSBridge.getUUID().then(({ uuid }) => {
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+            })
         },
         // 去登录系统，使用ticket  
         // return: user:用户
@@ -495,7 +480,7 @@ export default {
             let { user, token } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
             this.zz.setAcc(user) // 用户载入到缓存
             this.zz.setToken(token) // token 载入到缓存
-			this.addLoginQuene(user)  // 添加登录埋点
+            this.addLoginQuene(user)  // 添加登录埋点
             return user
         },
         // 登录浙里办
@@ -505,9 +490,8 @@ export default {
             const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
             // 浙里办支付宝小程序
             const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-            // const isWx = sUserAgent.indexOf("micromessenger") > -1
-            const weChartApply = sUserAgent.indexOf("micromessenger") > -1; //微信小程序
-
+            //微信小程序
+            const weChartApply = sUserAgent.indexOf("micromessenger") > -1;
             const { AccessKey, ZLB_ADDR, isDev } = this.bd
             console.info("ZLB_ADDR-----------------", ZLB_ADDR)
             let url = ''
@@ -516,29 +500,21 @@ export default {
             } else { // 浙里办APP
                 url = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
             }
-            console.log('回调地址', url);
             if (weChartApply) {
                 console.log("微信端，不跳转地址----------", window.location.search)
-				
-				if(ZWJSBridge.ssoTicket){
-					const ssoFlag = await ZWJSBridge.ssoTicket({})
-					if(ssoFlag&& ssoFlag.result === true){
-						//使用 IRS“浙里办”单点登录组件
-						if(ssoFlag.ticketId){
-							// TODO 应用方服务端单点登录接口
-							this.loginSys(null,ssoFlag.ticketId)
-						}else{
-							//当“浙里办”单点登录失败或登录态失效时调用 ZWJSBridge.openLink 方法重
-							// 新获取 ticketId。
-							ZWJSBridge.openLink({type: "reload"}).then(res=>{res.ticketId})
-						}
-					} else {
-					//使用 IRS【个人/法人单点登录】组件
-					}
-				}else{
-				//使用 IRS【个人/法人单点登录】组件
-				}
+                if (ZWJSBridge.ssoTicket) {
+                    const ssoFlag = await ZWJSBridge.ssoTicket({})
+                    if (ssoFlag && ssoFlag.result === true) {
+                        if (ssoFlag.ticketId) {
+                            console.info("微信单点登录", ssoFlag)
+                            this.loginSys(null, ssoFlag.ticketId)
+                        } else {
+                            ZWJSBridge.openLink({ type: "reload" }).then(res => { res.ticketId })
+                        }
+                    }
+                }
             } else {
+                console.info('回调地址', url);
                 window.location.replace(url)
             }
         },
