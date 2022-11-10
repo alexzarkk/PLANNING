@@ -110,17 +110,17 @@
                 </view>
             </view>
         </view>
-        <!-- :style="{bottom:btnBottom +'px'}" -->
-        <view v-show="showText" class="comment-bar">
+        <!--  -->
+        <view v-show="showText" class="comment-bar" :style="{bottom:btnBottom +'px'}">
             <view class="flex padding-lr padding-tb-sm align-center justify-between">
                 <view class="text-sm text-gray">评论</view>
                 <button :class="comment===''?'bg-gray':'bg-orange'" class="cu-btn text-sm" @tap="sendComment">发布</button>
             </view>
             <!-- :adjust-position="false" -->
             <!-- :focus="showText" -->
-            <!--  @keyboardheightchange="textareaKeyboardHeightChange" -->
-            <!--  :placeholder="replayInfo" -->
-            <tui-textarea v-model="comment" :isCounter="true" :focus="showText" minHeight="100rpx" height="100rpx"></tui-textarea>
+            <!--   -->
+            <!--   -->
+            <tui-textarea v-model="comment" :isCounter="true" :focus="showText" :placeholder="replayInfo" :adjust-position="false" minHeight="100rpx" height="100rpx" @keyboardheightchange="textareaKeyboardHeightChange"></tui-textarea>
         </view>
         <view style="height:100rpx;"></view>
         <!-- 单挑评论的相应操作
@@ -239,6 +239,7 @@ export default {
         if (this.userInfo) {
             this.isLogin = true
         }
+        // #ifdef H5
         document.body.addEventListener('focusin', () => {
             // this.zz.toast("键盘弹起")
         })
@@ -246,7 +247,7 @@ export default {
             // this.zz.toast("键盘收回")
             this.showText = false
         })
-
+        // #endif
         uni.$on("commentLogin", () => {
             this.isLogin = true
             this.userInfo = this.zz.getAcc()
@@ -255,6 +256,7 @@ export default {
         this.loadData();
     },
     beforeDestroy() {
+        // #ifdef H5
         document.body.removeEventListener('focusin', () => {
             console.info('卸载键盘弹起监听器')
         })
@@ -262,6 +264,8 @@ export default {
         document.body.removeEventListener('focusout', () => {
             console.info('卸载键盘收回监听器')
         })
+        // #endif
+
     },
     methods: {
         // 加载评论信息
@@ -428,7 +432,7 @@ export default {
                 this.total = this.commentList.length
                 this.zz.toast('评论已删除', 1000);
                 this.isDeleteShow = false;
-                this.contentComment()
+                // this.contentComment()
             });
         },
         // 对当前主评论回复
@@ -483,7 +487,8 @@ export default {
             // #ifdef APP-PLUS
             console.log("多行文本的键盘高度变化", event)
             if (event.height === 0) {
-                // this.btnBottom = 0;
+                this.btnBottom = 0;
+                this.showText = false
                 this.activeComment = false;
             } else {
                 this.btnBottom = event.height;
@@ -504,6 +509,8 @@ export default {
         //     }
         // },
         hideKeyboard() {
+            this.activeComment = false
+            this.showText = false
             uni.hideKeyboard()
         }
     }
