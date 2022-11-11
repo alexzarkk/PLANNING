@@ -145,7 +145,7 @@ export default {
     onHide() { },
     methods: {
         async init() {
-			let deptId = uni.getStorageSync('cur_deptId')
+			let deptId = uni.getStorageSync('cur_deptId')||'330213'
 			if (!deptId) {
 				// #ifdef H5-ZLB
 					// city: "宁波市"
@@ -155,8 +155,9 @@ export default {
 					// longitude: 121.42248984154213
 					// region: "奉化区"
 					// townCode: "330213"
-					let {townCode} = await ZWJSBridge.getLocation()
-					deptId = townCode
+					await ZWJSBridge.getLocation().then(({townCode}) =>{
+						deptId = townCode
+					})
 				// #endif
 				
 				// #ifndef H5-ZLB

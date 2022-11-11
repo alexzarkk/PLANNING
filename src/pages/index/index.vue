@@ -397,7 +397,6 @@ export default {
 
     async onLoad() {
         // #ifdef H5-ZLB
-		this.t1 = Date.now()
         let user = this.zz.getAcc()
         if (user) {  // 有用户，去判断是否失效
             if ((Date.now() - user.t) > 1000 * 60 * 60 * 5) {
