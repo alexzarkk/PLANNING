@@ -110,12 +110,17 @@
                 </view>
             </view>
         </view>
-        <view v-show="activeComment" class="comment-bar" :style="{bottom:btnBottom +'px'}">
+        <!--  -->
+        <view v-show="showText" class="comment-bar" :style="{bottom:btnBottom +'px'}">
             <view class="flex padding-lr padding-tb-sm align-center justify-between">
                 <view class="text-sm text-gray">评论</view>
                 <button :class="comment===''?'bg-gray':'bg-orange'" class="cu-btn text-sm" @tap="sendComment">发布</button>
             </view>
-            <tui-textarea v-model="comment" isCounter :placeholder="replayInfo" :adjust-position="false" :focus="activeComment" minHeight="100rpx" height="100rpx" @keyboardheightchange="textareaKeyboardHeightChange"></tui-textarea>
+            <!-- :adjust-position="false" -->
+            <!-- :focus="showText" -->
+            <!--   -->
+            <!--   -->
+            <tui-textarea v-model="comment" :isCounter="true" :focus="showText" :placeholder="replayInfo" :adjust-position="false" minHeight="100rpx" height="100rpx" @keyboardheightchange="textareaKeyboardHeightChange"></tui-textarea>
         </view>
         <view style="height:100rpx;"></view>
         <!-- 单挑评论的相应操作
@@ -132,7 +137,6 @@
         <zz-cu-modal :loading="false" :show="isLoginShow" title="提示" @confirm="openPage('/pages/comm/account/login',{back:true},false)" @cancel="isLoginShow=false">
             <view class="padding bg-white">当前未登录，点击确定去登录</view>
         </zz-cu-modal>
-
         <tui-loading v-show="loading"></tui-loading>
     </view>
 </template>
@@ -161,9 +165,10 @@ export default {
     },
     data() {
         return {
+            showText: false, // 控制多行文本的focus
             isMy: false,
             isLoginShow: false, // 登录modal提示
-            isLogin: false,
+            isLogin: true,
             total: -1,
             loading: false, // 页面加载动画
             activeComment: false, // 是否拉起input
@@ -222,6 +227,9 @@ export default {
         },
         activeComment(val) {
             console.info("键盘是否激活----------", val)
+        },
+        showText(val) {
+            console.info("多行文本控制---------", val)
         }
     },
     mounted() {
@@ -231,13 +239,15 @@ export default {
         if (this.userInfo) {
             this.isLogin = true
         }
-        console.info("zz-comment监听键盘高度变化")
-        // 软键盘弹起的时候弹起input框
-        uni.onKeyboardHeightChange((res) => {
-            console.info('zz-comment监听键盘高度变化-------', res);
-            // console.log("软键盘弹起=========", res)
-            // _this.btnBottom = res.height;
-        });
+        // #ifdef H5
+        document.body.addEventListener('focusin', () => {
+            // this.zz.toast("键盘弹起")
+        })
+        document.body.addEventListener('focusout', () => {
+            // this.zz.toast("键盘收回")
+            this.showText = false
+        })
+        // #endif
         uni.$on("commentLogin", () => {
             this.isLogin = true
             this.userInfo = this.zz.getAcc()
@@ -246,10 +256,16 @@ export default {
         this.loadData();
     },
     beforeDestroy() {
-        uni.offKeyboardHeightChange((event) => {
-            console.info("键盘监听事件取消", event)
+        // #ifdef H5
+        document.body.removeEventListener('focusin', () => {
+            console.info('卸载键盘弹起监听器')
         })
-        // console.log("销毁")
+
+        document.body.removeEventListener('focusout', () => {
+            console.info('卸载键盘收回监听器')
+        })
+        // #endif
+
     },
     methods: {
         // 加载评论信息
@@ -333,6 +349,7 @@ export default {
                 console.error('评论失败======', err);
             }).finally(() => {
                 this.activeComment = false
+                // this.showText = false
                 this.loading = false;
             });
         },
@@ -415,7 +432,7 @@ export default {
                 this.total = this.commentList.length
                 this.zz.toast('评论已删除', 1000);
                 this.isDeleteShow = false;
-                this.contentComment()
+                // this.contentComment()
             });
         },
         // 对当前主评论回复
@@ -427,6 +444,7 @@ export default {
                 // 对内容的评价没有回复的具体的人
                 this.replyObj = {};
                 this.activeComment = !this.activeComment;
+                this.showText = !this.showText
             }
         },
         replayComment(item) {
@@ -440,6 +458,7 @@ export default {
                 };
                 // console.log("回复对象==========", this.replyObj)
                 this.activeComment = !this.activeComment;
+                this.showText = !this.showText
             }
         },
         likeComment(item) {
@@ -455,17 +474,29 @@ export default {
                 // this.isLoginShow = true
                 this.showLoginModal()
             } else {
-                this.activeComment = true
+                this.showText = true
+                // this.zz.toast("showText = true")
+                // this.activeComment = false
+                // this.$nextTick(() => {
+                //     this.activeComment = true
+                // })
             }
         },
+        // 键盘高度发生变化的时候触发此事件,微信小程序基础库2.7.0+、App 3.1.0+
         textareaKeyboardHeightChange(event) {
+            // #ifdef APP-PLUS
             console.log("多行文本的键盘高度变化", event)
             if (event.height === 0) {
-                // this.btnBottom = 0;
+                this.btnBottom = 0;
+                this.showText = false
                 this.activeComment = false;
             } else {
                 this.btnBottom = event.height;
             }
+
+            console.info("修改高度以及键盘状态", this.btnBottom, this.activeComment)
+            // #endif
+
         },
         // keyboardheightchange(event) {
         //     console.log("键盘高度变化=====", event)
@@ -478,6 +509,8 @@ export default {
         //     }
         // },
         hideKeyboard() {
+            this.activeComment = false
+            this.showText = false
             uni.hideKeyboard()
         }
     }

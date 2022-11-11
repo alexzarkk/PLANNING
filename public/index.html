@@ -10,7 +10,7 @@
 	<% if (process.env.VUE_APP_ENV === 'zlb' ) { %>
 		<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script>
 		<!-- <script src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script> -->
-        <script src="//assets.zjzwfw.gov.cn/assets/zwlog/1.0.0/zwlog.js"></script>
+        <script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/zwlog/1.0.0/zwlog.js"></script>
 	<% } %>
 	<script>
 		var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))

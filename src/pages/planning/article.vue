@@ -69,9 +69,16 @@
                     <wxParse class="richText" :content="article.content"></wxParse>
                 </view>
             </view>
+            <!-- #ifdef APP -->
+            <view>APP</view>
+            <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true" @userEvent="commentEvent"></zz-comment>
+            <!-- #endif -->
+            <!-- #ifdef H5-ZLB -->
+            <!-- <view>ZLB</view> -->
+            <zz-blog v-if="article._id" ref="blogComment" :tid="article._id" :is-can-reply="false" />
+            <!-- #endif -->
             <view class="padding-sm flex flex-direction solid-bottom"></view>
-            <tui-scroll-top v-if="!isComment" :bottom="500" :top="300" :right="70" :scroll-top="scrolled"></tui-scroll-top>
-            <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true" @inComment="inComment" @userEvent="commentEvent"></zz-comment>
+            <!-- <tui-scroll-top v-if="!isComment" :bottom="500" :top="300" :right="70" :scroll-top="scrolled"></tui-scroll-top> -->
         </view>
     </view>
 </template>
@@ -84,51 +91,41 @@ export default {
             bd: this.bd,
             scrolled: 0,
             article: {},
-            isComment: false
+            isWriter: false
+            // isComment: false
         };
     },
     onLoad: async function ({ id } = q) {
+
+        uni.$on('newComment' + id, (params) => {
+            // console.log('评论更新了', params);
+            console.log("this.$refs.blogComment------", this.$refs.blogComment)
+            this.$refs.blogComment.init(); // 刷新评论列表
+        });
+
         this.article = await this.zz.req({ $url: 'public/article/info', _id: id }, true)
         setTimeout(() => {
             this.zz.userEvent(20, 10, this.article)
         }, 100)
-
-        console.info("article监听键盘高度变化")
-        // 软键盘弹起的时候弹起input框
-        uni.onKeyboardHeightChange((res) => {
-            console.info('article监听键盘高度变化-------', res);
-            // console.log("软键盘弹起=========", res)
-            // _this.btnBottom = res.height;
-        });
-    },
-    onUnload() {
-        uni.offKeyboardHeightChange((event) => {
-            console.info("article键盘监听事件取消", event)
-        })
     },
     onHide() {
         if (this.videoContext) this.videoContext.pause();
     },
     methods: {
-        viewClick() {
-            console.log('viewClick==========');
-            this.$refs.comment.contentComment()
-        },
         openProfile() {
-            let pages = getCurrentPages(); //获取所有页面栈实例列表
-            let prevPage = pages[pages.length - 2]; //上一页页面实例
-            if (prevPage) {
-                console.log("页面栈===", pages, prevPage)
-                console.log("路由信息", prevPage.route)
-                console.log("路由参数", prevPage.options)
-                // if (prevPage.route === 'pages/my/profile/profile' || prevPage.route === 'pages/my/profile/sysProfile') {  // 上一级是文章
-                //     uni.navigateBack({
-                //         delta: 1
-                //     });
-                //     return;
-                // }
-            }
-
+            // let pages = getCurrentPages(); //获取所有页面栈实例列表
+            // let prevPage = pages[pages.length - 2]; //上一页页面实例
+            // if (prevPage) {
+            //     console.log("页面栈===", pages, prevPage)
+            //     console.log("路由信息", prevPage.route)
+            //     console.log("路由参数", prevPage.options)
+            // if (prevPage.route === 'pages/my/profile/profile' || prevPage.route === 'pages/my/profile/sysProfile') {  // 上一级是文章
+            //     uni.navigateBack({
+            //         delta: 1
+            //     });
+            //     return;
+            // }
+            // }
             this.zz.profile(this.article.userInfo._id)
         },
         imgView: function (url) {
@@ -142,11 +139,8 @@ export default {
         commentEvent(params) {
             this.zz.userEvent(params.t, params.tt, this.article)
         },
-        inComment(event) {
-            this.inComment = event
-        },
+
         scrollToTop() {
-            console.log('top====================')
             uni.pageScrollTo({
                 scrollTop: 0,
                 duration: 300
@@ -154,7 +148,10 @@ export default {
         },
     },
     onPageScroll: function (e) {
+        // #ifdef APP-PLUS
         this.$refs.comment.hideKeyboard(); // 页面滚动时,评论区放下键盘
+        // #endif
+
         this.scrolled = e.scrollTop;
         if (this.article.video.url) {
             if (!this.videoContext) {
