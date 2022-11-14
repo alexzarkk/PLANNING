@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<view class="flex justify-between align-center text-grey solid-bottom">
+	<view class="">
+		<view class="flex justify-between align-center text-grey solid-bottom padding-tb-xs">
 			<view class="padding-lr text-sm" v-if="ui">
 				<text @click="userInfo">{{obj.userInfo.nickName}}</text>
 				<text class="margin-left-xs text-gray">{{zz.timeFrom(zz.date2Time(obj.createTime), 'Y-M-D h:m')}}</text>
@@ -18,12 +18,14 @@
 					<text class="cuIcon-favorfill" :class="obj.isFavor ? 'text-red' : ''"></text>
 					<text class="text-sm margin-left-xs">{{ obj.favor||0 }}</text>
 				</view>
+				<!-- #ifndef H5-ZLB -->
 				<view>
 					<button open-type="share" class="cu-btn xs bg-white" @click="share">
 						<text class="cuIcon-share"></text>
 						<!-- <text class="margin-left-sm text-sm text-green"></text> -->
 					</button>
 				</view>
+				<!-- #endif -->
 			</view>
 		</view>
 	</view>

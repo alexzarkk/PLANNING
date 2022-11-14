@@ -18,7 +18,8 @@
                     </text>
                 </view>
             </view>
-            <view class="padding-top padding-lr solid-bottom text-sm padding-bottom-sm flex justify-between">
+            <zz-user-event :obj="article" @act="userEvent" @share="showShare"></zz-user-event>
+            <!-- <view class="padding-top padding-lr solid-bottom text-sm padding-bottom-sm flex justify-between">
                 <view @click.stop="openProfile">
                     <text class="text-grey">
                         {{ article.author || article.origin || article.userInfo.nickName }}
@@ -33,7 +34,7 @@
                         {{ article.view }}
                     </text>
                 </view>
-            </view>
+            </view> -->
             <!-- 视频 -->
             <view v-if="article.video && article.video.url" id="tvideo">
                 <view class="cu-card case no-card">
@@ -139,6 +140,10 @@ export default {
             this.zz.userEvent(params.t, params.tt, this.article)
         },
 
+        // userEvent组件的事件处理
+        userEvent(t) {
+            this.zz.userEvent(t, 10, this.article)
+        },
         scrollToTop() {
             uni.pageScrollTo({
                 scrollTop: 0,
