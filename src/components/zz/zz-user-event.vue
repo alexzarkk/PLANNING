@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="flex justify-between align-center text-grey solid-bottom padding-tb-xs">
+		<view class="flex justify-between align-center text-grey solid-bottom padding-xs">
 			<view class="padding-lr text-sm" v-if="ui">
 				<text @click="userInfo">{{obj.userInfo.nickName}}</text>
 				<text class="margin-left-xs text-gray">{{zz.timeFrom(zz.date2Time(obj.createTime), 'Y-M-D h:m')}}</text>
