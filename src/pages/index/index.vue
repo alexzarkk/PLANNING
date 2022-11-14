@@ -215,6 +215,13 @@ import card from './component/card.vue';
 import newsHome from '@/components/news/news-home.vue'
 import newsPage from '../station/news.vue';
 
+// #ifdef H5-ZLB
+import zwLogUtils from '@/comm/zwLogUtils'
+
+console.log("引入浙里办日志工具", zwLogUtils)
+
+// #endif
+
 export default {
     components: {
         news,
@@ -421,12 +428,12 @@ export default {
         //         return this.loginZlb()
         //     }
         // } else { // 没有用户，去走单点
-            let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
-            if (ticket) {  // 有票据直接后台登录
-                await this.loginSys(ticket)
-            } else { // 没有票据去获取票据
-                return this.loginZlb()  // 去单点登录 （或者微信的登录流程
-            }
+        let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
+        if (ticket) {  // 有票据直接后台登录
+            await this.loginSys(ticket)
+        } else { // 没有票据去获取票据
+            return this.loginZlb()  // 去单点登录 （或者微信的登录流程
+        }
         // }
 		console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev])
         // #endif
@@ -448,11 +455,19 @@ export default {
         this.refreshNewsHome()
     },
     onShow() {
+        this.addZwlog()
         this.loadData()
         this.refreshNewsHome()
-        this.t0 = Date.now()
+        // this.t0 = Date.now()
     },
     methods: {
+        // onShow执行方法
+        addZwlog() {
+            zwLogUtils.addZwLogPage({
+                _this: this,
+                loadTime: new Date()  // 页面开始加载的时间
+            })
+        },
         // 刷新动态
         refreshNewsHome() {
             if (this.$refs.newsHome) {
@@ -461,16 +476,17 @@ export default {
         },
         // #ifdef H5-ZLB
         // 添加登录埋点
-        addLoginQuene(user) {
-            const { zlb_id, zlb_name } = user
+        addLoginQuene() {
+            zwLogUtils.initZwLog() // 新版埋点
+            // const { zlb_id, zlb_name } = user
             // 登录埋点
-            window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'BLOCK'] })
-            window.ZWJSBridge.getUUID().then(({ uuid }) => {
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-                window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-            })
+            // window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'BLOCK'] })
+            // window.ZWJSBridge.getUUID().then(({ uuid }) => {
+            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
+            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
+            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
+            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
+            // })
         },
         // 去登录系统，使用ticket  
         // return: user:用户
@@ -481,7 +497,9 @@ export default {
 			
             this.zz.setAcc(user) // 用户载入到缓存
             this.zz.setToken(token) // token 载入到缓存
-            this.addLoginQuene(user)  // 添加登录埋点
+            console.info("单点登录成功，去埋点")
+            // this.addLoginQuene()  // 添加登录埋点
+            zwLogUtils.initZwLog() // 新版埋点
             return user
         },
         // 登录浙里办

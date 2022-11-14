@@ -17,7 +17,7 @@ export default {
 		// #ifdef H5
             console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
 			// #ifdef H5-ZLB
-			// 方案1 修改字体
+			// 修改字体
 			let _this = this;
             console.log("ZWJSBridge------",ZWJSBridge)
 			ZWJSBridge.onReady(() => {
@@ -41,7 +41,20 @@ export default {
 					})
 				})
 			})
+
+
+
+
+
 			// #endif
+
+
+
+
+
+
+
+
 			// #ifndef H5-ZLB
 			this.$nextTick(()=>{
 				let fontSize = '10px'
@@ -51,6 +64,11 @@ export default {
 				console.warn("changeFontSize----------------------", fontSize)
 			})
 			 // #endif
+
+
+
+
+
         // #endif
 
         await uni.getSystemInfo({
