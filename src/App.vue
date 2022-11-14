@@ -15,6 +15,7 @@ export default {
     async onLaunch() {
 		
 		// #ifdef H5
+            console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
 			// #ifdef H5-ZLB
 			// 方案1 修改字体
 			let _this = this;
@@ -156,7 +157,7 @@ export default {
 					// townCode: "330213"
 					await ZWJSBridge.getLocation().then(({townCode}) =>{
 						deptId = townCode
-					}).catch(e={
+					}).catch(e=>{
 						deptId = '330213'
 					})
 				// #endif

@@ -70,11 +70,9 @@
                 </view>
             </view>
             <!-- #ifdef APP -->
-            <view>APP</view>
             <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true" @userEvent="commentEvent"></zz-comment>
             <!-- #endif -->
             <!-- #ifdef H5-ZLB -->
-            <!-- <view>ZLB</view> -->
             <zz-blog v-if="article._id" ref="blogComment" :tid="article._id" :is-can-reply="false" />
             <!-- #endif -->
             <view class="padding-sm flex flex-direction solid-bottom"></view>
@@ -96,8 +94,9 @@ export default {
         };
     },
     onLoad: async function ({ id } = q) {
-
-        uni.$on('newComment' + id, (params) => {
+        const eventName = 'newComment' + id
+        console.warn("文章页面监听评论更新--------", eventName)
+        uni.$on(eventName, (params) => {
             // console.log('评论更新了', params);
             console.log("this.$refs.blogComment------", this.$refs.blogComment)
             this.$refs.blogComment.init(); // 刷新评论列表

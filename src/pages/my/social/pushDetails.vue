@@ -119,7 +119,13 @@
                             <view class="operation-title">{{ item.title }}</view>
                         </view>
                     </view> -->
+                    <!-- #ifdef H5-ZLB -->
+                    <zz-blog v-if="details._id" ref="blogComment" :tid="details._id" :is-can-reply="false" />
+                    <!-- #endif -->
+                    <!-- #ifdef APP -->
                     <zz-comment v-if="details._id" ref="comment" :tid="details._id" :details="details" @commentChange="commentChange" @userEvent="commentEvent"></zz-comment>
+                    <!-- #endif -->
+
                 </view>
             </view>
 
@@ -145,7 +151,7 @@
 
             <tui-actionsheet :show="isMyMenuShow" :item-list="myMenuList" @click="confirmMyMenu" @cancel="isMyMenuShow = false"></tui-actionsheet>
             <!-- 确认删除对话框 -->
-            <zz-cu-modal :loading="false" :show="isDeleteShow" title="提示" @confirm="confirmDelete" @cancel="isDeleteShow = false">
+            <zz-cu-modal :isLoading="delLoading" :show="isDeleteShow" title="提示" @confirm="confirmDelete" @cancel="isDeleteShow = false">
                 <view class="padding bg-white">
                     删除后将不可恢复，是否继续?
                 </view>
@@ -192,6 +198,7 @@ export default {
             title: '',
             isMyMenuShow: false,
             isDeleteShow: false, // 删除评论的确认框展示
+            delLoading: false, // 删除按钮的loading
             myMenuList: [
                 // 对自己的评论的操作列表
                 {
@@ -208,16 +215,29 @@ export default {
         } else {
             const params = this.zz.getParam(v);
             if (params._id) {
+                id = params._id
                 this.loadData(params._id);
             }
         }
         this.userInfo = this.zz.getAcc()
-    },
-    onShow() {
+        // 在评论详情页面更新了评论
+        // #ifdef APP-PLUS
         uni.$on('modifyComment', (params) => {
-            // 在评论详情页面更新了评论
             this.$refs.comment.loadData('init');
         });
+        // #endif
+
+        // #ifdef H5-ZLB
+        let newCommentEvent = 'newComment' + id
+        console.warn("监听评论事件", newCommentEvent)
+        uni.$on(newCommentEvent, (params) => {
+            this.$refs.blogComment.init(); // 刷新评论列表
+        });
+        // #endif
+
+    },
+    onShow() {
+
     },
     methods: {
         async loadData(momentId) {
@@ -294,7 +314,13 @@ export default {
             }
         },
         handleComment() {
+            // #ifdef H5-ZLB
+            this.zz.href('/pages/my/blog/edit?tid=' + this.details._id,null,1);
+            // #endif
+            // #ifndef H5-ZLB
             this.$refs.comment.contentComment(); // 切换到对内容的评论
+            // #endif
+
         },
         // 处理点赞 评论 等信息
         handleOption(item) {
@@ -306,20 +332,20 @@ export default {
         inputFocus(event) {
         },
         confirmDelete() {
+            this.delLoading = true
             const requestParams = {
                 $url: 'user/moment/delete',
                 _id: this.details._id
             };
-            this.zz
-                .req(requestParams)
-                .then((res) => {
-                    this.zz.toast('删除成功');
-                    uni.$emit("pushChange")
-                    setTimeout(() => {
-                        uni.navigateBack();
-                    }, 1000);
-                })
+            this.zz.req(requestParams).then((res) => {
+                this.zz.toast('删除成功');
+                uni.$emit("pushChange")
+                setTimeout(() => {
+                    uni.navigateBack();
+                }, 1000);
+            })
                 .finally(() => {
+                    this.delLoading = false
                     this.isDeleteShow = false;
                 });
         },
