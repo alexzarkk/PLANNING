@@ -1,10 +1,10 @@
 // #ifdef APP-PLUS
 let alphaBg, shareMenu, showState = false;
 // 关闭弹窗
-export const closeShare = function(){
+export const closeShare = function () {
 	alphaBg && alphaBg.close();
 	alphaBg && shareMenu.close();
-	if(showState){
+	if (showState) {
 		showState = false;
 		return true
 	} else {
@@ -13,12 +13,12 @@ export const closeShare = function(){
 	}
 }
 // 复制
-function onCopy(item, shareInfo,callback) {
+function onCopy(item, shareInfo, callback) {
 	let copyInfo = shareInfo.shareUrl || shareInfo.shareContent || shareInfo.shareImg;
 	if (copyInfo) {
 		uni.setClipboardData({
 			data: copyInfo,
-			success:() => {
+			success: () => {
 				uni.showToast({
 					title: "已复制到剪贴板",
 					icon: "none"
@@ -26,23 +26,23 @@ function onCopy(item, shareInfo,callback) {
 				callback && callback(item);
 			}
 		});
-	} 
+	}
 }
 // 更多
-function onMore(item, shareInfo,callback) {
+function onMore(item, shareInfo, callback) {
 	plus.share.sendWithSystem({
 		type: "text",
 		title: shareInfo.shareTitle || "",
 		href: shareInfo.shareUrl || "",
 		content: shareInfo.shareContent || "",
-	},function(res){ 
+	}, function (res) {
 		callback && callback(item);
-	},function(err){
+	}, function (err) {
 		console.log(err);
 	});
 }
 // 分享
-function onShare(item, shareInfo,callback) {
+function onShare(item, shareInfo, callback) {
 	if (shareInfo.type == undefined) {
 		shareInfo.type = item.type;
 	}
@@ -59,17 +59,17 @@ function onShare(item, shareInfo,callback) {
 	};
 	if (shareInfo.shareTitle) {
 		shareObj.title = shareInfo.shareTitle;
-	}else if(item.provider == "qq"){
+	} else if (item.provider == "qq") {
 		uni.showToast({
 			title: "缺失分享的标题",
 			icon: "none"
 		});
 		return;
 	}
-	if(shareInfo.type == 0 || item.provider == "qq"){
+	if (shareInfo.type == 0 || item.provider == "qq") {
 		if (shareInfo.shareUrl) {
 			shareObj.href = shareInfo.shareUrl;
-		}else{
+		} else {
 			uni.showToast({
 				title: "缺失分享的地址",
 				icon: "none"
@@ -77,10 +77,10 @@ function onShare(item, shareInfo,callback) {
 			return;
 		}
 	}
-	if([0,1,3,4].includes(shareInfo.type)){
+	if ([0, 1, 3, 4].includes(shareInfo.type)) {
 		if (shareInfo.shareContent) {
 			shareObj.summary = shareInfo.shareContent;
-		}else{
+		} else {
 			uni.showToast({
 				title: "缺失分享的描述",
 				icon: "none"
@@ -88,10 +88,10 @@ function onShare(item, shareInfo,callback) {
 			return;
 		}
 	}
-	if([0,2,5].includes(shareInfo.type)){
+	if ([0, 2, 5].includes(shareInfo.type)) {
 		if (shareInfo.shareImg) {
 			shareObj.imageUrl = shareInfo.shareImg;
-		}else{
+		} else {
 			uni.showToast({
 				title: "缺失分享的图片",
 				icon: "none"
@@ -99,10 +99,10 @@ function onShare(item, shareInfo,callback) {
 			return;
 		}
 	}
-	if([3,4].includes(shareInfo.type)){
+	if ([3, 4].includes(shareInfo.type)) {
 		if (shareInfo.mediaUrl) {
 			shareObj.mediaUrl = shareInfo.mediaUrl;
-		}else{
+		} else {
 			uni.showToast({
 				title: "缺失分享的音视频地址",
 				icon: "none"
@@ -110,17 +110,17 @@ function onShare(item, shareInfo,callback) {
 			return;
 		}
 	}
-	if(shareInfo.type == 5){
+	if (shareInfo.type == 5) {
 		if (shareInfo.appId && shareInfo.appPath && shareInfo.appWebUrl) {
 			shareObj.miniProgram = {
-				id:shareInfo.appId,
-				path:shareInfo.appPath,
-				webUrl:shareInfo.appWebUrl,
+				id: shareInfo.appId,
+				path: shareInfo.appPath,
+				webUrl: shareInfo.appWebUrl,
 			};
-			if(shareInfo.appType){
+			if (shareInfo.appType) {
 				shareObj.miniProgram.type = shareInfo.appType;
 			}
-		}else{
+		} else {
 			uni.showToast({
 				title: "缺失分享小程序的参数",
 				icon: "none"
@@ -154,7 +154,7 @@ uni.getProvider({
 	success: function (res) {
 		if (res.provider.includes('sinaweibo')) {
 			platformShareList = [{
-				icon: "/uni_modules/zhouWei-APPshare/static/icon_weibo.png", 
+				icon: "/uni_modules/zhouWei-APPshare/static/icon_weibo.png",
 				text: "新浪微博",
 				onClick: onShare,
 				provider: "sinaweibo",
@@ -199,42 +199,42 @@ uni.getProvider({
 	}
 });
 // 根据type类型过滤掉不支持的平台
-function platformFilter(data){
+function platformFilter(data) {
 	let platformList = [];
 	let supportList = [
-		["weixin","sinaweibo"],
-		["weixin","sinaweibo","qq"],
-		["weixin","sinaweibo","qq"],
-		["weixin","qq"],
-		["weixin","sinaweibo"],
+		["weixin", "sinaweibo"],
+		["weixin", "sinaweibo", "qq"],
+		["weixin", "sinaweibo", "qq"],
+		["weixin", "qq"],
+		["weixin", "sinaweibo"],
 		["weixin"],
 	];
 	let currentSupport = [];
-	if(data.type >= 0 && data.type <= 5){
+	if (data.type >= 0 && data.type <= 5) {
 		currentSupport = supportList[data.type];
 	}
-	platformShareList.forEach((item,index) => {
-		if(data.type >= 0 && data.type <= 5){
-			if(currentSupport.includes(item.provider)){
-				if(item.provider == "weixin"){
-					if(item.text == "小程序"){
-						if(data.type == 5){
+	platformShareList.forEach((item, index) => {
+		if (data.type >= 0 && data.type <= 5) {
+			if (currentSupport.includes(item.provider)) {
+				if (item.provider == "weixin") {
+					if (item.text == "小程序") {
+						if (data.type == 5) {
 							platformList.push(item);
 						}
-					}else if(data.type !== 5){
+					} else if (data.type !== 5) {
 						platformList.push(item);
 					}
 				} else {
 					platformList.push(item);
 				}
 			}
-		}else{
-			if(item.provider == "weixin"){
-				if(item.text == "小程序"){
-					if(data.appId && data.appPath){
+		} else {
+			if (item.provider == "weixin") {
+				if (item.text == "小程序") {
+					if (data.appId && data.appPath) {
 						platformList.push(item);
 					}
-				}else {
+				} else {
 					platformList.push(item);
 				}
 			} else {
@@ -286,7 +286,7 @@ export default function (shareInfo, callback) {
 	alphaBg.addEventListener("click", function () { //处理遮罩层点击
 		alphaBg && alphaBg.close();
 		shareMenu && shareMenu.close();
-		if(showState){
+		if (showState) {
 			showState = false;
 		} else {
 			showState = false;
@@ -364,7 +364,7 @@ export default function (shareInfo, callback) {
 		if (e.screenY > plus.screen.resolutionHeight - 44) { //点击了底部取消按钮
 			alphaBg && alphaBg.close();
 			shareMenu && shareMenu.close();
-			if(showState){
+			if (showState) {
 				showState = false;
 			} else {
 				showState = false;
@@ -377,17 +377,17 @@ export default function (shareInfo, callback) {
 			let colIdx = Math.floor(x / itemWidth);
 			let rowIdx = Math.floor(y / itemHeight);
 			let tapIndex = colIdx + rowIdx * colNumber;
-			shareList[tapIndex].onClick(shareList[tapIndex], shareInfo,callback);
+			shareList[tapIndex].onClick(shareList[tapIndex], shareInfo, callback);
 		}
 	});
 	alphaBg.show();
 	shareMenu.show();
 	showState = true;
 	return {
-		close: function(){
+		close: function () {
 			alphaBg && alphaBg.close();
 			alphaBg && shareMenu.close();
-			if(showState){
+			if (showState) {
 				showState = false;
 				return true
 			} else {

@@ -58,6 +58,7 @@ export default {
 			this.zz.profile(this.obj.userInfo._id)
 		},
 		share(){
+			this.$emit("share")
 			console.log('do share');
 		}
 	}

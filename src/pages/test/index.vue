@@ -17,7 +17,7 @@
             </view>
         </view>
 		<zz-upload-image :imgs="[]" @add="addImage" @del="delImage"></zz-upload-image>
-        <!-- <view @click="showShare">分享</view> -->
+        <view @click="showShare">APP分享</view>
         <view class="flex flex-direction padding" style="row-gap: 20rpx">
             <button class="cu-btn round" @click="list_rec">list_rec</button>
             <button class="cu-btn round" @click="del_rec('631ea8c9a874f0000167ecd7')">删除rec</button>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-// import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
+import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
 
 export default {
     data() {

@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view class="bg-white">
         <!-- #ifndef APP-PLUS -->
         <view class="fixed text-white" :style="'opacity:' + (1 - headOpacity)">
@@ -19,10 +19,7 @@
         <!-- #endif -->
 
         <block v-if="trail">
-            <swiper
-                class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000"
-                duration="500"
-            >
+            <swiper class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="500">
                 <swiper-item v-for="(pic, idx) in trail.imgs" :key="idx" :data-index="idx" @tap.stop="bannerView">
                     <image :src="pic" mode="aspectFill" />
                 </swiper-item>
@@ -54,10 +51,10 @@
                     </view>
                 </view>
             </view>
-			<!-- <view class="padding-tb-xs text-gray text-right flex justify-between align-center"> -->
-				<!-- <text class="margin-left text-sm text-gray">{{ zz.time2Date(trail.createTime,'Y-M-D h:m') }}</text> -->
-				<zz-user-event :obj="trail" @act="userEvent"></zz-user-event>
-			<!-- </view> -->
+            <!-- <view class="padding-tb-xs text-gray text-right flex justify-between align-center"> -->
+            <!-- <text class="margin-left text-sm text-gray">{{ zz.time2Date(trail.createTime,'Y-M-D h:m') }}</text> -->
+            <zz-user-event :obj="trail" @act="userEvent" @share="showShare"></zz-user-event>
+            <!-- </view> -->
             <view class="padding bg-green">
                 <view class="padding flex text-center text-grey bg-orange light shadow">
                     <view class="flex flex-sub flex-direction solid-right solid-left">
@@ -141,10 +138,7 @@
                 <view class="cu-card case no-card">
                     <view class="padding-top-xs shadow">
                         <view class="bg-video flex align-center" style="height: 422rpx">
-                            <video
-                                id="myVideo" autoplay :src="trail.video.url" :muted="ismute" :show-fullscreen-btn="true"
-                                :show-mute-btn="true" :show-play-btn="true" object-fit="cover"
-                            />
+                            <video id="myVideo" autoplay :src="trail.video.url" :muted="ismute" :show-fullscreen-btn="true" :show-mute-btn="true" :show-play-btn="true" object-fit="cover" />
                         </view>
                     </view>
                     <view v-if="trail.video.desc" class="padding-xs text-cut bg-gray text-grey text-right">
@@ -176,10 +170,7 @@
 
             <view class="sticky-box bg-cyan margin-top" :style="[{ top: customBar + 'px' }]">
                 <scroll-view class="nav text-center" scroll-x scroll-with-animation>
-                    <view
-                        v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item text-lg" :class="item.sight ? 'cur text-bold  text-red' : ''"
-                        @tap="moveTo"
-                    >
+                    <view v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item text-lg" :class="item.sight ? 'cur text-bold  text-red' : ''" @tap="moveTo">
                         {{ item.name }}
                     </view>
                 </scroll-view>
@@ -278,7 +269,7 @@
 
             <tui-divider />
             <tui-scroll-top :scroll-top="scrolled" />
-			<zz-footer/>
+            <zz-footer />
         </block>
         <block v-else>
             <tui-loading :fixed="true" :index="3" type="green" />
@@ -294,6 +285,8 @@
 <script>
 // import backToLineTrack from '@/components/backToLineTrack.vue'
 // import { comm } from '@/comm/libs/mapbox/mbtool'
+
+import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
 
 export default {
     components: {
@@ -385,21 +378,21 @@ export default {
                 poi.push(await this.zz.req({ $url: 'public/poi/info', _id: s._id || s }));
             }
             this.poi = poi;
-			
-			// console.log(poi);
-            uni.$on('newComment'+_id, (params) => {
+
+            // console.log(poi);
+            uni.$on('newComment' + _id, (params) => {
                 // console.log('评论更新了', params);
                 this.$refs.comment.init(); // 刷新评论列表
             });
         },
         useLine() {
-			// #ifdef APP-PLUS
-			this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
-			// #endif
-			
-			// #ifndef APP-PLUS
-			this.zz.href('/pages/nav/navH5', { kml: this.trail._kml, tmt: 0 }, 1)
-			// #endif
+            // #ifdef APP-PLUS
+            this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
+            // #endif
+
+            // #ifndef APP-PLUS
+            this.zz.href('/pages/nav/navH5', { kml: this.trail._kml, tmt: 0 }, 1)
+            // #endif
         },
         //获取文字信息
         moveTo: function (e) {
@@ -440,7 +433,38 @@ export default {
         },
         userEvent(t) {
             this.zz.userEvent(t, 40, this.trail)
-        }
+        },
+        showShare() {
+
+            // "https://zts.5618.co/h5/#/pages/share?path=/pages/planning/detail&id=" + e._id
+            // let shareData = {
+            //     shareUrl: 'https://kemean.com/',
+            //     shareTitle: '分享的标题',
+            //     shareContent: '分享的描述',
+            //     shareImg: 'http://qn.kemean.cn//upload/202004/18/1587189024467w6xj18b1.jpg',
+            //     appId: 'wxd0e0881530ee4444', // 默认不传type的时候，必须传appId和appPath才会显示小程序图标
+            //     appPath: 'pages/home/home',
+            //     appWebUrl: 'https://kemean.com/'
+            // };
+            let shareData = {
+                shareUrl: `https://zts.5618.co/h5/#/pages/share?path=/pages/planning/detail&id=${this.trail._id}`,
+                shareTitle: '快来看看这条线路~',
+                shareContent: this.trail.name,
+                appPath: 'pages/planning/detail',
+                appWebUrl: `https://zts.5618.co/h5/#/pages/share?path=/pages/planning/detail&id=${this.trail._id}`
+            };
+            // 调用
+            let shareObj = appShare(shareData, (res) => {
+                console.log('分享成功回调', res);
+                // 分享成功后关闭弹窗
+                // 第一种关闭弹窗的方式
+                closeShare();
+            });
+            setTimeout(() => {
+                // 第二种关闭弹窗的方式
+                shareObj.close();
+            }, 5000);
+        },
     },
     onBackPress(event) {
         return false;

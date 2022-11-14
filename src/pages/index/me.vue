@@ -1,5 +1,5 @@
 <template name="basics">
-	<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <!-- 测试16px -->
     <view>
         <view class="UCenter-bg">
@@ -17,7 +17,7 @@
                             <text class="cuIcon-people"></text>
                         </view>
                         <view class="padding-left">
-							<!-- #ifndef H5-ZLB -->
+                            <!-- #ifndef H5-ZLB -->
                             <text>注册/登录</text>
                             <!-- #endif -->
                         </view>
@@ -100,7 +100,7 @@
         </view>
         <view class="cu-list menu shadow-lg radius solid">
             <!-- <view class="cu-item margin-top" @click="openScan()"> -->
-           <!-- <view class="cu-item margin-top" @tap="href('/pages/test/index',{},false)">
+            <!-- <view class="cu-item margin-top" @tap="href('/pages/test/index',{},false)">
                 <view class="content">
                     <text class="cuIcon-scan" />
                     <text class="text-grey">
@@ -108,21 +108,19 @@
                     </text>
                 </view>
             </view> -->
-			
-			<block v-for="(item,idx) of nav" :key="idx">
-				<tui-list-cell padding="0" :lineLeft="false" :arrow="true" @tap="href(item.url, null, 0)">
-					<view class="zz-list-cell">
-						<view class="content">
-							<text class="text-blue padding-lr-sm" :class="'cuIcon-'+item.icon"></text>
-							<text class="text-grey">{{item.text}}</text>
-						</view>
-					</view>
-				</tui-list-cell>
-			</block>
+            <block v-for="(item,idx) of nav" :key="idx">
+                <tui-list-cell padding="0" :lineLeft="false" :arrow="true" @tap="href(item.url, null, 0)">
+                    <view class="zz-list-cell">
+                        <view class="content">
+                            <text class="text-blue padding-lr-sm" :class="'cuIcon-'+item.icon"></text>
+                            <text class="text-grey">{{item.text}}</text>
+                        </view>
+                    </view>
+                </tui-list-cell>
+            </block>
 
         </view>
-		
-		
+
         <!-- 更换封面modal -->
         <view class="cu-modal" :class="modalName == 'Modal' ? 'show' : ''">
             <view class="cu-dialog">
@@ -130,7 +128,7 @@
             </view>
         </view>
         <view class="cu-bar"></view>
-        <zz-footer/>
+        <zz-footer />
     </view>
 </template>
 
@@ -208,26 +206,26 @@ export default {
             ],
             elements: [],
             nav: [
-            	{
-            		text:'意见反馈',
-            		url: '/pages/comm/feedback?path=profile',
-            		icon:'post'
-            	},
-            	{
-            		text:'服务协议',
-            		url: '/pages/comm/doc/protocol',
-            		icon:'read'
-            	},
-            	{
-            		text:'隐私政策',
-            		url: '/pages/comm/doc/privacy',
-            		icon:'profile '
-            	},
-            	{
-            		text:'设置',
-            		url: '/pages/my/set/settings',
-            		icon:'settings'
-            	}
+                {
+                    text: '意见反馈',
+                    url: '/pages/comm/feedback?path=profile',
+                    icon: 'post'
+                },
+                {
+                    text: '服务协议',
+                    url: '/pages/comm/doc/protocol',
+                    icon: 'read'
+                },
+                {
+                    text: '隐私政策',
+                    url: '/pages/comm/doc/privacy',
+                    icon: 'profile '
+                },
+                {
+                    text: '设置',
+                    url: '/pages/my/set/settings',
+                    icon: 'settings'
+                }
             ]
         };
     },
@@ -248,8 +246,8 @@ export default {
                     $url: 'user/person/info'
                 }).then(res => {
                     // console.log("个人统计数据", res)
-                    this.socialList.find(res=>res.key ==='follow').value = res.follow || 0
-                    this.socialList.find(res=>res.key ==='fans').value = res.fans || 0
+                    this.socialList.find(res => res.key === 'follow').value = res.follow || 0
+                    this.socialList.find(res => res.key === 'fans').value = res.fans || 0
                     // this.socialList[2].value = res.follow || 0
                     // this.socialList[3].value = res.fans || 0
                 })
@@ -330,10 +328,9 @@ export default {
 }
 
 .zz-list-cell {
-	display: flex;
-	align-items: center;
-	padding: 30rpx;
-	font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    padding: 30rpx;
+    font-size: 1.5rem;
 }
-
 </style>
