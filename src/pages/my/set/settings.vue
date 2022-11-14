@@ -1,91 +1,15 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">设置</block>
         </cu-custom>
         <view class="container">
-			<block v-if="user">
-				<tui-list-view margin-top="20rpx">
-					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/push')">
-						<view class="justify-between flex padding-right align-center">
-							<text class="">消息推送</text>
-							<!-- <text class="text-black  ">179cm,79kg</text> -->
-						</view>
-					</tui-list-cell>
-				</tui-list-view>
-
-				<tui-list-view margin-top="20rpx">
-					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/privacy')">
-						<view class="justify-between flex padding-right align-center">
-							<text class="">隐私设置</text>
-						</view>
-					</tui-list-cell>
-					<!-- <tui-list-cell arrow @click="openPage('/pages/my/set/settings/record')">
-						<view class="justify-between flex padding-right align-center">
-							<text class="">记录设置</text>
-						</view>
-					</tui-list-cell>
-					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/chat')">
-						<view class="justify-between flex padding-right align-center">
-							<text class="">聊天设置</text>
-						</view>
-					</tui-list-cell>
-					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/map')">
-						<view class="justify-between flex padding-right align-center">
-							<text class="">地图设置</text>
-						</view>
-					</tui-list-cell>
-					<tui-list-cell arrow @click="openPage('/pages/my/set/settings/mobile')">
-						<view class="justify-between flex padding-right align-center">
-							<text class="">手机设置</text>
-						</view>
-					</tui-list-cell> -->
-				</tui-list-view>
-			</block>
             <tui-list-view margin-top="20rpx">
-
-                <tui-list-cell arrow @click="clear">
-                    <view class="justify-between flex padding-right align-center">
-                        <text class="">清除缓存</text>
-                        <text class="text-black">{{fileSizeString}}</text>
-                    </view>
-                </tui-list-cell>
-                <block v-if="user">
-                    <tui-list-cell arrow @click="openPage('/pages/comm/account/repsd')">
-                        <view class="justify-between flex padding-right align-center"><text class="">重置密码</text></view>
-                    </tui-list-cell>
-                    <!-- <tui-list-cell arrow @click="openPage('/pages/my/set/address/address')">
-					    <view class="justify-between flex padding-right align-center"><text class="">我的收货地址</text></view>
-					</tui-list-cell> -->
-                </block>
-                <!-- <tui-list-cell arrow @click="openPage('/pages/comm/doc/protocol')">
-					    <view class="justify-between flex padding-right align-center"><text class="">服务协议</text></view>
-					</tui-list-cell>
-                	<tui-list-cell arrow @click="openPage('/pages/comm/doc/privacy')">
-					    <view class="justify-between flex padding-right align-center"><text class="">隐私政策</text></view>
-					</tui-list-cell> -->
-                <!-- <tui-list-cell arrow @click="openPage('/pages/my/set/feedback')"> -->
-                <!-- <tui-list-cell arrow @click="openPage('/pages/comm/feedback')">
-                    <view class="justify-between flex padding-right align-center"><text class="">意见反馈</text></view>
-                </tui-list-cell> -->
                 <tui-list-cell arrow @click="openPage('/pages/comm/about')">
                     <view class="justify-between flex padding-right align-center"><text class="">关于环浙步道</text></view>
                 </tui-list-cell>
             </tui-list-view>
-           
-			<!-- #ifndef H5-ZLB -->
-            <block v-if="user">
-                <view class="padding response margin-top"><button class="cu-btn round bg-red lg response" @click="isLogoutShow = true">退出登录</button></view>
-                <view class="padding flex align-center justify-center" @click="goDelAccount">
-                    <text class="text-grey">删除账户</text>
-                </view>
-
-                <zz-cu-modal title="退出登录" :show="isLogoutShow" @cancel="isLogoutShow = false" @confirm="logout">
-                    <view class="bg-white padding">确定退出登录？</view>
-                </zz-cu-modal>
-            </block>
-            <!-- #endif -->
         </view>
     </view>
 </template>
@@ -154,17 +78,17 @@ export default {
                 }
             }
             this.formatSize()
-			
-			// #ifdef APP-PLUS
-			comm.on()
-			// #endif
-			
-			// #ifndef APP-PLUS
-			comm.on([121, 29])
-			// #endif
-			// this.zz.req({ $url: 'public/trail/list', deptId: ['330213'], status: 10, type: 60 }).then(list => {
-			//     uni.setStorageSync('trailData', { trailData: list })
-			// })
+
+            // #ifdef APP-PLUS
+            comm.on()
+            // #endif
+
+            // #ifndef APP-PLUS
+            comm.on([121, 29])
+            // #endif
+            // this.zz.req({ $url: 'public/trail/list', deptId: ['330213'], status: 10, type: 60 }).then(list => {
+            //     uni.setStorageSync('trailData', { trailData: list })
+            // })
         },
         // 清除缓存
         clearCache() {

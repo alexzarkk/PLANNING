@@ -178,6 +178,7 @@ export default {
                 {
                     name: '排行榜',
                     url: '/pages/event/ranking',
+                    url: '/pages/comm/nodata?title=排行榜',
                     icon: 'cuIcon-like',
                     color: 'rgba(255, 170, 0, 0.7)',
                     text: '成绩排名'

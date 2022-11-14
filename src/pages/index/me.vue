@@ -4,11 +4,11 @@
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->
-            <view class="setting-icon" @click="href('/pages/my/social/message/msgList')">
+            <!-- <view class="setting-icon" @click="href('/pages/my/social/message/msgList')">
                 <view class="cuIcon-messagefill text-green">
-                    <!-- <view class="cu-tag badge">3</view> -->
+                    <view class="cu-tag badge">3</view>
                 </view>
-            </view>
+            </view> -->
             <!--用户信息-->
             <view class="flex justify-start margin-top padding-top-xl">
                 <template v-if="!isLogin">
@@ -211,16 +211,16 @@ export default {
                     url: '/pages/comm/feedback?path=profile',
                     icon: 'post'
                 },
-                {
-                    text: '服务协议',
-                    url: '/pages/comm/doc/protocol',
-                    icon: 'read'
-                },
-                {
-                    text: '隐私政策',
-                    url: '/pages/comm/doc/privacy',
-                    icon: 'profile '
-                },
+                // {
+                //     text: '服务协议',
+                //     url: '/pages/comm/doc/protocol',
+                //     icon: 'read'
+                // },
+                // {
+                //     text: '隐私政策',
+                //     url: '/pages/comm/doc/privacy',
+                //     icon: 'profile '
+                // },
                 {
                     text: '设置',
                     url: '/pages/my/set/settings',

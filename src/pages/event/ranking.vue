@@ -9,13 +9,14 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="backText"></block>
             <block slot="content">排行榜</block>
         </cu-custom>
-        <scroll-view scroll-x class="bg-white nav text-center fixed" :style="[{ top: CustomBar + 'px' }]">
+        <tui-no-data :fixed="true">无数据~</tui-no-data>
+        <!-- <scroll-view scroll-x class="bg-white nav text-center fixed" :style="[{ top: CustomBar + 'px' }]">
             <view
                 v-for="(item, index) in tabNav" :key="index" class="cu-item" :class="index == TabCur ? 'text-orange text-bold cur' : ''" :data-id="index"
                 @tap="tabSelect"
@@ -63,12 +64,8 @@
                 >
                     {{ item.title }}
                 </tui-td>
-                <!-- v-for="(item, index) in header" :key="index"  -->
-                <!-- <tui-td textAlign="center" alignItems="center" padding="20rpx 8rpx" border-width="0" bold :span="12">用户</tui-td> -->
             </tui-tr>
             <tui-tr v-for="(item, index) in listData" :key="index" :backgroundColor="index % 2 != 0 ? '#FAFAFA' : '#fff'">
-                <!-- <image class="avatar" src="/static/avatar/avatar1.jpg"></image> -->
-                <!--  -->
                 <tui-td
                     v-for="(obj, idx) in header"
                     :key="idx"
@@ -94,17 +91,12 @@
                         <view v-if="obj.key === 'name'" class="flex align-center padding-left">
                             <view class="cu-avatar round margin-right" :style="{ backgroundImage: 'url(/static/avatar/avatar' + item.id + '.jpg)' }"></view>
                             <view>{{ item[obj.key] }}</view>
-                            <!-- <view>{{ item.id }}</view> -->
                         </view>
                         <view v-else>{{ item[obj.key] }}</view>
                     </view>
                 </tui-td>
-
-                <!-- <tui-td padding="20rpx 8rpx" border-width="0" textAlign="center" alignItems="center" backgroundColor="transparent" :span="12">
-                    <view>{{ listData[0].name }}</view>
-                </tui-td> -->
             </tui-tr>
-        </tui-table>
+        </tui-table> -->
         <!-- 选择器 -->
         <!-- <tui-picker :show="pickerShow" :pickerData="pickerData" @hide="pickerHide" @change="pickerChange"> -->
     </view>
