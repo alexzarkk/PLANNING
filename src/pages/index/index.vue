@@ -144,7 +144,7 @@
             </swiper>
         </template> -->
 
-        <view class="padding-xs">
+        <!-- <view class="padding-xs">
             <view class="bg-blue light" style="margin: 20rpx; padding: 20rpx; border-radius: 8rpxs">
                 <view class="text-df text-ftblue text-bold padding-tb-xs">
                     <text class="cuIcon-safe text-ftblues text-lg padding-lr-xs"></text>
@@ -157,7 +157,7 @@
                     </view>
                 </view>
             </view>
-        </view>
+        </view> -->
 
         <!-- <template v-if="bd.isDev&&deptId=='330213'">
             <view class="bg-img padding-top" style="background-image: url('https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unia9cc9/362a6b36-f1d9-451c-bd16-d4ee9643894c.gif'); height: 333rpx" @click="href('/pages/mall/special')">

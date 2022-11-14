@@ -138,11 +138,11 @@ export default {
                     path: '/pages/nav/rec/point',
                     k: 'poi'
                 },
-                {
-                    title: '照片',
-                    path: '/pages/nav/rec/picture',
-                    k: 'imgs'
-                },
+                // {
+                //     title: '照片',
+                //     path: '/pages/nav/rec/picture',
+                //     k: 'imgs'
+                // },
                 {
                     title: '视频',
                     path: '/pages/comm/nodata',

@@ -163,7 +163,7 @@ export default {
     onHide() { },
     methods: {
         async init() {
-			let deptId
+			let deptId = '330213'
 			if (!uni.getStorageSync('sysInited')) {
 				// #ifdef H5-ZLB
 					// city: "宁波市"

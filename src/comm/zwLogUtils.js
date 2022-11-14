@@ -35,7 +35,7 @@ function initZwLog() {
 /**
  * 在页面中添加埋点日志
  * 注意点: zwlogPageMap 所有的数据通过关键字pagePath（页面路径进行匹配）
- * _this            【页面必填，App监听不填】  当前页面this      用于获取当前页面的pagePath，navigationBarTitle
+ * _this            【页面必填，App监听不填】  当前页面this      用于获取当前页面的pagePath，navigationBarTitle  页面路径和页面title
  * pagePath         【页面不填，App监听必填】  当前页面的路径     通过路径来设置页面进入和离开时间，app.vue中监听路由只能拿到路径
  * enterPageTime    【页面不填，App监听必填】  进入页面的时间     app.vue中监听路由得到  路由守卫
  * leavePageTime    【页面不填，App监听必填】  离开页面的时间     app.vue中监听路由得到  路由后置守卫
