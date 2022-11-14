@@ -228,6 +228,9 @@ const
 			plus.geolocation.getCurrentPosition(p => {
 				loc.p = p.coords
 				loc.coord = [fixNum(p.coords.longitude), fixNum(p.coords.latitude), ~~(p.coords.altitude || 0)]
+				if(type == 'gcj02') {
+					loc.coord = trans(loc.coord)
+				}
 				res(loc)
 			}, (e) => {
 				geoErr(e)
@@ -235,7 +238,7 @@ const
 			}, {
 				timeout: 60000,
 				geocode: false,
-				coordsType: type,
+				coordsType: 'wgs84',
 				provider: 'system',
 				enableHighAccuracy: true,
 			})
@@ -261,7 +264,10 @@ const
 			window.amapGeo.getCurrentPosition((_,e)=>{
 				if(e.status==0) {
 					loc.p = e
-					loc.coord = trans([e.position.getLng(), e.position.getLat(), ~~(e.altitude || 0)],'gcj02towgs84')
+					loc.coord = [e.position.getLng(), e.position.getLat(), ~~(e.altitude || 0)]
+					if(type == 'wgs84') {
+						loc.coord = trans(loc.coord, 'gcj02towgs84')
+					}
 					res(loc)
 				}else{
 					rej(e.message)

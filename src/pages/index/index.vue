@@ -428,12 +428,11 @@ export default {
                 return this.loginZlb()  // 去单点登录 （或者微信的登录流程
             }
         // }
+		console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev])
         // #endif
         uni.$on("pushChange", () => {  // 文章动态发生改变
             this.refreshNewsHome()
         })
-        // console.info("登录信息 ---------->", user)
-        console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev])
     },
     // onUnload() {
     //     document.body.removeEventListener('focusin', () => {
@@ -477,6 +476,9 @@ export default {
         // return: user:用户
         async loginSys(ticket, ticketId) {
             let { user, token } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
+			
+			console.info('loginSys------------------:', user);
+			
             this.zz.setAcc(user) // 用户载入到缓存
             this.zz.setToken(token) // token 载入到缓存
             this.addLoginQuene(user)  // 添加登录埋点

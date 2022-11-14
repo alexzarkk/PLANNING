@@ -9,7 +9,6 @@ import AMapLoader from '@amap/amap-jsapi-loader'
 
 // #ifdef APP-PLUS
 import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update'
-const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 // #endif
 
 export default {
@@ -145,8 +144,8 @@ export default {
     onHide() { },
     methods: {
         async init() {
-			let deptId = uni.getStorageSync('cur_deptId')||'330213'
-			if (!deptId) {
+			let deptId
+			if (!uni.getStorageSync('sysInited')) {
 				// #ifdef H5-ZLB
 					// city: "宁波市"
 					// cityName: "宁波市"
@@ -157,12 +156,15 @@ export default {
 					// townCode: "330213"
 					await ZWJSBridge.getLocation().then(({townCode}) =>{
 						deptId = townCode
+					}).catch(e={
+						deptId = '330213'
 					})
 				// #endif
 				
 				// #ifndef H5-ZLB
 					let [_,e] = await uni.getLocation(),
 						addr = await this.zz.reGeo([e.longitude,e.latitude])
+					
 					deptId = addr.addressComponent.adcode+''
 				// #endif
 				
@@ -206,11 +208,6 @@ export default {
 
             // #ifdef APP-PLUS
             comm.on()
-            // locationModule.getOnceLocation({
-            // 	locationMode: 'Device_Sensors'
-            // }, (xiaoming) => {
-            // 	console.log('小明定位结果 ------------------->',xiaoming);
-            // })
             // #endif
         }
     }

@@ -16,7 +16,7 @@
 
 <script>
 import gaodeMap from '@/components/gaode-map/zz-gaode-map.nvue';
-const locationModule = uni.requireNativePlugin('XM_Alive_Location')
+// const locationModule = uni.requireNativePlugin('XM_Alive_Location')
 const modal = uni.requireNativePlugin('modal');
 
 export default {
@@ -38,19 +38,6 @@ export default {
 	methods: {
 		async getLocation(){
 			console.log("getLocation===")
-				await locationModule.getOnceLocation({
-					locationMode: 'Device_Sensors'
-				}, (xiaoming) => {
-					console.log('原生插件定位 ------------------->',xiaoming);
-					if (xiaoming.success) {
-						return this.center = [xiaoming.data.longitude, xiaoming.data.latitude]
-					} else {
-						modal.toast({
-							message: '定位获取失败，GPS信号弱！',
-							duration: 3
-						});
-					}
-				});
 		}
 	}
 };

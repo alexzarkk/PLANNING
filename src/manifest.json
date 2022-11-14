@@ -222,18 +222,25 @@
                     "parameters" : {}
                 }
             },
-            "XM_Alive_Location" : {
+            "yh-alive" : {
+                "插件需要配置的参数名称, 如appid" : "b9218ea546ae7ca8264470270b0e0a70",
                 "__plugin_info__" : {
-                    "name" : "保活定位插件",
-                    "description" : "后台保活，使用高德地图进行定位和定位上传",
-                    "platforms" : "Android,iOS",
-                    "url" : "",
+                    "name" : "Android保活插件，后台持续运行，高德定位上传，实际项目使用，不断迭代升级",
+                    "description" : "插件主要可用于需要持续获取位置信息、推送服务监听，需要不被杀死等应用场景。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=6673",
                     "android_package_name" : "uni.UNI210B33A",
                     "ios_bundle_id" : "szs.run",
-                    "isCloud" : false,
-                    "bought" : -1,
-                    "pid" : "",
-                    "parameters" : {}
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "6673",
+                    "parameters" : {
+                        "插件需要配置的参数名称, 如appid" : {
+                            "des" : "高德地图Key配置",
+                            "key" : "com.amap.api.v2.apikey",
+                            "value" : ""
+                        }
+                    }
                 }
             }
         }
