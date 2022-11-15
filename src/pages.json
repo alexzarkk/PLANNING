@@ -124,7 +124,10 @@
 					}
 				},
 				{
-					"path": "detail"
+					"path": "detail",
+					"meta": {
+						"title": "线路详情"
+					}
 				},
 				{
 					"path": "poi"

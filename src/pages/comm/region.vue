@@ -61,6 +61,7 @@ export default {
 	    };
 	},
     onLoad() {
+        
         const codes = Object.keys(this.dict.deps);
         let cityList = [],
             regionList = [];

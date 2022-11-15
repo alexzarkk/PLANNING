@@ -455,7 +455,10 @@ export default {
         this.refreshNewsHome()
     },
     onShow() {
+        // #ifdef H5-ZLB
         this.addZwlog()
+        // #endif
+        
         this.loadData()
         this.refreshNewsHome()
         // this.t0 = Date.now()

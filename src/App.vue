@@ -13,40 +13,40 @@ import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update
 
 export default {
     async onLaunch() {
-		
-		// #ifdef H5
-            console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
-			// #ifdef H5-ZLB
-			// 修改字体
-			let _this = this;
-            console.log("ZWJSBridge------",ZWJSBridge)
-			ZWJSBridge.onReady(() => {
-				console.info('浙里办初始化完成，执行bridge方法')
-				ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
-					console.log("获取到的当前的style======", uiStyle)
-					// uiStyle = 'elder'
-					let fontSize = '10px'
-					console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
-					if (uiStyle === 'elder') {
-						fontSize = '16px'
-					} else {
-						fontSize = '10px'
-					}
-					_this.$nextTick(()=>{
-						document.documentElement.style.fontSize = fontSize
-						// 方案2修改字体
-						let htmlFont = document.getElementsByTagName('html')[0]
-						htmlFont.style.fontSize = fontSize  // 测试16px
-						console.warn("changeFontSize----------------------", fontSize)
-					})
-				})
-			})
+
+        // #ifdef H5
+        console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
+        // #ifdef H5-ZLB
+        // 修改字体
+        let _this = this;
+        console.log("ZWJSBridge------", ZWJSBridge)
+        ZWJSBridge.onReady(() => {
+            console.info('浙里办初始化完成，执行bridge方法')
+            ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
+                console.log("获取到的当前的style======", uiStyle)
+                // uiStyle = 'elder'
+                let fontSize = '10px'
+                console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
+                if (uiStyle === 'elder') {
+                    fontSize = '16px'
+                } else {
+                    fontSize = '10px'
+                }
+                _this.$nextTick(() => {
+                    document.documentElement.style.fontSize = fontSize
+                    // 方案2修改字体
+                    let htmlFont = document.getElementsByTagName('html')[0]
+                    htmlFont.style.fontSize = fontSize  // 测试16px
+                    console.warn("changeFontSize----------------------", fontSize)
+                })
+            })
+        })
 
 
 
 
 
-			// #endif
+        // #endif
 
 
 
@@ -55,15 +55,15 @@ export default {
 
 
 
-			// #ifndef H5-ZLB
-			this.$nextTick(()=>{
-				let fontSize = '10px'
-				document.documentElement.style.fontSize = fontSize
-				let htmlFont = document.getElementsByTagName('html')[0]
-				htmlFont.style.fontSize = fontSize  // 测试16px
-				console.warn("changeFontSize----------------------", fontSize)
-			})
-			 // #endif
+        // #ifndef H5-ZLB
+        this.$nextTick(() => {
+            let fontSize = '10px'
+            document.documentElement.style.fontSize = fontSize
+            let htmlFont = document.getElementsByTagName('html')[0]
+            htmlFont.style.fontSize = fontSize  // 测试16px
+            console.warn("changeFontSize----------------------", fontSize)
+        })
+        // #endif
 
 
 
@@ -72,7 +72,7 @@ export default {
         // #endif
 
         await uni.getSystemInfo({
-            success(e){
+            success(e) {
                 Vue.prototype.WinHeight = e.windowHeight
                 Vue.prototype.WinWidth = e.windowWidth
                 Vue.prototype.StatusBar = e.statusBarHeight
@@ -133,96 +133,99 @@ export default {
                 })
             }
         })
-       
-		// #ifndef APP-PLUS
-		await uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
-		// #endif
-		
-		uni.onNetworkStatusChange(e => {
-			// #ifdef H5
-			comm.setNet(e.isConnected)
-			// #endif
-		    if (e.isConnected) {
-				if(!uni.getStorageSync('sysInited')) {
-					uni.removeStorageSync('cur_deptId')
-					this.init()
-					uni.reLaunch({ url: '/pages/index/index' })
-				}
-				sync.go()
-		    }
-		})
-		this.init()
-		
-		// #ifdef APP-PLUS
-		setTimeout(() => { checkUpdate() }, 3000)
-		// #endif
+
+        // #ifndef APP-PLUS
+        await uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
+        // #endif
+
+        uni.onNetworkStatusChange(e => {
+            // #ifdef H5
+            comm.setNet(e.isConnected)
+            // #endif
+            if (e.isConnected) {
+                if (!uni.getStorageSync('sysInited')) {
+                    uni.removeStorageSync('cur_deptId')
+                    this.init()
+                    uni.reLaunch({ url: '/pages/index/index' })
+                }
+                sync.go()
+            }
+        })
+        this.init()
+
+        // #ifdef APP-PLUS
+        setTimeout(() => { checkUpdate() }, 3000)
+        // #endif
     },
     onShow() {
-		sync.go()
+        sync.go()
     },
     onHide() { },
     methods: {
         async init() {
-			let deptId = '330213'
-			if (!uni.getStorageSync('sysInited')) {
-				// #ifdef H5-ZLB
-					// city: "宁波市"
-					// cityName: "宁波市"
-					// detailAddress: "浙江省宁波市奉化区斗门北路197号"
-					// latitude: 29.677769971311186
-					// longitude: 121.42248984154213
-					// region: "奉化区"
-					// townCode: "330213"
-					await ZWJSBridge.getLocation().then(({townCode}) =>{
-						deptId = townCode
-					}).catch(e=>{
-						deptId = '330213'
-					})
-				// #endif
-				
-				// #ifndef H5-ZLB
-					let [_,e] = await uni.getLocation(),
-						addr = await this.zz.reGeo([e.longitude,e.latitude])
-					
-					deptId = addr.addressComponent.adcode+''
-				// #endif
-				
-				//是否浙江地区
-				uni.setStorageSync('cur_deptId', deptId.startsWith('33')?deptId:'330213')
-				await this.zz.setDept()
-			}
-			let dict = uni.getStorageSync('sys_dict') || {}
-			this.zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-				if (e.v) {
-					Object.assign(dict, e)
-					uni.setStorageSync('sys_dict', dict)
-					uni.setStorageSync('sysInited',1)
-				}
-			})
-			
+
+            let dict = uni.getStorageSync('sys_dict') || {}
+            this.zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
+                console.log("获取到的dict----", e)
+                if (e.v) {
+                    Object.assign(dict, e)
+                    uni.setStorageSync('sys_dict', dict)
+                    uni.setStorageSync('sysInited', 1)
+                }
+            })
+            let deptId = '330213'
+            if (!uni.getStorageSync('sysInited')) {
+                // #ifdef H5-ZLB
+                // city: "宁波市"
+                // cityName: "宁波市"
+                // detailAddress: "浙江省宁波市奉化区斗门北路197号"
+                // latitude: 29.677769971311186
+                // longitude: 121.42248984154213
+                // region: "奉化区"
+                // townCode: "330213"
+                await ZWJSBridge.getLocation().then(({ townCode }) => {
+                    deptId = townCode
+                }).catch(e => {
+                    deptId = '330213'
+                })
+                // #endif
+
+                // #ifndef H5-ZLB
+                let [_, e] = await uni.getLocation(),
+                    addr = await this.zz.reGeo([e.longitude, e.latitude])
+
+                deptId = addr.addressComponent.adcode + ''
+                // #endif
+
+                //是否浙江地区
+                uni.setStorageSync('cur_deptId', deptId.startsWith('33') ? deptId : '330213')
+                await this.zz.setDept()
+            }
+
+
             // #ifndef APP-PLUS
             comm.on([121, 29])
-			AMapLoader.load({
-				key: this.bd.amapKey,
-				version: "2.0",
-				plugins:['AMap.Geolocation']
-			}).then(e=>{
-				window.amapGeo = new AMap.Geolocation({
-					enableHighAccuracy: true, //是否使用高精度定位，默认:true
-					noIpLocate: 3,				//3: 所有终端禁止使用IP定位
-					noGeoLocation:0,		  //1: 手机设备禁止使用浏览器定位
-					// timeout: 10000,           //超过10秒后停止定位，默认：无穷大
-					maximumAge: 0,            //定位结果缓存0毫秒，默认：0
-					convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-					showButton: false,        //显示定位按钮，默认：true
-					// buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
-					// buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-					showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
-					showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
-					panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
-					zoomToAccuracy:false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-				})
-			})
+            AMapLoader.load({
+                key: this.bd.amapKey,
+                version: "2.0",
+                plugins: ['AMap.Geolocation']
+            }).then(e => {
+                window.amapGeo = new AMap.Geolocation({
+                    enableHighAccuracy: true, //是否使用高精度定位，默认:true
+                    noIpLocate: 3,				//3: 所有终端禁止使用IP定位
+                    noGeoLocation: 0,		  //1: 手机设备禁止使用浏览器定位
+                    // timeout: 10000,           //超过10秒后停止定位，默认：无穷大
+                    maximumAge: 0,            //定位结果缓存0毫秒，默认：0
+                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                    showButton: false,        //显示定位按钮，默认：true
+                    // buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+                    // buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                    showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
+                    showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
+                    panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                    zoomToAccuracy: false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                })
+            })
             // #endif
 
             // #ifdef APP-PLUS
@@ -241,7 +244,7 @@ export default {
 @import '@/comm/colorui/icon.css';
 @import '@/comm/colorui/animation.css';
 @import '@/comm/css/app.css';
-@import '@/comm/css/zzIcon.css';  // 远程
+@import '@/comm/css/zzIcon.css'; // 远程
 @import '@/components/uParse/src/wxParse.css';
 
 // view {

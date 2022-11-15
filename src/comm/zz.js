@@ -467,14 +467,14 @@ async function req(params = {}, loading = false, t = 9999) {
 						zz.logOut()
 						// console.log()
 						zz.toast(message)
-						console.info("接口错误----------",e)
+						console.info("接口错误----------", e)
 						reject()
 						// return toLogin()
 						break
 					// 失败
 					default:
 						zz.toast(message)
-						console.info("接口错误----------",e)
+						console.info("接口错误----------", e)
 						reject(e.data || e.result)
 				}
 			},
@@ -834,7 +834,15 @@ const zz = {
 		let d = uni.getStorageSync('sys_dict')
 		this.href(`/pages/my/profile/${d.sysUser[id] ? 'sysProfile' : 'profile'}?id=${id}`)
 	},
-	getParam(v) { return JSON.parse(decodeURI(v)) }
+	getParam(v) {
+		console.log("获取到的路由参数", v, typeof v)
+		if (typeof v === 'object') {
+			return v
+		}else{
+			return JSON.parse(decodeURI(v))
+		}
+		
+	}
 }
 
 module.exports = zz

@@ -11,7 +11,7 @@
             </view>
 
             <!-- #ifndef APP-PLUS -->
-            <!-- #ifndef H5-ZLB -->
+            <!-- #ifndef H5-->
             <view class="padding flex flex-direction align-center">
                 <button class="cu-btn lg round lines bg-blue response" @tap="downloadApp">
                     <view class="text-ztsblue">【环浙步道】APP下载</view>

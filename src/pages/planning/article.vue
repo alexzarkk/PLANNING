@@ -73,7 +73,7 @@
             <!-- #ifdef APP -->
             <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true" @userEvent="commentEvent"></zz-comment>
             <!-- #endif -->
-            <!-- #ifdef H5-ZLB -->
+            <!-- #ifdef H5 -->
             <zz-blog v-if="article._id" ref="blogComment" :tid="article._id" :is-can-reply="false" />
             <!-- #endif -->
             <view class="padding-sm flex flex-direction solid-bottom"></view>
@@ -95,6 +95,7 @@ export default {
         };
     },
     onLoad: async function ({ id } = q) {
+        console.log("article-----------onLoad============")
         const eventName = 'newComment' + id
         console.warn("文章页面监听评论更新--------", eventName)
         uni.$on(eventName, (params) => {
@@ -107,6 +108,12 @@ export default {
         setTimeout(() => {
             this.zz.userEvent(20, 10, this.article)
         }, 100)
+    },
+    onReady(){
+        console.log("article-----------onReady============")
+    },
+    onShow(){
+        console.log('onshow---------------');
     },
     onHide() {
         if (this.videoContext) this.videoContext.pause();
