@@ -109,12 +109,12 @@
                                 编辑
                             </view>
                         </view>
-                        <view class="line-operation  radius square" @click="showShareModal">
+                        <!-- <view class="line-operation  radius square" @click="showShareModal">
                             <view class="operation-icon cuIcon-share"></view>
                             <view class="operation-title">
                                 分享
                             </view>
-                        </view>
+                        </view> -->
                     </view>
                 </view>
             </view>

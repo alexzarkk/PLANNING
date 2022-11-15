@@ -112,7 +112,10 @@
 					}
 				},
 				{
-					"path": "rec/lineDetail"
+					"path": "rec/lineDetail",
+					"pageMeta": {
+						"title": "轨迹"
+					}
 				},
 				{
 					"path": "rec/point",
@@ -288,7 +291,10 @@
 					"path": "food"
 				},
 				{
-					"path": "news"
+					"path": "news",
+					"pageMeta": {
+						"title": "资讯"
+					}
 				}
 			]
 		},
@@ -337,7 +343,10 @@
 					}
 				},
 				{
-					"path": "blog/edit"
+					"path": "blog/edit",
+					"pageMeta": {
+						"title": "编辑留言"
+					}
 				},
 				{
 					"path": "blog/detail"
@@ -346,7 +355,10 @@
 					"path": "blog/bloglist"
 				},
 				{
-					"path": "set/set"
+					"path": "set/set",
+					"pageMeta": {
+						"title": "信息编辑"
+					}
 				},
 				{
 					"path": "set/version"
@@ -358,7 +370,10 @@
 					}
 				},
 				{
-					"path": "set/avatarCropper"
+					"path": "set/avatarCropper",
+					"pageMeta": {
+						"title": "头像裁剪"
+					}
 				},
 				{
 					"path": "set/settings/privacy"
@@ -379,7 +394,10 @@
 					"path": "set/settings/mobile"
 				},
 				{
-					"path": "set/settings/bodyInfo"
+					"path": "set/settings/bodyInfo",
+					"pageMeta": {
+						"title": "修改身体数据"
+					}
 				},
 				{
 					"path": "set/settings/saveInfo"
@@ -484,7 +502,10 @@
 					}
 				},
 				{
-					"path": "nodata"
+					"path": "nodata",
+					"pageMeta": {
+						"title": ""
+					}
 				},
 				{
 					"path": "webView"
@@ -514,7 +535,10 @@
 					}
 				},
 				{
-					"path": "kml"
+					"path": "kml",
+					"pageMeta": {
+						"title": "轨迹"
+					}
 				},
 				{
 					"path": "point"

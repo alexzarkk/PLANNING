@@ -2,7 +2,7 @@
 import zwLogUtils from '@/comm/zwLogUtils'
 export default {
     onShow() {
-        console.warn("onShow ---------------------------mixin-----------------", this.$route)
+        // console.warn("onShow ---------------------------mixin-----------------", this.$route)
         this.addZwLog(this)
     },
     data() {

@@ -31,7 +31,7 @@ const comm = {
 			x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
 			x.send(param)
 			
-			console.log('Ajax ------------------->', q)
+			// console.log('Ajax ------------------->', q)
 			
 			x.onreadystatechange = ()=>{
 				if (x.readyState === 4) {

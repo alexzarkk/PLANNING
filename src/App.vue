@@ -15,25 +15,25 @@ export default {
     async onLaunch() {
 
         // #ifdef H5
-        console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
+        // console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
         // #ifdef H5-ZLB
         // 修改字体
         let _this = this;
-        console.log("ZWJSBridge------", ZWJSBridge)
+        // console.log("ZWJSBridge------", ZWJSBridge)
         ZWJSBridge.onReady(() => {
             ZWJSBridge.setTitle({
                 "title": "环浙步道"
             }).then(res => {
-                console.log("修改当前页面的标题成功---", res)
+                // console.log("修改当前页面的标题成功---", res)
             }).catch(err => {
-                console.error("修改当前页面的标题失败---", err)
+                // console.error("修改当前页面的标题失败---", err)
             })
-            console.info('浙里办初始化完成，执行bridge方法')
+            // console.info('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
-                console.log("获取到的当前的style======", uiStyle)
+                // console.log("获取到的当前的style======", uiStyle)
                 // uiStyle = 'elder'
                 let fontSize = '10px'
-                console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
+                // console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
                 if (uiStyle === 'elder') {
                     fontSize = '16px'
                 } else {
@@ -44,7 +44,7 @@ export default {
                     // 方案2修改字体
                     let htmlFont = document.getElementsByTagName('html')[0]
                     htmlFont.style.fontSize = fontSize  // 测试16px
-                    console.warn("changeFontSize----------------------", fontSize)
+                    // console.warn("changeFontSize----------------------", fontSize)
                 })
             })
         })
@@ -68,7 +68,7 @@ export default {
             document.documentElement.style.fontSize = fontSize
             let htmlFont = document.getElementsByTagName('html')[0]
             htmlFont.style.fontSize = fontSize  // 测试16px
-            console.warn("changeFontSize----------------------", fontSize)
+            // console.warn("changeFontSize----------------------", fontSize)
         })
         // #endif
 
@@ -86,7 +86,7 @@ export default {
                 Vue.prototype.platform = e.platform
                 // #ifdef APP-PLUS
                 Vue.prototype.CustomBar = e.statusBarHeight + 44
-                console.info('App Launch at APP-PLUS' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + Vue.prototype.StatusBar);
+                // console.info('App Launch at APP-PLUS' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + Vue.prototype.StatusBar);
                 // #endif
 
                 // #ifdef H5
@@ -121,13 +121,13 @@ export default {
                 Vue.prototype.platform = 'MP-WEIXIN';
                 let custom = wx.getMenuButtonBoundingClientRect()
                 Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-                console.log('App Launch at MP-WEIXIN' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + e.statusBarHeight);
+                // console.log('App Launch at MP-WEIXIN' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + e.statusBarHeight);
                 // #endif
 
                 // #ifdef MP-ALIPAY
                 Vue.prototype.platform = 'MP-ALIPAY'
                 Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight
-                console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
+                // console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
                 // #endif
 
                 uni.setStorageSync('sysInfo', e)
@@ -173,7 +173,7 @@ export default {
 
             let dict = uni.getStorageSync('sys_dict') || {}
             this.zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-                console.log("获取到的dict----", e)
+                // console.log("获取到的dict----", e)
                 if (e.v) {
                     Object.assign(dict, e)
                     uni.setStorageSync('sys_dict', dict)

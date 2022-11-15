@@ -229,7 +229,7 @@ export default {
 
         // #ifdef H5-ZLB
         let newCommentEvent = 'newComment' + id
-        console.warn("监听评论事件", newCommentEvent)
+        // console.warn("监听评论事件", newCommentEvent)
         uni.$on(newCommentEvent, (params) => {
             this.$refs.blogComment.init(); // 刷新评论列表
         });
