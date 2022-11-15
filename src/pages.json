@@ -13,12 +13,18 @@
 			"path": "pages/index/index",
 			"app-plus": {
 				"bounce": "none" //关闭窗口回弹效果
+			},
+			"meta": {
+				"title": "环浙步道"
 			}
 		},
 		{
 			"path": "pages/index/planning",
 			"style": {
 				"onReachBottomDistance": 20
+			},
+			"meta": {
+				"title": "行程"
 			}
 		},
 		{
@@ -35,10 +41,16 @@
 			"path": "pages/index/station"
 		},
 		{
-			"path": "pages/index/event"
+			"path": "pages/index/event",
+			"meta": {
+				"title": "活动"
+			}
 		},
 		{
-			"path": "pages/index/me"
+			"path": "pages/index/me",
+			"meta": {
+				"title": "我"
+			}
 		},
 		{
 			"path": "pages/index/postStation"
