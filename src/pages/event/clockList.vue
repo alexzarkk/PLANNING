@@ -149,10 +149,8 @@ https://s1.ax1x.com/2022/05/27/XegQC4.png  坐标点
 </template>
 
 <script>
-import zzBottomBtn from '../../components/zz/zz-bottom-btn.vue';
 import { mapState } from 'vuex';
 export default {
-    components: { zzBottomBtn },
     onShow() {
         if (this.isMapReady) {
             this.getList();

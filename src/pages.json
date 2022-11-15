@@ -9,19 +9,43 @@
 		}
 	},
 	"pages": [
-		{"path": "pages/index/index",
-		"app-plus": {
-			"bounce": "none" //关闭窗口回弹效果
-		}},
-		{"path": "pages/index/planning", "style": { "onReachBottomDistance": 20 }},
-		{"path": "pages/index/planningPub", "style":{ "enablePullDownRefresh": true, "backgroundColorTop": "#1d50a2" }},
-		{"path": "pages/index/station"},
-		{"path": "pages/index/event"},
-		{"path": "pages/index/me"},
-		{"path": "pages/index/postStation"},
-		{"path": "pages/share"}   //此路径在PC后端分享使用，请勿修改
+		{
+			"path": "pages/index/index",
+			"app-plus": {
+				"bounce": "none" //关闭窗口回弹效果
+			}
+		},
+		{
+			"path": "pages/index/planning",
+			"style": {
+				"onReachBottomDistance": 20
+			}
+		},
+		{
+			"path": "pages/index/planningPub",
+			"style": {
+				"enablePullDownRefresh": true,
+				"backgroundColorTop": "#1d50a2"
+			}
+		},
+		{
+			"path": "pages/index/station"
+		},
+		{
+			"path": "pages/index/event"
+		},
+		{
+			"path": "pages/index/me"
+		},
+		{
+			"path": "pages/index/postStation"
+		},
+		{
+			"path": "pages/share"
+		} //此路径在PC后端分享使用，请勿修改
 		// #ifdef APP-PLUS
-		,{
+		,
+		{
 			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
 			"style": {
 				"disableScroll": true,
@@ -38,87 +62,127 @@
 		}
 		// #endif
 	],
-	
-	"subPackages": [ 
+	"subPackages": [
 		//记录
 		{
-			"root": "pages/nav/",
+			"root": "pages/nav",
 			"pages": [
-				{"path": "navApp"},
-				{"path": "navH5"},
-				{"path": "info"},
-				{"path": "point"},
-				{"path": "save"},
+				{
+					"path": "navApp"
+				},
+				{
+					"path": "navH5"
+				},
+				{
+					"path": "info"
+				},
+				{
+					"path": "point"
+				},
+				{
+					"path": "save"
+				},
 				// #ifdef H5
-				{"path": "scan"},
+				{
+					"path": "scan"
+				},
 				// #endif
-				
-				{"path": "rec/line"},
-				{"path": "rec/lineDetail"},
-				{"path": "rec/point"},
-				{"path": "rec/foots"},
-				{"path": "rec/picture"},
-				
-				{"path": "rec/edit"},
-				{"path": "rec/editPoi"}
+				{
+					"path": "rec/line"
+				},
+				{
+					"path": "rec/lineDetail"
+				},
+				{
+					"path": "rec/point"
+				},
+				{
+					"path": "rec/foots"
+				},
+				{
+					"path": "rec/picture"
+				},
+				{
+					"path": "rec/edit"
+				},
+				{
+					"path": "rec/editPoi"
+				}
 			]
 		},
 		//行程
 		{
-			"root": "pages/planning/",
+			"root": "pages/planning",
 			"pages": [
 				// #ifdef APP-PLUS
 				// {"path": "lineMap"},
 				// #endif
-			
 				{
 					"path": "article",
-					"style": {
-						"app-plus": {
-							"titleNView": {
-								"backgroundColor": "#1d50a2",
-								"titleText": "环浙步道"
-							}
-						}
+					"meta": {
+						"title": "文章详情"
 					}
-				}, {
-					"path": "detail"
-					// #ifdef APP-PLUS
-					,
-					"style": {
-						"app-plus": {
-							"titleNView": {
-								"backgroundColor": "#4eb543",
-								"titleText": "详情信息",
-								"type": "transparent"
-							}
-						}
-					}
-					// #endif
 				},
-				{"path": "poi"},
-				{"path": "map"},
-				{"path": "list"},
-				{"path": "mapView"},
-				{"path": "recommandLine"},
-				{"path": "localLine"},
-				{"path": "myLineTrack"},
-				{"path": "z"}
+				{
+					"path": "detail"
+				},
+				{
+					"path": "poi"
+				},
+				{
+					"path": "map"
+				},
+				{
+					"path": "list"
+				},
+				{
+					"path": "mapView"
+				},
+				{
+					"path": "recommandLine"
+				},
+				{
+					"path": "localLine"
+				},
+				{
+					"path": "myLineTrack"
+				},
+				{
+					"path": "z"
+				}
 			]
 		},
 		// 赛事活动
 		{
-			"root": "pages/event/",
+			"root": "pages/event",
 			"pages": [
-				{"path": "event"},
-				{"path": "tounament"},
-				{"path": "point"},
-				{"path": "ranking"},
-				{"path": "clockList"},
-				{"path": "clockDetails"},
-				{"path": "selfClockDetails"},
-				{"path": "clockResult"},
-				{"path": "mapView"},
+				{
+					"path": "event"
+				},
+				{
+					"path": "tounament"
+				},
+				{
+					"path": "point"
+				},
+				{
+					"path": "ranking"
+				},
+				{
+					"path": "clockList"
+				},
+				{
+					"path": "clockDetails"
+				},
+				{
+					"path": "selfClockDetails"
+				},
+				{
+					"path": "clockResult"
+				},
+				{
+					"path": "mapView"
+				},
 				{
 					"path": "detail/detail"
 					// #ifdef APP-PLUS
@@ -138,36 +202,65 @@
 		},
 		// 服务
 		{
-			"root": "pages/serve/",
+			"root": "pages/serve",
 			"pages": [
-				{"path": "serve"},
-				{"path": "sos"},
-				{"path": "declare"},
-				{"path": "weather"},
-				{"path": "around"},
+				{
+					"path": "serve"
+				},
+				{
+					"path": "sos"
+				},
+				{
+					"path": "declare"
+				},
+				{
+					"path": "weather"
+				},
+				{
+					"path": "around"
+				},
 				// #ifndef MP-WEIXIN
-				{"path": "amapAround"},
+				{
+					"path": "amapAround"
+				},
 				// #endif
-				{"path": "errreport"},
-				{"path": "outdoorEnv"},
-				{"path": "outdoorSafe"},
-				{"path": "outdoorSkill"},
-				{"path": "outdoorTips"}
+				{
+					"path": "errreport"
+				},
+				{
+					"path": "outdoorEnv"
+				},
+				{
+					"path": "outdoorSafe"
+				},
+				{
+					"path": "outdoorSkill"
+				},
+				{
+					"path": "outdoorTips"
+				}
 			]
 		},
 		// 驿站
 		{
-			"root": "pages/station/",
+			"root": "pages/station",
 			"pages": [
-				{"path": "hotel"},
-				{"path": "food"},
-				{"path": "news"}
+				{
+					"path": "hotel"
+				},
+				{
+					"path": "food"
+				},
+				{
+					"path": "news"
+				}
 			]
 		},
 		// mall
 		{
-			"root": "pages/mall/",
-			"pages": [{
+			"root": "pages/mall",
+			"pages": [
+				{
 					"path": "special",
 					"style": {
 						"app-plus": {
@@ -178,100 +271,212 @@
 						}
 					}
 				},
-				{"path": "goodsDetail"}
+				{
+					"path": "goodsDetail"
+				}
 			]
 		},
-		
 		{
-			"root": "pages/my/",
+			"root": "pages/my",
 			"pages": [
-				{"path": "my"},
+				{
+					"path": "my"
+				},
 				{
 					"path": "discover",
-					"style":{
-						"enablePullDownRefresh":true
+					"style": {
+						"enablePullDownRefresh": true
 					}
-				},  // 我的动态
-				{"path": "event/event"},
-				{"path": "blog/blog"},
-				{"path": "blog/edit"},
-				{"path": "blog/detail"},
-				{"path": "blog/bloglist"},
-				{"path": "set/set"},
-				{"path": "set/version"},
-				{"path": "set/settings"},
-				{"path": "set/avatarCropper"},
-				{"path": "set/settings/privacy"},
-				{"path": "set/settings/push"},
-				{"path": "set/settings/record"},
-				{"path": "set/settings/chat"},
-				{"path": "set/settings/map"},
-				{"path": "set/settings/mobile"},
-				{"path": "set/settings/bodyInfo"},
-				{"path": "set/settings/saveInfo"},
-				{"path": "set/settings/cacheList"},
-				{"path": "set/address/address"},
-				{"path": "set/address/editAddress"},
-				{"path": "planning/planning"},
-				{"path": "profile/profile"},
-				{"path": "profile/sysProfile"}, // 系统账户
-				{"path": "favor/favor"},
-				{"path": "order/orderList"},
+				}, // 我的动态
+				{
+					"path": "event/event"
+				},
+				{
+					"path": "blog/blog"
+				},
+				{
+					"path": "blog/edit"
+				},
+				{
+					"path": "blog/detail"
+				},
+				{
+					"path": "blog/bloglist"
+				},
+				{
+					"path": "set/set"
+				},
+				{
+					"path": "set/version"
+				},
+				{
+					"path": "set/settings"
+				},
+				{
+					"path": "set/avatarCropper"
+				},
+				{
+					"path": "set/settings/privacy"
+				},
+				{
+					"path": "set/settings/push"
+				},
+				{
+					"path": "set/settings/record"
+				},
+				{
+					"path": "set/settings/chat"
+				},
+				{
+					"path": "set/settings/map"
+				},
+				{
+					"path": "set/settings/mobile"
+				},
+				{
+					"path": "set/settings/bodyInfo"
+				},
+				{
+					"path": "set/settings/saveInfo"
+				},
+				{
+					"path": "set/settings/cacheList"
+				},
+				{
+					"path": "set/address/address"
+				},
+				{
+					"path": "set/address/editAddress"
+				},
+				{
+					"path": "planning/planning"
+				},
+				{
+					"path": "profile/profile"
+				},
+				{
+					"path": "profile/sysProfile"
+				}, // 系统账户
+				{
+					"path": "favor/favor"
+				},
+				{
+					"path": "order/orderList"
+				},
 				{
 					"path": "social/fans",
-					"style":{
-						"enablePullDownRefresh":true
+					"style": {
+						"enablePullDownRefresh": true
 					}
 				},
 				{
 					"path": "social/follow",
-					"style":{
-						"enablePullDownRefresh":true
+					"style": {
+						"enablePullDownRefresh": true
 					}
 				},
-				{"path": "social/friend"},
-				{"path": "social/team"},
-				{"path": "social/teamCreate"},
-				{"path": "social/teamSetting"},
-				{"path": "social/pushDetails"},
-				{"path": "social/commentDetails"},
-				{"path": "social/writeTopic"},
-				{"path": "social/message/chat"},
-				{"path": "social/message/msgList"}
+				{
+					"path": "social/friend"
+				},
+				{
+					"path": "social/team"
+				},
+				{
+					"path": "social/teamCreate"
+				},
+				{
+					"path": "social/teamSetting"
+				},
+				{
+					"path": "social/pushDetails"
+				},
+				{
+					"path": "social/commentDetails"
+				},
+				{
+					"path": "social/writeTopic"
+				},
+				{
+					"path": "social/message/chat"
+				},
+				{
+					"path": "social/message/msgList"
+				}
 			]
 		},
-		
 		// comm
 		{
-			"root": "pages/comm/",
+			"root": "pages/comm",
 			"pages": [
-				{"path": "about"},
-				{"path": "nodata"},
-				{"path": "webView"},
-				{"path": "feedback"},
-				{"path": "search"},
-				{"path": "region"},
-				{"path": "mapboxFullscreen"},
-				{"path": "kmlPage"},
-				{"path": "kml"},
-				{"path": "point"},
-				{"path": "account/login"}, 
-				{"path": "account/reg"}, 
-				{"path": "account/repsd"},
-				{"path": "account/changePhone"},
-				{"path": "account/deleteAccount"},
-				{"path": "doc/privacy"},
-				{"path": "doc/protocol"}
+				{
+					"path": "about"
+				},
+				{
+					"path": "nodata"
+				},
+				{
+					"path": "webView"
+				},
+				{
+					"path": "feedback"
+				},
+				{
+					"path": "search"
+				},
+				{
+					"path": "region"
+				},
+				{
+					"path": "mapboxFullscreen"
+				},
+				{
+					"path": "kmlPage"
+				},
+				{
+					"path": "kml"
+				},
+				{
+					"path": "point"
+				},
+				{
+					"path": "account/login"
+				},
+				{
+					"path": "account/reg"
+				},
+				{
+					"path": "account/repsd"
+				},
+				{
+					"path": "account/changePhone"
+				},
+				{
+					"path": "account/deleteAccount"
+				},
+				{
+					"path": "doc/privacy"
+				},
+				{
+					"path": "doc/protocol"
+				}
 			]
 		},
 		// test
 		{
-			"root": "pages/test/",
+			"root": "pages/test",
 			"pages": [
-				{"path": "index"},
-				{"path": "amap"},
-				{"path": "mapbox"},
-				{"path": "mapView"}
+				{
+					"path": "index"
+				},
+				{
+					"path": "amap"
+				},
+				{
+					"path": "mapbox"
+				},
+				{
+					"path": "mapView"
+				}
 			]
 		}
 	],
@@ -280,13 +485,13 @@
 		"selectedColor": "#515151",
 		"borderStyle": "black",
 		"backgroundColor": "#f8f8f8",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index/index",
 				"text": "首页",
 				"iconPath": "static/bar/discover_.png",
 				"selectedIconPath": "static/bar/discover.png"
 			},
-			
 			{
 				// "pagePath": "pages/index/planningPub",
 				"pagePath": "pages/index/planning",
@@ -300,7 +505,6 @@
 				"iconPath": "static/bar/event_.png",
 				"selectedIconPath": "static/bar/event.png"
 			},
-			
 			// #ifdef H5&&H5-ZLB
 			// {
 			// 	"pagePath": "pages/index/postStation",
