@@ -14,7 +14,7 @@
 			"app-plus": {
 				"bounce": "none" //关闭窗口回弹效果
 			},
-			"meta": {
+			"pageMeta": {
 				"title": "环浙步道"
 			}
 		},
@@ -23,7 +23,7 @@
 			"style": {
 				"onReachBottomDistance": 20
 			},
-			"meta": {
+			"pageMeta": {
 				"title": "行程"
 			}
 		},
@@ -33,7 +33,7 @@
 				"enablePullDownRefresh": true,
 				"backgroundColorTop": "#1d50a2"
 			},
-			"meta": {
+			"pageMeta": {
 				"title": "广场"
 			}
 		},
@@ -42,13 +42,13 @@
 		},
 		{
 			"path": "pages/index/event",
-			"meta": {
+			"pageMeta": {
 				"title": "活动"
 			}
 		},
 		{
 			"path": "pages/index/me",
-			"meta": {
+			"pageMeta": {
 				"title": "我"
 			}
 		},
@@ -87,7 +87,7 @@
 				},
 				{
 					"path": "navH5",
-					"meta": {
+					"pageMeta": {
 						"title": "轨迹记录"
 					}
 				},
@@ -107,7 +107,7 @@
 				// #endif
 				{
 					"path": "rec/line",
-					"meta": {
+					"pageMeta": {
 						"title": "我的轨迹"
 					}
 				},
@@ -116,7 +116,7 @@
 				},
 				{
 					"path": "rec/point",
-					"meta": {
+					"pageMeta": {
 						"title": "我的兴趣点"
 					}
 				},
@@ -143,13 +143,13 @@
 				// #endif
 				{
 					"path": "article",
-					"meta": {
+					"pageMeta": {
 						"title": "文章详情"
 					}
 				},
 				{
 					"path": "detail",
-					"meta": {
+					"pageMeta": {
 						"title": "线路详情"
 					}
 				},
@@ -161,7 +161,7 @@
 				},
 				{
 					"path": "list",
-					"meta": {
+					"pageMeta": {
 						"title": "线路列表"
 					}
 				},
@@ -170,13 +170,13 @@
 				},
 				{
 					"path": "recommandLine",
-					"meta": {
+					"pageMeta": {
 						"title": "行程套餐"
 					}
 				},
 				{
 					"path": "localLine",
-					"meta": {
+					"pageMeta": {
 						"title": "本地频道"
 					}
 				},
@@ -323,7 +323,7 @@
 					"style": {
 						"enablePullDownRefresh": true
 					},
-					"meta": {
+					"pageMeta": {
 						"title": "我的动态"
 					}
 				}, // 我的动态
@@ -332,7 +332,7 @@
 				},
 				{
 					"path": "blog/blog",
-					"meta": {
+					"pageMeta": {
 						"title": "我的评论"
 					}
 				},
@@ -353,7 +353,7 @@
 				},
 				{
 					"path": "set/settings",
-					"meta": {
+					"pageMeta": {
 						"title": "设置"
 					}
 				},
@@ -398,19 +398,19 @@
 				},
 				{
 					"path": "profile/profile",
-					"meta": {
+					"pageMeta": {
 						"title": "个人主页"
 					}
 				},
 				{
 					"path": "profile/sysProfile",
-					"meta": {
+					"pageMeta": {
 						"title": "主页"
 					}
 				}, // 系统账户
 				{
 					"path": "favor/favor",
-					"meta": {
+					"pageMeta": {
 						"title": "收藏|喜欢"
 					}
 				},
@@ -422,7 +422,7 @@
 					"style": {
 						"enablePullDownRefresh": true
 					},
-					"meta": {
+					"pageMeta": {
 						"title": "粉丝"
 					}
 				},
@@ -431,13 +431,13 @@
 					"style": {
 						"enablePullDownRefresh": true
 					},
-					"meta": {
+					"pageMeta": {
 						"title": "关注"
 					}
 				},
 				{
 					"path": "social/friend",
-					"meta": {
+					"pageMeta": {
 						"title": "好友"
 					}
 				},
@@ -452,7 +452,7 @@
 				},
 				{
 					"path": "social/pushDetails",
-					"meta": {
+					"pageMeta": {
 						"title": "动态详情"
 					}
 				},
@@ -461,7 +461,7 @@
 				},
 				{
 					"path": "social/writeTopic",
-					"meta": {
+					"pageMeta": {
 						"title": "发布动态"
 					}
 				},
@@ -479,7 +479,7 @@
 			"pages": [
 				{
 					"path": "about",
-					"meta": {
+					"pageMeta": {
 						"title": "关于"
 					}
 				},
@@ -491,7 +491,7 @@
 				},
 				{
 					"path": "feedback",
-					"meta": {
+					"pageMeta": {
 						"title": "意见反馈"
 					}
 				},
@@ -500,7 +500,7 @@
 				},
 				{
 					"path": "region",
-					"meta": {
+					"pageMeta": {
 						"title": "选择地区"
 					}
 				},
@@ -509,7 +509,7 @@
 				},
 				{
 					"path": "kmlPage",
-					"meta": {
+					"pageMeta": {
 						"title": "轨迹"
 					}
 				},

@@ -16,6 +16,9 @@ Vue.prototype.bd = bd
 // Vue.prototype.$store = store
 Vue.config.productionTip = false
 
+import zwlogMixin from '@/mixins/zwlog';
+Vue.mixin(zwlogMixin);
+
 App.mpType = 'app'
 const app = new Vue({
 	...App,

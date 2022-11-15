@@ -95,9 +95,9 @@ export default {
         };
     },
     onLoad: async function ({ id } = q) {
-        console.log("article-----------onLoad============")
+        // console.log("article-----------onLoad============")
         const eventName = 'newComment' + id
-        console.warn("文章页面监听评论更新--------", eventName)
+        // console.warn("文章页面监听评论更新--------", eventName)
         uni.$on(eventName, (params) => {
             // console.log('评论更新了', params);
             console.log("this.$refs.blogComment------", this.$refs.blogComment)

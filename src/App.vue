@@ -21,6 +21,13 @@ export default {
         let _this = this;
         console.log("ZWJSBridge------", ZWJSBridge)
         ZWJSBridge.onReady(() => {
+            ZWJSBridge.setTitle({
+                "title": "环浙步道"
+            }).then(res => {
+                console.log("修改当前页面的标题成功---", res)
+            }).catch(err => {
+                console.error("修改当前页面的标题失败---", err)
+            })
             console.info('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
                 console.log("获取到的当前的style======", uiStyle)

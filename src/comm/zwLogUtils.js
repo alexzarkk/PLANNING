@@ -1,13 +1,16 @@
 
 import zz from './zz'
 
-console.log("引入了zz",zz.getAcc())
+
+import bd from './bd'
+
+
 
 // 埋点对象
-var zwlog;
+let zwlog;
 
 // 页面埋点数据
-var zwlogPageMap = {};
+let zwlogPageMap = {};
 
 // 使用path当成key，装埋点数据
 
@@ -35,6 +38,11 @@ function initZwLog() {
 /**
  * 在页面中添加埋点日志
  * 注意点: zwlogPageMap 所有的数据通过关键字pagePath（页面路径进行匹配）
+ * 
+ * 路由守卫加入进入离开时间
+ * onShow + this.$nextTick 统计页面加载完成时间
+ * 
+ * 
  * _this            【页面必填，App监听不填】  当前页面this      用于获取当前页面的pagePath，navigationBarTitle  页面路径和页面title
  * pagePath         【页面不填，App监听必填】  当前页面的路径     通过路径来设置页面进入和离开时间，app.vue中监听路由只能拿到路径
  * enterPageTime    【页面不填，App监听必填】  进入页面的时间     app.vue中监听路由得到  路由守卫
@@ -48,16 +56,14 @@ function addZwLogPage({
     enterPageTime = null,
     leavePageTime = null,
     loadTime = null,
-    responseTime = null
+    responseTime = null,
+    title = null
 } = {}) {
-    if (initZwLog() && (_this || pagePath)) {
+    let path = _this ? _this.$route.path : pagePath
+    if (initZwLog() && (_this || path)) {
         // 获取匹配的页面
-        let path = _this ? _this.$mp.page.route : pagePath
-        console.info("获取页面路径",path)
         // 移除测试页面带来的埋点干扰项
         if (White_List.indexOf(path) != -1) return
-        let title = _this ? _this.$holder.navigationBarTitleText : null
-        console.info('获取到的页面的titile',title)
         // 如果不存在当前页面的数据，那么就开始初始化
         if (!zwlogPageMap.hasOwnProperty(path)) {
             zwlogPageMap[path] = {
@@ -71,13 +77,25 @@ function addZwLogPage({
         }
 
         // 写入当前数据
-        if (path) {zwlogPageMap[path].path = path}
-        if (title) {zwlogPageMap[path].title = title}
-        if (enterPageTime) {zwlogPageMap[path].enterPageTime = enterPageTime}
-        if (leavePageTime) {zwlogPageMap[path].leavePageTime = leavePageTime}
-        if (loadTime) {zwlogPageMap[path].loadTime = loadTime}
-        if (responseTime) { zwlogPageMap[path].responseTime = responseTime }
-
+        if (path) {
+            zwlogPageMap[path].path = path
+        }
+        if (title) {
+            zwlogPageMap[path].title = title
+        }
+        if (enterPageTime) {
+            zwlogPageMap[path].enterPageTime = enterPageTime
+        }
+        if (leavePageTime) {
+            zwlogPageMap[path].leavePageTime = leavePageTime
+        }
+        if (loadTime) {
+            zwlogPageMap[path].loadTime = loadTime
+        }
+        if (responseTime) {
+            zwlogPageMap[path].responseTime = responseTime
+        }
+        console.log("收集的数据", zwlogPageMap)
         // 如果当前页面的数据全部收集完毕
         if (zwlogPageMap[path].path &&
             zwlogPageMap[path].title &&
@@ -86,7 +104,7 @@ function addZwLogPage({
             zwlogPageMap[path].loadTime &&
             zwlogPageMap[path].responseTime) {
 
-            // 页面浏览时长
+            // 页面浏览时长  离开时间 - 进入时间
             let Page_duration = (zwlogPageMap[path].leavePageTime.getTime() - zwlogPageMap[path].enterPageTime
                 .getTime()) / 1000
             // 页面加载时间
@@ -95,8 +113,10 @@ function addZwLogPage({
             let t0 = (zwlogPageMap[path].responseTime.getTime() - zwlogPageMap[path].enterPageTime.getTime()) / 1000
 
             let pvParams = {
-                miniAppId: getApp().globalData.miniAppId,
-                miniAppName: getApp().globalData.miniAppName,
+                // miniAppId: getApp().globalData.miniAppId,
+                // miniAppName: getApp().globalData.miniAppName,
+                miniAppId: bd.appid,
+                miniAppName: bd.sys.name,
                 log_status: '02',
                 Page_duration: Page_duration,
                 t2: t2,
@@ -112,7 +132,7 @@ function addZwLogPage({
                 return
             }
             zwlog.onReady(function () {
-                console.log("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
+                console.warn("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
                     "\n查看NetWork - All(不进行筛选)-m.gif?xxxxxx\n",
                     `\n miniAppId（IRS服务侧应用appId） = ${pvParams.miniAppId}
                     \n miniAppName（IRS服务侧应用名称） = ${pvParams.miniAppName}
@@ -122,7 +142,8 @@ function addZwLogPage({
                     \n Page_duration（页面浏览时长） = ${pvParams.Page_duration}
                     \n t2（页面加载时间，启动到开始加载） = ${pvParams.t2}
                     \n t0（页面响应时间，启动到加载完毕） = ${pvParams.t0} \n\n `);
-                if (getApp().globalData.ZlBRelease) zwlog.sendPV(pvParams)
+                zwlog.sendPV(pvParams)
+                // if (getApp().globalData.ZlBRelease) {}
                 delete zwlogPageMap[path]
             })
         }
