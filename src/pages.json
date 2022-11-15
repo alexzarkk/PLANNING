@@ -26,6 +26,9 @@
 			"style": {
 				"enablePullDownRefresh": true,
 				"backgroundColorTop": "#1d50a2"
+			},
+			"meta": {
+				"title": "广场"
 			}
 		},
 		{
@@ -71,7 +74,10 @@
 					"path": "navApp"
 				},
 				{
-					"path": "navH5"
+					"path": "navH5",
+					"meta": {
+						"title": "轨迹记录"
+					}
 				},
 				{
 					"path": "info"
@@ -88,13 +94,19 @@
 				},
 				// #endif
 				{
-					"path": "rec/line"
+					"path": "rec/line",
+					"meta": {
+						"title": "我的轨迹"
+					}
 				},
 				{
 					"path": "rec/lineDetail"
 				},
 				{
-					"path": "rec/point"
+					"path": "rec/point",
+					"meta": {
+						"title": "我的兴趣点"
+					}
 				},
 				{
 					"path": "rec/foots"
@@ -136,16 +148,25 @@
 					"path": "map"
 				},
 				{
-					"path": "list"
+					"path": "list",
+					"meta": {
+						"title": "线路列表"
+					}
 				},
 				{
 					"path": "mapView"
 				},
 				{
-					"path": "recommandLine"
+					"path": "recommandLine",
+					"meta": {
+						"title": "行程套餐"
+					}
 				},
 				{
-					"path": "localLine"
+					"path": "localLine",
+					"meta": {
+						"title": "本地频道"
+					}
 				},
 				{
 					"path": "myLineTrack"
@@ -289,13 +310,19 @@
 					"path": "discover",
 					"style": {
 						"enablePullDownRefresh": true
+					},
+					"meta": {
+						"title": "我的动态"
 					}
 				}, // 我的动态
 				{
 					"path": "event/event"
 				},
 				{
-					"path": "blog/blog"
+					"path": "blog/blog",
+					"meta": {
+						"title": "我的评论"
+					}
 				},
 				{
 					"path": "blog/edit"
@@ -313,7 +340,10 @@
 					"path": "set/version"
 				},
 				{
-					"path": "set/settings"
+					"path": "set/settings",
+					"meta": {
+						"title": "设置"
+					}
 				},
 				{
 					"path": "set/avatarCropper"
@@ -355,13 +385,22 @@
 					"path": "planning/planning"
 				},
 				{
-					"path": "profile/profile"
+					"path": "profile/profile",
+					"meta": {
+						"title": "个人主页"
+					}
 				},
 				{
-					"path": "profile/sysProfile"
+					"path": "profile/sysProfile",
+					"meta": {
+						"title": "主页"
+					}
 				}, // 系统账户
 				{
-					"path": "favor/favor"
+					"path": "favor/favor",
+					"meta": {
+						"title": "收藏|喜欢"
+					}
 				},
 				{
 					"path": "order/orderList"
@@ -370,16 +409,25 @@
 					"path": "social/fans",
 					"style": {
 						"enablePullDownRefresh": true
+					},
+					"meta": {
+						"title": "粉丝"
 					}
 				},
 				{
 					"path": "social/follow",
 					"style": {
 						"enablePullDownRefresh": true
+					},
+					"meta": {
+						"title": "关注"
 					}
 				},
 				{
-					"path": "social/friend"
+					"path": "social/friend",
+					"meta": {
+						"title": "好友"
+					}
 				},
 				{
 					"path": "social/team"
@@ -391,13 +439,19 @@
 					"path": "social/teamSetting"
 				},
 				{
-					"path": "social/pushDetails"
+					"path": "social/pushDetails",
+					"meta": {
+						"title": "动态详情"
+					}
 				},
 				{
 					"path": "social/commentDetails"
 				},
 				{
-					"path": "social/writeTopic"
+					"path": "social/writeTopic",
+					"meta": {
+						"title": "发布动态"
+					}
 				},
 				{
 					"path": "social/message/chat"
@@ -412,7 +466,10 @@
 			"root": "pages/comm",
 			"pages": [
 				{
-					"path": "about"
+					"path": "about",
+					"meta": {
+						"title": "关于"
+					}
 				},
 				{
 					"path": "nodata"
@@ -421,19 +478,28 @@
 					"path": "webView"
 				},
 				{
-					"path": "feedback"
+					"path": "feedback",
+					"meta": {
+						"title": "意见反馈"
+					}
 				},
 				{
 					"path": "search"
 				},
 				{
-					"path": "region"
+					"path": "region",
+					"meta": {
+						"title": "选择地区"
+					}
 				},
 				{
 					"path": "mapboxFullscreen"
 				},
 				{
-					"path": "kmlPage"
+					"path": "kmlPage",
+					"meta": {
+						"title": "轨迹"
+					}
 				},
 				{
 					"path": "kml"
