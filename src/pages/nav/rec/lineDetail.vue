@@ -2,231 +2,202 @@
 	<page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bg-color="bg-ztsgreen" :is-back="true">
-            <block slot="content">{{ rec.name }}</block>
+            <block slot="content">{{ rec?rec.name:'' }}</block>
         </cu-custom>
-		<block v-if="line.length">
-			<zz-map :cur="cur" :line="line" :point="point" :winH="240"></zz-map>
-			
-			<tui-collapse :index="1" :current="current" :disabled="!point.length" @click="change3">
-				<template v-slot:title>
-					<tui-list-cell :hover="true">
-						<text class="cuIcon-location text-blue"></text>
-						<text class="padding-left-sm">兴趣点
-							<text class="text-gray text-sm margin-lr-sm">{{point.length+'个'}}</text>
-						</text>
-					</tui-list-cell>
-				</template>
-				<template v-slot:content>
-					<view class="bg-gray">
-						<view class="cu-list menu-avatar padding-sm">
-							<block v-for="(t2, idx) in point" :key="idx">
-								<view class="cu-item solid-top" :style="'background:'+(t2._id==cur._id?'#cce6ff':'#FFF')">
-									<view class="cu-avatar lg" :style="'background-image:url('+icon[t2.t2]+')'" @click="active(t2)"></view>
-									<view class="content" @click="active(t2)">
-										<view class="text-grey">
-											<view class="text-dark text-bold">{{ t2.sn||t2.name }}</view>
-											<view class="padding-left-xs text-grey text-xs">{{ t2.pt.label }}</view>
-										</view>
-										<view class="text-gray text-sm flex">
-											<view class="text-cut">
-												<text class="cuIcon-info text-grey margin-right-xs"></text>
-												{{t2.desc||t2.time}}
-											</view>
-										</view>
-									</view>
-									<view class="action" @click="active(t2, idx)">
-										<text class="cuIcon-pic text-grey" v-if="t2.imgs.length">{{ t2.imgs.length }}</text>
-										<text class="cuIcon-record text-grey" v-if="t2.video"></text>
-										<view class="text-grey text-xs">详情</view>
-									</view>
-								</view>
-							</block>
-						</view>
-					</view>
-				</template>
-			</tui-collapse>
-			
-			<zz-kml-nav v-if="line.length" :coord="line[0].coord" class="solid" @addr="addrInfo"></zz-kml-nav>
-		</block>
-		<block v-else>
-			<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
-		</block>
-		
-		<view class="container solid-top">
-            <!-- 使用路线 -->
-            <view v-if="rec" style="width: 380rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
-                <button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
-                    <text class="zzIcon-distfill margin-right-sm" />
-                    使用路线
-                </button>
-            </view>
-			<!-- <view class="flex">
-				<view class="flex-sub"></view>
-				<view class="flex-treble">
-					<view v-if="rec" style="width: 350rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
-					    <button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
-					        <text class="zzIcon-distfill margin-right-sm" />
-					        使用路线
-					    </button>
-					</view>
-				</view>
-				<view class="flex-sub">1</view>
-			</view> -->
-			
-			<block v-if="rec.imgs.length">
-				<swiper class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="500">
-					<swiper-item v-for="(pic, index) in rec.imgs" :key="index" :data-index="index" @tap.stop="viewImg(rec.imgs, index)">
-						<image :src="pic" mode="aspectFill"></image>
-					</swiper-item>
-				</swiper>
-			</block>
-			
-            <!-- 线路信息 -->
-            <view class="line-info-box">
-                <view class="flex align-center justify-between">
-                    <view class="sport-type-box">
-                        <view class="sport-icon" :class="'zzIcon-z'+rec.type"></view>
-                        <view>{{ rec.typeObj.label }}</view>
-                    </view>
-                    <view class="padding-right text-bold">
-                        {{ zz.time2Date(rec.startTime, 'Y-M-D h:m') }}
-                    </view>
-                </view>
-                <view class="line-info-name">
-                    {{ rec.name }}
-                </view>
-				
-                <view class="flex align-center justify-between">
-                    <view class="avatar-box">
-                        <view class="cu-avatar radius margin-right lg" :style="'background-image:url(' + rec.userInfo.headImg + ')'"></view>
-                        <view>{{ rec.userInfo.nickName }}</view>
-                    </view>
-                    <!-- 编辑按钮 -->
-                    <view class="padding-right flex">
-                        <view v-if="isMy" class="line-operation margin-right radius square" @click="openEdit">
-                            <view class="operation-icon cuIcon-edit"></view>
-                            <view class="operation-title">
-                                编辑
-                            </view>
-                        </view>
-                        <view class="line-operation  radius square" @click="showShareModal">
-                            <view class="operation-icon cuIcon-share"></view>
-                            <view class="operation-title">
-                                分享
-                            </view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-			
-            <!-- 相关操作的盒子 -->
-            <view v-if="!isMy" class="line-operation-box">
-                <view v-for="(item, index) in opeartionList" :key="index" class="line-operation" @click="opeartionClick(item)">
-                    <view class="operation-icon" :class="'cuIcon-'+item.icon+(rec[item.k]? 'fill':'')"></view>
-					<text class="text-gray text-sm">{{rec[item.v]||0}}</text>
-                    <view class="operation-title">
-                        {{ item.title }}
-                    </view>
-                </view>
-            </view>
-            <view class="line-detail-info-box solids-bottom">
-                <view v-for="(item, index) in lineDetailList" :key="index" class="line-detail-item-wrapper">
-                    <view v-for="(inner, iIndex) in item" :key="iIndex" class="line-detail-border-box">
-                        <view class="line-detail-item">
-                            <view class="detail-item-title">
-                                {{ inner.title }}
-                            </view>
-                            <view class="detail-item-value">
-                                {{ inner.value }}
-                            </view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-            <!-- 线路描述 -->
-            <view v-if="rec.desc" class="padding text-xl">
-                {{ rec.desc }}
-            </view>
-			
-			<view class="cu-bar bg-white solid-bottom">
-				<view class="action">
-					<text class="cuIcon-titles text-blue"></text>
-					景观元素
-				</view>
-			</view>
-				
-			<!-- 景观元素 -->
-			<template v-if="rec.ele.length">
-				<view class="padding-lr bg-white solid-bottom">
-					<view class="grid text-center col-1">
-						<view class="bg-white">
-							<view class="flex align-center">
-								<view class="flex-treble padding-xs radius">
-									<view class="flex flex-wrap align-center">
-										<view class="padding-xs" v-for="(x, idx) in rec.ele" :key="idx">
-											<view class="cu-tag bg-green round lg">{{ dict.trail_element[x].label }}</view>
-											<!-- <view class="cu-tag" :class="'bg-' + dict.trail_element[x].color">{{ dict.trail_element[x].label }}</view> -->
-										</view>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			 </template>
-			 <template v-else>
-				 <tui-no-data :fixed="false">无数据~</tui-no-data>
-			 </template>
-				 
-			<!-- 体验评分 -->
-			<view class="cu-bar solid-bottom">
-				<view class="action">
-					<text class="cuIcon-titles text-blue"></text>
-					印象评分
-				</view>
-			</view>
-			<view class="solid-bottom padding-bottom">
-				<block v-for="(e, idx) in zz.toArr(dict.trail_ip)" :key="idx">
-					<view class="cu-list menu bg-white sm-border card-menu">
-						<view class="flex padding-lr align-center">
-							<view class="radius flex align-center" style="column-gap:20rpx" :class="'text-' + e.color">
-								<text class="cuIcon-info"></text>
-								<view style="min-width: 4.5em">{{ e.label }}</view>
-								<tui-rate :current="rec.ip[idx]" :disabled="true"></tui-rate>
-							</view>
-						</view>
-					</view>
-				</block>
-			</view>
-			
-        </view>
-		<!-- <view class="bg-gray">
-			<view class="name form-section">
-				<view class="form-section-title flex justify-between">
-					<view>
-						<text class="text-red padding-right-xs">*</text>
-						印象评分
-					</view>
-				</view>
-				<view class="cu-list menu">
-					<view v-for="(e, idx) in zz.toArr(dict.trail_ip)" :key="idx">
-						<view class="content">
-							<view class="flex justify-between">
-								<view :class="'text-' + e.color">
-									<text class="cuIcon-info margin-right-xs"></text>
-									<text>{{ e.label }}</text>
-								</view>
-								<tui-rate :size="22" :current="rec.ip[idx]"></tui-rate>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view> -->
-		<zz-weather v-if="addr" :addr="addr"></zz-weather>
-		
-        <zz-blog ref="blog" class="solid" :tid="rec._id"></zz-blog>
-		
+    	<block v-if="line.length">
+    		<zz-map :cur="cur" :line="line" :point="point" :winH="240"></zz-map>
+    		
+    		<tui-collapse :index="1" :current="current" :disabled="!point.length" @click="change3">
+    			<template v-slot:title>
+    				<tui-list-cell :hover="true">
+    					<text class="cuIcon-location text-blue"></text>
+    					<text class="padding-left-sm">兴趣点
+    						<text class="text-gray text-sm margin-lr-sm">{{point.length+'个'}}</text>
+    					</text>
+    				</tui-list-cell>
+    			</template>
+    			<template v-slot:content>
+    				<view class="bg-gray">
+    					<view class="cu-list menu-avatar padding-sm">
+    						<block v-for="(t2, idx) in point" :key="idx">
+    							<view class="cu-item solid-top" :style="'background:'+(t2._id==cur._id?'#cce6ff':'#FFF')">
+    								<view class="cu-avatar lg" :style="'background-image:url('+icon[t2.t2]+')'" @click="active(t2)"></view>
+    								<view class="content" @click="active(t2)">
+    									<view class="text-grey">
+    										<view class="text-dark text-bold">{{ t2.sn||t2.name }}</view>
+    										<view class="padding-left-xs text-grey text-xs">{{ t2.pt.label }}</view>
+    									</view>
+    									<view class="text-gray text-sm flex">
+    										<view class="text-cut">
+    											<text class="cuIcon-info text-grey margin-right-xs"></text>
+    											{{t2.desc||t2.time}}
+    										</view>
+    									</view>
+    								</view>
+    								<view class="action" @click="active(t2, idx)">
+    									<text class="cuIcon-pic text-grey" v-if="t2.imgs.length">{{ t2.imgs.length }}</text>
+    									<text class="cuIcon-record text-grey" v-if="t2.video"></text>
+    									<view class="text-grey text-xs">详情</view>
+    								</view>
+    							</view>
+    						</block>
+    					</view>
+    				</view>
+    			</template>
+    		</tui-collapse>
+    		
+    		<zz-kml-nav v-if="line.length" :coord="line[0].coord" class="solid" @addr="addrInfo"></zz-kml-nav>
+    	</block>
+    	<block v-else>
+    		<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
+    	</block>
+    	
+    	<block v-if="rec">
+    		<view class="container solid-top">
+    		    <!-- 使用路线 -->
+    		    <view v-if="rec" style="width: 380rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
+    		        <button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
+    		            <text class="zzIcon-distfill margin-right-sm" />
+    		            使用路线
+    		        </button>
+    		    </view>
+    			
+    			<block v-if="rec.imgs&&rec.imgs.length">
+    				<swiper class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="500">
+    					<swiper-item v-for="(pic, index) in rec.imgs" :key="index" :data-index="index" @tap.stop="viewImg(rec.imgs, index)">
+    						<image :src="pic" mode="aspectFill"></image>
+    					</swiper-item>
+    				</swiper>
+    			</block>
+    			
+    		    <!-- 线路信息 -->
+    		    <view class="line-info-box">
+    		        <view class="flex align-center justify-between">
+    		            <view class="sport-type-box">
+    		                <view class="sport-icon" :class="'zzIcon-z'+rec.type"></view>
+    		                <view>{{ dict.trail_type[rec.type||110].label }}</view>
+    		            </view>
+    		            <view class="padding-right text-bold">
+    		                {{ zz.time2Date(rec.startTime, 'Y-M-D h:m') }}
+    		            </view>
+    		        </view>
+    		        <view class="line-info-name">
+    		            {{ rec.name }}
+    		        </view>
+    				
+    		        <view class="flex align-center justify-between">
+    		            <view class="avatar-box">
+    		                <view class="cu-avatar radius margin-right lg" :style="'background-image:url(' + rec.userInfo.headImg + ')'"></view>
+    		                <view>{{ rec.userInfo.nickName }}</view>
+    		            </view>
+    		            <!-- 编辑按钮 -->
+    		            <view class="padding-right flex">
+    		                <view v-if="isMy" class="line-operation margin-right radius square" @click="openEdit">
+    		                    <view class="operation-icon cuIcon-edit"></view>
+    		                    <view class="operation-title">
+    		                        编辑
+    		                    </view>
+    		                </view>
+    		                <view class="line-operation  radius square" @click="showShareModal">
+    		                    <view class="operation-icon cuIcon-share"></view>
+    		                    <view class="operation-title">
+    		                        分享
+    		                    </view>
+    		                </view>
+    		            </view>
+    		        </view>
+    		    </view>
+    			
+    		    <!-- 相关操作的盒子 -->
+    		    <view v-if="!isMy" class="line-operation-box">
+    		        <view v-for="(item, index) in opeartionList" :key="index" class="line-operation" @click="opeartionClick(item)">
+    		            <view class="operation-icon" :class="'cuIcon-'+item.icon+(rec[item.k]? 'fill':'')"></view>
+    					<text class="text-gray text-sm">{{rec[item.v]||0}}</text>
+    		            <view class="operation-title">
+    		                {{ item.title }}
+    		            </view>
+    		        </view>
+    		    </view>
+    		    <view class="line-detail-info-box solids-bottom">
+    		        <view v-for="(item, index) in lineDetailList" :key="index" class="line-detail-item-wrapper">
+    		            <view v-for="(inner, iIndex) in item" :key="iIndex" class="line-detail-border-box">
+    		                <view class="line-detail-item">
+    		                    <view class="detail-item-title">
+    		                        {{ inner.title }}
+    		                    </view>
+    		                    <view class="detail-item-value">
+    		                        {{ inner.value }}
+    		                    </view>
+    		                </view>
+    		            </view>
+    		        </view>
+    		    </view>
+    		    <!-- 线路描述 -->
+    		    <view v-if="rec.desc" class="padding text-xl">
+    		        {{ rec.desc }}
+    		    </view>
+    			
+    			<view class="cu-bar bg-white solid-bottom">
+    				<view class="action">
+    					<text class="cuIcon-titles text-blue"></text>
+    					景观元素
+    				</view>
+    			</view>
+    				
+    			<!-- 景观元素 -->
+    			<template v-if="rec.ele.length">
+    				<view class="padding-lr bg-white solid-bottom">
+    					<view class="grid text-center col-1">
+    						<view class="bg-white">
+    							<view class="flex align-center">
+    								<view class="flex-treble padding-xs radius">
+    									<view class="flex flex-wrap align-center">
+    										<view class="padding-xs" v-for="(x, idx) in rec.ele" :key="idx">
+    											<view class="cu-tag bg-green round lg">{{ dict.trail_element[x].label }}</view>
+    											<!-- <view class="cu-tag" :class="'bg-' + dict.trail_element[x].color">{{ dict.trail_element[x].label }}</view> -->
+    										</view>
+    									</view>
+    								</view>
+    							</view>
+    						</view>
+    					</view>
+    				</view>
+    			 </template>
+    			 <template v-else>
+    				 <tui-no-data :fixed="false">无数据~</tui-no-data>
+    			 </template>
+    				 
+    			<!-- 体验评分 -->
+    			<view class="cu-bar solid-bottom">
+    				<view class="action">
+    					<text class="cuIcon-titles text-blue"></text>
+    					印象评分
+    				</view>
+    			</view>
+    			<view class="solid-bottom padding-bottom">
+    				<block v-for="(e, idx) in zz.toArr(dict.trail_ip)" :key="idx">
+    					<view class="cu-list menu bg-white sm-border card-menu">
+    						<view class="flex padding-lr align-center">
+    							<view class="radius flex align-center" style="column-gap:20rpx" :class="'text-' + e.color">
+    								<text class="cuIcon-info"></text>
+    								<view style="min-width: 4.5em">{{ e.label }}</view>
+    								<tui-rate :current="rec.ip[idx]" :disabled="true"></tui-rate>
+    							</view>
+    						</view>
+    					</view>
+    				</block>
+    			</view>
+    			
+    		</view>
+    		
+    	</block>
+    	<block v-else>
+    		<tui-loading :fixed="true" :index="3" type="green"></tui-loading>
+    	</block>
+    	<zz-weather v-if="addr" :addr="addr"></zz-weather>
+    	<zz-blog ref="blog" class="solid" :tid="rec._id"></zz-blog>
+    	
+    	
         <!-- 分享窗口 -->
         <view class="cu-modal" :class="modalName == 'shareModal' ? 'show' : ''" @tap="hideModal">
             <view class="cu-dialog" @tap.stop="">
@@ -248,8 +219,8 @@
                 </view>
             </view>
         </view>
-		
-		<tui-scroll-top :scroll-top="scrolled" />
+    	
+    	<tui-scroll-top :scroll-top="scrolled" />
         <!-- 页面底部应用信息 -->
         <zz-footer/>
     </view>
@@ -300,33 +271,36 @@ export default {
 			line: [],
 			point: [],
 			current: -1,
+			ele: {},
 			cur: {}
         };
     },
     async onLoad(option) {
-        let obj,
-			user = this.zz.getAcc()
-			
+		let user = this.zz.getAcc(),
+			d = this.dict
+		this.ele = Object.assign(d.trail_element,d.trail_serverPoi,d.trail_otherPoi)
+		
         if (option.id) {
-            await this.zz.req({ $url: '/user/rec/info', _id: option.id,ui:1}).then(res => {
-                obj = res
+            await this.zz.req({ $url: '/user/rec/info', _id: option.id, ui:1}).then(res => {
+                this.rec = res
             })
         }
         if (option.v) {
-            obj = this.zz.getParam(option.v)
+            this.rec = this.zz.getParam(option.v)
         }
-		obj.typeObj = this.dict.trail_type[obj.type]
-		
-        this.rec = obj
-		this.isMy = obj.userId == user._id
-        this.loadData()
-		
-		if(user&&!this.isMy) {
-			this.zz.req({$url: '/user/ue/i_s', tid: obj._id}).then(e => {
-				Object.assign(this.rec, e)
-			})
+        this.rec = this.rec
+		if(user) {
+			this.isMy = this.rec.userId == user._id
+			if(!this.isMy){
+				this.zz.req({$url: '/user/ue/i_s', tid: this.rec._id}).then(e => {
+					Object.assign(this.rec, e)
+				})
+			}else{
+				this.rec.userInfo = user
+			}
 		}
-		uni.$on('newComment'+obj._id, () => { this.$refs.blog.init() })
+		this.loadData()
+		uni.$on('newComment'+this.rec._id, () => { this.$refs.blog.init() })
     },
     methods: {
         loadData() {
@@ -351,7 +325,7 @@ export default {
             this.zz.req({$url: '/public/rec/pms',sort: 1, pid: r._id}).then(e => {
                 let {line, point} = e
 				for (let s of point) {
-					s.pt = this.dict.trail_element[s.t3]||this.dict.trail_serverPoi[s.t3]||this.dict.trail_otherPoi[s.t3]
+					s.pt = this.ele[s.t3]
 				}
 				this.line = line
 				this.point = point

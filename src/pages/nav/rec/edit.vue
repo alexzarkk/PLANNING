@@ -72,8 +72,8 @@
 			    							<view class="text-gray text-sm flex">
 			    								<view class="text-cut">
 			    									<text class="cuIcon-info text-grey margin-right-xs"></text>
-			    									{{dict.trail_element[t2.t3].label||dict.trail_serverPoi[t2.t3].label||dict.trail_otherPoi[t2.t3].label}}
-			    								</view>
+			    									{{ tele[t2.t3].label }}
+												</view>
 			    							</view>
 			    						</view>
 			    						<view class="action" @click="active(t2, idx)">
@@ -271,6 +271,7 @@ export default {
 			current: -1,
 			
 			ele:[],
+			tele:{},
 			ip: [0,0,0,0,0],
 			pageLock: true,
 			
@@ -296,7 +297,8 @@ export default {
 	onLoad({ v }) {
 		let { kml, line, point } = this.zz.getParam(v),
 			dict = this.dict
-			
+		
+		this.tele = Object.assign(dict.trail_element,dict.trail_serverPoi,dict.trail_otherPoi)		
 		this.kml = kml
 		this.line = line
 		this.point = point

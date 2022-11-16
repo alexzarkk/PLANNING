@@ -399,7 +399,7 @@ export default {
 			scale: 15,
 			point: [],
 			line: [],
-			onRun: false,
+			keepRec: false,
 			onRec: false,
 			puase: false,
 			tim: {H:0, M:0, S:0, MS:0},
@@ -423,7 +423,7 @@ export default {
 		uni.removeStorageSync('cur_loc_wgs84')
 		
 		if(v) {
-			let { kml, onRun=0, tmt=0 } = this.zz.getParam(v)
+			let { kml, keepRec=0, tmt=0 } = this.zz.getParam(v)
 			
 			this.kml = kml
 			this.tmt = tmt
@@ -442,7 +442,7 @@ export default {
 			// let p = this.point[0]
 			// if(!p) p = this.way.coord[0]
 			if(this.way.coord) this.center = this.way.coord[0]
-			this.onRun = onRun
+			this.keepRec = keepRec
 		} else {
 			await this.getLoc(true)
 		}
@@ -507,7 +507,7 @@ export default {
 		mapDone(e) {
 			this.mdone = e
 			this.setProp()
-			if(this.onRun) this.start(1)
+			if(this.keepRec) this.start(1)
 		},
 		mapDo(e) {
 			// console.log('mapDo ------ >', e)
@@ -539,7 +539,6 @@ export default {
 			}
 		},
 		mbEvent(e) { this.lock = false },
-		setRec(){uni.setStorageSync('nav_rec'+this.tmt, this.rec)},
 		async around(c){
 			if(!this.tmt) {
 				this.cps = await comm.around(c)
@@ -586,7 +585,7 @@ export default {
 			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
 			}, 1000)
 		},
-		async start(onRun){
+		async start(keepRec){
 			// #ifndef H5-ZLB
 				//提示下载app
 				// const [_, ask] = await uni.showModal({
@@ -608,6 +607,7 @@ export default {
 				},
 				tim = {H:0, M:0, S:0, MS:0},
 				rec = {
+					ct: 'wgs84',
 					startTime: this.zz.now(),
 					stopTime: 0,
 					endTime: 0,
@@ -623,7 +623,6 @@ export default {
 			const [_, ask] = await uni.showModal({
 				title: '提示',
 				content: '为确保轨迹正常记录，请勿退出页面或关闭屏幕！',
-				// cancelText: '知道了',
 				confirmText: '知道了'
 			})
 			// #endif
@@ -631,13 +630,13 @@ export default {
 			// 查询本地是否有未完成的轨迹记录
 			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
 			if (nav_rec) {
-				const keepGoing = (tran)=>{
+				const keepGoing = ()=>{
 					Object.assign(rec, nav_rec)
-					if(tran) {
-						for (let s of rec.point) {
-							s.coord = trans(s.coord,'gcj02towgs84')
-						}
+					if(rec.ct == 'gcj02') {
+						for (let s of rec.point) { s.coord = trans(s.coord,'gcj02towgs84') }
 						rec.coord = trans(rec.coord,'gcj02towgs84')
+						rec.ct = 'wgs84'
+						this.setRec()
 					}
 					
 					let T = uni.getStorageSync('nav_T_tim'+this.tmt)
@@ -646,8 +645,8 @@ export default {
 					tim.M = T[2]
 					tim.H = T[3]
 				}
-				if(onRun){
-					keepGoing(1)
+				if(keepRec){
+					keepGoing()
 				} else {
 					if(this.zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
 						init()
@@ -770,7 +769,7 @@ export default {
 						if(len&&len%10==0&&!rec.t['z'+len]) {
 							rec.t['z'+len] = 1
 							delete rec.t['z'+(len-10)]
-							let task = {$url: '/user/rec/sync', coord:[], len, tim: this.tim, stopTime: rec.stopTime}
+							let task = {$url: '/user/rec/sync', coord:[], len, ct: rec.ct, tim: this.tim, stopTime: rec.stopTime}
 							for (var i = (len-10); i < len; i++) {
 								task.coord.push(rec.coord[i])
 							}
@@ -907,14 +906,25 @@ export default {
 			this.setRec()
 		},
 		changeMap(e) {
-			this.setRec()
-			this.zz.href('/pages/nav/nav'+(this.amap?'H5':'App'), {onRun:1, kml:this.kml})
+			this.setRec(1)
+			this.zz.href('/pages/nav/nav'+(this.amap?'H5':'App'), {keepRec:1, kml:this.kml})
 		},
 		share(e) {
 			
 		},
 		info() {
 			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
+		},
+		setRec(tr){
+			let rec = this.rec
+			// if(tr) {
+			// 	rec.ct = 'gcj02'
+			// 	for (let s of rec.point) {
+			// 		s.coord = trans(s.coord)
+			// 	}
+			// 	rec.coord = trans(rec.coord)
+			// }
+			uni.setStorageSync('nav_rec'+this.tmt, rec)
 		}
 	}
 };
