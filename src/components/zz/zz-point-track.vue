@@ -29,7 +29,7 @@
                     <view class=" basis-sm flex  align-center justify-around line-info-box line-info-column-box">
                         <view class="line-info-item line-info-item-col">
                             <text class="line-info-item-title">类型</text>
-                            <text class="line-info-item-value">{{ getTypeName }}</text>
+                            <text class="line-info-item-value">{{ typeName }}</text>
                         </view>
                         <view class="line-info-item">
                             <text class="line-info-item-title">海拔</text>
@@ -136,21 +136,19 @@ export default {
             default: () => {
                 return {}
             }
-        }
+        },
+		typeName: {
+			type: String,
+			default: ''
+		}
     },
     data() {
         return {
             isPreview: false,
-            cardMode: true,
-            dict: uni.getStorageSync('sys_dict')
+            cardMode: true
         };
     },
     computed: {
-        getTypeName() {
-            const type = this.details.t3
-            const obj = this.dict.trail_element[type]
-            return obj.label || ''
-        },
         isFavor() {
             return this.details.isFavor
         }
@@ -224,13 +222,13 @@ export default {
         .line-name-sport {
             &-name {
                 color: #232323;
-                font-size: 1.6rem;
+                font-size: 32rpx;
                 font-weight: bold;
             }
 
             &-sport {
                 color: #4e4e4e;
-                font-size: 1.2rem;
+                font-size: 24rpx;
             }
         }
     }
@@ -270,12 +268,12 @@ export default {
             flex-direction: column;
             justify-content: flex-start;
             &-title {
-                font-size: 1.2rem;
+                font-size: 24rpx;
                 color: #858585;
             }
 
             &-value {
-                font-size: 1.8rem;
+                font-size: 36rpx;
                 font-weight: bold;
                 color: #282828;
             }
@@ -289,13 +287,13 @@ export default {
 
 .record-time-box {
     &-title {
-        font-size: 1.6rem;
+        font-size: 32rpx;
         font-weight: bold;
         margin-right: 20rpx;
     }
 
     &-value {
-        font-size: 1.4rem;
+        font-size: 28rpx;
     }
 }
 </style>

@@ -107,8 +107,10 @@ export default {
 		this.stH = this.sysInfo.statusBarHeight
 		this.mapHeight = this.winH
 		
+		
+		console.log('onLoad',v);
 		if(v) {
-			let { kml, onRun=0, tmt=0 } = zz.getParam(v)
+			let { kml, keepRec=0, tmt=0 } = zz.getParam(v)
 			
 			this.kml = kml
 			this.tmt = tmt
@@ -128,8 +130,8 @@ export default {
 			if(!p) p = this.line[0].points[0]
 			this.center = [p.longitude, p.latitude]
 			
-			if(onRun) {
-				this.start(1)
+			if(keepRec) {
+				return this.start(keepRec)
 			}
 		} else {
 			await this.onLoc(true)
@@ -138,7 +140,7 @@ export default {
 		if(this.tmt) {
 			// this.start()
 		}else{
-			zz.req({$fn:'sync0', $url:'/user/rec/sync',get:1}).then(e=>{
+			zz.req({$fn:'sync'+ zz.rndInt(), $url:'/user/rec/sync',get:1}).then(e=>{
 				console.log(e);
 				if(e&&(e.rec.point.length||e.rec.coord.length)&&!uni.getStorageSync('nav_rec'+this.tmt)) {
 					uni.setStorageSync('nav_rec'+this.tmt, e.rec)
@@ -170,7 +172,6 @@ export default {
 	onBackPress() { return this.onRec },
 	
 	methods: {
-		setRec(){uni.setStorageSync('nav_rec'+this.tmt, this.rec)},
 		async onchg(e){ this.lock = false; on.call(this) },
 		async around(c){
 			if(!this.tmt) {
@@ -179,9 +180,7 @@ export default {
 		},
 		async onLoc(ct,c){
 			if(!c){
-				// let {coord} = await getLocation()
-				
-				uni.showLoading({})
+				uni.showLoading()
 				let {coord} = await getLocation('gcj02')
 				uni.hideLoading()
 				c = coord
@@ -189,6 +188,7 @@ export default {
 			}
 			if(ct) this.fly(c)
 			this.lock = true
+			console.log('onLoc:>',ct,c );
 		},
 		fly(c){
 			this.amap.moveToLocation({
@@ -238,9 +238,7 @@ export default {
 			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
 			}, 1000)
 		},
-		async start(onRun=0){
-			// plus.geolocation.clearWatch(plus.wid)
-			
+		async start(keepRec){
 			let pt = (e) => { return {longitude: e[0], latitude: e[1]} },
 				init = () => {
 					uni.removeStorageSync('nav_rec'+this.tmt)
@@ -248,6 +246,7 @@ export default {
 				},
 				tim = {H:0, M:0, S:0, MS:0},
 				rec = {
+					ct: 'gcj02',
 					startTime: zz.now(),
 					stopTime: 0,
 					endTime: 0,
@@ -276,7 +275,7 @@ export default {
 				}
 			
 			// 安卓设备需要主动开启后台定位
-			// if (!onRun&&this.sysInfo.platform=='android' && uni.getStorageSync('dontAskAndroid')=='') {
+			// if (!keepRec&&this.sysInfo.platform=='android' && uni.getStorageSync('dontAskAndroid')=='') {
 			// 	const [_, ask] = await uni.showModal({
 			// 		title: '提示',
 			// 		content: '为确保轨迹在熄屏后的持续记录，请授权手机的电池和后台运行权限！',
@@ -333,12 +332,20 @@ export default {
 			
 			// 查询本地是否有未完成的轨迹记录
 			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
+			console.log(uni.getStorageSync('nav_rec'+this.tmt),keepRec)
+			
 			if (nav_rec) {
-				const keepGoing = (tran)=>{
+				const keepGoing = ()=>{
 					Object.assign(rec, nav_rec)
-					if(tran) { rec.coord = trans(rec.coord) }
+					
+					if(rec.ct == 'wgs84') {
+						for (let s of rec.point) { s.coord = trans(s.coord) }
+						rec.coord = trans(rec.coord)
+						rec.ct = 'gcj02'
+						this.setRec()
+					}
+					
 					for (let s of rec.point) {
-						if(tran) { s.coord = trans(s.coord) }
 						this.point.push(createEle(s))
 					}
 					for (let s of rec.coord) {
@@ -351,8 +358,8 @@ export default {
 					tim.M = T[2]
 					tim.H = T[3]
 				}
-				if(onRun){
-					keepGoing(1)
+				if(keepRec){
+					keepGoing()
 				} else {
 					if(zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
 						init()
@@ -362,7 +369,7 @@ export default {
 							content: "取消后，上次记录将会被删除！"
 						})
 						if (res.confirm) {
-							keepGoing(0)
+							keepGoing()
 						} else { //删除缓存和数据库
 							init()
 						}
@@ -388,22 +395,23 @@ export default {
 			this.rec = rec
 			this.clock()
 			this.onRec = true
+			
 			if(this.sysInfo.platform == 'ios') this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
 			
-			// if(!rec.t['0']) {
-			// 	rec.t['0'] = 1
-			// 	tts.speak('轨迹记录已开始，请保持手机后台定位权限已开启')
-			// }
+			if(!rec.t['0']) {
+				rec.t['0'] = 1
+				tts.speak('轨迹记录已开始')
+			}
 			
 			this.wid = plus.geolocation.watchPosition(_p=>{
-				console.log('watchPosition====>', _p)
+				// console.log('watchPosition====>', _p)
 				let cd = [_p.coords.longitude, _p.coords.latitude, _p.coords.altitude||0],
 					c1 = [...trans(cd), _p.timestamp || zz.now(), fixNum(_p.coords.speed||0,2)],
 					line = this.rLine[0],
 					size = rec.coord.length
-					
+				
 				if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
-				uni.setStorageSync('cur_loc_gcj02', cd)
+				uni.setStorageSync('cur_loc_gcj02', c1)
 				
 				//保持地图中心
 				if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
@@ -469,7 +477,7 @@ export default {
 						if(len&&len%10==0&&!rec.t['z'+len]) {
 							rec.t['z'+len] = 1
 							delete rec.t['z'+(len-10)]
-							let task = {$url: '/user/rec/sync', coord:[], len, tim: this.tim, stopTime: rec.stopTime}
+							let task = {$url: '/user/rec/sync', coord:[], len, ct: rec.type, tim: this.tim, stopTime: rec.stopTime}
 							for (var i = (len-10); i < len; i++) {
 								task.coord.push(rec.coord[i])
 							}
@@ -524,7 +532,7 @@ export default {
 				maximumAge: 10000,
 				enableHighAccuracy: true
 			})
-			
+			/* 
 			// locationModule.startLocation({
 			// 		intervalTime: 5000,
 			// 		distanceFilter: 5,
@@ -656,6 +664,7 @@ export default {
 			// 		}
 			// 	}
 			// )
+			 */
 		},
 		
 		async controltap(t) {
@@ -683,7 +692,7 @@ export default {
 					let {coord} = await getLocation('gcj02')
 					uni.hideLoading()
 					
-						poi = {
+					let	poi = {
 								_id: uniqId(),
 								name: '',
 								t1: 2,
@@ -694,7 +703,6 @@ export default {
 								imgs: t=='v'? []:e,
 								video: t=='v'? e:null
 							}
-					uni.hideLoading()
 					zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
 				}
 			}
@@ -760,7 +768,7 @@ export default {
 			plus.geolocation.clearWatch(this.wid)
 			if (this.sysInfo.platform == 'android') {KeepAliveModule.stopKeepAlive({})}
 			this.setRec()
-			zz.href('/pages/nav/nav'+(this.amap?'H5':'APP'), {onRun:1, kml:this.kml})
+			zz.href('/pages/nav/nav'+(this.amap?'H5':'APP'), {keepRec:1, kml:this.kml})
 		},
 		_2bl(e){
 			this.tbl = e
@@ -770,6 +778,10 @@ export default {
 		},
 		info() {
 			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
+		},
+		setRec(){
+			let rec = this.rec
+			uni.setStorageSync('nav_rec'+this.tmt, rec)
 		},
 		async checkPermission() {
 			let isIos = permision.isIOS,

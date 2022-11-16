@@ -29,9 +29,12 @@
                         <view class="padding-right text-black text-w4 text-right">{{ line.point.length }}个</view>
                     </view>
                 </view>
-                <zz-point-track
-                    v-for="(point,pIndex) in line.point" :key="pIndex" :cardMode="isCard" :details="point" :userInfo="line.userInfo"
-                    @userEvent="userEvent($event,lIndex,pIndex)" @pointDetails="openPointDetails($event,lIndex,pIndex)"
+                <zz-point-track v-for="(point,pIndex) in line.point" :key="pIndex"
+                	:details="point"
+                	:typeName="ele[point.t3].label"
+                	:userInfo="line.userInfo||user"
+                    @userEvent="userEvent($event,lIndex,pIndex)" 
+                	@pointDetails="openPointDetails($event,lIndex,pIndex)"
                 ></zz-point-track>
             </view>
             <zz-page-status :loading="loading" :length="pageList.length" :total="total"></zz-page-status>
@@ -49,11 +52,15 @@ export default {
             pageNum: 1,  // 页码
             pageSize: 5,  // 数量
             isCard: true,
-            dict: uni.getStorageSync('sys_dict'),
+            ele:{},
+			user:{}
         };
     },
     onLoad() {
-        this.loadData();
+		this.user = this.zz.getAcc()
+		let d = uni.getStorageSync('sys_dict')
+		this.ele = Object.assign(d.trail_element,d.trail_serverPoi,d.trail_otherPoi)
+        this.loadData()
     },
     methods: {
         /**
