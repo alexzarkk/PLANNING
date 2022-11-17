@@ -157,7 +157,10 @@
 					}
 				},
 				{
-					"path": "poi"
+					"path": "poi",
+					"pageMeta": {
+						"title": "兴趣点"
+					}
 				},
 				{
 					"path": "map"
