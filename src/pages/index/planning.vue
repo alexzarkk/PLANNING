@@ -46,7 +46,7 @@
             </view>
         </view>
         <view class="nav-list bg-white" style="padding-top: 30rpx">
-            <navigator hover-class="none" :url="item.path" class="nav-li" navigateTo :class="'bg-' + item.color" v-for="(item, index) in elements" :key="index">
+            <navigator hover-class="none" :url="item.path" class="nav-li" style="width:100%;" navigateTo :class="'bg-' + item.color" v-for="(item, index) in elements" :key="index">
                 <view class="nav-title">{{ item.title }}</view>
                 <view class="nav-name">{{ item.name }}</view>
                 <text :class="'cuIcon-' + item.cuIcon"></text>
@@ -99,13 +99,13 @@ export default {
                     cuIcon: 'newsfill',
                     path: '/pages/planning/localLine'
                 },
-                {
-                    title: '行程套餐',
-                    name: 'recommand',
-                    color: 'blue',
-                    cuIcon: 'colorlens',
-                    path: '/pages/planning/recommandLine'
-                }
+                // {
+                //     title: '行程套餐',
+                //     name: 'recommand',
+                //     color: 'blue',
+                //     cuIcon: 'colorlens',
+                //     path: '/pages/planning/recommandLine'
+                // }
             ],
             trailShowData: [], // 瀑布流使用的列表
             loadding: false
