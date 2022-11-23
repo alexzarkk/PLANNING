@@ -9,40 +9,38 @@
 	</title>
 	<% if (process.env.VUE_APP_ENV==='zlb' ) { %>
 		<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script>
-		<!-- <script src="//assets.zjzwfw.gov.cn/assets/ZWJSBridge/1.1.0/zwjsbridge.js"></script> -->
 		<script type="text/javascript" src="//assets.zjzwfw.gov.cn/assets/zwlog/1.0.0/zwlog.js"></script>
-		<% } %>
-			<script>
-				var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
-				document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' + (coverSupport ? ', viewport-fit=cover' : '') + '" />')
-			</script>
+		<script>
+			var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
+			document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' + (coverSupport ? ', viewport-fit=cover' : '') + '" />')
+		</script>
+		<link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
+		<style>
+			#global-menu {
+				position: fixed;
+				right: 20px;
+				bottom: 100px;
+				display: flex;
+				flex-direction: column;
+			}
 
-			<link rel="stylesheet" href="<%= BASE_URL %>static/index.<%= VUE_APP_INDEX_CSS_HASH %>.css" />
-			<style>
-				#global-menu {
-					position: fixed;
-					right: 20px;
-					bottom: 100px;
-					display: flex;
-					flex-direction: column;
-				}
+			#global-menu img {
+				width: 60px;
+				height: 60px;
+				margin-bottom: 5px;
+			}
 
-				#global-menu img {
-					width: 60px;
-					height: 60px;
-					margin-bottom: 5px;
-				}
-
-				.drag-btn {
-					position: fixed;
-					z-index: 999;
-					top: 100px;
-					left: 100px;
-					width: 50px;
-					height: 50px;
-					background-color: aqua;
-				}
-			</style>
+			.drag-btn {
+				position: fixed;
+				z-index: 999;
+				top: 100px;
+				left: 100px;
+				width: 50px;
+				height: 50px;
+				background-color: aqua;
+			}
+		</style>
+	<% } %>
 </head>
 
 <body>
@@ -53,13 +51,6 @@
 	<div id="global-menu"></div>
 	<% if (process.env.VUE_APP_ENV==='zlb' ) { %>
 		<script>
-
-			// 新版埋点
-			// const zwlog = new ZwLog({
-
-			// })
-
-
 				(function (w, d, s, q, i) {
 					w[q] = w[q] || [];
 					var f = d.getElementsByTagName(s)[0],
