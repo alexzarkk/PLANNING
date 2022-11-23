@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view class="container" :style="{ height: windowHeight }">
 		<!-- 
 		 
@@ -877,7 +877,7 @@ export default {
 
 		&-text {
 			color: #fff;
-			font-size: 1.6rem;
+			font-size: 32rpx;
 			// text-align: center;
 		}
 	}
@@ -888,12 +888,12 @@ export default {
 		align-items: center;
 		.record-text {
 			color: #fff;
-			font-size: 1.4rem;
+			font-size: 28rpx;
 		}
 
 		.record-time {
 			color: #fff;
-			font-size: 2rem;
+			font-size: 40rpx;
 			font-weight: bold;
 		}
 	}
@@ -914,7 +914,7 @@ export default {
 
 		&-text {
 			color: #fff;
-			font-size: 1.6rem;
+			font-size: 32rpx;
 			// text-align: center;
 		}
 	}
@@ -947,7 +947,7 @@ export default {
 		// z-index: 1000;
 
 		.type-text {
-			font-size: 1.6rem;
+			font-size: 32rpx;
 			color: #222222;
 		}
 
@@ -998,7 +998,7 @@ export default {
 		align-items: center;
 		&-title {
 			&-text {
-				font-size: 1.6rem;
+				font-size: 32rpx;
 				color: #222222;
 			}
 		}
@@ -1011,7 +1011,7 @@ export default {
 			&-location {
 				height: 200rpx;
 				line-height: 200rpx;
-				font-size: 2.4rem;
+				font-size: 48rpx;
 				font-weight: bold;
 			}
 			&-copy {

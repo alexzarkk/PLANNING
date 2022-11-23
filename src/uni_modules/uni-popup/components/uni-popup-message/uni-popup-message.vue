@@ -105,7 +105,7 @@
 	}
 
 	.uni-popup-message-text {
-		font-size: 1.4rem;
+		font-size: 28rpx;
 		padding: 0;
 	}
 

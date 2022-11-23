@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view class="container">
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">线路</block>

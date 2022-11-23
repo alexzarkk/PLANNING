@@ -5,7 +5,9 @@
 	    <view :style="{width,height}" @click="state=!state" class="box">
 	        <image class="playIcon" src="@/static/play.png" mode="widthFix"></image>
 	    </view>
-	    <video :id="videoId" :style="{height,width:state?'740rpx':'0rpx'}" @pause="state=0" @timeupdate="timeupdate" @fullscreenchange="fullscreenchange" class="video" :src="url"></video>
+	    <video :id="videoId" :style="{height,width:state?'740rpx':'0rpx'}" @pause="state=0" @timeupdate="timeupdate" @fullscreenchange="fullscreenchange" class="video" 
+		
+		:src="url"></video>
 	    <!-- <progress :style="{'top':height,width}" class="progress" :percent="currentTime?parseInt(currentTime/duration*100):0" show-info border-radius="5" active></progress> -->
 	</view>
 </view>

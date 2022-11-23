@@ -1,11 +1,11 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->
-            <view class="setting-icon" @click="loadData(1)">
+            <view class="setting-icon" @click="reload">
                 <button class="cu-btn cuIcon">
-                    <text class="bg-green round" :class="num.tCount<tNum?'cuIcon-loading2 cuIconfont-spin':'cuIcon-refresh'"></text>
+                    <text class="bg-green round" :class="loading?'cuIcon-loading2 cuIconfont-spin':'cuIcon-refresh'"></text>
                 </button>
             </view>
             <!-- #ifdef APP-PLUS -->
@@ -19,9 +19,7 @@
                             <text class="cuIcon-people" />
                         </view>
                         <view class="padding-left">
-                           <!-- #ifndef H5-ZLB -->
-                           <text>注册/登录</text>
-                           <!-- #endif -->
+                            <text>注册/登录</text>
                         </view>
                         <view class="margin-left-xs cuIcon-right" />
                     </view>
@@ -55,8 +53,8 @@
         </view>
         <!-- <zz-map ref="zmap" :pms="trail._kml.children"></zz-map> -->
         <view class="padding flex align-end text-center text-grey bg-white shadow-warp">
-            <!-- <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/comm/nodata',null,1)"> -->
-            <view class="text-orange flex flex-sub flex-direction solid-right">
+            <!-- <view class="text-orange flex flex-sub flex-direction solid-right" @click="zz.href('/pages/nav/rec/foots',null,1)"> -->
+                <view class="text-orange flex flex-sub flex-direction solid-right">
                 <view class="flex align-end justify-center">
                     <view class="text-xxl">{{num.scan}}</view>
                     <view class="text-df text-gray">/</view>
@@ -86,7 +84,7 @@
         <view class="event-card">
             <view class="bg-image radius">
                 <view v-for="(item,index) in menu" :key="index" class="event-btn-item" :class="index<3?'border-bottom-grey':''">
-                    <view class="flex flex-direction justify-center align-center event-btn" @click="href(index)">
+                    <view class="flex flex-direction justify-center align-center event-btn" @click="href(index,index!==3)">
                         <view class="text-xl">{{item.name}}</view>
                         <view class="padding-top-xs text-sm text-gray">{{item.text}}</view>
                         <!-- <text class="cuIcon-titles">扫码</text> -->
@@ -104,27 +102,30 @@
 </template>
 
 <script>
-import { uniqId, getLocation, trans, isSame } from '@/comm/geotools'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
 export default {
+    props: {
+        user: { type: [Object, String] },
+	    person: { type: Object }
+    },
     data() {
         return {
             tNum: 99999,
             num: {
-				scan: 0, //扫码
-                event: 0, //  赛事
-                top: 0, //  登顶
-                rec: 0,  // 轨迹
-                poi: 0, //  兴趣点 
-                imgs: 0,// 照片
-                video: 0,
+                scan: 0, 	// 扫码
+                event: 0, 	// 赛事
+                top: 0, 	// 登顶
+
+                rec: 0, 	// 轨迹
+                poi: 0, 	// 兴趣点 
+                imgs: 0,	// 照片
+                video: 0,	// 视频
 
                 tCount: 0,
             },
 
             addr: null,
-            user: null,
             loading: 0,
 
             recInfoList: [
@@ -138,11 +139,11 @@ export default {
                     path: '/pages/nav/rec/point',
                     k: 'poi'
                 },
-                // {
-                //     title: '照片',
-                //     path: '/pages/nav/rec/picture',
-                //     k: 'imgs'
-                // },
+                {
+                    title: '照片',
+                    path: '/pages/nav/rec/picture',
+                    k: 'imgs'
+                },
                 {
                     title: '视频',
                     path: '/pages/comm/nodata',
@@ -152,9 +153,9 @@ export default {
             menu: [
                 {
                     name: '足迹',
-					// #ifdef APP-PLUS
-					url: '/pages/nav/navApp',
-					// #endif
+                    // #ifdef APP-PLUS
+                    url: '/pages/nav/navApp',
+                    // #endif
                     // #ifndef APP-PLUS
                     url: '/pages/nav/navH5',
                     // #endif
@@ -177,8 +178,7 @@ export default {
                 },
                 {
                     name: '排行榜',
-                    url: '/pages/event/ranking',
-                    url: '/pages/comm/nodata?title=排行榜',
+                    url: '/pages/nav/rec/ranking',
                     icon: 'cuIcon-like',
                     color: 'rgba(255, 170, 0, 0.7)',
                     text: '成绩排名'
@@ -186,26 +186,43 @@ export default {
             ],
         }
     },
-    onLoad() {
-    },
-    onShow() {
+	watch: {
+		person(e) {
+			if(e) {
+				for (let k in e) {
+				    if (k != '_id') {
+				        this.numDH(k, e[k])
+				    }
+				}
+			} else {
+				for (let k in this.num) {
+				    this.num[k] = 0
+				}
+			}
+		}
+	},
+    mounted() {
         this.loadData(!this.num.tCount)
     },
     methods: {
+		reload(){
+			this.$emit('personInfo')
+			this.loadData(1)
+		},
         async loadData(init) {
-            this.user = this.zz.getAcc()
+            console.log('event.loadData --------------------');
+
             let net = comm.hadNet()
+
             if (init) {
                 if (!net) return this.zz.toast('没有网络~')
-                for (let k in this.num) {
-                    this.num[k] = 0
-                }
                 this.zz.req({ $url: '/public/chart/info', trSt: 50 }).then(e => {
                     this.tNum = e
                     this.numDH('tCount', e)
                 })
                 comm.on()
             }
+
             if (net) {
                 if (this.user) {
                     //更新离线足迹
@@ -216,7 +233,7 @@ export default {
                         if (log.temp) {
                             let t = this.zz.clone(log.temp)
                             for (var i = 0; i < t.length; i++) {
-                                await zz.req({ $url: '/admin/comm/scan', ...t[i] }, true).then(x => {
+                                await this.zz.req({ $url: '/admin/comm/scan', ...t[i] }, true).then(x => {
                                     log.temp.splice(1, i)
                                     uni.setStorageSync('user_scan_log', log)
                                 })
@@ -224,11 +241,6 @@ export default {
                         }
                         this.loading = 0
                     }
-                    this.zz.req({ $url: '/user/person/info' }).then(e => {
-                        for (let k in e) {
-                            this.numDH(k, e[k])
-                        }
-                    })
                 }
             }
         },
@@ -244,13 +256,15 @@ export default {
                 this.num[k] = n
             }
         },
-        href(idx) { this.zz.href(this.menu[idx].url, 0, 1) },
+        href(idx, veri = true) {
+            this.zz.href(this.menu[idx].url, 0, veri)
+        }
+
     },
     async onPullDownRefresh() {
         await this.loadData(1)
         uni.stopPullDownRefresh()
-    },
-    onBackPress() { return true }
+    }
 };
 </script>
 

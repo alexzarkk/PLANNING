@@ -230,7 +230,7 @@ map {
 	position: absolute;
 	top: 0rpx;
 	right: -0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 10rpx;
 	height: 38rpx;
 	color: #ffffff;
@@ -241,7 +241,7 @@ map {
 	position: absolute;
 	top: -50rpx;
 	right: -0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 10rpx;
 	height: 38rpx;
 	color: #ffffff;

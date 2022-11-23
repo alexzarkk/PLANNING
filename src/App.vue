@@ -3,90 +3,22 @@ import Vue from 'vue'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
 
-// #ifdef H5
-import AMapLoader from '@amap/amap-jsapi-loader'
-// #endif
-
 // #ifdef APP-PLUS
 import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update'
 // #endif
 
 export default {
     async onLaunch() {
-
-        // #ifdef H5
-        // console.warn("local=======*****&&&&&&&&&$!^&(*#&!($&!(#@")
-        // #ifdef H5-ZLB
-        // 修改字体
-        let _this = this;
-        // console.log("ZWJSBridge------", ZWJSBridge)
-        ZWJSBridge.onReady(() => {
-            ZWJSBridge.setTitle({
-                "title": "环浙步道"
-            }).then(res => {
-                // console.log("修改当前页面的标题成功---", res)
-            }).catch(err => {
-                // console.error("修改当前页面的标题失败---", err)
-            })
-            // console.info('浙里办初始化完成，执行bridge方法')
-            ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
-                // console.log("获取到的当前的style======", uiStyle)
-                // uiStyle = 'elder'
-                let fontSize = '10px'
-                // console.warn("uiStyle === 'elder'---------------------", uiStyle === 'elder')
-                if (uiStyle === 'elder') {
-                    fontSize = '16px'
-                } else {
-                    fontSize = '10px'
-                }
-                _this.$nextTick(() => {
-                    document.documentElement.style.fontSize = fontSize
-                    // 方案2修改字体
-                    let htmlFont = document.getElementsByTagName('html')[0]
-                    htmlFont.style.fontSize = fontSize  // 测试16px
-                    // console.warn("changeFontSize----------------------", fontSize)
-                })
-            })
-        })
-
-
-
-
-
-        // #endif
-
-
-
-
-
-
-
-
-        // #ifndef H5-ZLB
-        this.$nextTick(() => {
-            let fontSize = '10px'
-            document.documentElement.style.fontSize = fontSize
-            let htmlFont = document.getElementsByTagName('html')[0]
-            htmlFont.style.fontSize = fontSize  // 测试16px
-            // console.warn("changeFontSize----------------------", fontSize)
-        })
-        // #endif
-
-
-
-
-
-        // #endif
-
+		
         await uni.getSystemInfo({
-            success(e) {
+            success(e){
                 Vue.prototype.WinHeight = e.windowHeight
                 Vue.prototype.WinWidth = e.windowWidth
                 Vue.prototype.StatusBar = e.statusBarHeight
                 Vue.prototype.platform = e.platform
                 // #ifdef APP-PLUS
                 Vue.prototype.CustomBar = e.statusBarHeight + 44
-                // console.info('App Launch at APP-PLUS' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + Vue.prototype.StatusBar);
+                console.info('App Launch at APP-PLUS' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + Vue.prototype.StatusBar);
                 // #endif
 
                 // #ifdef H5
@@ -109,137 +41,40 @@ export default {
                 }
                 // #endif
 
-                // #ifdef H5-ZLB
-                e.platform = 'H5-ZLB'
-                e.uniPlatform = 'H5-ZLB'
-                Vue.prototype.platform = 'H5-ZLB'
-                Vue.prototype.CustomBar = e.statusBarHeight
-                // #endif
-
 
                 // #ifdef MP-WEIXIN
                 Vue.prototype.platform = 'MP-WEIXIN';
                 let custom = wx.getMenuButtonBoundingClientRect()
                 Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-                // console.log('App Launch at MP-WEIXIN' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + e.statusBarHeight);
+                console.log('App Launch at MP-WEIXIN' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + Vue.prototype.CustomBar + ' | StatusBar: ' + e.statusBarHeight);
                 // #endif
 
                 // #ifdef MP-ALIPAY
                 Vue.prototype.platform = 'MP-ALIPAY'
                 Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight
-                // console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
+                console.log('App Launch at MP-ALIPAY' + ' | WinHeight: ' + e.windowHeight + ' | CustomBar: ' + (e.statusBarHeight + e.titleBarHeight) + ' | statusBarHeight: ' + e.statusBarHeight);
                 // #endif
 
                 uni.setStorageSync('sysInfo', e)
                 comm.setStorage('clientInfo', {
                     OS: e.osName,
                     PLATFORM: e.uniPlatform || e.platform,
-                    APPID: e.appId || '__UNI__210B33A',
+                    APPID: e.appId || '__UNI__3AB0063',
                     deviceId: e.deviceId,
                     deviceModel: e.model
                 })
             }
         })
-
-        // #ifndef APP-PLUS
-        await uni.getNetworkType({ success(e) { comm.setNet(e.networkType != 'none') } })
-        // #endif
-
-        uni.onNetworkStatusChange(e => {
-            // #ifdef H5
-            comm.setNet(e.isConnected)
-            // #endif
-            if (e.isConnected) {
-                if (!uni.getStorageSync('sysInited')) {
-                    uni.removeStorageSync('cur_deptId')
-                    this.init()
-                    uni.reLaunch({ url: '/pages/index/index' })
-                }
-                sync.go()
-            }
-        })
-        this.init()
-
-        // #ifdef APP-PLUS
-        setTimeout(() => { checkUpdate() }, 3000)
-        // #endif
+       
+		// #ifdef APP-PLUS
+		setTimeout(() => { checkUpdate() }, 3000)
+		// #endif
     },
     onShow() {
-        sync.go()
+		sync.go()
     },
     onHide() { },
-    methods: {
-        async init() {
-
-            let dict = uni.getStorageSync('sys_dict') || {}
-            this.zz.req({ $url: '/public/zz/dict', obj: true, v: dict.v }).then(e => {
-                // console.log("获取到的dict----", e)
-                if (e.v) {
-                    Object.assign(dict, e)
-                    uni.setStorageSync('sys_dict', dict)
-                    uni.setStorageSync('sysInited', 1)
-                }
-            })
-            let deptId = '330213'
-            if (!uni.getStorageSync('sysInited')) {
-                // #ifdef H5-ZLB
-                // city: "宁波市"
-                // cityName: "宁波市"
-                // detailAddress: "浙江省宁波市奉化区斗门北路197号"
-                // latitude: 29.677769971311186
-                // longitude: 121.42248984154213
-                // region: "奉化区"
-                // townCode: "330213"
-                await ZWJSBridge.getLocation().then(({ townCode }) => {
-                    deptId = townCode
-                }).catch(e => {
-                    deptId = '330213'
-                })
-                // #endif
-
-                // #ifndef H5-ZLB
-                let [_, e] = await uni.getLocation(),
-                    addr = await this.zz.reGeo([e.longitude, e.latitude])
-
-                deptId = addr.addressComponent.adcode + ''
-                // #endif
-
-                //是否浙江地区
-                uni.setStorageSync('cur_deptId', deptId.startsWith('33') ? deptId : '330213')
-                await this.zz.setDept()
-            }
-
-
-            // #ifndef APP-PLUS
-            comm.on([121, 29])
-            AMapLoader.load({
-                key: this.bd.amapKey,
-                version: "2.0",
-                plugins: ['AMap.Geolocation']
-            }).then(e => {
-                window.amapGeo = new AMap.Geolocation({
-                    enableHighAccuracy: true, //是否使用高精度定位，默认:true
-                    noIpLocate: 3,				//3: 所有终端禁止使用IP定位
-                    noGeoLocation: 0,		  //1: 手机设备禁止使用浏览器定位
-                    // timeout: 10000,           //超过10秒后停止定位，默认：无穷大
-                    maximumAge: 0,            //定位结果缓存0毫秒，默认：0
-                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-                    showButton: false,        //显示定位按钮，默认：true
-                    // buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
-                    // buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-                    showMarker: false,        //定位成功后在定位到的位置显示点标记，默认：true
-                    showCircle: false,        //定位成功后用圆圈表示定位精度范围，默认：true
-                    panToLocation: false,     //定位成功后将定位到的位置作为地图中心点，默认：true
-                    zoomToAccuracy: false      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-                })
-            })
-            // #endif
-
-            // #ifdef APP-PLUS
-            comm.on()
-            // #endif
-        }
-    }
+    methods: { }
 }
 </script>
 
@@ -251,15 +86,15 @@ export default {
 @import '@/comm/colorui/icon.css';
 @import '@/comm/colorui/animation.css';
 @import '@/comm/css/app.css';
-@import '@/comm/css/zzIcon.css'; // 远程
+@import '@/comm/css/zzIcon.css';  // 远程
 @import '@/components/uParse/src/wxParse.css';
 
 // view {
-//     font-size: 1.6rem;
+//     font-size: 32rpx;
 // }
 
 // text {
-//     font-size: 1.6rem;
+//     font-size: 32rpx;
 // }
 
 /* 我增加的样式 */
@@ -284,7 +119,7 @@ a.mapboxgl-ctrl-logo {
     position: absolute;
     top: 0rpx;
     right: -0rpx;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     padding: 0rpx 10rpx;
     height: 38rpx;
     color: #ffffff;
@@ -298,7 +133,7 @@ a.mapboxgl-ctrl-logo {
 // 没有更多了的文字
 .tui-nomore-text {
     color: #999;
-    font-size: 1.2rem;
+    font-size: 24rpx;
     text-align: center;
     padding: 0 2px;
     height: 36rpx;
@@ -368,15 +203,15 @@ a.mapboxgl-ctrl-logo {
     box-shadow: 4rpx 4rpx 6rpx rgba(94, 185, 94, 0.4);
 }
 .nav-title {
-    font-size: 1.6rem;
+    font-size: 32rpx;
     font-weight: 300;
 }
 .nav-title::first-letter {
-    font-size: 2rem;
+    font-size: 40rpx;
     margin-right: 4rpx;
 }
 .nav-name {
-    font-size: 1.4rem;
+    font-size: 28rpx;
     text-transform: Capitalize;
     margin-top: 20rpx;
     position: relative;
@@ -405,7 +240,7 @@ a.mapboxgl-ctrl-logo {
 }
 .nav-name::first-letter {
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 36rpx;
     margin-right: 1px;
 }
 .nav-li text {

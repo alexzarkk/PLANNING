@@ -628,7 +628,7 @@
 	}
 
 	.tui-tooltip__title {
-		font-size: 1.5rem;
+		font-size: 30rpx;
 		color: #fff;
 		line-height: 30rpx;
 	}
@@ -641,7 +641,7 @@
 	}
 
 	.tui-tooltip__val {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		line-height: 24rpx;
 		color: #fff;
 		margin-left: 6rpx;

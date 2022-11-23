@@ -39,7 +39,7 @@
 		width: 50%;
 		margin: 1.5em auto;
 		line-height: 1.5em;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		display: flex;
 		justify-content: center;
 	}
@@ -67,7 +67,7 @@
 
 	.tui-nomore-text {
 		color: #999;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		text-align: center;
 		padding: 0 18rpx;
 		height: 36rpx;

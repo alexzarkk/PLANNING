@@ -1,5 +1,5 @@
 <template>
-	<page-meta root-font-size="10px"></page-meta>
+	
     <view>
         <cu-custom bg-color="bg-ztsblue" :is-back="true">
             <block slot="content">我的兴趣点</block>
@@ -30,11 +30,11 @@
                     </view>
                 </view>
                 <zz-point-track v-for="(point,pIndex) in line.point" :key="pIndex"
-                	:details="point"
-                	:typeName="ele[point.t3].label"
-                	:userInfo="line.userInfo||user"
+					:details="point"
+					:typeName="ele[point.t3].label"
+					:userInfo="line.userInfo||user"
                     @userEvent="userEvent($event,lIndex,pIndex)" 
-                	@pointDetails="openPointDetails($event,lIndex,pIndex)"
+					@pointDetails="openPointDetails($event,lIndex,pIndex)"
                 ></zz-point-track>
             </view>
             <zz-page-status :loading="loading" :length="pageList.length" :total="total"></zz-page-status>
@@ -84,7 +84,6 @@ export default {
                 size: this.pageSize
             }
             this.zz.req(req1).then(({ pagination, list }) => {
-				console.log(list);
                 this.total = pagination.total
                 this.pageNum ++
                 this.pageList = this.pageList.concat(list)
@@ -139,7 +138,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     color: #333;
 }
 
@@ -203,7 +202,7 @@ export default {
     height: 84rpx;
     padding: 10rpx 30rpx;
     box-sizing: border-box;
-    font-size: 1.2rem;
+    font-size: 24rpx;
     align-items: center;
     overflow: hidden;
 }

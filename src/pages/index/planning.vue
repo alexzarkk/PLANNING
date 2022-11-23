@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+
     <view class="container">
         <cu-custom bgColor="bg-ztsblue">
             <block slot="left">
@@ -41,12 +41,12 @@
             <!-- 筛选条件+线路统计+切换到地图按钮 -->
             <view class="flex justify-around title-search-bar bg-blue light">
                 <view class="planing-search-btn" @click="kmls">轨迹</view>
-                <view class="text-blue light">{{trailData.length}}路线</view>
+                <view class="text-blue light">{{trailData&&trailData.length > 0 ?trailData.length:0}}路线</view>
                 <view class="planing-search-btn" @click="pub">广场</view>
             </view>
         </view>
         <view class="nav-list bg-white" style="padding-top: 30rpx">
-            <navigator hover-class="none" :url="item.path" class="nav-li" style="width:100%;" navigateTo :class="'bg-' + item.color" v-for="(item, index) in elements" :key="index">
+            <navigator hover-class="none" :url="item.path" class="nav-li" navigateTo :class="'bg-' + item.color" v-for="(item, index) in elements" :key="index">
                 <view class="nav-title">{{ item.title }}</view>
                 <view class="nav-name">{{ item.name }}</view>
                 <text :class="'cuIcon-' + item.cuIcon"></text>
@@ -69,18 +69,34 @@
                 <!-- <text class="tui-color__black">{{ msg }}</text> -->
             </tui-no-data>
         </view>
-        <tui-scroll-top ref="top" :scrollTop="scrolled"></tui-scroll-top>
+        <tui-scroll-top ref="top" :scrollTop="scrollTop"></tui-scroll-top>
     </view>
 </template>
 <script>
 // import tabsData from '@/comm/test/json/line.json';
 export default {
+    props: {
+        scrollTop: {
+            type: Number,
+            default: 0
+        },
+        indexTrailData: {
+            type: Object,
+            default: () => {
+                return {}
+            }
+        },
+        deptId: {
+            type: [String, Number],
+            default: '330213',
+            required: true
+        }
+    },
     data() {
         return {
             timer: new Date().getTime(),
             isReady: false, // 数据准备
             trailData: [],  // 总共线路
-            deptId: '', // 部门信息
             bd: this.bd,
             td: {},
             pageSize: 5, // 当前的数量
@@ -90,7 +106,7 @@ export default {
             tabCur: 0,
             tabs: this.bd.tStyle,
             searchKey: '',
-            scrolled: 0,
+            // scrollTop: 0,
             elements: [
                 {
                     title: '本地频道',
@@ -99,52 +115,53 @@ export default {
                     cuIcon: 'newsfill',
                     path: '/pages/planning/localLine'
                 },
-                // {
-                //     title: '行程套餐',
-                //     name: 'recommand',
-                //     color: 'blue',
-                //     cuIcon: 'colorlens',
-                //     path: '/pages/planning/recommandLine'
-                // }
+                {
+                    title: '行程套餐',
+                    name: 'recommand',
+                    color: 'blue',
+                    cuIcon: 'colorlens',
+                    path: '/pages/planning/recommandLine'
+                }
             ],
             trailShowData: [], // 瀑布流使用的列表
             loadding: false
         };
     },
-    onShow() {
-        let { deptId } = this.zz.getDept()
-        if (deptId === this.deptId) {
-
-        } else {
-            this.deptId = deptId
-            this.loadData('init')
-        }
-
+    mounted() {
+        // this.$nextTick
+        // this.loadData('init')
     },
-    onBackPress() { return true },
-    onLoad(qr) {
-        // this.loadData()
-    },
+    // onBackPress() { return true },
+    // onLoad(qr) {
+    // this.loadData()
+    // },
     methods: {
         loadData(type) {
-            if (type === "init") {
-                this.isReady = false
-                this.trailShowData = []
-                this.trailData = []
+            console.warn("planning===============loadData================", this.indexTrailData)
+            try {
+                if (type === "init") {
+                    this.isReady = false
+                    this.trailShowData = []
+                    this.trailData = []
+                }
+                let td = null
+                td = this.indexTrailData
+                this.trailData = td.trailData;
+                if (td && td.tStyle) {
+                    this.tabs = td.tStyle;
+                }
+                const list = td.trailData.slice(0, this.pageSize);
+                this.trailShowData = this.trailShowData.concat(list)
+                console.log("this.trailShowData========", this.trailShowData.length)
+                if (this.trailShowData.length === 0) {  // 没有数据
+                    this.$emit("noData")
+                }
+                this.isReady = true
+                console.log("PLANNING-------------isReady===========", this.isReady)
+            } catch (error) {
+
+                console.log("planning--------------init----------", error)
             }
-            let td = uni.getStorageSync('trailData');
-            this.trailData = td.trailData;
-            if (td && td.tStyle) {
-                this.tabs = td.tStyle;
-            }
-            /**
-             *  else {
-                this.tabs = tabsData;
-            }
-             */
-            const list = td.trailData.slice(0, this.pageSize);
-            this.trailShowData = this.trailShowData.concat(list)
-            this.isReady = true
         },
         kmls() { this.zz.href('/pages/comm/kmlPage') },
         onCollect() {
@@ -156,7 +173,8 @@ export default {
             this.zz.href('/pages/planning/lineMap', 0, 0, 'slide-in-bottom');
         },
         pub() {
-            uni.navigateTo({ url: '/pages/index/planningPub' })
+            this.zz.href('/pages/index/planningPub')
+            // uni.navigateTo({ url: '/pages/index/planningPub' })
         },
         doSearch: function (e) {
             let key = e ? e : this.searchKey;
@@ -197,19 +215,23 @@ export default {
                 this.isLoaded = true;
             }
             this.trailShowData = this.trailShowData.concat(list);
+        },
+        inReachBottom() {
+            // console.log("触底加载");
+            if (this.isLoaded) {
+                return;
+            }
+            this.addTrailShowData()
         }
     },
+
     // 触底加载，优化瀑布流
-    onReachBottom: function () {
-        // console.log("触底加载");
-        if (this.isLoaded) {
-            return;
-        }
-        this.addTrailShowData()
-    },
-    onPageScroll: function (e) {
-        this.scrolled = e.scrollTop;
-    }
+    // onReachBottom: function () {
+
+    // },
+    // onPageScroll: function (e) {
+    //     this.scrollTop = e.scrollTop;
+    // }
 };
 </script>
 

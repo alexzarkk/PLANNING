@@ -138,7 +138,7 @@ export default {
 
 <style lang="scss" scoped>
 page {
-    font-size: 1.4rem;
+    font-size: 28rpx;
 }
 .c-flex-align {
     display: flex;
@@ -223,7 +223,7 @@ page {
                 &::after {
                     content: '✓';
                     font-weight: bold;
-                    font-size: 1.8rem;
+                    font-size: 36rpx;
                     position: absolute;
                     right: 40rpx;
                 }

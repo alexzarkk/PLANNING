@@ -1,5 +1,5 @@
 <template>
-	<page-meta root-font-size="10px"></page-meta>
+	
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">我的相册</block>
@@ -9,7 +9,7 @@
                 <view class="cu-bar bg-white solid-bottom solid-top">
                     <view class="action sub-title">
                         <text class="text-xl text-bold text-green">{{ item.name }}</text>
-                        <text class="bg-green" style="width: 2rem"></text>
+                        <text class="bg-green" style="width: 40rpx"></text>
                     </view>
                     <view class="padding-right text-blue">{{ item.imgList.length }}张</view>
                 </view>

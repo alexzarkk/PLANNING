@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <view class="fixed">
             <cu-custom :isBack="true" bgColor=" bg-orange" :home="false">
@@ -264,14 +264,14 @@ page {
 }
 
 .tui-modal-custom-text {
-    font-size: 1.5rem;
+    font-size: 30rpx;
     color: #333;
     padding: 30rpx 0 50rpx;
 }
 
 .tui-prompt-title {
     padding-bottom: 20rpx;
-    font-size: 1.7rem;
+    font-size: 34rpx;
 }
 .tui-modal-input {
     width: 80%;
@@ -279,7 +279,7 @@ page {
     border-bottom: 1rpx solid #e6e6e6;
     margin: 30rpx auto 50rpx;
     padding-bottom: 20rpx;
-    font-size: 1.6rem;
+    font-size: 32rpx;
 }
 .tui-hidden-input {
     /* #ifdef MP-WEIXIN */

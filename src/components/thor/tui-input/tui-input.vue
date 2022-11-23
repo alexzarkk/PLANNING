@@ -457,7 +457,7 @@
 		/* #endif */
 		/* #ifdef APP-NVUE */
 		color: #ccc;
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		/* #endif */
 	}
 

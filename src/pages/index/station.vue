@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+    
     <view>
         <!-- <cu-custom bgColor="bg-ftblue" :home="false">
 			<block slot="backText"></block>
@@ -208,37 +208,6 @@ export default {
         };
     },
     async onLoad() {
-        // #ifdef H5-ZLB
-
-        // ZWJSBridge.onReady(() => {
-        // 	console.log('初始化完成后，执行bridge方法');
-        // });
-        // ZWJSBridge.getLocation()
-        // 	.then(result => {
-        // 		console.log('获取到的经纬度信息', result);
-        // 		let { cityName, townCode, latitude, detailAddress, region, longitude, city } = result;
-        // 	})
-        // 	.catch(error => {
-        // 		console.error('获取经纬度失败', error);
-        // 	});
-
-        // ZWJSBridge.openLink({
-        //     url: 'https://www.baidu.com'
-        // }).then(res => {
-        //     console.log('跳转成功',res)
-        // 	this.resMsg = res
-        // }).catch(error => {
-        //    console.log('跳转失败',error)
-        //    this.resMsg = error.errorMessage
-        // })
-
-        // ZWJSBridge.getUiStyle().then(res=>{
-        // 	console.log("获取到的模式",res);
-        // }).catch(error=>{
-        // 	console.log("getUiStyle=======error",error)
-        // })
-
-        // #endif
 
         await this.zz.req({ $url: 'public/zz/mock', tar: 'special' }, true).then((res) => {
             this.banner = res.data;
@@ -359,7 +328,7 @@ export default {
 .pro-tit {
     /* font-size:  */
     color: #2e2e2e;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     word-break: break-all;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -373,13 +342,13 @@ export default {
 }
 
 .sale-price {
-    font-size: 1.7rem;
+    font-size: 34rpx;
     font-weight: 500;
     color: #ea1500;
 }
 
 .factory-price {
-    font-size: 1.2rem;
+    font-size: 24rpx;
     color: #a0a0a0;
     text-decoration: line-through;
     padding-left: 12rpx;
@@ -387,7 +356,7 @@ export default {
 
 .pro-pay {
     padding-top: 10rpx;
-    font-size: 1.2rem;
+    font-size: 24rpx;
     color: #656565;
 }
 </style>

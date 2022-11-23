@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<!-- #ifndef APP-PLUS -->
 		<cu-custom bgColor="bg-pink light" :isBack="true">
@@ -503,7 +503,7 @@ export default {
 	position: absolute;
 	top: 0rpx;
 	left: 0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 6rpx;
 	height: 38rpx;
 	color: #ffffff;
@@ -514,7 +514,7 @@ export default {
 	position: absolute;
 	top: 0rpx;
 	right: -0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 10rpx;
 	height: 38rpx;
 	color: #ffffff;

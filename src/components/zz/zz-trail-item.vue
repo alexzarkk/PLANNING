@@ -99,7 +99,7 @@
 
 	.tui-product__title {
 		color: #2e2e2e;
-		font-size: 1.3rem;
+		font-size: 26rpx;
 		line-height: 32rpx;
 		word-break: break-all;
 		overflow: hidden;
@@ -114,13 +114,13 @@
 	}
 
 	.tui-sale__price {
-		font-size: 1.7rem;
+		font-size: 34rpx;
 		font-weight: 500;
 		color: #e41f19;
 	}
 
 	.tui-factory__price {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #a0a0a0;
 		text-decoration: line-through;
 		padding-left: 12rpx;
@@ -128,7 +128,7 @@
 
 	.tui-product__pay {
 		padding-top: 10rpx;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #656565;
 	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<cu-custom bgColor="bg-green" :isBack="true">
 			<block slot="backText"></block>
@@ -85,7 +85,7 @@
 				</view>
 			</view>
 			
-			<zz-blog :ver="ver" :tid="poi._id"></zz-blog>
+			<zz-blog :ver="ver" :tid="poi._id" :tt="20"></zz-blog>
 		</block>
 		<tui-divider></tui-divider>
 		<tui-scroll-top :scrollTop="scrolled"></tui-scroll-top>

@@ -290,7 +290,7 @@ page {
 			transparent
 		);
 	background-size: 3rem 3rem;
-	background-position: -1rem -1rem;
+	background-position: -20rpx -20rpx;
 	z-index: 10;
 	background-color: #1110;
 }
@@ -303,7 +303,7 @@ page {
 	top: 50%;
 	transform: translate(-50%, -50%);
 	overflow: hidden;
-	border: 0.1rem solid rgba(0, 255, 51, 0.2);
+	border: 0.20rpx solid rgba(0, 255, 51, 0.2);
 	z-index: 11;
 }
 
@@ -328,7 +328,7 @@ page {
 	width: 3vw;
 	height: 3vw;
 	z-index: 12;
-	border: 0.2rem solid transparent;
+	border: 0.40rpx solid transparent;
 }
 
 .box:after,
@@ -421,7 +421,7 @@ page {
 .error {
 	color: #fff;
 	padding: 40rpx;
-	font-size: 1.2rem;
+	font-size: 24rpx;
 	background-color: #333333;
 	position: fixed;
 	top: 50%;
@@ -432,6 +432,6 @@ page {
 }
 
 .error .on1 {
-	font-size: 1.5rem;
+	font-size: 30rpx;
 }
 </style>

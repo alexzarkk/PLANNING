@@ -1,65 +1,11 @@
 // prettier-ignore
 {
-	"easycom": {
-		"autoscan": true,
-		"custom": {
-			"zz-(.*)": "@/components/zz/zz-$1.vue",
-			"tui-(.*)": "@/components/thor/tui-$1/tui-$1.vue"
-			// "^uni-(.*)": "@/components/uni-ui/uni-$1/uni-$1.vue"
-		}
-	},
 	"pages": [
-		{
-			"path": "pages/index/index",
-			"app-plus": {
-				"bounce": "none" //关闭窗口回弹效果
-			},
-			"pageMeta": {
-				"title": "环浙步道"
-			}
-		},
-		{
-			"path": "pages/index/planning",
-			"style": {
-				"onReachBottomDistance": 20
-			},
-			"pageMeta": {
-				"title": "行程"
-			}
-		},
-		{
-			"path": "pages/index/planningPub",
-			"style": {
-				"enablePullDownRefresh": true,
-				"backgroundColorTop": "#1d50a2"
-			},
-			"pageMeta": {
-				"title": "广场"
-			}
-		},
-		{
-			"path": "pages/index/station"
-		},
-		{
-			"path": "pages/index/event",
-			"pageMeta": {
-				"title": "活动"
-			}
-		},
-		{
-			"path": "pages/index/me",
-			"pageMeta": {
-				"title": "我"
-			}
-		},
-		{
-			"path": "pages/index/postStation"
-		},
-		{
-			"path": "pages/share"
-		} //此路径在PC后端分享使用，请勿修改
+		{"path": "pages/share" },   //页面总入口
+		{"path": "pages/index"},
+		{"path": "pages/index/planningPub", "style":{ "enablePullDownRefresh": true, "backgroundColorTop": "#1d50a2" }},
+		
 		// #ifdef APP-PLUS
-		,
 		{
 			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
 			"style": {
@@ -77,151 +23,91 @@
 		}
 		// #endif
 	],
-	"subPackages": [
+	
+	"subPackages": [ 
 		//记录
 		{
-			"root": "pages/nav",
+			"root": "pages/nav/",
 			"pages": [
-				{
-					"path": "navApp"
-				},
-				{
-					"path": "navH5",
-					"pageMeta": {
-						"title": "轨迹记录"
-					}
-				},
-				{
-					"path": "info"
-				},
-				{
-					"path": "point"
-				},
-				{
-					"path": "save"
-				},
+				{"path": "navApp"},
+				{"path": "navAppios"},
+				{"path": "navH5"},
+				{"path": "info"},
+				{"path": "point"},
+				{"path": "preSave"},
+				{"path": "save"},
 				// #ifdef H5
-				{
-					"path": "scan"
-				},
+				{"path": "scan"},
 				// #endif
-				{
-					"path": "rec/line",
-					"pageMeta": {
-						"title": "我的轨迹"
-					}
-				},
-				{
-					"path": "rec/lineDetail",
-					"pageMeta": {
-						"title": "轨迹"
-					}
-				},
-				{
-					"path": "rec/point",
-					"pageMeta": {
-						"title": "我的兴趣点"
-					}
-				},
-				{
-					"path": "rec/foots"
-				},
-				{
-					"path": "rec/picture"
-				},
-				{
-					"path": "rec/edit"
-				},
-				{
-					"path": "rec/editPoi"
-				}
+				
+				{"path": "rec/ranking"},
+				
+				{"path": "rec/line"},
+				{"path": "rec/lineDetail"},
+				{"path": "rec/point"},
+				{"path": "rec/foots"},
+				{"path": "rec/picture"},
+				
+				{"path": "rec/edit"},
+				{"path": "rec/editPoi"}
 			]
 		},
 		//行程
 		{
-			"root": "pages/planning",
+			"root": "pages/planning/",
 			"pages": [
 				// #ifdef APP-PLUS
 				// {"path": "lineMap"},
 				// #endif
+			
 				{
 					"path": "article",
-					"pageMeta": {
-						"title": "文章详情"
+					"style": {
+						"app-plus": {
+							"titleNView": {
+								"backgroundColor": "#1d50a2",
+								"titleText": "环浙步道"
+							}
+						}
 					}
-				},
-				{
-					"path": "detail",
-					"pageMeta": {
-						"title": "线路详情"
+				}, {
+					"path": "detail"
+					// #ifdef APP-PLUS
+					,
+					"style": {
+						"app-plus": {
+							"titleNView": {
+								"backgroundColor": "#4eb543",
+								"titleText": "详情信息",
+								"type": "transparent"
+							}
+						}
 					}
+					// #endif
 				},
-				{
-					"path": "poi"
-				},
-				{
-					"path": "map"
-				},
-				{
-					"path": "list",
-					"pageMeta": {
-						"title": "线路列表"
-					}
-				},
-				{
-					"path": "mapView"
-				},
-				{
-					"path": "recommandLine",
-					"pageMeta": {
-						"title": "行程套餐"
-					}
-				},
-				{
-					"path": "localLine",
-					"pageMeta": {
-						"title": "本地频道"
-					}
-				},
-				{
-					"path": "myLineTrack"
-				},
-				{
-					"path": "z"
-				}
+				{"path": "poi"},
+				{"path": "map"},
+				{"path": "list"},
+				{"path": "mapView"},
+				{"path": "recommandLine"},
+				{"path": "localLine"},
+				{"path": "myLineTrack"},
+				{"path": "z"}
 			]
 		},
 		// 赛事活动
 		{
-			"root": "pages/event",
+			"root": "pages/event/",
 			"pages": [
-				{
-					"path": "event"
-				},
-				{
-					"path": "tounament"
-				},
-				{
-					"path": "point"
-				},
-				{
-					"path": "ranking"
-				},
-				{
-					"path": "clockList"
-				},
-				{
-					"path": "clockDetails"
-				},
-				{
-					"path": "selfClockDetails"
-				},
-				{
-					"path": "clockResult"
-				},
-				{
-					"path": "mapView"
-				},
+				{"path": "event"},
+				{"path": "tounament"},
+				{"path": "point"},
+				
+				{"path": "clockList"},
+				{"path": "clockDetails"},
+				{"path": "selfClockDetails"},
+				{"path": "clockResult"},
+				{"path": "mapView"},
 				{
 					"path": "detail/detail"
 					// #ifdef APP-PLUS
@@ -241,68 +127,36 @@
 		},
 		// 服务
 		{
-			"root": "pages/serve",
+			"root": "pages/serve/",
 			"pages": [
-				{
-					"path": "serve"
-				},
-				{
-					"path": "sos"
-				},
-				{
-					"path": "declare"
-				},
-				{
-					"path": "weather"
-				},
-				{
-					"path": "around"
-				},
+				{"path": "serve"},
+				{"path": "sos"},
+				{"path": "declare"},
+				{"path": "weather"},
+				{"path": "around"},
 				// #ifndef MP-WEIXIN
-				{
-					"path": "amapAround"
-				},
+				{"path": "amapAround"},
 				// #endif
-				{
-					"path": "errreport"
-				},
-				{
-					"path": "outdoorEnv"
-				},
-				{
-					"path": "outdoorSafe"
-				},
-				{
-					"path": "outdoorSkill"
-				},
-				{
-					"path": "outdoorTips"
-				}
+				{"path": "errreport"},
+				{"path": "outdoorEnv"},
+				{"path": "outdoorSafe"},
+				{"path": "outdoorSkill"},
+				{"path": "outdoorTips"}
 			]
 		},
 		// 驿站
 		{
-			"root": "pages/station",
+			"root": "pages/station/",
 			"pages": [
-				{
-					"path": "hotel"
-				},
-				{
-					"path": "food"
-				},
-				{
-					"path": "news",
-					"pageMeta": {
-						"title": "资讯"
-					}
-				}
+				{"path": "hotel"},
+				{"path": "food"},
+				{"path": "news"}
 			]
 		},
 		// mall
 		{
-			"root": "pages/mall",
-			"pages": [
-				{
+			"root": "pages/mall/",
+			"pages": [{
 					"path": "special",
 					"style": {
 						"app-plus": {
@@ -313,324 +167,116 @@
 						}
 					}
 				},
-				{
-					"path": "goodsDetail"
-				}
+				{"path": "goodsDetail"}
 			]
 		},
+		
 		{
-			"root": "pages/my",
+			"root": "pages/my/",
 			"pages": [
-				{
-					"path": "my"
-				},
+				{"path": "my"},
 				{
 					"path": "discover",
-					"style": {
-						"enablePullDownRefresh": true
-					},
-					"pageMeta": {
-						"title": "我的动态"
+					"style":{
+						"enablePullDownRefresh":true
 					}
-				}, // 我的动态
-				{
-					"path": "event/event"
-				},
-				{
-					"path": "blog/blog",
-					"pageMeta": {
-						"title": "我的评论"
-					}
-				},
-				{
-					"path": "blog/edit",
-					"pageMeta": {
-						"title": "编辑留言"
-					}
-				},
-				{
-					"path": "blog/detail"
-				},
-				{
-					"path": "blog/bloglist"
-				},
-				{
-					"path": "set/set",
-					"pageMeta": {
-						"title": "信息编辑"
-					}
-				},
-				{
-					"path": "set/version"
-				},
-				{
-					"path": "set/settings",
-					"pageMeta": {
-						"title": "设置"
-					}
-				},
-				{
-					"path": "set/avatarCropper",
-					"pageMeta": {
-						"title": "头像裁剪"
-					}
-				},
-				{
-					"path": "set/settings/privacy"
-				},
-				{
-					"path": "set/settings/push"
-				},
-				{
-					"path": "set/settings/record"
-				},
-				{
-					"path": "set/settings/chat"
-				},
-				{
-					"path": "set/settings/map"
-				},
-				{
-					"path": "set/settings/mobile"
-				},
-				{
-					"path": "set/settings/bodyInfo",
-					"pageMeta": {
-						"title": "修改身体数据"
-					}
-				},
-				{
-					"path": "set/settings/saveInfo"
-				},
-				{
-					"path": "set/settings/cacheList"
-				},
-				{
-					"path": "set/address/address"
-				},
-				{
-					"path": "set/address/editAddress"
-				},
-				{
-					"path": "planning/planning"
-				},
-				{
-					"path": "profile/profile",
-					"pageMeta": {
-						"title": "个人主页"
-					}
-				},
-				{
-					"path": "profile/sysProfile",
-					"pageMeta": {
-						"title": "主页"
-					}
-				}, // 系统账户
-				{
-					"path": "favor/favor",
-					"pageMeta": {
-						"title": "收藏|喜欢"
-					}
-				},
-				{
-					"path": "order/orderList"
-				},
+				},  // 我的动态
+				{"path": "event/event"},
+				{"path": "blog/blog"},
+				{"path": "blog/edit"},
+				{"path": "blog/detail"},
+				{"path": "blog/bloglist"},
+				{"path": "set/set"},
+				{"path": "set/version"},
+				{"path": "set/settings"},
+				{"path": "set/avatarCropper"},
+				{"path": "set/settings/privacy"},
+				{"path": "set/settings/push"},
+				{"path": "set/settings/record"},
+				{"path": "set/settings/chat"},
+				{"path": "set/settings/map"},
+				{"path": "set/settings/mobile"},
+				{"path": "set/settings/bodyInfo"},
+				{"path": "set/settings/saveInfo"},
+				{"path": "set/settings/cacheList"},
+				{"path": "set/address/address"},
+				{"path": "set/address/editAddress"},
+				{"path": "planning/planning"},
+				{"path": "profile/profile"},
+				{"path": "profile/sysProfile"}, // 系统账户
+				{"path": "favor/favor"},
+				{"path": "order/orderList"},
 				{
 					"path": "social/fans",
-					"style": {
-						"enablePullDownRefresh": true
-					},
-					"pageMeta": {
-						"title": "粉丝"
+					"style":{
+						"enablePullDownRefresh":true
 					}
 				},
 				{
 					"path": "social/follow",
-					"style": {
-						"enablePullDownRefresh": true
-					},
-					"pageMeta": {
-						"title": "关注"
+					"style":{
+						"enablePullDownRefresh":true
 					}
 				},
-				{
-					"path": "social/friend",
-					"pageMeta": {
-						"title": "好友"
-					}
-				},
-				{
-					"path": "social/team"
-				},
-				{
-					"path": "social/teamCreate"
-				},
-				{
-					"path": "social/teamSetting"
-				},
-				{
-					"path": "social/pushDetails",
-					"pageMeta": {
-						"title": "动态详情"
-					}
-				},
-				{
-					"path": "social/commentDetails"
-				},
-				{
-					"path": "social/writeTopic",
-					"pageMeta": {
-						"title": "发布动态"
-					}
-				},
-				{
-					"path": "social/message/chat"
-				},
-				{
-					"path": "social/message/msgList"
-				}
+				{"path": "social/friend"},
+				{"path": "social/team"},
+				{"path": "social/teamCreate"},
+				{"path": "social/teamSetting"},
+				{"path": "social/pushDetails"},
+				{"path": "social/commentDetails"},
+				{"path": "social/writeTopic"},
+				{"path": "social/message/chat"},
+				{"path": "social/message/msgList"}
 			]
 		},
+		
 		// comm
 		{
-			"root": "pages/comm",
+			"root": "pages/comm/",
 			"pages": [
-				{
-					"path": "about",
-					"pageMeta": {
-						"title": "关于"
-					}
-				},
-				{
-					"path": "nodata",
-					"pageMeta": {
-						"title": ""
-					}
-				},
-				{
-					"path": "webView"
-				},
-				{
-					"path": "feedback",
-					"pageMeta": {
-						"title": "意见反馈"
-					}
-				},
-				{
-					"path": "search"
-				},
-				{
-					"path": "region",
-					"pageMeta": {
-						"title": "选择地区"
-					}
-				},
-				{
-					"path": "mapboxFullscreen"
-				},
-				{
-					"path": "kmlPage",
-					"pageMeta": {
-						"title": "轨迹"
-					}
-				},
-				{
-					"path": "kml",
-					"pageMeta": {
-						"title": "轨迹"
-					}
-				},
-				{
-					"path": "point"
-				},
-				{
-					"path": "account/login"
-				},
-				{
-					"path": "account/reg"
-				},
-				{
-					"path": "account/repsd"
-				},
-				{
-					"path": "account/changePhone"
-				},
-				{
-					"path": "account/deleteAccount"
-				},
-				{
-					"path": "doc/privacy"
-				},
-				{
-					"path": "doc/protocol"
-				}
+				{"path": "about"},
+				{"path": "nodata"},
+				{"path": "webView"},
+				{"path": "feedback"},
+				{"path": "search"},
+				{"path": "region"},
+				{"path": "mapboxFullscreen"},
+				{"path": "kmlPage"},
+				{"path": "kml"},
+				{"path": "point"},
+				{"path": "account/login"}, 
+				{"path": "account/reg"}, 
+				{"path": "account/repsd"},
+				{"path": "account/changePhone"},
+				{"path": "account/deleteAccount"},
+				{"path": "doc/privacy"},
+				{"path": "doc/protocol"}
 			]
 		},
 		// test
 		{
-			"root": "pages/test",
+			"root": "pages/test/",
 			"pages": [
-				{
-					"path": "index"
-				},
-				{
-					"path": "amap"
-				},
-				{
-					"path": "mapbox"
-				},
-				{
-					"path": "mapView"
-				}
+				{"path": "index"},
+				{"path": "amap"},
+				{"path": "mapbox"},
+				{"path": "mapView"}
 			]
 		}
 	],
-	"tabBar": {
-		"color": "#aaaaaa",
-		"selectedColor": "#515151",
-		"borderStyle": "black",
-		"backgroundColor": "#f8f8f8",
-		"list": [
-			{
-				"pagePath": "pages/index/index",
-				"text": "首页",
-				"iconPath": "static/bar/discover_.png",
-				"selectedIconPath": "static/bar/discover.png"
-			},
-			{
-				// "pagePath": "pages/index/planningPub",
-				"pagePath": "pages/index/planning",
-				"text": "行程",
-				"iconPath": "static/bar/nav_.png",
-				"selectedIconPath": "static/bar/nav.png"
-			},
-			{
-				"pagePath": "pages/index/event",
-				"text": "活动",
-				"iconPath": "static/bar/event_.png",
-				"selectedIconPath": "static/bar/event.png"
-			},
-			// #ifdef H5&&H5-ZLB
-			// {
-			// 	"pagePath": "pages/index/postStation",
-			// 	"text": "驿站",
-			// 	"iconPath": "static/bar/station_.png",
-			// 	"selectedIconPath": "static/bar/station.png"
-			// },
-			// #endif
-			{
-				"pagePath": "pages/index/me",
-				"text": "我",
-				"iconPath": "static/bar/me_.png",
-				"selectedIconPath": "static/bar/me.png"
-			}
-		]
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"zz-(.*)": "@/components/zz/zz-$1.vue",
+			"tui-(.*)": "@/components/thor/tui-$1/tui-$1.vue"
+			// "^uni-(.*)": "@/components/uni-ui/uni-$1/uni-$1.vue"
+		}
 	},
 	"globalStyle": {
+		"navigationBarBackgroundColor": "#0081ff",
+		"navigationBarTitleText": "环浙步道",
 		"navigationStyle": "custom",
-		"backgroundColor": "#F8F8F8"
-		// "navigationBarTextStyle": "black"
-		// "navigationBarTitleText": "环浙步道",
-		// "navigationBarBackgroundColor": "#0477b3"
+		// "navigationBarTextStyle": "#F8F8F8",
+		"pageOrientation": "portrait"
 	}
 }

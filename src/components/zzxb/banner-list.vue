@@ -108,7 +108,7 @@ export default {
 	position: absolute;
 	top: 0rpx;
 	left: 0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 6rpx;
 	height: 38rpx;
 	color: #ffffff;
@@ -119,7 +119,7 @@ export default {
 	position: absolute;
 	top: 0rpx;
 	right: -0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 10rpx;
 	height: 38rpx;
 	color: #ffffff;
@@ -168,7 +168,7 @@ export default {
 	
 	.tui-pro-tit {
 		color: #2e2e2e;
-		font-size: 1.3rem;
+		font-size: 26rpx;
 		word-break: break-all;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -182,13 +182,13 @@ export default {
 	}
 	
 	.tui-sale-price {
-		font-size: 1.7rem;
+		font-size: 34rpx;
 		font-weight: 500;
 		color: #e41f19;
 	}
 	
 	.tui-factory-price {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #a0a0a0;
 		text-decoration: line-through;
 		padding-left: 12rpx;
@@ -196,7 +196,7 @@ export default {
 	
 	.tui-pro-pay {
 		padding-top: 10rpx;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #a0a0a0;
 	}	
 </style>

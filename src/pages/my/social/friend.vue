@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">好友</block>
@@ -126,7 +126,7 @@ body {
                     .name {
                         color: $color-black;
                         // font-weight: bold;
-                        font-size: 1.8rem;
+                        font-size: 36rpx;
                         margin-bottom: 5rpx;
                     }
 
@@ -137,7 +137,7 @@ body {
                         // width: calc(4em + 20rpx);
                         padding: 5rpx 10rpx;
                         border-radius: 50rpx;
-                        font-size: 0.8rem;
+                        font-size: 16rpx;
                         color: $color-black;
                         // font-weight: bold;
                         text-align: center;
@@ -146,7 +146,7 @@ body {
                     }
 
                     .date {
-                        font-size: 1.4rem;
+                        font-size: 28rpx;
                         color: $color-gray;
                     }
                 }

@@ -95,7 +95,7 @@ export default {
 }
 
 .tui-loading__text {
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	line-height: 26rpx;
 	text-align: center;
 }

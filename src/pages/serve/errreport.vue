@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<cu-custom bgColor="bg-ztsblue" :isBack="true">
 			<block slot="backText"></block>
@@ -321,7 +321,7 @@ console.log("clouadpath ------------------>", this.pics)
 		min-width: calc(4em + 15px);
 	}
 	.title {
-	  font-size: 1.5rem;
+	  font-size: 30rpx;
 	  color: #666;
 	  padding-bottom: 26rpx;
 	}
@@ -338,12 +338,12 @@ console.log("clouadpath ------------------>", this.pics)
 	  height: 210rpx;
 	  width: 100%;
 	  color: #666;
-	  font-size: 1.4rem;
+	  font-size: 28rpx;
 	}
 	
 	
 	.textarea-counter {
-	  font-size: 1.2rem;
+	  font-size: 24rpx;
 	  color: #999;
 	  text-align: right;
 	  height: 40rpx;
@@ -376,14 +376,14 @@ console.log("clouadpath ------------------>", this.pics)
 	}
 	.tui-title {
 		width: 180rpx;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 	}
 	.tui-input-sj {
 		width: 440rpx;
 	}
 	.tui-phcolor {
 		color: #c8c8c8;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 	}
 	
 </style>

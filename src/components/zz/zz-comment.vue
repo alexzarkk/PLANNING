@@ -150,7 +150,32 @@ export default {
         // 帖子的id
         tid: {
             type: String,
+            required: true,
             default: ''
+        },
+        // 评论回复对象的类型 id
+        /**
+         * const key = {
+                cur: 'ue',
+                exp: 60 * 24 * 365 * 1,
+                2:  'zts_blog', 		//2.评论(blog)
+                10: 'zts_article',		//10.文章(article)
+                20: 'zts_poi',			//20.兴趣点()poi
+                30: 'zts_mall_goods',	//30.商品(goods)
+                40: 'zts_trail',		//40.路线(trail)
+                42: 'rec',				//42.路线(rec)	
+                44: 'rec_pm',			//44.兴趣点(rec_pm)	
+                50: 'zts_event',		//50.赛事活动(event)
+                60: 'sys_person',		//60.用户（person）
+                70: 'social_moment',	//70.动态/帖子moment
+                99: 'zts_lay',			//99.lay
+                100:'zts_kml'			//100.kml
+            }
+         */
+        tt: { // 评论目标的数据库类型
+            type: Number,
+            required: true,
+            default: 2
         },
         showFooter: {
             type: Boolean,
@@ -311,9 +336,12 @@ export default {
             };
             if (this.replyObj.pid) {
                 requestParams.pid = this.replyObj.pid; // 主评论ID
+                requestParams.tt = 2 // 字评论就是 2
             } else {
                 requestParams.tid = this.tid; // 对内容的回复
+                requestParams.tt = this.tt // 回复对象的类型，默认评论的字评论
             }
+
             // const now = this.zz.time2Date(false, 'obj').full;
             const now = this.zz.time2Date(false, 'Y-M-D h:m:s');
             this.zz.req(requestParams).then((res) => {
@@ -335,6 +363,7 @@ export default {
                         like: 0,
                         status: 0,
                         tid: this.tid,
+                        tt: this.tt, // 回复对象的类型
                         userId: this.userInfo._id,  // 前端参数使用
                         userInfo: this.userInfo,
                         createTime: now,
@@ -410,8 +439,9 @@ export default {
             })
         },
         shareActive() {
+            this.$emit("share")
             // this.activeComment = !this.activeComment
-            this.zz.toast("分享暂未开启", 1000)
+            // this.zz.toast("分享暂未开启", 1000)
         },
         // 删除当前操作的评论
         confirmDelete() {

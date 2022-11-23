@@ -1,5 +1,5 @@
 <template>
-	<page-meta root-font-size="10px"></page-meta>
+	
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true">
             <block slot="content">更新兴趣点</block>
@@ -192,7 +192,7 @@ export default {
 			if(c) {
 				uni.showLoading({ mask:true })
 				for (let k in this.xFile) await this.zz.removeFile(k)
-				await this.zz.req({$fn: 'sync', $url:'/user/rec/delete', pmId: this.poi._id})
+				await this.zz.req({$fn: 'sync0', $url:'/user/rec/delete', pmId: this.poi._id})
 				uni.hideLoading()
 				
 				this.replace(true)
@@ -236,7 +236,7 @@ export default {
 				
 				let p = this.zz.clone(poi)
 				delete p.pt
-				await this.zz.req({$fn: 'sync', $url:'/user/rec/update', ...p})
+				await this.zz.req({$fn: 'sync0', $url:'/user/rec/update', ...p})
 				uni.hideLoading()
 				this.replace()
 			}
@@ -258,7 +258,7 @@ export default {
 
         &-title {
             margin-bottom: 12rpx;
-            font-size: 1.2rem;
+            font-size: 24rpx;
             color: #999999;
         }
     }

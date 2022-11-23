@@ -5,7 +5,7 @@
 			<view class="record-title" style="height:44px;">
 				
 				<!-- #ifdef APP-PLUS -->
-				<button class="cu-btn bg-gray" type="default" @click="tools"><text>工具</text></button>
+				<!-- <button class="cu-btn bg-gray" type="default" @click="tools"><text>工具</text></button> -->
 				<!-- #endif -->
 				
 				<view style="display: flex;flex-direction: row; justify-content: center; ">

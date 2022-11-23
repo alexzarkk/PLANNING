@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-orange" :isBack="true" >
             <block slot="content">报备留踪</block>
@@ -386,7 +386,7 @@ export default {
 }
 .tui-title {
     width: 180rpx;
-    font-size: 1.3rem;
+    font-size: 26rpx;
 }
 .itext {
     border-left: 1rpx solid #f3f3f3;
@@ -394,6 +394,6 @@ export default {
 }
 .tui-phcolor {
     color: #c8c8c8;
-    font-size: 1.3rem;
+    font-size: 26rpx;
 }
 </style>

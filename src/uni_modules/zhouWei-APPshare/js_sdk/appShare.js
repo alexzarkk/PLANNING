@@ -2,6 +2,7 @@
 let alphaBg, shareMenu, showState = false;
 // 关闭弹窗
 export const closeShare = function () {
+	uni.hideLoading()
 	alphaBg && alphaBg.close();
 	alphaBg && shareMenu.close();
 	if (showState) {
@@ -43,6 +44,9 @@ function onMore(item, shareInfo, callback) {
 }
 // 分享
 function onShare(item, shareInfo, callback) {
+	uni.showLoading({
+		mask: true
+	})
 	if (shareInfo.type == undefined) {
 		shareInfo.type = item.type;
 	}
@@ -51,10 +55,11 @@ function onShare(item, shareInfo, callback) {
 		type: shareInfo.type,
 		success: (res) => {
 			callback && callback(item);
-			console.log("success:" + JSON.stringify(res));
+			// console.log("success:" + JSON.stringify(res))
+
 		},
 		fail: (err) => {
-			console.log("分享失败，参数缺失 fail:" + JSON.stringify(err));
+			// console.log("分享失败，参数缺失 fail:" + JSON.stringify(err))
 		}
 	};
 	if (shareInfo.shareTitle) {
@@ -133,19 +138,18 @@ function onShare(item, shareInfo, callback) {
 	}
 	uni.share(shareObj);
 }
-let otherShareList = [
-	{
-		icon: "/uni_modules/zhouWei-APPshare/static/icon_copy.png",
-		text: "复制",
-		provider: "copy",
-		onClick: onCopy
-	},
-	{
-		icon: "/uni_modules/zhouWei-APPshare/static/icon_more.png",
-		text: "更多",
-		provider: "more",
-		onClick: onMore
-	}
+let otherShareList = [{
+	icon: "/uni_modules/zhouWei-APPshare/static/icon_copy.png",
+	text: "复制",
+	provider: "copy",
+	onClick: onCopy
+},
+{
+	icon: "/uni_modules/zhouWei-APPshare/static/icon_more.png",
+	text: "更多",
+	provider: "more",
+	onClick: onMore
+}
 ];
 let platformShareList = [];
 // 获取服务商支持的分享
@@ -171,6 +175,7 @@ uni.getProvider({
 			}].concat(platformShareList);
 		}
 		if (res.provider.includes('weixin')) {
+
 			platformShareList = [{
 				icon: "/uni_modules/zhouWei-APPshare/static/icon_weixin.png",
 				text: "微信好友",
@@ -194,12 +199,16 @@ uni.getProvider({
 				provider: "weixin",
 				scene: "WXSceneSession",
 				type: 5
-			}].concat(platformShareList);
+			}
+			].concat(platformShareList);
 		}
 	}
 });
+
+
 // 根据type类型过滤掉不支持的平台
 function platformFilter(data) {
+	let sysInfo = uni.getStorageSync('sysInfo')
 	let platformList = [];
 	let supportList = [
 		["weixin", "sinaweibo"],
@@ -213,36 +222,41 @@ function platformFilter(data) {
 	if (data.type >= 0 && data.type <= 5) {
 		currentSupport = supportList[data.type];
 	}
-	platformShareList.forEach((item, index) => {
-		if (data.type >= 0 && data.type <= 5) {
-			if (currentSupport.includes(item.provider)) {
-				if (item.provider == "weixin") {
-					if (item.text == "小程序") {
-						if (data.type == 5) {
+
+	//安卓尚不支持微信
+	if (sysInfo.platform == 'ios') {
+		platformShareList.forEach((item, index) => {
+			if (data.type >= 0 && data.type <= 5) {
+				if (currentSupport.includes(item.provider)) {
+					if (item.provider == "weixin") {
+						if (item.text == "小程序") {
+							if (data.type == 5) {
+								platformList.push(item);
+							}
+						} else if (data.type !== 5) {
 							platformList.push(item);
 						}
-					} else if (data.type !== 5) {
+					} else {
 						platformList.push(item);
 					}
-				} else {
-					platformList.push(item);
-				}
-			}
-		} else {
-			if (item.provider == "weixin") {
-				if (item.text == "小程序") {
-					if (data.appId && data.appPath) {
-						platformList.push(item);
-					}
-				} else {
-					platformList.push(item);
 				}
 			} else {
-				platformList.push(item);
+				if (item.provider == "weixin") {
+					if (item.text == "小程序") {
+						if (data.appId && data.appPath) {
+							platformList.push(item);
+						}
+					} else {
+						platformList.push(item);
+					}
+				} else {
+					platformList.push(item);
+				}
 			}
-		}
-	});
-	return platformList.concat(otherShareList);
+		})
+	}
+	const resShareList = platformList.concat(otherShareList);
+	return resShareList
 }
 // 数据处理
 function dataFactory(shareInfo = {}) {
@@ -361,6 +375,7 @@ export default function (shareInfo, callback) {
 		shareMenu.draw(item);
 	});
 	shareMenu.addEventListener("click", function (e) { //处理底部图标菜单的点击事件，根据点击位置触发不同的逻辑
+
 		if (e.screenY > plus.screen.resolutionHeight - 44) { //点击了底部取消按钮
 			alphaBg && alphaBg.close();
 			shareMenu && shareMenu.close();
@@ -385,6 +400,7 @@ export default function (shareInfo, callback) {
 	showState = true;
 	return {
 		close: function () {
+			uni.hideLoading()
 			alphaBg && alphaBg.close();
 			alphaBg && shareMenu.close();
 			if (showState) {

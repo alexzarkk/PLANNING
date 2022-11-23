@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ztsgreen">
             <block slot="content">{{t3?'保存记录':'选择运动类型'}}</block>
@@ -22,230 +22,231 @@
 			</block>
 		</view>
 		
-        <view v-show="t3" :class="t3?'animation-slide-right':'animation-slide-left'">
-			<zz-map :cur="cur" :line="[kml.line]" :point="kml.point" :winH="240"></zz-map>
+		<!-- <view v-show="t3" :class="t3?'animation-slide-right':'animation-slide-left'"> -->
+        <block v-if="t3">
+			<!-- <view class="animation-slide-right"> -->
+				<zz-map :cur="cur" :line="[kml.line]" :point="kml.point" :winH="240"></zz-map>
+				<view class="name form-section">
+					<view class="cu-list solid-bottom">
+						<view class="cu-item bg-white solid-top line-wrapper light">
+							<view class="content padding-tb-xs">
+								<view>
+									<text class="cuIcon-link margin-lr-sm"></text>
+									耗时：{{ zz.formatDuring(kml.endTime-kml.startTime-kml.stopTime) }}
+								</view>
+								<view class="text-gray padding-tb-sm text-df">
+									<text class="cuIcon-infofill margin-lr-sm"></text>
+									长度
+									<text class="text-orange margin-right-xs">{{ kml.info.len }}m</text>
+									海拔
+									<text class="cuIcon-top text-orange">{{ kml.info.top }}</text>
+									<text class="cuIcon-down text-orange margin-right-xs">{{ kml.info.bottom }}</text>
+									累计 ↑
+									<text class="text-orange">{{ kml.info.up }}</text>
+									↓
+									<text class="text-orange">{{ kml.info.down }}</text>
+								</view>
+							</view>
+							<view class="mybadge cu-tag bg-green"><text class="text-black">轨迹</text></view>
+						</view>
+					</view>
+					<tui-collapse :index="1" :current="current" :disabled="!kml.point.length" @click="change3">
+						<template v-slot:title>
+							<tui-list-cell :hover="true">
+								<text class="cuIcon-location text-blue"></text>
+								<text class="padding-left-sm">兴趣点
+									<text class="text-gray text-sm margin-lr-sm">{{kml.point.length+'个'}}</text>
+								</text>
+							</tui-list-cell>
+						</template>
+						<template v-slot:content>
+							<view class="bg-gray">
+								<view class="cu-list menu-avatar padding-sm">
+									<block v-for="(t2, idx) in kml.point" :key="idx">
+										<view class="cu-item solid-top" :style="'background:'+(t2._id==cur._id?'#cce6ff':'#FFF')">
+											<view class="cu-avatar lg" :style="'background-image:url('+icon[t2.t2]+')'" @click="active(t2)"></view>
+											<view class="content" @click="active(t2)">
+												<view class="text-grey">
+													<view class="text-dark text-bold">{{t2.sn||t2.name}}</view>
+													<view class="padding-left-xs text-grey text-xs">{{dict.prop[t2.t2].text}}</view>
+												</view>
+												<view class="text-gray text-sm flex">
+													<view class="text-cut">
+														<text class="cuIcon-info text-grey margin-right-xs"></text>
+														{{ tele[t2.t3].label }}
+													</view>
+												</view>
+											</view>
+											<view class="action" @click="active(t2, idx)">
+												<text class="cuIcon-pic text-grey">{{ t2.imgs.length }}</text>
+												<view class="text-grey text-xs">编辑</view>
+											</view>
+										</view>
+									</block>
+								</view>
+							</view>
+						</template>
+					</tui-collapse>
+				</view>
+						
+						
+				<!-- 名称，详情，活动，难度，照片,隐私设置，保存为草稿 -->
+				<view class="name form-section">
+					<view class="form-section-title">
+						<text class="text-red padding-right-xs">*</text>
+						名称
+					</view>
+					<view><input v-model="kml.name" placeholder="输入名称" /></view>
+				</view>
+				<view class="name form-section">
+					<view class="form-section-title">
+						<text class="text-red padding-right-xs">*</text>
+						详情
+					</view>
+					<view><textarea auto-height placeholder="输入详情" v-model="kml.desc" /></view>
+				</view>
+
+				<view class="name form-section">
+					<view class="form-section-title">
+						<text class="text-red padding-right-xs">*</text>
+						活动
+					</view>
+					<view class="flex align-center justify-center">
+						<view class="flex-sub bg-green light radius">
+							<view class="flex flex-direction justify-center align-center ">
+								<text class="padding-tb-sm" :class="'zzIcon-z' + pt.value" style="font-size: 100rpx;"></text>
+								<text class="text-dark padding-tb-xs">{{pt.label}}</text>
+							</view>
+						</view>
+						<view class="flex-twice padding-lr">
+							<button class="cu-btn round block lg bg-green" @click="changeSportType">
+								<text class="cuIcon-activity"></text>更改活动类型</button>
+						</view>
+					</view>
+				</view>
+
+
+				<!--           
+				view class="name form-section">
+					<view class="form-section-title flex justify-between">
+						<view>
+							<text class="text-red padding-right-xs">*</text>
+							难度
+						</view>
+						<text class="current-level">{{ currentLevelText }}</text>
+					</view>
+					<view class="flex align-center margin-tb">
+						<tui-slider section showValue :max="5" @change="sliderChange"></tui-slider>
+					</view>
+					<view class="flex justify-between align-center">
+						<view class="text-gray text-sm">简单</view>
+						<view class="text-gray text-sm">仅适合专业人士</view>
+					</view>
+				</view> -->
+
+				<view class="name form-section">
+					<view class="form-section-title flex justify-between">
+						<view>
+							<text class="text-red padding-right-xs">*</text>
+							景观元素
+						</view>
+					</view>
+					<view>
+						<checkbox-group @change="elCheckboxChange">
+							<view class="cu-list grid col-3 solid">
+								<view class="cu-item" v-for="(item, index) in ele" :key="index">
+									<view class="flex align-center padding-left-xs">
+										<checkbox class="green sm" :class="item.checked ? 'checked' : ''" :checked="item.checked ? true : false" :value="item.value + ''"></checkbox>
+										<view class="text-dark margin-left-xs text-df">{{ item.label }}</view>
+									</view>
+								</view>
+							</view>
+						</checkbox-group>
+					</view>
+				</view>
+
+				<view class="name form-section">
+					<view class="form-section-title flex justify-between">
+						<view>
+							<text class="text-red padding-right-xs">*</text>
+							印象评分
+						</view>
+					</view>
+					<view class="cu-list menu">
+						<view class="cu-item" v-for="(item, index) in ip" :key="index">
+							<view class="content">
+								<view class="flex justify-between">
+									<view :class="'text-' + item.color">
+										<text class="cuIcon-info margin-right-xs"></text>
+										<text>{{ item.label }}</text>
+									</view>
+									<tui-rate :size="22" :current="item.score" @change="rateChange" :params="index"></tui-rate>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="name form-section flex align-center justify-between">
+					<view class="form-section-title">
+						<view>
+							隐私
+						</view>
+					</view>
+					<view class="flex align-center" @click="pubShow">
+						<view style="min-width:3em;" class="text-bold text-right text-gray text-under text-ztsgreen">{{kml.pub? '公开':'隐藏'}}</view>
+					</view>
+				</view>
+				<zz-upload-image :count="20" :imgs="kml.imgs||[]" @add="addImage" @del="delImage"></zz-upload-image>
 			
-			<view class="name form-section">
-				<view class="cu-list solid-bottom">
-					<view class="cu-item bg-white solid-top line-wrapper light">
-						<view class="content padding-tb-xs">
-							<view>
-								<text class="cuIcon-link margin-lr-sm"></text>
-								耗时：{{ zz.formatDuring(kml.endTime-kml.startTime-kml.stopTime) }}
-							</view>
-							<view class="text-gray padding-tb-sm text-df">
-								<text class="cuIcon-infofill margin-lr-sm"></text>
-								长度
-								<text class="text-orange margin-right-xs">{{ kml.info.len }}m</text>
-								海拔
-								<text class="cuIcon-top text-orange">{{ kml.info.top }}</text>
-								<text class="cuIcon-down text-orange margin-right-xs">{{ kml.info.bottom }}</text>
-								累计 ↑
-								<text class="text-orange">{{ kml.info.up }}</text>
-								↓
-								<text class="text-orange">{{ kml.info.down }}</text>
-							</view>
+				<view class="cu-modal" :class="show ? 'show' : ''">
+					<view class="cu-dialog">
+						<view class="cu-bar bg-white justify-end">
+							<view class="content">隐私设置</view>
+							<view class="action" @tap="show = false"><text class="cuIcon-close text-red"></text></view>
 						</view>
-						<view class="mybadge cu-tag bg-green"><text class="text-black">轨迹</text></view>
-					</view>
-				</view>
-			    <tui-collapse :index="1" :current="current" :disabled="!kml.point.length" @click="change3">
-			        <template v-slot:title>
-			            <tui-list-cell :hover="true">
-			            	<text class="cuIcon-location text-blue"></text>
-			            	<text class="padding-left-sm">兴趣点
-			    				<text class="text-gray text-sm margin-lr-sm">{{kml.point.length+'个'}}</text>
-			    			</text>
-			            </tui-list-cell>
-			        </template>
-			        <template v-slot:content>
-			    		<view class="bg-gray">
-			    			<view class="cu-list menu-avatar padding-sm">
-			    				<block v-for="(t2, idx) in kml.point" :key="idx">
-			    					<view class="cu-item solid-top" :style="'background:'+(t2._id==cur._id?'#cce6ff':'#FFF')">
-			    						<view class="cu-avatar lg" :style="'background-image:url('+icon[t2.t2]+')'" @click="active(t2)"></view>
-			    						<view class="content" @click="active(t2)">
-			    							<view class="text-grey">
-			    								<view class="text-dark text-bold">{{t2.sn||t2.name}}</view>
-			    								<view class="padding-left-xs text-grey text-xs">{{dict.prop[t2.t2].text}}</view>
-			    							</view>
-			    							<view class="text-gray text-sm flex">
-			    								<view class="text-cut">
-			    									<text class="cuIcon-info text-grey margin-right-xs"></text>
-			    									{{dict.trail_element[t2.t3].label||dict.trail_serverPoi[t2.t3].label||dict.trail_otherPoi[t2.t3].label}}
-			    								</view>
-			    							</view>
-			    						</view>
-			    						<view class="action" @click="active(t2, idx)">
-			    							<text class="cuIcon-pic text-grey">{{ t2.imgs.length }}</text>
-			    							<view class="text-grey text-xs">编辑</view>
-			    						</view>
-			    					</view>
-			    				</block>
-			    			</view>
-			    		</view>
-			        </template>
-			    </tui-collapse>
-			</view>
-					
-					
-            <!-- 名称，详情，活动，难度，照片,隐私设置，保存为草稿 -->
-            <view class="name form-section">
-                <view class="form-section-title">
-                    <text class="text-red padding-right-xs">*</text>
-                    名称
-                </view>
-                <view><input v-model="kml.name" placeholder="输入名称" /></view>
-            </view>
-            <view class="name form-section">
-                <view class="form-section-title">
-                    <text class="text-red padding-right-xs">*</text>
-                    详情
-                </view>
-				<view><textarea auto-height placeholder="输入详情" v-model="kml.desc" /></view>
-            </view>
-
-            <view class="name form-section">
-                <view class="form-section-title">
-                    <text class="text-red padding-right-xs">*</text>
-                    活动
-                </view>
-				<view class="flex align-center justify-center">
-					<view class="flex-sub bg-green light radius">
-						<view class="flex flex-direction justify-center align-center ">
-							<text class="padding-tb-sm" :class="'zzIcon-z' + pt.value" style="font-size: 100rpx;"></text>
-							<text class="text-dark padding-tb-xs">{{pt.label}}</text>
+						<view class="bg-white padding solid-top">
+							<view class="text-bold padding-tb-sm text-left text-xl">谁能看到这条路线？</view>
+							<radio-group class="block" @change="pubChange">
+								<view>
+									<view class="flex justify-between padding-tb-sm">
+										<text class="text-bold">
+											所有人(公开)
+										</text>
+										<radio class='radio green' :checked="pub==1" value="1"></radio>
+									</view>
+									<view class="text-left text-df">环浙步道用户将看到此路线,该路线可以保存在您的列表中,可以分享,并且计入用户排名。</view>
+								</view>
+								<view>
+									<view class="flex justify-between padding-tb-sm">
+										<text class="text-bold">
+											只有您（隐藏）
+										</text>
+										<radio class='radio grey' :checked="pub==0" value="0"></radio>
+									</view>
+									<view class="text-left text-df">只有您可以看到此路线，无法保存到公开的列表中，也不能分享，并且不会计入用户排名，但是会计入个人统计中。</view>
+								</view>
+							</radio-group>
+							<view class="margin-top text-gray text-df"><text class="text-black">提示：</text>如果您还未准备好路线的详细描述或照片，可以先标记为隐藏路线，当一切准备好之后，可以随时把此路线更改为公开路线。</view>
+						</view>
+						<view class="cu-bar bg-white solid-top">
+							<view class="action margin-0 flex-sub solid-left" @tap="show = false">取消</view>
+							<view class="action margin-0 flex-sub text-green solid-left" @tap="pubConfirm">确定</view>
 						</view>
 					</view>
-					<view class="flex-twice padding-lr">
-						<button class="cu-btn round block line-green lg" @click="changeSportType">
-							<text class="cuIcon-activity"></text>更改活动类型</button>
-					</view>
 				</view>
-            </view>
-
-
-			<!--           
-			view class="name form-section">
-                <view class="form-section-title flex justify-between">
-                    <view>
-                        <text class="text-red padding-right-xs">*</text>
-                        难度
-                    </view>
-                    <text class="current-level">{{ currentLevelText }}</text>
-                </view>
-                <view class="flex align-center margin-tb">
-					<tui-slider section showValue :max="5" @change="sliderChange"></tui-slider>
-                </view>
-                <view class="flex justify-between align-center">
-                    <view class="text-gray text-sm">简单</view>
-                    <view class="text-gray text-sm">仅适合专业人士</view>
-                </view>
-            </view> -->
-
-            <view class="name form-section">
-                <view class="form-section-title flex justify-between">
-                    <view>
-                        <text class="text-red padding-right-xs">*</text>
-                        景观元素
-                    </view>
-                </view>
-                <view>
-                    <checkbox-group @change="elCheckboxChange">
-                        <view class="cu-list grid col-3 solid">
-                            <view class="cu-item" v-for="(item, index) in ele" :key="index">
-                                <view class="flex align-center padding-left-xs">
-                                    <checkbox class="green sm" :class="item.checked ? 'checked' : ''" :checked="item.checked ? true : false" :value="item.value + ''"></checkbox>
-                                    <view class="text-dark margin-left-xs text-df">{{ item.label }}</view>
-                                </view>
-                            </view>
-                        </view>
-                    </checkbox-group>
-                </view>
-            </view>
-
-            <view class="name form-section">
-                <view class="form-section-title flex justify-between">
-                    <view>
-                        <text class="text-red padding-right-xs">*</text>
-                        印象评分
-                    </view>
-                </view>
-                <view class="cu-list menu">
-                    <view class="cu-item" v-for="(item, index) in ip" :key="index">
-                        <view class="content">
-                            <view class="flex justify-between">
-                                <view :class="'text-' + item.color">
-                                    <text class="cuIcon-info margin-right-xs"></text>
-                                    <text>{{ item.label }}</text>
-                                </view>
-                                <tui-rate :size="22" :current="item.score" @change="rateChange" :params="index"></tui-rate>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-            <view class="name form-section flex align-center justify-between">
-                <view class="form-section-title">
-                    <view>
-                        隐私
-                    </view>
-                </view>
-                <view class="flex align-center" @click="pubShow">
-                    <view style="min-width:3em;" class="text-bold text-right text-gray text-under text-ztsgreen">{{kml.pub? '公开':'隐藏'}}</view>
-                </view>
-            </view>
-			<zz-upload-image :count="20" :imgs="kml.imgs||[]" @add="addImage" @del="delImage"></zz-upload-image>
-           
-        </view>
+			<!-- </view> -->
+		</block>
 		
-		<view class="cu-modal" :class="show ? 'show' : ''">
-		    <view class="cu-dialog">
-		        <view class="cu-bar bg-white justify-end">
-		            <view class="content">隐私设置</view>
-		            <view class="action" @tap="show = false"><text class="cuIcon-close text-red"></text></view>
-		        </view>
-		        <view class="bg-white padding solid-top">
-		            <view class="text-bold padding-tb-sm text-left text-xl">谁能看到这条路线？</view>
-		            <radio-group class="block" @change="pubChange">
-		                <view>
-		                    <view class="flex justify-between padding-tb-sm">
-		                        <text class="text-bold">
-		                            所有人(公开)
-		                        </text>
-		                        <radio class='radio green' :checked="pub==1" value="1"></radio>
-		                    </view>
-		                    <view class="text-left text-df">环浙步道用户将看到此路线,该路线可以保存在您的列表中,可以分享,并且计入用户排名。</view>
-		                </view>
-		                <view>
-		                    <view class="flex justify-between padding-tb-sm">
-		                        <text class="text-bold">
-		                            只有您（隐藏）
-		                        </text>
-		                        <radio class='radio grey' :checked="pub==0" value="0"></radio>
-		                    </view>
-		                    <view class="text-left text-df">只有您可以看到此路线，无法保存到公开的列表中，也不能分享，并且不会计入用户排名，但是会计入个人统计中。</view>
-		                </view>
-		            </radio-group>
-		            <view class="margin-top text-gray text-df"><text class="text-black">提示：</text>如果您还未准备好路线的详细描述或照片，可以先标记为隐藏路线，当一切准备好之后，可以随时把此路线更改为公开路线。</view>
-		        </view>
-		        <view class="cu-bar bg-white solid-top">
-		            <view class="action margin-0 flex-sub solid-left" @tap="show = false">取消</view>
-		            <view class="action margin-0 flex-sub text-green solid-left" @tap="pubConfirm">确定</view>
-		        </view>
-		    </view>
-		</view>
-		
-		<!--底部操作栏-->
 		<view v-show="t3">
-		    <view class="cu-tabbar-height"></view>
-		    <view class="cu-bar bg-white tabbar border shop foot">
-		        <button class="action text-red" @tap="close">
-		            <view class="cuIcon-close"></view>
-		            取消
-		        </button>
-		        <view class="bg-ztsgreen submit cuIcon-check" @tap="save">保存</view>
-		    </view>
+			<!--底部操作栏-->
+			<view class="cu-tabbar-height"></view>
+			<view class="cu-bar bg-white tabbar border shop foot">
+				<button class="action text-red" @tap="close">
+					<view class="cuIcon-close"></view>
+					取消
+				</button>
+				<view class="bg-ztsgreen submit cuIcon-check" @tap="save">保存</view>
+			</view>
 		</view>
     </view>
 </template>
@@ -267,6 +268,7 @@ export default {
 			current: -1,
 			
 			ele:[],
+			tele:{},
 			ip: [0,0,0,0,0],
 			pageLock: true,
 			
@@ -294,11 +296,14 @@ export default {
 		this.$scope.$getAppWebview().setStyle({'popGesture':'none'})
 		// #endif
 		
-		let { tmt } = this.zz.getParam(v),
+		let { tmt, rec } = this.zz.getParam(v),
 			dict = uni.getStorageSync('sys_dict')
-			
+		
+		this.tele = Object.assign(dict.trail_element,dict.trail_serverPoi,dict.trail_otherPoi)	
 		this.tmt = tmt
+		this.rec = rec
 		this.dict = dict
+		this.t3 = rec.t3||0
 		
 		this.ele = this.zz.toArr(dict.trail_element)
 		this.ip = this.zz.toArr(dict.trail_ip)
@@ -321,7 +326,7 @@ export default {
 	onBackPress() { return this.pageLock },
     methods: {
 		loadData(){
-			let rec = uni.getStorageSync('nav_rec' + this.tmt),
+			let rec = this.rec,
 				f = uni.getStorageSync('sync_files')||{},
 				popular = uni.getStorageSync('popular_sport_type') || [110,118,120,122,210,218],
 				
@@ -339,7 +344,7 @@ export default {
 					endTime: rec.endTime,
 					stopTime: rec.stopTime,
 					info: rec.info,
-					line:{
+					line: {
 							_id: uniqId(),
 							t1:1,
 							t2:10,
@@ -401,7 +406,7 @@ export default {
 		    uni.setStorageSync('selected_sport_type', p.value)
 		    setTimeout(() => {
 				this.t3 = p.value
-		    }, 300)
+		    }, 200)
 		},
 		changeSportType() {
 			this.idx = '0_0'
@@ -460,7 +465,7 @@ export default {
 			const [_, e] = await uni.showModal({ title: "确定要放弃保存？" })
         	if(e.confirm) {
         		this.pageLock = false
-        		this.zz.href('/pages/index/event')
+				uni.redirectTo({ url: '/pages/index?tab=event' })
         	}
         },
         // 保存兴趣点
@@ -510,8 +515,7 @@ export default {
 			uni.removeStorageSync('nav_rec'+this.tmt)
 			
         	this.pageLock = false
-        	// this.zz.href('/pages/nav/rec/line',{kml:this.kml}, 1, null, 'redirectTo')
-        	this.zz.href('/pages/index/event')
+			uni.redirectTo({ url: '/pages/index?tab=event' })
         }
         
     }
@@ -528,7 +532,7 @@ export default {
 
 	&-title {
 		margin-bottom: 12rpx;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #999999;
 	}
 }

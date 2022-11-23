@@ -1,6 +1,6 @@
 
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+    
     <!-- 系统账户Profile -->
     <view>
         <view class="container">
@@ -256,7 +256,7 @@ body {
                 padding: 0 20rpx;
                 color: #ffffff;
                 z-index: 20;
-                font-size: 1.8rem;
+                font-size: 36rpx;
             }
 
             .name-box {
@@ -300,7 +300,7 @@ body {
     align-items: center;
     .bottom-btn {
         width: 300rpx;
-        font-size: 1.8rem;
+        font-size: 36rpx;
     }
 
     .send {

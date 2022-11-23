@@ -126,6 +126,10 @@ export default {
             default: 0
         },
         tid: [String], // 目标内容ID
+        tt: {
+            type: Number, // 目标内容的数据库类型
+            required: true
+        },
         tar: [String],
         isCanReply: {
             type: Boolean
@@ -149,7 +153,7 @@ export default {
         },
         // 跳转到编写评论的页面
         writeComment() {
-			this.zz.href('/pages/my/blog/edit?tid=' + this.tid,null,1);
+            this.zz.href(`/pages/my/blog/edit?tid=${this.tid}&tt=${this.tt}`, null, 1);
         },
         // 作者回复评论
         replyComment(item) {

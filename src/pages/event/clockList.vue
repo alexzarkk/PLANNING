@@ -20,7 +20,7 @@ https://s1.ax1x.com/2022/05/27/XegQC4.png  坐标点
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view class="container">
         <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">打卡列表</block></cu-custom>
         <view>
@@ -149,8 +149,10 @@ https://s1.ax1x.com/2022/05/27/XegQC4.png  坐标点
 </template>
 
 <script>
+import zzBottomBtn from '../../components/zz/zz-bottom-btn.vue';
 import { mapState } from 'vuex';
 export default {
+    components: { zzBottomBtn },
     onShow() {
         if (this.isMapReady) {
             this.getList();
@@ -326,7 +328,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    font-size: 1.8rem;
+    font-size: 36rpx;
     color: #ffffff;
 }
 
@@ -360,7 +362,7 @@ export default {
     align-items: center;
     height: 600rpx;
     .text {
-        font-size: 1.8rem;
+        font-size: 36rpx;
     }
 }
 
@@ -417,11 +419,11 @@ export default {
                 justify-content: space-between;
                 padding: 10rpx 0;
                 .main-title {
-                    font-size: 1.8rem;
+                    font-size: 36rpx;
                     font-weight: bold;
                 }
                 .sub-title {
-                    font-size: 1.2rem;
+                    font-size: 24rpx;
                 }
             }
         }

@@ -273,7 +273,7 @@
 		/* padding: 15px 20px; */
 		box-sizing: border-box;
 		transition: transform 0.2s ease;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 		cursor: pointer;
 	}
 

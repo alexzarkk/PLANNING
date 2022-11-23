@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <!-- 
 			@name:运动类型选择
 			@desc：出发前选择运动类型
@@ -155,7 +155,7 @@ page {
         padding: 24rpx;
         .sport-title {
             color: #8b8b8b;
-            font-size: 1.2rem;
+            font-size: 24rpx;
             margin-bottom: 16rpx;
         }
 
@@ -181,7 +181,7 @@ page {
                     padding: 16rpx;
 
                     // .sport-type-icon{
-                    // 	font-size: 1rem;
+                    // 	font-size: 20rpx;
                     // }
 
                     &-image {
@@ -192,7 +192,7 @@ page {
 
                 &-title {
                     color: #525252;
-                    font-size: 1.4rem;
+                    font-size: 28rpx;
                 }
             }
 

@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view class="container">
         <cu-custom :isBack="true" bgColor="bg-dark"><block slot="content">隐私保护声明</block></cu-custom>
         <view>

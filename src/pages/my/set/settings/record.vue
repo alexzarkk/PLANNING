@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 <!-- 记录设置 -->
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">记录设置</block></cu-custom>

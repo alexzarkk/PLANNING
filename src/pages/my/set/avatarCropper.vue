@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <!-- 图片裁剪 -->
     <view class="container">
         <tui-picture-cropper :lockRatio="true" :imageUrl="imageUrl" :isBase64="false" @ready="ready" @cropper="cropper"></tui-picture-cropper>

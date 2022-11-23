@@ -147,7 +147,7 @@
 		font-style: normal;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		font-size: 2.4rem;
+		font-size: 48rpx;
 	}
 
 	.tui-icon__backspace:before {
@@ -235,7 +235,7 @@
 
 	.tui-key__item {
 		width: 100%;
-		font-size: 2rem;
+		font-size: 40rpx;
 		font-weight: 600;
 		height: 88rpx;
 		background-color: #fff;
@@ -261,7 +261,7 @@
 
 	.tui-dk__btn .tui-key__item {
 		height: 296rpx;
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		font-weight: 500;
 	}
 

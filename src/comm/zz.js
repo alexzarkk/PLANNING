@@ -1,11 +1,9 @@
-// #ifdef H5-ZLB
-import { mgop } from '@aligov/jssdk-mgop'
-import { pathToBase64 } from '@/js_sdk/mmmm-image-tools'
-// #endif
-
 import { api, isDev, appKey, amapKey, appid } from '@/comm/bd'
 import { isSame, clone, math, isArray } from '@/comm/geotools'
 
+// #ifdef APP-PLUS
+const mpaasScanModule = uni.requireNativePlugin("Mpaas-Scan-Module")
+// #endif
 
 const
 	rndInt = (a = 0, z = 4) => { return Math.floor(Math.random() * (z - a + 1)) + a },
@@ -18,21 +16,40 @@ const
 	},
 
 	scan = async (onlyFromCamera = true, scanType = ['qrCode']) => {
-		authCemera()
+		// authCemera()
 		return new Promise((resolve, reject) => {
 			// #ifndef APP-PLUS
-			ZWJSBridge.scan({ type: "qrCode" }).then(e => { resolve(e) }).catch(e => { reject(e) })
+			resolve(e)
 			// #endif
 
 			// #ifdef APP-PLUS
-			uni.scanCode({
-				onlyFromCamera,
+			// uni.scanCode({
+			// 	onlyFromCamera,
+			// 	scanType,
+			// 	success(e) {
+			// 		console.log(e);
+			// 		resolve(e)
+			// 	},
+			// 	fail(e) {
+			// 		reject(e)
+			// 	}
+			// })
+			mpaasScanModule.mpaasScan({
+				// 扫码识别类型，参数可多选，qrCode、barCode，不设置，默认识别所有
 				scanType,
-				success(e) {
+				// 是否隐藏相册，默认false不隐藏
+				'hideAlbum': onlyFromCamera
+			},
+			(e) => {
+				// console.log(e);
+				// {"resp_result":"https://z.szs.run/z.html?o=W0665.102","resp_code":1000,"resp_message":"success"} 
+				// 返回值中，resp_code 表示返回结果值，10：用户取消，11：其他错误，1000：成功
+				// 返回值中，resp_message 表示返回结果信息
+				// 返回值中，resp_result 表示扫码结果，只有成功才会有返回
+				if(e.resp_code==1000) {
 					resolve(e)
-				},
-				fail(e) {
-					reject(e)
+				}else{
+					reject(e.resp_code)
 				}
 			})
 			// #endif
@@ -84,42 +101,6 @@ const
 	 * 上传文件
 	 */
 	upload = async (filePath, remove) => {
-		// #ifdef H5-ZLB
-		/* 用 http 请求上传 */
-		let base64 = [],
-			f = await pathToBase64(filePath)
-
-		const put = (s, n = 900000) => {
-			if (s.length > n) {
-				base64.push(s.substring(0, n))
-				put(s.substring(n, s.length))
-			} else {
-				base64.push(s)
-			}
-		}
-		put(f.split(',')[1])
-
-		let file = {
-			id: Date.now() + '',
-			sn: 1,
-			size: base64.length,
-			cloudPath: uni.getStorageSync(filePath)
-		}
-		for (let s of base64) {
-			let e = await zz.req({ $fn: 'sync' + rndInt(), $url: '/admin/comm/upload', dataUrl: s, ...file })
-			if (e) {
-				file.url = e.fileID
-				if (remove) uni.removeStorageSync(filePath)
-			}
-			file.sn++
-		}
-
-		return new Promise((resolve, reject) => {
-			file.url ? resolve(file.url) : reject(false)
-		})
-		// #endif
-
-		// #ifndef H5-ZLB
 		return new Promise((resolve, reject) => {
 			uniCloud.uploadFile({
 				filePath,
@@ -138,7 +119,6 @@ const
 				}
 			})
 		})
-		// #endif
 	},
 	chooseImage = async ({ sourceType = ['album', 'camera'], sizeType = ['compressed'], count = 1 }, save = false) => {
 
@@ -434,10 +414,11 @@ async function req(params = {}, loading = false, t = 9999) {
 		url = params.$url,
 		token = zz.getToken(),
 		net = zz.hadNet(),
+		storageKey = zz.key(fn + url + JSON.stringify(params)),
 		toLogin = () => {
 			zz.href('/pages/comm/account/login', 0, { back: 1 })
 		}
-
+	
 	delete params.$fn
 	delete params.$veri
 
@@ -446,7 +427,7 @@ async function req(params = {}, loading = false, t = 9999) {
 			toLogin()
 		}, true)
 	}
-	console.info("requestPrams ===========", params, api[isDev] + fn)
+	// console.info(isDev,"requestPrams ===========>"+fn, params)
 
 	if (net) {
 		if (loading) uni.showLoading({ mask: true })
@@ -459,28 +440,28 @@ async function req(params = {}, loading = false, t = 9999) {
 				switch (code) {
 					// 成功
 					case 1000:
-						if (data) uni.setStorage(zz.key(fn + url + JSON.stringify(params)), data)
+						if (data) {
+							uni.setStorage(storageKey, data)
+						}
 						resolve(data)
 						break
 					// 登录失效
 					case 1002:
 						zz.logOut()
-						// console.log()
 						zz.toast(message)
-						console.info("接口错误----------", e)
+						console.info(code,"接口错误----------",e)
 						reject()
-						// return toLogin()
 						break
 					// 失败
 					default:
 						zz.toast(message)
-						console.info("接口错误----------", e)
+						console.info(code,"接口错误----------",e)
 						reject(e.data || e.result)
 				}
 			},
 				fail = (e) => {
+					console.info("接口错误.fail----------",e)
 					if (loading) uni.hideLoading()
-					// zz.toast(e.message || e.data.message)
 					params.$fn = fn
 					params.$url = url
 					reject(e.message || e.data.message || '服务器错误！')
@@ -488,52 +469,8 @@ async function req(params = {}, loading = false, t = 9999) {
 				complete = (e) => {
 					params.$fn = fn
 					params.$url = url
-					// clearTimeout(tim)
-					// console.log(e);
 				}
 
-			// #ifdef H5-ZLB
-
-			// console.log("请求的内容",)
-			// console.log("当前isDev------------", isDev)
-			let header = {
-				// isTestUrl: isDev + '',
-				authorization: token,
-				clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
-			}
-
-			if (isDev) {
-				header.isTestUrl = '1'
-			}
-			console.log('header================================', header);
-			mgop({
-				api: 'mgop.zz.zts.' + fn, // 必填
-				host: 'https://mapi.zjzwfw.gov.cn/',
-				dataType: 'JSON',
-				type: 'POST',
-				appKey,
-				header,
-				data: params,
-				onSuccess: success,
-				onFail: fail
-			});
-			// #endif
-
-			// #ifndef H5-ZLB
-			// uni.request({
-			// 	url: api[isDev] + fn,
-			// 	timeout: 10000,
-			// 	header: {
-			// 		'content-type': 'application/json',
-			// 		authorization: token,
-			// 		clientinfo: JSON.stringify(uni.getStorageSync('clientInfo'))
-			// 	},
-			// 	data: params,
-			// 	method: 'POST',
-			// 	success,
-			// 	fail,
-			// 	complete
-			// })
 			delete params.$url
 			uniCloud.callFunction({
 				name: fn,
@@ -542,12 +479,17 @@ async function req(params = {}, loading = false, t = 9999) {
 				fail,
 				complete
 			})
-			// #endif
 		})
 	} else {
-		let data = uni.getStorageSync(zz.key(fn + url + JSON.stringify(params)))
-		if (!data) zz.toast("请求失败，没有网络！")
-		return data
+		return new Promise((resolve,reject)=>{
+			let data = uni.getStorageSync(storageKey)
+			if (data){
+				resolve(data)
+			}else{
+				// zz.toast("请求失败，没有网络！")
+				reject(false)
+			}
+		})
 	}
 }
 
@@ -704,16 +646,16 @@ const zz = {
 
 	now() { return Date.now() },
 	setAcc(u) {
-		uni.setStorageSync('210B33A_acc', u)
+		uni.setStorageSync('3AB0063_acc', u)
 	},
-	getAcc() { return uni.getStorageSync('210B33A_acc') },
+	getAcc() { return uni.getStorageSync('3AB0063_acc') },
 	setToken(token) {
-		uni.setStorageSync('210B33A_token', token)
+		uni.setStorageSync('3AB0063_token', token)
 	},
-	getToken() { return uni.getStorageSync('210B33A_token') },
+	getToken() { return uni.getStorageSync('3AB0063_token') },
 	logOut() {
-		uni.removeStorageSync('210B33A_acc')
-		uni.removeStorageSync('210B33A_token')
+		uni.removeStorageSync('3AB0063_acc')
+		uni.removeStorageSync('3AB0063_token')
 	},
 	async setDept() {
 		let { deptId, dept } = this.getDept()
@@ -758,37 +700,6 @@ const zz = {
 			}
 		})
 	},
-	// #ifdef H5-ZLB
-	// 浙里办PV 埋点  跳转页面埋点
-	sendZlbPV() {
-		const sdk = window.ZWJSBridge
-		const getLocation = sdk.getLocation()
-		const getUserType = sdk.getUserType()
-
-		Promise.all([getUserType, getLocation]).then(([userTypeData, locationData]) => {
-			// console.log("定位和用户类型-------", userTypeData, locationData)
-			const { userType } = userTypeData
-			const { longitude, latitude } = locationData
-			const params = {
-				action: 'aplus.sendPV',
-				arguments: [
-					{
-						is_auto: false
-					},
-					{
-						miniAppId: appid,
-						miniAppName: '环浙步道',
-						long: longitude,
-						lati: latitude,
-						userType
-					}
-				]
-			}
-			// console.log("浙里办PV埋点-------", params)
-			window.aplus_queue.push(params)
-		})
-	},
-	// #endif
 
 	/**
 	 * 
@@ -798,7 +709,7 @@ const zz = {
 	 * @returns 
 	 */
 	href(url, v, veri, animationType, t = 'navigateTo') {
-		if (url.startsWith('/pages/index')) return uni.switchTab({ url })
+		// if (url.startsWith('/pages/index')) return uni.switchTab({ url })
 
 		if (v) {
 			url += '?v=' + encodeURI(JSON.stringify(v))
@@ -816,13 +727,7 @@ const zz = {
 			uni[t]({
 				url,
 				animationType,
-				success: (res) => {
-					// #ifdef H5-ZLB
-					// console.log("页面跳转完成---------------------------", res)
-					// 添加pv埋点
-					zz.sendZlbPV()
-					// #endif
-				},
+				success: (res) => {},
 				fail: (err) => {
 					console.error('路由跳转失败===', err)
 				}
@@ -834,15 +739,7 @@ const zz = {
 		let d = uni.getStorageSync('sys_dict')
 		this.href(`/pages/my/profile/${d.sysUser[id] ? 'sysProfile' : 'profile'}?id=${id}`)
 	},
-	getParam(v) {
-		console.log("获取到的路由参数", v, typeof v)
-		if (typeof v === 'object') {
-			return v
-		}else{
-			return JSON.parse(decodeURI(v))
-		}
-		
-	}
+	getParam(v) { return JSON.parse(decodeURI(v)) }
 }
 
 module.exports = zz

@@ -1,7 +1,7 @@
 
 [class*="zzIcon-"] {
 	font-family: "zzIcon";
-	font-size: 1.6rem;
+	font-size: 32rpx;
 	font-style: normal;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -9,9 +9,9 @@
 @font-face {
   font-family: "zzIcon"; /* Project id 3351452 */
   /* #ifdef APP-PLUS */
-	src: url('~@/comm/css/local/iconfont.woff2?t=1663742976') format('woff2'),
-		url('~@/comm/css/local/iconfont.woff?t=1663742976') format('woff'),
-		url('~@/comm/css/local/iconfont.ttf?t=1663742976') format('truetype');
+	src: url('~@/comm/css/local/iconfont.woff2?t=1668823696840') format('woff2'),
+		url('~@/comm/css/local/iconfont.woff?t=1668823696840') format('woff'),
+		url('~@/comm/css/local/iconfont.ttf?t=1668823696840') format('truetype');
   /* #endif */
   
   /* #ifndef APP-PLUS */
@@ -23,10 +23,15 @@
 
 .zzIcon {
   font-family: "zzIcon" !important;
-  font-size: 1.6rem;
+  font-size: 32rpx;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+.zzIcon-apple-fill:before {
+  content: "\e881";
 }
 
 .zzIcon-dongtai:before {

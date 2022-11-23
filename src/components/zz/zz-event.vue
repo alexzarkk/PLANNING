@@ -284,7 +284,7 @@ export default {
 .cardTitle {
 	color: #282828;
 	padding: 56rpx 20rpx 10rpx 20rpx;
-	font-size: 1.8rem;
+	font-size: 36rpx;
 	font-weight: 500;
 	transform: skew(-10deg, 0deg);
 	position: relative;
@@ -296,7 +296,7 @@ export default {
 	position: absolute;
 	top: 0rpx;
 	left: -0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 10rpx;
 	height: 38rpx;
 	color: #ffffff;
@@ -307,7 +307,7 @@ export default {
 	position: absolute;
 	top: 0rpx;
 	right: -0rpx;
-	font-size: 1.3rem;
+	font-size: 26rpx;
 	padding: 0rpx 10rpx;
 	height: 38rpx;
 	color: #ffffff;

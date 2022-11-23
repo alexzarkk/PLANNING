@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true" :manualBack="true" @back="close">
             <block slot="content">兴趣点</block>
@@ -322,7 +322,7 @@ export default {
 
         &-title {
             margin-bottom: 12rpx;
-            font-size: 1.2rem;
+            font-size: 24rpx;
             color: #999999;
         }
     }

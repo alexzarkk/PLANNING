@@ -1,25 +1,23 @@
 <template name="basics">
-    <page-meta root-font-size="10px"></page-meta>
+
     <!-- 测试16px -->
     <view>
         <view class="UCenter-bg">
             <!-- 右上角信息 -->
-            <!-- <view class="setting-icon" @click="href('/pages/my/social/message/msgList')">
+            <view class="setting-icon" @click="href('/pages/my/social/message/msgList')">
                 <view class="cuIcon-messagefill text-green">
-                    <view class="cu-tag badge">3</view>
+                    <!-- <view class="cu-tag badge">3</view> -->
                 </view>
-            </view> -->
+            </view>
             <!--用户信息-->
             <view class="flex justify-start margin-top padding-top-xl">
-                <template v-if="!isLogin">
+                <template v-if="!user">
                     <view class="margin-top flex align-center padding content" @tap="href('/pages/comm/account/login',{},false)">
                         <view class="cu-avatar radius">
                             <text class="cuIcon-people"></text>
                         </view>
                         <view class="padding-left">
-                            <!-- #ifndef H5-ZLB -->
                             <text>注册/登录</text>
-                            <!-- #endif -->
                         </view>
                         <view class="margin-left-xs cuIcon-right"></view>
                     </view>
@@ -108,6 +106,7 @@
                     </text>
                 </view>
             </view> -->
+
             <block v-for="(item,idx) of nav" :key="idx">
                 <tui-list-cell padding="0" :lineLeft="false" :arrow="true" @tap="href(item.url, null, 0)">
                     <view class="zz-list-cell">
@@ -134,10 +133,13 @@
 
 <script>
 export default {
+	props: {
+	    user: { type: [Object, String] },
+	    person: { type: Object }
+	},
     data() {
         return {
             modalName: '',
-            user: null,
             CustomBar: this.CustomBar,
             isLogin: false, // 是否登录
             loginTip: false,
@@ -211,16 +213,16 @@ export default {
                     url: '/pages/comm/feedback?path=profile',
                     icon: 'post'
                 },
-                // {
-                //     text: '服务协议',
-                //     url: '/pages/comm/doc/protocol',
-                //     icon: 'read'
-                // },
-                // {
-                //     text: '隐私政策',
-                //     url: '/pages/comm/doc/privacy',
-                //     icon: 'profile '
-                // },
+                {
+                    text: '服务协议',
+                    url: '/pages/comm/doc/protocol',
+                    icon: 'read'
+                },
+                {
+                    text: '隐私政策',
+                    url: '/pages/comm/doc/privacy',
+                    icon: 'profile '
+                },
                 {
                     text: '设置',
                     url: '/pages/my/set/settings',
@@ -229,31 +231,35 @@ export default {
             ]
         };
     },
-    // onLoad: function (options) {
-    //     this.loadData()
-    // },
-    onShow() {
-        this.user = this.zz.getAcc()
+	watch: {
+		person(e) {
+			if(e) {
+				this.socialList.find(res => res.key === 'follow').value = e.follow || 0
+				this.socialList.find(res => res.key === 'fans').value = e.fans || 0
+			}
+		},
+	},
+    mounted() {
         this.loadData()
     },
     methods: {
         // 初始化加载数据
         loadData() {
-            const token = this.zz.getToken()
-            if (token) {
-                this.isLogin = true
-                this.zz.req({
-                    $url: 'user/person/info'
-                }).then(res => {
-                    // console.log("个人统计数据", res)
-                    this.socialList.find(res => res.key === 'follow').value = res.follow || 0
-                    this.socialList.find(res => res.key === 'fans').value = res.fans || 0
-                    // this.socialList[2].value = res.follow || 0
-                    // this.socialList[3].value = res.fans || 0
-                })
-            } else {
-                this.isLogin = false
-            }
+            // const token = this.zz.getToken()
+            // if (token) {
+            //     this.isLogin = true
+            //     this.zz.req({
+            //         $url: 'user/person/info'
+            //     }).then(res => {
+            //         // console.log("个人统计数据", res)
+            //         this.socialList.find(res => res.key === 'follow').value = res.follow || 0
+            //         this.socialList.find(res => res.key === 'fans').value = res.fans || 0
+            //         // this.socialList[2].value = res.follow || 0
+            //         // this.socialList[3].value = res.fans || 0
+            //     })
+            // } else {
+            //     this.isLogin = false
+            // }
         },
         openProfile() {
             this.href('/pages/my/profile/profile')
@@ -331,6 +337,6 @@ export default {
     display: flex;
     align-items: center;
     padding: 30rpx;
-    font-size: 1.5rem;
+    font-size: 30rpx;
 }
 </style>

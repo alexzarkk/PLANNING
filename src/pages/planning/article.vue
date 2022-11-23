@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+
     <view class="bg-white">
         <!-- #ifndef APP-PLUS -->
         <cu-custom bg-color="bg-ztsblue" :is-back="true">
@@ -18,8 +18,7 @@
                     </text>
                 </view>
             </view>
-            <zz-user-event :obj="article" @act="userEvent" @share="showShare"></zz-user-event>
-            <!-- <view class="padding-top padding-lr solid-bottom text-sm padding-bottom-sm flex justify-between">
+            <view class="padding-top padding-lr solid-bottom text-sm padding-bottom-sm flex justify-between">
                 <view @click.stop="openProfile">
                     <text class="text-grey">
                         {{ article.author || article.origin || article.userInfo.nickName }}
@@ -34,7 +33,7 @@
                         {{ article.view }}
                     </text>
                 </view>
-            </view> -->
+            </view>
             <!-- 视频 -->
             <view v-if="article.video && article.video.url" id="tvideo">
                 <view class="cu-card case no-card">
@@ -70,12 +69,7 @@
                     <wxParse class="richText" :content="article.content"></wxParse>
                 </view>
             </view>
-            <!-- #ifdef APP -->
-            <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :show-footer="true" @userEvent="commentEvent"></zz-comment>
-            <!-- #endif -->
-            <!-- #ifdef H5 -->
-            <zz-blog v-if="article._id" ref="blogComment" :tid="article._id" :is-can-reply="false" />
-            <!-- #endif -->
+            <zz-comment v-if="article._id" ref="comment" :tid="article._id" :details="article" :tt="10" :show-footer="true"  @share="zhouweiShare" @userEvent="commentEvent"></zz-comment>
             <view class="padding-sm flex flex-direction solid-bottom"></view>
             <!-- <tui-scroll-top v-if="!isComment" :bottom="500" :top="300" :right="70" :scroll-top="scrolled"></tui-scroll-top> -->
         </view>
@@ -83,6 +77,8 @@
 </template>
 
 <script>
+
+import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
 
 export default {
     data() {
@@ -95,25 +91,18 @@ export default {
         };
     },
     onLoad: async function ({ id } = q) {
-        // console.log("article-----------onLoad============")
-        const eventName = 'newComment' + id
-        // console.warn("文章页面监听评论更新--------", eventName)
-        uni.$on(eventName, (params) => {
+
+        uni.$on('newComment' + id, (params) => {
             // console.log('评论更新了', params);
             console.log("this.$refs.blogComment------", this.$refs.blogComment)
             this.$refs.blogComment.init(); // 刷新评论列表
         });
-
         this.article = await this.zz.req({ $url: 'public/article/info', _id: id }, true)
+        console.log("文章详情", this.article)
+
         setTimeout(() => {
             this.zz.userEvent(20, 10, this.article)
         }, 100)
-    },
-    onReady(){
-        console.log("article-----------onReady============")
-    },
-    onShow(){
-        console.log('onshow---------------');
     },
     onHide() {
         if (this.videoContext) this.videoContext.pause();
@@ -147,15 +136,35 @@ export default {
             this.zz.userEvent(params.t, params.tt, this.article)
         },
 
-        // userEvent组件的事件处理
-        userEvent(t) {
-            this.zz.userEvent(t, 10, this.article)
-        },
         scrollToTop() {
             uni.pageScrollTo({
                 scrollTop: 0,
                 duration: 300
             });
+        },
+        zhouweiShare() {
+            let cur = this.article;
+            const params = `path=/pages/planning/article&id=${this.article._id}`
+            let shareData = {
+                shareUrl: `https://zts.5618.co/h5/#/pages/share?${params}`,
+                shareTitle: cur.title,
+                shareContent: cur.desc,
+                shareImg: 'https://zts.5618.co/repo/shareLogo.png',
+                appId: "wx5043dab28d7cf44c",
+                type: 0,
+                appWebUrl: `https://zts.5618.co/h5/#/pages/share?${params}`
+            };
+            // 调用
+            let shareObj = appShare(shareData, res => {
+                console.log("分享成功回调", res);
+                // 分享成功后关闭弹窗
+                // 第一种关闭弹窗的方式
+                closeShare();
+            });
+            setTimeout(() => {
+                // 第二种关闭弹窗的方式
+                shareObj.close();
+            }, 5000);
         },
     },
     onPageScroll: function (e) {

@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
 		<!-- #ifdef H5 -->
 		<nav-custom bgColor="bg-ztsblue">

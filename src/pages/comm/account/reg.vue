@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view class="container">
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <!-- <block slot="content">{{sys.name}}</block> -->
@@ -144,7 +144,6 @@ export default {
             if (this.code.length != 4) return this.zz.toast('请输入正确的验证码');
             if (!this.nickName) return this.zz.toast('请输入昵称');
             if (!this.username) return this.zz.toast('请输入用户名');
-            if (this.password.length < 8) return this.zz.toast('密码长度不能少于8位数')
 			
 			let r = isSafe(this.password)
 			if(!r) return this.zz.toast(r)
@@ -256,7 +255,7 @@ export default {
     height: 100vh;
     .tui-page-title {
         width: 80%;
-        font-size: 2.4rem;
+        font-size: 48rpx;
         font-weight: bold;
         color: $uni-text-color;
         line-height: 42rpx;
@@ -363,7 +362,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    font-size: 1.6rem;
+    font-size: 32rpx;
     background: #fff;
 }
 
@@ -428,7 +427,7 @@ export default {
 }
 
 .input {
-    font-size: 1.6rem;
+    font-size: 32rpx;
     color: #353535;
     width: 565rpx;
     padding-right: 5rpx;
@@ -438,7 +437,7 @@ export default {
 
 .text {
     padding: 0 10rpx;
-    font-size: 1.6rem;
+    font-size: 32rpx;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

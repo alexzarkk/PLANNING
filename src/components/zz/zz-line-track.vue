@@ -153,13 +153,13 @@ export default {
         .line-name-sport {
             &-name {
                 color: #232323;
-                font-size: 1.6rem;
+                font-size: 32rpx;
                 font-weight: bold;
             }
 
             &-sport {
                 color: #4e4e4e;
-                font-size: 1.2rem;
+                font-size: 24rpx;
             }
         }
     }
@@ -193,12 +193,12 @@ export default {
             margin-right: 20rpx;
             // justify-content: space-around;
             &-title {
-                font-size: 1.2rem;
+                font-size: 24rpx;
                 color: #858585;
             }
 
             &-value {
-                font-size: 1.6rem;
+                font-size: 32rpx;
                 font-weight: bold;
                 color: #282828;
             }
@@ -212,13 +212,13 @@ export default {
 
 .record-time-box {
     &-title {
-        font-size: 1.6rem;
+        font-size: 32rpx;
         font-weight: bold;
         margin-right: 20rpx;
     }
 
     &-value {
-        font-size: 1.4rem;
+        font-size: 28rpx;
     }
 }
 </style>

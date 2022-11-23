@@ -121,7 +121,7 @@ export default {
                 position: absolute;
                 top: 110rpx;
                 left: 0px;
-                font-size: 1.2rem;
+                font-size: 24rpx;
                 padding: 0 10rpx;
                 background-color: #ffffff;
                 border-radius: 24rpx;
@@ -134,7 +134,7 @@ export default {
                 position: absolute;
                 top: 108rpx;
                 left: 120rpx;
-                font-size: 0.8rem;
+                font-size: 16rpx;
                 padding: 0rpx 10rpx;
                 background-color: $zts-green;
                 border-radius: 24rpx;
@@ -143,7 +143,7 @@ export default {
 
             .info-box {
                 .name {
-                    font-size: 1.4rem;
+                    font-size: 28rpx;
                     color: #fff;
 
                     width: 300rpx;
@@ -151,7 +151,7 @@ export default {
 
                 .desc {
                     color: #fff;
-                    font-size: 1.2rem;
+                    font-size: 24rpx;
                     width: 300rpx;
                 }
             }
@@ -167,7 +167,7 @@ export default {
 
             .num {
                 color: #fff;
-                font-size: 1.2rem;
+                font-size: 24rpx;
             }
         }
     }

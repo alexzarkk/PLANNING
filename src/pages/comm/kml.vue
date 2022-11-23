@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+
     <view>
         <view class="fixed text-white" :style="'opacity:' + (1 - headOpacity)">
             <cu-custom :isBack="true">
@@ -77,7 +77,7 @@
 
                 <view class="padding-tb-xs bg-white text-gray text-right flex justify-between align-center">
                     <text class="margin-left text-sm text-gray">{{ kml.type==99? dict.kmlGrade[kml.grade].label : zz.time2Date(kml.createTime,'Y-M-D h:m') }}</text>
-                    <zz-user-event :ui="false" :obj="kml" @act="userEvent"></zz-user-event>
+                    <zz-user-event :ui="false" :obj="kml" @act="userEvent" @share="zhouweiShare"></zz-user-event>
                 </view>
             </view>
             <block v-if="kml.type == 99">
@@ -142,15 +142,15 @@
                         </view>
                     </view>
                 </view>
-				
-				<!-- 使用路线 -->
-				<view style="width: 380rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
-					<button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
-						<text class="zzIcon-distfill margin-right-sm" />
-						使用路线
-					</button>
-				</view>
-				
+
+                <!-- 使用路线 -->
+                <view style="width: 380rpx" :style="{ top: customBar + 'px', left: '200rpx' }" class="padding-tb flex flex-direction justify-center align-center sticky-button-box">
+                    <button style="width: 280rpx" class="shadow cu-btn bg-green lg round" @click="useLine">
+                        <text class="zzIcon-distfill margin-right-sm" />
+                        使用路线
+                    </button>
+                </view>
+
                 <view class="cu-bar bg-white solid-bottom">
                     <view class="action">
                         <text class="cuIcon-titles text-blue"></text>
@@ -302,10 +302,9 @@
 
             <!-- 评论留言 -->
             <!-- <zz-blog :blog="blog"></zz-blog> -->
-            <zz-blog class="solid" :ver="ver" :tid="kml._id"></zz-blog>
-
+            <zz-blog class="solid" :ver="ver" :tid="kml._id" :tt="100"></zz-blog>
             <!-- <tui-scroll-top :scrollTop="scrolled"></tui-scroll-top> -->
-            <zz-footer/>
+            <zz-footer />
 
         </block>
     </view>
@@ -314,6 +313,10 @@
 <script>
 import icon from '@/comm/libs/icon.js';
 import { reArr } from '@/comm/geotools';
+
+import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
+
+
 export default {
     data() {
         return {
@@ -400,29 +403,54 @@ export default {
             this.zz.userEvent(t, this.kml.type == 99 ? 99 : 100, this.kml)
         },
         userInfo() {
-			this.zz.profile(this.kml.userId)
+            this.zz.profile(this.kml.userId)
         },
         async follow() {
-			const ueRes = await this.zz.userEvent(60, 60, this.kml.userInfo)
-			if (this.kml.userInfo.isFollow) {
-				this.zz.toast('关注成功~')
-			} else {
-				this.zz.toast('已取消关注')
-			}
+            const ueRes = await this.zz.userEvent(60, 60, this.kml.userInfo)
+            if (this.kml.userInfo.isFollow) {
+                this.zz.toast('关注成功~')
+            } else {
+                this.zz.toast('已取消关注')
+            }
         },
-		useLine() {
-			let url = '/pages/nav/nav'
-			
-		    // #ifdef H5
-			url+='H5'
-		    // #endif
-		
-		    // #ifdef APP-PLUS
-			url+='App'
-		    // #endif
-			let t200 = this.kml.t2.filter(e=>e.t2==200)
-			this.zz.href(url, {kml:{...this.kml, children:[...this.kml.t1, ...t200]}}, 1)
-		}
+        useLine() {
+            let url = '/pages/nav/nav'
+
+            // #ifdef H5
+            url += 'H5'
+            // #endif
+
+            // #ifdef APP-PLUS
+            url += 'App'
+            // #endif
+            let t200 = this.kml.t2.filter(e => e.t2 == 200)
+            this.zz.href(url, { kml: { ...this.kml, children: [...this.kml.t1, ...t200] } }, 1)
+        },
+        // 执行分享
+        zhouweiShare() {
+            let cur = this.kml;
+            const params = `path=/pages/comm/kml&_id=${this.kml._id}`
+            let shareData = {
+                shareUrl: `https://zts.5618.co/h5/#/pages/share?${params}`,
+                shareTitle: cur.name,
+                shareContent: cur.desc || '我分享了一条线路快来看看~',
+                shareImg: 'https://zts.5618.co/repo/shareLogo.png',
+                appId: "wx5043dab28d7cf44c",
+                type: 0,
+                appWebUrl: `https://zts.5618.co/h5/#/pages/share?${params}`
+            };
+            // 调用
+            let shareObj = appShare(shareData, res => {
+                console.log("分享成功回调", res);
+                // 分享成功后关闭弹窗
+                // 第一种关闭弹窗的方式
+                closeShare();
+            });
+            setTimeout(() => {
+                // 第二种关闭弹窗的方式
+                shareObj.close();
+            }, 5000);
+        }
     },
     onPageScroll(e) {
         if (!this.isTabTap) {
@@ -456,7 +484,7 @@ body {
     position: absolute;
     top: 0rpx;
     right: 0rpx;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     padding: 0rpx 10rpx;
     height: 38rpx;
     .round {
@@ -469,7 +497,7 @@ body {
     position: absolute;
     top: 0rpx;
     left: 0rpx;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     padding: 0rpx 10rpx;
     height: 38rpx;
 }

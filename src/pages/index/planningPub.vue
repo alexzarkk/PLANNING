@@ -1,38 +1,44 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
-        <cu-custom bg-color="bg-ztsblue" :isBack="true">
-			<!-- <block slot="left">
+        <cu-custom bg-color="bg-ztsblue" :isBack="!home">
+            <!-- <block slot="left">
 				<button class="cu-btn xs line-white round shadow margin-left-sm" @tap="onCollect">
 					<text class="zzIcon-dist margin-right-xs"></text>
 					<text class="text-sm">去记录</text>
 				</button>
 			</block> -->
-            <block slot="content">行程广场</block>     
-			<block slot="left">
-				<button class="cu-btn xs line-white round shadow margin-right-sm" @tap="onCollect">
-					<text class="zzIcon-dist margin-right-xs"></text>
-					<text class="text-sm">去记录</text>
-				</button>
-			   	<!-- <button class="cu-btn xs line-white round shadow margin-right-sm" @tap="mapView">
+            <block slot="content">行程广场</block>
+            <block slot="left">
+                <button class="cu-btn xs line-white round shadow margin-lr-sm" @tap="onCollect">
+                    <text class="zzIcon-dist margin-right-xs"></text>
+                    <text class="text-sm">去记录</text>
+                </button>
+                <!-- <button class="cu-btn xs line-white round shadow margin-right-sm" @tap="mapView">
 			   		<text class="zzIcon-maplocation margin-right-xs"></text>
 			   		<text class="text-sm">地图</text>
 			   	</button> -->
-			</block>
-		</cu-custom>
+            </block>
+        </cu-custom>
         <zz-search :areaPick="false" @search="search"></zz-search>
-		<zz-line-track v-for="(item,index) in list" :key="index" :details="item" />
-		<zz-page-status :loading="loading" :length="list.length" :total="page.total" />
+        <zz-line-track v-for="(item,index) in list" :key="index" :details="item" />
+        <zz-page-status :loading="loading" :length="list.length" :total="page.total" />
     </view>
 </template>
 
 <script>
 export default {
+    props: {
+        home: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             loading: false,
-            page: {total:-1, size: 10, pub:1, ui:1, ue:1},
-			list:[]
+            page: { total: -1, size: 10, pub: 1, ui: 1, ue: 1 },
+            list: []
         };
     },
     onLoad() { },
@@ -40,45 +46,47 @@ export default {
     methods: {
         loadData(m) {
             if (m == 'init') {
-				this.list = []
-				Object.assign(this.page, { page: 1, total: -1 })
+                this.list = []
+                Object.assign(this.page, { page: 1, total: -1 })
             }
             if (this.loading || this.page.total === this.list.length) {
                 return
             }
             this.loading = true
             this.zz.req({ $url: '/public/rec/page', ...this.page }).then(e => {
-				this.loading = false
-				// console.log(e);
-				this.page.total = e.pagination.total
+                this.loading = false
+                // console.log(e);
+                this.page.total = e.pagination.total
                 this.list = this.list.concat(e.list)
                 this.page.page++
+            }).catch(err => {
+                console.error("行程广场加载失败===========", err)
             })
         },
-		onCollect() {
-			// #ifdef APP-PLUS
-			this.zz.href('/pages/nav/navApp',0,1,'slide-in-bottom')
-			// #endif
-		},
-		mapView(){
-			this.zz.href('/pages/planning/z')
-		},
+        onCollect() {
+            // #ifdef APP-PLUS
+            this.zz.href('/pages/nav/navApp', 0, 1, 'slide-in-bottom')
+            // #endif
+        },
+        mapView() {
+            this.zz.href('/pages/planning/z')
+        },
         search(e) {
-        	if(e.keyWord != this.page.keyWord) {
-        		this.page.keyWord = e.keyWord
-        		this.loadData('init')
-        	}
+            if (e.keyWord != this.page.keyWord) {
+                this.page.keyWord = e.keyWord
+                this.loadData('init')
+            }
         }
     },
     onReachBottom() {
         this.loadData('add')
     },
-	async onPullDownRefresh() {
-		uni.showLoading({ title:'正在刷新' })
-		await this.loadData('init')
-		uni.hideLoading()
-		uni.stopPullDownRefresh()
-	}
+    async onPullDownRefresh() {
+        uni.showLoading({ title: '正在刷新' })
+        await this.loadData('init')
+        uni.hideLoading()
+        uni.stopPullDownRefresh()
+    }
 };
 </script>
 

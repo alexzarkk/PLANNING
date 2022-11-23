@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<cu-custom bgColor="bg-ztsblue" :isBack="true">
 			<block slot="backText"></block>
@@ -163,7 +163,7 @@ export default {
 
 			&-value {
 				color: #252525;
-				font-size: 1.6rem;
+				font-size: 32rpx;
 			}
 		}
 	}
@@ -181,7 +181,7 @@ export default {
 				width: 170px;
 				// word-wrap:normal;
 				color: #222222;
-				font-size: 1.6rem;
+				font-size: 32rpx;
 				overflow: hidden;
 				// word-break: break-all; /* break-all(允许在单词内换行。) */
 				text-overflow: ellipsis; /* 超出部分省略号 */
@@ -193,7 +193,7 @@ export default {
 
 			.line-name {
 				color: #555555;
-				font-size: 1.4rem;
+				font-size: 28rpx;
 			}
 		}
 
@@ -214,7 +214,7 @@ export default {
 
 				&-value {
 					color: #252525;
-					font-size: 1.6rem;
+					font-size: 32rpx;
 				}
 			}
 		}

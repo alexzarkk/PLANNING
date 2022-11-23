@@ -1,6 +1,5 @@
 <template>
-
-    <page-meta root-font-size="10px"></page-meta>
+<!-- tt:2 -->
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">评论详情</block>
@@ -124,6 +123,7 @@ import xss from 'xss'
 export default {
     data() {
         return {
+            contentType: 2,  // 当前所有评论都是对评论回复
             activeComment: false, // 是否拉起input
             loading: false,
             isDeleteShow: false, // 删除确认框控制
@@ -177,6 +177,7 @@ export default {
         this.userInfo = this.zz.getAcc();
         const option = this.zz.getParam(v);
         this.tid = option.tid;
+        // this.contentType = option.tt
         this.commentId = option.commentId;
         this.loadData(option.commentId);
         const _this = this;
@@ -266,7 +267,8 @@ export default {
                 $url: 'user/blog/add',
                 content: xss(this.comment),
                 pid: this.replyObj.pid,  // 一级评论的id,用来查询当前评论下的所有评论
-                rid: this.replyObj.rid  // 回复人的_id 用来查询个人资料
+                rid: this.replyObj.rid,  // 回复人的_id 用来查询个人资料
+                tt: 2
             };
             this.zz.req(requestParams).then((res) => {
                 const now = this.zz.time2Date(false, 'Y-M-D h:m:s');

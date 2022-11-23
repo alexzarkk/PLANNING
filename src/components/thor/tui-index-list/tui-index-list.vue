@@ -603,7 +603,7 @@
 		width: 40rpx;
 		height: 40rpx;
 		border-radius: 50%;
-		font-size: 1.3rem;
+		font-size: 26rpx;
 		transform: scale(0.8);
 		transform-origin: center center;
 		display: flex;
@@ -627,7 +627,7 @@
 
 	.tui-list__item view {
 		width: 90%;
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		padding-left: 20rpx;
 		padding-right: 40rpx;
 		box-sizing: border-box;

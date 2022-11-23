@@ -108,7 +108,7 @@
     padding: 16rpx;
     white-space: pre;
     margin: 1em 0rpx;
-    font-size:1.2rem;
+    font-size:24rpx;
 }
 .wxParse .code {
     overflow: auto;
@@ -116,7 +116,7 @@
     white-space: pre;
     margin: 1em 0rpx;
     background: #f5f5f5;
-    font-size:1.2rem;
+    font-size:24rpx;
 }
 
 .wxParse .big {

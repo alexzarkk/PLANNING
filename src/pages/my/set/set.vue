@@ -3,7 +3,7 @@
 	个人设置
 	个人信息修改 
  -->
-    <page-meta root-font-size="10px"></page-meta>
+    
     <view>
 
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
@@ -77,7 +77,6 @@
                     </view>
                 </tui-list-cell>
             </tui-list-view> -->
-            <!-- #ifndef H5-ZLB -->
             <tui-list-view margin-top="20rpx">
                 <tui-list-cell arrow @click="changePhoneNumber()">
                     <view class="justify-between flex padding-right align-center">
@@ -86,7 +85,6 @@
                     </view>
                 </tui-list-cell>
             </tui-list-view>
-            <!-- #endif -->
             <!-- <tui-list-cell arrow>
                     <view class="justify-between flex padding-right align-center">
                         <text class=" ">领队认证</text>

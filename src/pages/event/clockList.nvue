@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<!-- 顶部地图 -->
 		<gaode-map v-if="trail.kml.lines" :line="trail.kml.lines" :point="trail.kml.points" :map-height="mapHeight" :center="center" @onLoc="getLocation()" />
@@ -115,7 +115,7 @@ export default {
 		padding-top: 5rpx;
 		&-title {
 			color: $color-gray;
-			font-size: 1.2rem;
+			font-size: 24rpx;
 		}
 	}
 
@@ -128,7 +128,7 @@ export default {
 		&-title {
 			margin-left: 20rpx;
 			color: #ffffff;
-			font-size: 1.4rem;
+			font-size: 28rpx;
 		}
 	}
 }
@@ -191,7 +191,7 @@ export default {
 					justify-content: center;
 					align-items: center;
 					.text-white {
-						font-size: 1.8rem;
+						font-size: 36rpx;
 						color: #ffffff;
 					}
 				}
@@ -202,11 +202,11 @@ export default {
 				justify-content: space-between;
 				padding: 10rpx 0;
 				.main-title {
-					font-size: 1.8rem;
+					font-size: 36rpx;
 					font-weight: bold;
 				}
 				.sub-title {
-					font-size: 1.2rem;
+					font-size: 24rpx;
 					color: $color-gray;
 				}
 			}

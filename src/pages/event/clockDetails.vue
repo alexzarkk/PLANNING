@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">人气打卡点</block>
@@ -155,7 +155,7 @@ export default {
                 font-weight: bold;
             }
             .clock {
-                font-size: 2rem;
+                font-size: 40rpx;
             }
         }
     }
@@ -177,7 +177,7 @@ export default {
     }
 
     .time {
-        font-size: 1.8rem;
+        font-size: 36rpx;
     }
 
     .clock-success {

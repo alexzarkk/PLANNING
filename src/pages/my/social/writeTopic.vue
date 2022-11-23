@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+    
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true">
             <block slot="content">发布动态</block>
@@ -180,6 +180,6 @@ export default {
     column-gap: 40rpx;
     background-color: #ffffff;
     padding-left: 30rpx;
-    font-size: 1.8rem;
+    font-size: 36rpx;
 }
 </style>

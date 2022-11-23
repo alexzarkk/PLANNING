@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">搜索</block>
@@ -265,7 +265,7 @@ view {
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    font-size: 1.4rem;
+    font-size: 28rpx;
     color: #fff;
     background: linear-gradient(to right, #ff9801, #ff570a);
     border-radius: 60rpx;
@@ -273,7 +273,7 @@ view {
 .search-box .input-box > input {
     width: 100%;
     height: 60rpx;
-    font-size: 1.6rem;
+    font-size: 32rpx;
     border: 0;
     border-radius: 60rpx;
     -webkit-appearance: none;
@@ -303,7 +303,7 @@ view {
     width: 94%;
     height: 80rpx;
     margin: 0 3%;
-    font-size: 1.5rem;
+    font-size: 30rpx;
     color: #333;
     display: flex;
     justify-content: space-between;
@@ -357,7 +357,7 @@ view {
 .keyword-box .keyword-block .hide-hot-tis {
     display: flex;
     justify-content: center;
-    font-size: 1.4rem;
+    font-size: 28rpx;
     color: #6b6b6b;
 }
 .keyword-box .keyword-block .keyword > view {
@@ -368,7 +368,7 @@ view {
     padding: 0 20rpx;
     margin: 10rpx 20rpx 10rpx 0;
     height: 60rpx;
-    font-size: 1.4rem;
+    font-size: 28rpx;
     background-color: rgb(242, 242, 242);
     color: #6b6b6b;
 }

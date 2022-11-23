@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+    
     <view>
         <web-view :webview-styles="webviewStyles" :src="url"></web-view>
     </view>

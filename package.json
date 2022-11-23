@@ -1,10 +1,10 @@
 {
-	"name": "planning",
+	"name": "cli-uni-house",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"serve": "npm run dev:custom h5-zlb",
-		"build": "cross-env UNI_OUTPUT_DIR='build' NODE_ENV=production uniapp-cli custom h5-zlb --mode zlb",
+		"build": "cross-env UNI_OUTPUT_DIR='build' NODE_ENV=production uniapp-cli custom h5-zlb",
 		"lint": "vue-cli-service lint",
 		"build:app-plus": "cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build",
 		"build:custom": "cross-env UNI_OUTPUT_DIR='build' NODE_ENV=production uniapp-cli custom",
@@ -41,7 +41,7 @@
 		"test:ios": "cross-env UNI_PLATFORM=app-plus UNI_OS_NAME=ios jest -i",
 		"test:mp-baidu": "cross-env UNI_PLATFORM=mp-baidu jest -i",
 		"test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i",
-		"zlb": "cross-env NODE_ENV=development uniapp-cli custom h5-zlb --mode zlb"
+		"zlb": "cross-env NODE_ENV=development uniapp-cli custom h5-zlb"
 	},
 	"dependencies": {
 		"@aligov/jssdk-mgop": "^3.1.9",

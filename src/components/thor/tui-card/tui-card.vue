@@ -100,7 +100,7 @@
 <style scoped>
 	.tui-card {
 		margin: 0 30rpx;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 		background-color: #fff;
 		border-radius: 10rpx;
 		box-shadow: 0 0 10rpx #eee;
@@ -182,7 +182,7 @@
 
 	.tui-header-title {
 		display: inline-block;
-		font-size: 1.5rem;
+		font-size: 30rpx;
 		color: #7a7a7a;
 		vertical-align: middle;
 		max-width: 460rpx;
@@ -192,18 +192,18 @@
 	}
 
 	.tui-header-right {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #b2b2b2;
 	}
 
 	.tui-card-body {
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		color: #262b3a;
 		box-sizing: border-box;
 	}
 
 	.tui-card-footer {
-		font-size: 1.4rem;
+		font-size: 28rpx;
 		color: #596d96;
 		border-bottom-left-radius: 10rpx;
 		border-bottom-right-radius: 10rpx;

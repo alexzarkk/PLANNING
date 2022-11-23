@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<map id="amap"
 			:style="{width: '750rpx', height: winH + 'px' }"
@@ -27,7 +27,7 @@
 		<block v-if="!onRec">
 			<image @click="controltap('back')" src="@/static/back.png" class="back-img" :style="'top:'+(stH+20)+'px;'"></image>
 			<view class="start-f">
-				<view class="start-btn" @click="start">
+				<view class="start-btn" @click="start(0)">
 					<text class="start-btn-name">开始记录</text>
 				</view>
 			</view>
@@ -46,12 +46,12 @@
 
 <script>
 // const locationModule = uni.requireNativePlugin('XM_Alive_Location')
-import permision from '@/comm/permission.js'
 const KeepAliveModule = uni.requireNativePlugin("yh-alive")
+import permision from '@/comm/permission.js'
 const tts = uni.requireNativePlugin("nrb-tts-plugin")
 tts && tts.init({ "lang":"ZH", "country":"CN" })
 
-import { uniqId, bearing, getDist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
+import { uniqId, bearing, getDist,dist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
 import { createEle, toDist, scan, on } from '@/comm/nav'
 import icon from '@/comm/libs/icon'
 import comm from '@/comm/comm'
@@ -71,8 +71,8 @@ export default {
 			tmt: 0,
 			tbl: false,
 			cps: [],
+			
 			way: {},
-			minDist: 60,
 			
 			amap: null,
 			mapHeight: 0,
@@ -85,20 +85,43 @@ export default {
 			tim: {H:0, M:0, S:0, MS:0},
 			nav: {line:[], point:[]}, // 基础
 			rec: {point:[],coord:[],t:{},info:{}},
-			rLine: [{width:8,arrowLine:true,points:[]}],
+			
+			
+			//当前记录中
+			recLine: [{width:8, arrowLine:true, points:[]}],
+			//打卡点
+			tarPoint: [],
+			//目标打卡点
+			tarLine: [],
+			//已打卡
+			scand: [],
+			
+			tarDist: 500, //显示目标打卡点
+			minDist: 60, //语音播报
+			ckDist: 30, //显示自动打卡
+			cp: null, //可用打卡点
+			
+			// 测试参数
+			// tarDist: 50000, //显示目标打卡点
+			// minDist: 8000, //语音播报
+			// ckDist: 7000, //显示自动打卡
+			
+			//扫码记录
+			scanLog: uni.getStorageSync('user_scan_log')||{},
 			
 			timer: null,
 			lock: false,
 			
-			// isConn: true,
+			gcj02: null,
+			wgs84: null
 		}
 	},
 	computed: {
 		lines() {
-			return [...this.nav.line, ...this.line, ...this.rLine]
+			return [...this.nav.line, ...this.line, ...this.recLine, ...this.tarLine]
 		},
 		points() {
-			return [...this.nav.point, ...this.point]
+			return [...this.nav.point, ...this.point, ...this.tarPoint, ...this.scand]
 		}
 	},
 	async onLoad({v}) {
@@ -107,11 +130,8 @@ export default {
 		this.stH = this.sysInfo.statusBarHeight
 		this.mapHeight = this.winH
 		
-		
-		console.log('onLoad',v);
 		if(v) {
 			let { kml, keepRec=0, tmt=0 } = zz.getParam(v)
-			
 			this.kml = kml
 			this.tmt = tmt
 			for (let s of kml.children) {
@@ -126,33 +146,38 @@ export default {
 			}
 			
 			//设定地图center
-			let p = this.point[0]
-			if(!p) p = this.line[0].points[0]
-			this.center = [p.longitude, p.latitude]
+			if(this.point.length || this.line.length) {
+				let p = this.point[0]
+				if(!p) p = this.line[0].points[0]
+				this.center = [p.longitude, p.latitude]
+			}
 			
 			if(keepRec) {
-				return this.start(keepRec)
+				return this.start(1)
 			}
 		} else {
-			await this.onLoc(true)
+			let {coord} = await getLocation('gcj02')
+			this.center = coord
 		}
 		//是否赛事
 		if(this.tmt) {
 			// this.start()
 		}else{
 			zz.req({$fn:'sync'+ zz.rndInt(), $url:'/user/rec/sync',get:1}).then(e=>{
-				console.log(e);
 				if(e&&(e.rec.point.length||e.rec.coord.length)&&!uni.getStorageSync('nav_rec'+this.tmt)) {
 					uni.setStorageSync('nav_rec'+this.tmt, e.rec)
 					uni.setStorageSync('nav_T_tim'+this.tmt, [e.tim.MS, e.tim.S, e.tim.M, e.tim.H])
 				}
 			})
 		}
+		await comm.on(this.center)
 		await this.around(this.center)
 	},
-	onReady() { this.amap = uni.createMapContext('amap', this) },
-	async onShow() {
+	onReady() {
+		this.amap = uni.createMapContext('amap', this)
 		this.checkPermission()
+	},
+	async onShow() {
 		let poi = uni.getStorageSync('nav_poi')
 		if (poi) {
 			uni.removeStorageSync('nav_poi')
@@ -161,7 +186,7 @@ export default {
 				this.rec.point.push(poi)
 				this.point.push(createEle(poi))
 				this.fly(poi.coord)
-			}else{
+			} else {
 				this.rec.point.splice(idx,1,poi)
 				this.point.splice(this.point.findIndex(e=>e.id==poi._id),1,createEle(poi))
 			}
@@ -170,7 +195,6 @@ export default {
 		}
 	},
 	onBackPress() { return this.onRec },
-	
 	methods: {
 		async onchg(e){ this.lock = false; on.call(this) },
 		async around(c){
@@ -182,43 +206,50 @@ export default {
 			if(!c){
 				uni.showLoading()
 				let {coord} = await getLocation('gcj02')
-				uni.hideLoading()
 				c = coord
-				uni.setStorageSync('cur_loc_gcj02', c)
+				uni.hideLoading()
 			}
 			if(ct) this.fly(c)
 			this.lock = true
-			console.log('onLoc:>',ct,c );
 		},
-		fly(c){
-			this.amap.moveToLocation({
-				longitude: c[0],
-				latitude: c[1],
-				success: (e)=>{
-					setTimeout(()=>{
-						this.scale = this.scale==17? 17.01:17
-					}, 555)
-				}
-			})
+		fly(c,z=17){
+			try{
+				this.amap.moveToLocation({
+					longitude: c[0],
+					latitude: c[1],
+					success: (e)=>{
+						setTimeout(()=>{
+							this.scale = z
+						}, 333)
+					}
+				})
+			}catch(e){
+				//TODO handle the exception
+				console.error('fly.err', e);
+			}
 		},
-		
 		stop(){
+			clearInterval(this.timer)
 			let rec = this.rec
-			this.onRec = false
+			
+			rec.info = calData(rec.coord)
+			this.setRec()
+			
 			// locationModule.stopLocation()
 			plus.geolocation.clearWatch(this.wid)
 			if (this.sysInfo.platform == 'android') {
 				KeepAliveModule.stopKeepAlive({})
-			}else{
+			} else {
 				this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
 			}
 			
-			if(rec.coord.length<10 && !rec.point.length) return zz.modal('本次记录太短了！')
-			
-			rec.info = calData(rec.coord)
-			this.setRec()
+			if (rec.coord.length<10 && !rec.point.length) {
+				this.onRec = false
+				return zz.modal('本次记录太短了！')
+			} 
 			zz.href('/pages/nav/save',{tmt: this.tmt, rec}, 1, null, 'redirectTo')
 		},
+		
 		clock(){
 			let tim = this.tim
 			this.timer = setInterval(()=>{
@@ -238,7 +269,7 @@ export default {
 			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
 			}, 1000)
 		},
-		async start(keepRec){
+		async start(keepRec=0){
 			let pt = (e) => { return {longitude: e[0], latitude: e[1]} },
 				init = () => {
 					uni.removeStorageSync('nav_rec'+this.tmt)
@@ -258,7 +289,7 @@ export default {
 					if (tim.H && !rec.t['t'+tim.H]) {
 						rec.t['t'+tim.H] = 1
 						delete rec.t['t'+(tim.H-1)]
-						tts.speak('您已运动' + tim.H + '小时，累计距离' + rec.info.len + '米，爬升' + rec.info.up + '米，下降' + rec.info.down + '米')
+						tts.speak('您已运动' + tim.H + '小时，累计距离'+(rec.info.len<1000?rec.info.len+'米':rec.info.len/1000+'公里')+'，上升' + rec.info.up + '米，下降' + rec.info.down + '米')
 					}
 					if (rec.info.len > 980) {
 						for (var i = 0; i < 12; i++) {
@@ -323,7 +354,7 @@ export default {
 				
 				KeepAliveModule.startKeepAlive({
 					showNotification:true,
-					notificationTitle:"轨迹持续记录中...",
+					notificationTitle:"轨迹持续记录中",
 					notificationText:"后台运行中",
 					runModel:1,//0-省电模式,1-流氓模式
 					intervalTime: 5000,
@@ -332,8 +363,6 @@ export default {
 			
 			// 查询本地是否有未完成的轨迹记录
 			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
-			console.log(uni.getStorageSync('nav_rec'+this.tmt),keepRec)
-			
 			if (nav_rec) {
 				const keepGoing = ()=>{
 					Object.assign(rec, nav_rec)
@@ -344,12 +373,13 @@ export default {
 						rec.ct = 'gcj02'
 						this.setRec()
 					}
-					
 					for (let s of rec.point) {
 						this.point.push(createEle(s))
 					}
+					
+					
 					for (let s of rec.coord) {
-						this.rLine[0].points.push(pt(s))
+						this.recLine[0].points.push(pt(s))
 					}
 					
 					let T = uni.getStorageSync('nav_T_tim'+this.tmt)
@@ -358,6 +388,7 @@ export default {
 					tim.M = T[2]
 					tim.H = T[3]
 				}
+				
 				if(keepRec){
 					keepGoing()
 				} else {
@@ -379,123 +410,52 @@ export default {
 				init()
 			}
 			
-			if(this.cps.length && !this.rLine[1]) {
-				this.rLine[1] = {
-								weight: 1,
-								color: '#00ff7f',
-								dottedLine: true,
-								points: []
-							}
-							// pt(trans(this.cps[0].coord))
-			}
-			
 			rec.kmlId = this.kml._id || 0
 			rec.tmt = this.tmt
+			rec.t = {}
 			this.tim = tim
 			this.rec = rec
 			this.clock()
 			this.onRec = true
 			
+			for (let s of this.cps) {
+				delete rec.t[s._id]
+			}
+			
 			if(this.sysInfo.platform == 'ios') this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
 			
-			if(!rec.t['0']) {
-				rec.t['0'] = 1
-				tts.speak('轨迹记录已开始')
+			if(!keepRec) {
+				tts.speak('记录已开始')
 			}
 			
 			this.wid = plus.geolocation.watchPosition(_p=>{
 				// console.log('watchPosition====>', _p)
 				let cd = [_p.coords.longitude, _p.coords.latitude, _p.coords.altitude||0],
 					c1 = [...trans(cd), _p.timestamp || zz.now(), fixNum(_p.coords.speed||0,2)],
-					line = this.rLine[0],
+					line = this.recLine[0],
 					size = rec.coord.length
 				
-				if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
-				uni.setStorageSync('cur_loc_gcj02', c1)
+				this.gcj02 = c1
+				this.wgs84 = cd
+				
+				if(keepRec||!size) { this.onLoc(true,c1) }
 				
 				//保持地图中心
-				if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
+				if (this.lock) {
+					this.fly(c1,18+(size%1==0?0:0.01))
+				}
+				
 				if (!this.puase) {
-					const keepSync = (len) =>{
-						
-						// 刷新附近cps
-						if((!len||len%77==0) && !rec.t['y'+len]) {
-							rec.t['y'+len] = 1
-							delete rec.t['y'+(len-77)]
-							comm.on(cd)
-						}
-						// 更新打卡点距离
-						if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
-							rec.t['x'+len] = 1
-							delete rec.t['x'+(len-55)]
-							this.around(cd)
-						}
-						console.log('keepSync', len);
-						// 打卡提醒
-						let cps = this.cps
-						if((!len||len%6==0) && !rec.t[len] &&cps.length) {
-							rec.t[len] = 1
-							delete rec.t[len-6]
-							
-							toDist(cd, cps, this.tmt? this.way.coord:null)
-							cps.sort(zz.compare('dist'))
-							
-							//找未扫过的最近的一个
-							const getUnscaned=(log,i=0)=>{
-								let scaned = log[cps[i]._id]
-								if (!scaned || (zz.now() - scaned[scaned.length-1]) > 1000*60*60*24) {
-									return cps[i]
-								} else {
-									i++
-									if(i<cps.length) return getUnscaned(log,i)
-								}
-							}
-							
-							let p = getUnscaned(uni.getStorageSync('user_scan_log')||{temp:[]})
-							
-							console.log(p,'checkcps .............',cps,p)
-							if(p) {
-								this.cp = p
-								if(p.dist <= 500) {
-									this.rLine[1].points[1] = pt(trans(p.coord))
-								} else {
-									if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
-								}
-								if(p.dist <= this.minDist) {
-									//显示打卡点
-									this.point.push(createEle(p,1, icon[90]))
-									
-									if(!rec.t[p._id]) {
-										rec.t[p._id] = true
-										tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
-									}
-								}
-							}
-						}
-						
-						// 同步服务器数据
-						if(len&&len%10==0&&!rec.t['z'+len]) {
-							rec.t['z'+len] = 1
-							delete rec.t['z'+(len-10)]
-							let task = {$url: '/user/rec/sync', coord:[], len, ct: rec.type, tim: this.tim, stopTime: rec.stopTime}
-							for (var i = (len-10); i < len; i++) {
-								task.coord.push(rec.coord[i])
-							}
-							sync.add(task)
-						}
-					}
-					
 					if (!size) {
-						this.onLoc(true,c1)
+						this.keepSync(size)
 						rec.coord.push(c1)
 						line.points.push(pt(c1))
-						keepSync(0)
 					}else{
 						let c2 = rec.coord[size-1],
 							len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
 						
-						//大于6m 小于60m/每秒 判断有效
-						if(len>=6 && (len/((c1[3]-c2[3])*1000) < 60)) {
+						//大于6m 小于100m/每秒 判断有效
+						if(len>=6 && (len/((c1[3]-c2[3])/1000) < 100)) {
 							rec.coord.push(c1)
 							line.points.push(pt(c1))
 							
@@ -514,13 +474,28 @@ export default {
 								}
 								console.info('去除漂移------1',b1,b2, ~~Math.abs((b1-b2)))
 							}
+							
+							size = rec.coord.length
+							
+							// 同步服务器数据
+							if(size&&size%10==0&&!rec.t['z'+size]) {
+								rec.t['z'+size] = 1
+								delete rec.t['z'+(size-10)]
+								
+								let task = {$url: '/user/rec/sync', coord:[], size, ct: rec.type, tim: this.tim, stopTime: rec.stopTime}
+								for (var i = (size-10); i < size; i++) {
+									task.coord.push(rec.coord[i])
+								}
+								sync.add(task)
+							}
 						}
-						keepSync(rec.coord.length)
+						this.keepSync(size)
 					}
 					rec.info = calData(rec.coord)
-					say()
 					this.setRec()
-					console.info(rec)
+					say()
+					
+					// console.info(rec)
 				}
 			}, e =>{
 				console.log('watchPosition.err',e);
@@ -529,14 +504,15 @@ export default {
 				provider: 'system',
 				coordsType: 'wgs84',
 				geocode: false,
-				maximumAge: 10000,
+				maximumAge: 4000,
 				enableHighAccuracy: true
 			})
-			/* 
+			
 			// locationModule.startLocation({
+			// 		locationMode: 'Device_Sensors',
 			// 		intervalTime: 5000,
 			// 		distanceFilter: 5,
-			// 		notifyTip: '持续定位中',
+			// 		notifyTip: '轨迹记录中',
 			// 		notifyTitle: '环浙步道',
 			// 		sysName: '环浙步道'
 			// 	}, (xiaoming)=>{
@@ -544,160 +520,120 @@ export default {
 			// 		if (xiaoming.success) {
 			// 			let _p = xiaoming.data,
 			// 				c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
-			// 				line = this.rLine[0],
+			// 				line = this.recLine[0],
 			// 				size = rec.coord.length
-							
-			// 			if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
-			// 			uni.setStorageSync('cur_loc_gcj02', c1)
-						
-			// 			//保持地图中心
-			// 			if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
-			// 			if (!this.puase) {
-			// 				const keepSync = (len) =>{
-								
-			// 					// 刷新附近cps
-			// 					if((!len||len%77==0) && !rec.t['y'+len]) {
-			// 						rec.t['y'+len] = 1
-			// 						delete rec.t['y'+(len-77)]
-			// 						comm.on(trans(c1, 'gcj02towgs84'))
-			// 					}
-			// 					// 更新打卡点距离
-			// 					if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
-			// 						rec.t['x'+len] = 1
-			// 						delete rec.t['x'+(len-55)]
-			// 						this.around(trans(c1, 'gcj02towgs84'))
-			// 					}
-			// 					console.log('keepSync', len);
-			// 					// 打卡提醒
-			// 					let cps = this.cps
-			// 					if((!len||len%6==0) && !rec.t[len] &&cps.length) {
-			// 						rec.t[len] = 1
-			// 						delete rec.t[len-6]
-									
-			// 						toDist(trans(c1, 'gcj02towgs84'), cps, this.tmt? this.way.coord:null)
-			// 						cps.sort(zz.compare('dist'))
-									
-			// 						//找未扫过的最近的一个
-			// 						const getUnscaned=(log,i=0)=>{
-			// 							let scaned = log[cps[i]._id]
-			// 							if (!scaned || (zz.now() - scaned[scaned.length-1]) > 1000*60*60*24) {
-			// 								return cps[i]
-			// 							} else {
-			// 								i++
-			// 								if(i<cps.length) return getUnscaned(log,i)
-			// 							}
-			// 						}
-									
-			// 						let p = getUnscaned(uni.getStorageSync('user_scan_log')||{temp:[]})
-									
-			// 						console.log(p,'checkcps .............',cps,p)
-			// 						if(p) {
-			// 							this.cp = p
-			// 							if(p.dist <= 500) {
-			// 								this.rLine[1].points[1] = pt(trans(p.coord))
-			// 							} else {
-			// 								if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
-			// 							}
-			// 							if(p.dist <= this.minDist) {
-			// 								//显示打卡点
-			// 								this.point.push(createEle(p,1, icon[90]))
-											
-			// 								if(!rec.t[p._id]) {
-			// 									rec.t[p._id] = true
-			// 									tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
-			// 								}
-			// 							}
-			// 						}
-			// 					}
-								
-			// 					// 同步服务器数据
-			// 					if(len&&len%10==0&&!rec.t['z'+len]) {
-			// 						rec.t['z'+len] = 1
-			// 						delete rec.t['z'+(len-10)]
-			// 						let task = {$url: '/user/rec/sync', coord:[], len, tim: this.tim, stopTime: rec.stopTime}
-			// 						for (var i = (len-10); i < len; i++) {
-			// 							task.coord.push(rec.coord[i])
-			// 						}
-			// 						sync.add(task)
-			// 					}
-			// 				}
-							
-			// 				if (!size) {
-			// 					this.onLoc(true,c1)
-			// 					rec.coord.push(c1)
-			// 					line.points.push(pt(c1))
-			// 					keepSync(0)
-			// 				}else{
-			// 					let c2 = rec.coord[size-1],
-			// 						len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
-								
-			// 					//大于6m 小于60m/每秒 判断有效
-			// 					if(len>=6 && (len/((c1[3]-c2[3])*1000) < 60)) {
-			// 						rec.coord.push(c1)
-			// 						line.points.push(pt(c1))
-									
-			// 						// 去除漂移点
-			// 						if (size > 2) {
-			// 							let r1 = rec.coord[size - 3],
-			// 								r2 = rec.coord[size - 2],
-			// 								r3 = rec.coord[size - 1],
-											
-			// 								b1 = bearing(r2, r1),
-			// 								b2 = bearing(r2, r3)
-															
-			// 							if (~~Math.abs(b1 - b2) < 15) {
-			// 								rec.coord.splice(size - 2, 1)
-			// 								line.points.splice(size - 2, 1)
-			// 							}
-			// 							console.info('去除漂移------1',b1,b2, ~~Math.abs((b1-b2)))
-			// 						}
-			// 					}
-			// 					keepSync(rec.coord.length)
-			// 				}
-			// 				rec.info = calData(rec.coord)
-			// 				say()
-			// 				this.setRec()
-			// 				console.info(rec)
-			// 			}
+				
 			// 		} else {
 			// 			zz.toast('GPS定位失败，信号弱！')
 			// 		}
 			// 	}
 			// )
-			 */
 		},
-		
+		keepSync(len){
+			let rec = this.rec,
+				cd = this.wgs84,
+				c1 = this.gcj02,
+				cps = this.cps,
+				pt = (e) => { return {longitude: e[0], latitude: e[1]} }
+			
+			// 刷新附近打卡点（cps）
+			if((!len||len%77==0) && !rec.t['y'+len]) {
+				rec.t['y'+len] = 1
+				delete rec.t['y'+(len-77)]
+				comm.on(cd)
+			}
+			// 更新打卡点距离
+			if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
+				rec.t['x'+len] = 1
+				delete rec.t['x'+(len-55)]
+				this.around(cd)
+			}
+			
+			
+			// 打卡提醒
+			if((!len||len%9==0) && !rec.t['p'+len] && cps.length) {
+				rec.t['p'+len] = 1
+				delete rec.t['p'+(len-9)]
+				
+				toDist(cd, cps, this.tmt? this.way.coord:null)
+				cps.sort(zz.compare('dist'))
+				
+				//找未扫过的最近的一个
+				const getUnscaned=(i=0)=>{
+					let scaned = this.scanLog[cps[i]._id]
+					if (!scaned || (zz.now() - scaned[scaned.length-1]) > 1000*60*60*24) {
+						return cps[i]
+					} else {
+						i++
+						if(i<cps.length) return getUnscaned(i)
+					}
+				}
+				
+				let p = getUnscaned()
+				
+				this.cp = null
+				this.tarPoint = []
+				this.tarLine = []
+				
+				// console.log('checkcps .............',cps,p)
+				if(p) {
+					//显示附件打卡点
+					if(p.dist <= this.tarDist) {
+						this.tarPoint.push(createEle(p,1, icon[90]))
+						this.tarLine = [{ weight: 1, color: '#00ff7f', dottedLine: this.sysInfo.platform == 'android', points: [pt(trans(p.coord)), pt(c1)] }]
+					}
+					
+					//语音播报
+					if(p.dist <= this.minDist && !rec.t[p._id]) {
+						rec.t[p._id] = 1
+						tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
+					}
+					
+					//打卡弹框
+					if (p.dist <= this.ckDist) {
+						this.cp = p
+					}
+				}
+			}
+		},
 		async controltap(t) {
 			if(t=='back') {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				let p = await scan()
+				let p = await scan(this.wgs84,null,this.cp)
 				if(p) {
-					if(this.rLine[1]) this.rLine.splice(1,1)
-					
-					this.rec.t[p._id] = 1
-					this.point.splice(this.point.findIndex(x => x.id == p._id), 1)
-					this.point.push(createEle(p,1))
+					this.scand.push(createEle(p,1))
 					this.fly(trans(p.coord))
+					
+					if (!this.scanLog[p.sn]) {
+						this.scanLog[p.sn] = []
+					}
+					this.scanLog[p.sn].push(zz.date2Time(p.tim))
+					this.keepSync()
 				}
 			}
 			if(t=='position') {
-				this.onLoc(1)
+				this.onLoc(1, this.gcj02)
 			}
 			if(t=='v' || t=='camera') {
 				let e = t=='v'? await zz.chooseVideo({}) : await zz.chooseImage({})
 				if(e) {
-					uni.showLoading()
-					let {coord} = await getLocation('gcj02')
-					uni.hideLoading()
+					
+					let c = this.gcj02
+					if(!c){
+						uni.showLoading()
+						let {coord} = await getLocation('gcj02')
+						c = coord
+						uni.hideLoading()
+					}
 					
 					let	poi = {
 								_id: uniqId(),
 								name: '',
 								t1: 2,
 								t2: t=='v'? 60:50,
-								coord,
+								coord:c,
 								desc: '',
 								time: zz.time2Date(),
 								imgs: t=='v'? []:e,
@@ -745,6 +681,7 @@ export default {
 				//非采集坐标
 			}
 		},
+		
 		mapTap(e) {
 			
 		},
@@ -768,7 +705,7 @@ export default {
 			plus.geolocation.clearWatch(this.wid)
 			if (this.sysInfo.platform == 'android') {KeepAliveModule.stopKeepAlive({})}
 			this.setRec()
-			zz.href('/pages/nav/nav'+(this.amap?'H5':'APP'), {keepRec:1, kml:this.kml})
+			zz.href('/pages/nav/nav'+(this.amap?'H5':'APP'), {keepRec:1, kml:this.kml}, 0, null, 'redirectTo')
 		},
 		_2bl(e){
 			this.tbl = e
@@ -780,14 +717,15 @@ export default {
 			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
 		},
 		setRec(){
-			let rec = this.rec
-			uni.setStorageSync('nav_rec'+this.tmt, rec)
+			uni.setStorageSync('nav_rec'+this.tmt, this.rec)
 		},
+		
+		
+		
+		
 		async checkPermission() {
 			let isIos = permision.isIOS,
 				status
-			
-			// console.log('checkPermission', isIos);
 			
 			if(isIos) {
 				status = await permision.requestIOS('location')

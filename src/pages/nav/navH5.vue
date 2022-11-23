@@ -184,7 +184,7 @@ export default {
 			if(t==1) {
 				this.si = si
 				this.self = self
-				ctrl = new TerrainControl(true, map.sid, si.platform)
+				ctrl = new TerrainControl(true, map.sid, si.platform, false)
 				map.addControl(ctrl, 'top-left')
 			}
 			this.setTop(10 + si.statusBarHeight)
@@ -330,11 +330,10 @@ export default {
 }
 </script>
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
 		
-		<!-- #ifndef H5-ZLB -->
 		<view class="cu-modal" :class="video ? 'show' : ''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
@@ -344,7 +343,6 @@ export default {
 			   <video v-if="video" id="myVideo" :src="video" controls></video>
 			</view>
 		</view>
-		<!-- #endif -->
 
 		<image v-if="locating" class="back-img loading" :style="'top:'+(stH+312)+'px;'"></image>
 		<image v-else @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
@@ -353,16 +351,14 @@ export default {
 		<block v-if="!onRec">
 			<image @click="controltap('back')" src="@/static/back.png" class="back-img" :style="'top:'+(stH+20)+'px;'"></image>
 			<view class="start-f" v-if="mdone">
-				<view class="start-btn" @click="start">
+				<view class="start-btn" @click="start(0)">
 					<text class="start-btn-name">开始记录</text>
 				</view>
 			</view>
 		</block>
 		<block v-else>
 			<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
-			<!-- #ifndef H5-ZLB -->
 			<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
-			<!-- #endif -->
 			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" @changeMap="changeMap" @share="share" />
 		</block>
 		
@@ -395,7 +391,7 @@ export default {
 			minDist: 60,
 			
 			mapHeight: 0,
-			center: [121,30],  //121.53537, 29.64611
+			center: [121,30],
 			scale: 15,
 			point: [],
 			line: [],
@@ -408,7 +404,6 @@ export default {
 			timer: null,
 			lock: false,
 			
-			// isConn: true,
 			locating:false,
 			mdone: false,
 			mb: {},
@@ -557,14 +552,15 @@ export default {
 		fly(c){ this.exec({m:'fly2', e:{coord:c}}) },
 		stop(){
 			let rec = this.rec
-			this.onRec = false
-			this.exec({m:'trigger', e:0})
-			uni.removeStorageSync('cur_loc_wgs84')
-			if(rec.coord.length<10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
-			
 			rec.info = calData(rec.coord)
 			this.setRec()
-			this.zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
+			this.exec({m:'trigger', e:0})
+			uni.removeStorageSync('cur_loc_wgs84')
+			if(rec.coord.length<10 && !rec.point.length){
+				this.onRec = false
+				return zz.modal('本次记录太短了！')
+			} 
+			this.zz.href('/pages/nav/save',{tmt: this.tmt, rec}, 1, null, 'redirectTo')
 		},
 		clock(){
 			let tim = this.tim
@@ -586,7 +582,6 @@ export default {
 			}, 1000)
 		},
 		async start(keepRec){
-			// #ifndef H5-ZLB
 				//提示下载app
 				// const [_, ask] = await uni.showModal({
 				// 	title: '提示',
@@ -599,7 +594,6 @@ export default {
 				// } else {
 				// 	uni.setStorageSync('dontAskAndroid',1)
 				// }
-			// #endif
 			
 			let init = () => {
 					uni.removeStorageSync('nav_rec'+this.tmt)
@@ -617,7 +611,6 @@ export default {
 					line: []
 				}
 				
-			
 			// #ifndef APP-PLUS
 			// H5提示
 			const [_, ask] = await uni.showModal({
@@ -819,7 +812,7 @@ export default {
 				uni.navigateBack()
 			}
 			if(t=='scan') {
-				// #ifdef H5-ZLB || APP-PLUS
+				// #ifdef APP-PLUS
 				let p = await scan()
 				return this.scaned(p)
 				// #endif
@@ -892,7 +885,6 @@ export default {
 			}
 		},
 		onPuase(e){
-			console.log('onPuase', e);
 			this.puase = e
 			let r = this.rec
 			if(e){
@@ -906,8 +898,8 @@ export default {
 			this.setRec()
 		},
 		changeMap(e) {
-			this.setRec(1)
-			this.zz.href('/pages/nav/nav'+(this.amap?'H5':'App'), {keepRec:1, kml:this.kml})
+			this.setRec()
+			this.zz.href('/pages/nav/nav'+(this.amap?'H5':'App'), {keepRec:1, kml:this.kml}, 0, null, 'redirectTo')
 		},
 		share(e) {
 			
@@ -915,16 +907,8 @@ export default {
 		info() {
 			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
 		},
-		setRec(tr){
-			let rec = this.rec
-			// if(tr) {
-			// 	rec.ct = 'gcj02'
-			// 	for (let s of rec.point) {
-			// 		s.coord = trans(s.coord)
-			// 	}
-			// 	rec.coord = trans(rec.coord)
-			// }
-			uni.setStorageSync('nav_rec'+this.tmt, rec)
+		setRec(){
+			uni.setStorageSync('nav_rec'+this.tmt, this.rec)
 		}
 	}
 };

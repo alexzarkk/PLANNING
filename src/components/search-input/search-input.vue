@@ -169,7 +169,7 @@ export default {
             .icon {
                 padding: 0 15rpx;
                 &.icon-del {
-                    font-size: 1.9rem;
+                    font-size: 38rpx;
                     &:before {
                         content: '\e644';
                     }
@@ -233,7 +233,7 @@ export default {
 
 .icon {
     font-family: iconfont;
-    font-size: 1.6rem;
+    font-size: 32rpx;
     font-style: normal;
     color: #999;
 }

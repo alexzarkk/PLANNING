@@ -110,7 +110,7 @@ export default {
             uni.navigateBack({ delta: 1 });
         },
         goHome() {
-            uni.switchTab({ url: '/pages/index/index' });
+            uni.switchTab({ url: '/pages/index' });
         }
     }
 };

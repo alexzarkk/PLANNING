@@ -384,7 +384,7 @@
 	}
 
 	.tui-tooltip__val {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		line-height: 24rpx;
 		color: #fff;
 		margin-left: 6rpx;

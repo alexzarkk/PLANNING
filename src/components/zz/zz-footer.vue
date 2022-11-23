@@ -5,21 +5,11 @@
 		</view>
 		<view class="tui-footer-copyright flex flex-direction">
 			
-			<!-- #ifdef H5-ZLB -->
-			<text class="text-sm text-gray">本服务由{{sys.copyright}}提供</text>
-			<text class="margin-top-xs text-sm text-gray">
-				服务咨询热线：
-				<text class="text-bold text-blue" @click="call">{{sys.tel}}</text>
-			</text>
-			<!-- #endif -->
-			
-			<!-- #ifndef H5-ZLB -->
 			<text class="text-sm text-gray">{{sys.copyright}}</text>
 			<text class="margin-top-xs text-sm text-gray">
 				服务咨询热线：
 				<text class="text-bold text-blue" @click="call">{{sys.tel}}</text>
 			</text>
-			<!-- #endif -->
 			
 		</view>
 	</view>
@@ -67,7 +57,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 	}
 
 	.tui-link {
@@ -99,7 +89,7 @@
 	}
 
 	.tui-footer-copyright {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #A7A7A7;
 		line-height: 1;
 		text-align: center;

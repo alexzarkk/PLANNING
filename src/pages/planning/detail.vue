@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+
     <view class="bg-white">
         <!-- #ifndef APP-PLUS -->
         <view class="fixed text-white" :style="'opacity:' + (1 - headOpacity)">
@@ -53,7 +53,7 @@
             </view>
             <!-- <view class="padding-tb-xs text-gray text-right flex justify-between align-center"> -->
             <!-- <text class="margin-left text-sm text-gray">{{ zz.time2Date(trail.createTime,'Y-M-D h:m') }}</text> -->
-            <zz-user-event :obj="trail" @act="userEvent" @share="showShare"></zz-user-event>
+            <zz-user-event :obj="trail" @act="userEvent" @share="zhouweiShare"></zz-user-event>
             <!-- </view> -->
             <view class="padding bg-green">
                 <view class="padding flex text-center text-grey bg-orange light shadow">
@@ -262,7 +262,7 @@
                 <!-- 留言评论 END -->
                 <!-- 留言评论 START -->
                 <!-- <view class="bg-gray"> -->
-                <zz-blog ref="comment" :tid="trail._id" :is-can-reply="isWriter" />
+                <zz-blog ref="comment" :tid="trail._id" :is-can-reply="isWriter" :tt="40" />
                 <!-- </view> -->
                 <!-- 留言评论 END -->
             </view>
@@ -387,7 +387,7 @@ export default {
         },
         useLine() {
             // #ifdef APP-PLUS
-            this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1, null, 'redirectTo')
+            this.zz.href('/pages/nav/navApp', { kml: this.trail._kml, tmt: 0 }, 1)
             // #endif
 
             // #ifndef APP-PLUS
@@ -434,28 +434,22 @@ export default {
         userEvent(t) {
             this.zz.userEvent(t, 40, this.trail)
         },
-        showShare() {
-
-            // "https://zts.5618.co/h5/#/pages/share?path=/pages/planning/detail&id=" + e._id
-            // let shareData = {
-            //     shareUrl: 'https://kemean.com/',
-            //     shareTitle: '分享的标题',
-            //     shareContent: '分享的描述',
-            //     shareImg: 'http://qn.kemean.cn//upload/202004/18/1587189024467w6xj18b1.jpg',
-            //     appId: 'wxd0e0881530ee4444', // 默认不传type的时候，必须传appId和appPath才会显示小程序图标
-            //     appPath: 'pages/home/home',
-            //     appWebUrl: 'https://kemean.com/'
-            // };
+        // 执行分享
+        zhouweiShare() {
+            let cur = this.trail;
+            const params = `path=/pages/planning/detail&id=${this.trail._id}`
             let shareData = {
-                shareUrl: `https://zts.5618.co/h5/#/pages/share?path=/pages/planning/detail&id=${this.trail._id}`,
-                shareTitle: '快来看看这条线路~',
-                shareContent: this.trail.name,
-                appPath: 'pages/planning/detail',
-                appWebUrl: `https://zts.5618.co/h5/#/pages/share?path=/pages/planning/detail&id=${this.trail._id}`
+                shareUrl: `https://zts.5618.co/h5/#/pages/share?${params}`,
+                shareTitle: cur.kml.name,
+                shareContent: cur.desc,
+                shareImg: 'https://zts.5618.co/repo/shareLogo.png',
+                appId: "wx5043dab28d7cf44c",
+                type: 0,
+                appWebUrl: `https://zts.5618.co/h5/#/pages/share?${params}`
             };
             // 调用
-            let shareObj = appShare(shareData, (res) => {
-                console.log('分享成功回调', res);
+            let shareObj = appShare(shareData, res => {
+                console.log("分享成功回调", res);
                 // 分享成功后关闭弹窗
                 // 第一种关闭弹窗的方式
                 closeShare();
@@ -465,6 +459,7 @@ export default {
                 shareObj.close();
             }, 5000);
         },
+
     },
     onBackPress(event) {
         return false;
@@ -559,7 +554,7 @@ page {
     position: absolute;
     top: -16rpx;
     left: -10rpx;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     padding: 0rpx 10rpx;
     height: 38rpx;
     color: #ffffff;

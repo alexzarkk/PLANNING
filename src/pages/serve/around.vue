@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view class="maps-container">
 		<cu-custom bgColor="bg-ztsblue" :isBack="true">
 			<block slot="backText"></block>
@@ -517,7 +517,7 @@
 
 	.search-bar-text {
 		display: inline-block;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 		vertical-align: middle;
 	}
 
@@ -536,7 +536,7 @@
 	}
 
 	.search-bar-input {
-		font-size: 1.4rem;
+		font-size: 28rpx;
 		flex: 1;
 	}
 
@@ -582,7 +582,7 @@
 	}
 
 	.addr-title {
-		font-size: 1.5rem;
+		font-size: 30rpx;
 		line-height: 40rpx;
 		color: #000;
 		font-weight: bold;
@@ -606,7 +606,7 @@
 		/* autoprefixer: off */
 		-webkit-box-orient: vertical;
 		/* autoprefixer: on */
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #999;
 	}
 
@@ -633,7 +633,7 @@
 
 	.text {
 		color: #333;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		line-height: 30rpx;
 	}
 </style>

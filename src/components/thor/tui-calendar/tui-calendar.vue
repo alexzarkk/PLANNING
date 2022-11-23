@@ -653,7 +653,7 @@
 
 	.tui-iconfont {
 		font-family: 'tuiDateFont' !important;
-		font-size: 1.8rem;
+		font-size: 36rpx;
 		font-style: normal;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
@@ -693,7 +693,7 @@
 	.tui-date_time {
 		padding: 0 16rpx;
 		color: #333;
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		line-height: 32rpx;
 		font-weight: bold;
 	}
@@ -711,7 +711,7 @@
 		display: flex;
 		align-items: center;
 		background-color: #fff;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		line-height: 24rpx;
 		color: #555;
 		box-shadow: 0 15rpx 20rpx -15rpx #efefef;
@@ -776,7 +776,7 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		line-height: 32rpx;
 		position: relative;
 		border-radius: 50%;
@@ -838,7 +838,7 @@
 		justify-content: center;
 		align-items: center;
 		box-sizing: border-box;
-		font-size: 1.5rem;
+		font-size: 30rpx;
 		background-color: #fff;
 		color: #555;
 		position: relative;
@@ -867,7 +867,7 @@
 
 	.tui-custom-desc {
 		width: 100%;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		line-height: 24rpx;
 		transform: scale(0.8);
 		transform-origin: center center;
@@ -883,7 +883,7 @@
 
 	.tui-date-desc {
 		width: 100%;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		line-height: 24rpx;
 		position: absolute;
 		left: 0;
@@ -903,7 +903,7 @@
 		background-color: #fff;
 		padding: 0 42rpx 30rpx;
 		box-sizing: border-box;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #666;
 	}
 

@@ -184,7 +184,7 @@
 	}
 
 	.tui-step-item {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		position: relative;
 		box-sizing: border-box;
 	}

@@ -1,9 +1,9 @@
 {
     "name" : "环浙步道",
-    "appid" : "__UNI__210B33A",
+    "appid" : "__UNI__3AB0063",
     "description" : "环浙步道客户端app",
-    "versionName" : "1.1.7",
-    "versionCode" : 121,
+    "versionName" : "1.1.9",
+    "versionCode" : 123,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -55,7 +55,8 @@
             "Statistic" : {},
             "Geolocation" : {},
             "Share" : {},
-            "Push" : {}
+            "Push" : {},
+            "OAuth" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -112,7 +113,12 @@
                 "UIBackgroundModes" : [ "location", "audio" ],
                 "capabilities" : {
                     "entitlements" : {
-                        "com.apple.developer.associated-domains" : [ "z.szs.run", "zts.5618.co" ]
+                        "com.apple.developer.associated-domains" : [
+                            "z.szs.run",
+                            "zts.5618.co",
+                            "applinks:zts.5618.co/h5",
+                            "applinks:zts.5618.co"
+                        ]
                     }
                 },
                 /*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
@@ -158,8 +164,17 @@
                 "speech" : {
                     "ifly" : {}
                 },
-                "share" : {},
-                "payment" : {}
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx5043dab28d7cf44c",
+                        "UniversalLinks" : "https://zts.5618.co/h5"
+                    }
+                },
+                "payment" : {},
+                "oauth" : {
+                    "univerify" : {},
+                    "apple" : {}
+                }
             },
             "icons" : {
                 "android" : {
@@ -214,7 +229,7 @@
                     "description" : "原生语音合成TTS",
                     "platforms" : "Android,iOS",
                     "url" : "https://ext.dcloud.net.cn/plugin?id=4133",
-                    "android_package_name" : "uni.UNI210B33A",
+                    "android_package_name" : "uni.UNI3AB0063",
                     "ios_bundle_id" : "szs.run",
                     "isCloud" : true,
                     "bought" : 1,
@@ -229,7 +244,7 @@
                     "description" : "插件主要可用于需要持续获取位置信息、推送服务监听，需要不被杀死等应用场景。",
                     "platforms" : "Android",
                     "url" : "https://ext.dcloud.net.cn/plugin?id=6673",
-                    "android_package_name" : "uni.UNI210B33A",
+                    "android_package_name" : "uni.UNI3AB0063",
                     "ios_bundle_id" : "szs.run",
                     "isCloud" : true,
                     "bought" : 1,
@@ -238,6 +253,39 @@
                         "插件需要配置的参数名称, 如appid" : {
                             "des" : "高德地图Key配置",
                             "key" : "com.amap.api.v2.apikey",
+                            "value" : ""
+                        }
+                    }
+                }
+            },
+            "Mpaas-Scan" : {
+                "AppId" : "ALIPUB77EE875211719",
+                "License" : "xrsp+Xb0Q/oigwkJy8OEF1xMd5tNdIN6JHqKYWg95KQaoQzZd20N76ClTrn+jYvW24BNnlwKHGTWRXPbWGYcuv4/KAewm3t4YykGiss2ER1UugGMJQSmTbVPjqHQhklMcOmPNW6Ao3AqkFyyKMfjEbmuo7Pj3JcpTEPAeAax+LoXK2fnCzS9i8Vy5OtPkgsbikA4s0Lmo5ndWaO0uN4UM0+kaC9Vf+XHPPK446znkkdUAU2T1TlBRbAjcbkcWHUA+YgjIFXPKM2nq0n/xqkarG+0+s4WP9ktukpij8QXkoNe2iS8tI+YshACEwon2zsHilh8YU8FLt11Jun6vhYgGA==",
+                "WorkspaceId" : "default",
+                "__plugin_info__" : {
+                    "name" : "支付宝原生扫码插件",
+                    "description" : "支付宝原生扫码组件，包体积仅0.7MB，15分钟即可完成接入。同时，mPaaS提供「扫码分析」大盘",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=2636",
+                    "android_package_name" : "uni.UNI3AB0063",
+                    "ios_bundle_id" : "szs.run",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "2636",
+                    "parameters" : {
+                        "AppId" : {
+                            "des" : "Android平台的AppId，请填写Android的config文件中的appId对应的值",
+                            "key" : "mobilegw.appid",
+                            "value" : ""
+                        },
+                        "License" : {
+                            "des" : "Android平台的License,，请填写Android的config文件中的mpaasConfigLicense对应的值",
+                            "key" : "mpaasConfigLicense",
+                            "value" : ""
+                        },
+                        "WorkspaceId" : {
+                            "des" : "Android平台的WorkspaceId，请填写Android的config文件中的workspaceId对应的值",
+                            "key" : "workspaceId",
                             "value" : ""
                         }
                     }
@@ -275,19 +323,17 @@
         "enable" : false
     },
     "vueVersion" : "2",
-    //浙里办
     "h5" : {
         "title" : "环浙步道",
         "appkey" : "4kzz5t3t+2002281722+mzaaot",
-        "publicPath" : "./",
         "router" : {
-            "base" : "./",
+            "base" : "/h5/",
             "mode" : "hash"
         },
         "sdkConfigs" : {
             "maps" : {
                 "qqmap" : {
-                    "key" : "5VZBZ-WNO6Q-R4I55-GRABZ-P3NVO-RPFZC"
+                    "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ"
                 }
             }
         },
@@ -295,32 +341,12 @@
             "treeShaking" : {
                 "enable" : true
             }
+        },
+        "unipush" : {
+            "enable" : true
         }
     },
-    //普通H5
-    // "h5" : {
-    //     "title" : "环浙步道",
-    //     "appkey" : "4kzz5t3t+2002281722+mzaaot",
-    //     "router" : {
-    //         "base" : "/h5/",
-    //         "mode" : "hash"
-    //     },
-    //     "sdkConfigs" : {
-    //         "maps" : {
-    //             "qqmap" : {
-    //                 "key" : "CCJBZ-R2ZRJ-RIBFM-KSU34-D6D6E-ZPBNQ"
-    //             }
-    //         }
-    //     },
-    //     "optimization" : {
-    //         "treeShaking" : {
-    //             "enable" : true
-    //         }
-    //     },
-    //     "unipush" : {
-    //         "enable" : true
-    //     }
-    // },
     "locale" : "zh-Hans",
-    "fallbackLocale" : "zh-Hans"
+    "fallbackLocale" : "zh-Hans",
+    "_spaceID" : "699d1eb1-ee53-4c66-bddd-06cda80d1231"
 }

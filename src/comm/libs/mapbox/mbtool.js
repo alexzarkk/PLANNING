@@ -229,11 +229,12 @@ setActive = (map, pm, opt = {}) => {
 		}
 		idx ++
 		map.getSource(id).setData(g)
-		map.run = setTimeout(()=>{go(g,idx,count)}, 56)
+		map.run = setTimeout(()=>{go(g,idx,count)}, 20)
 	}
 	
-	return go(geo.data, 0, Math.ceil(coord.length/44))
+	return go(geo.data, 0, Math.ceil(coord.length/200))
 },
+
 
 run = (map,btn) =>{
 	// console.log('run',btn);
@@ -265,11 +266,13 @@ run = (map,btn) =>{
 	map.play = 1
 	map.runrotate = 0
 	
+	
+	
 	let start,
 		// cfg = this.runCfg,
 		cfg = {
 			speed: 1,
-			circle: 1,
+			circle: 5,
 			animationDuration: 200000
 		},
 		// info = calData(line.coord),
@@ -313,7 +316,22 @@ run = (map,btn) =>{
 		}
 	});
 	
-	// console.log('地图start ...pathDistance', pathDistance);
+	window.addEventListener("keydown", (e)=>{
+		if(e.key=='MediaTrackNext') {
+			cfg.speed ++
+		}
+		if(e.key=='MediaTrackPrevious') {
+			cfg.speed --
+		}
+		if(e.key=='Comma') { // <
+			cfg.circle --
+		}
+		if(e.key=='Period') { // >
+			cfg.circle ++
+		}
+	})
+	
+	console.log('地图start ...pathDistance', pathDistance);
 	const frame = (time)=> {
 		if (!start) start = time
 		const animationPhase = (time - start) / cfg.animationDuration * cfg.speed
@@ -322,6 +340,8 @@ run = (map,btn) =>{
 			// btn.around.node.style.display = ''
 			btn.self.node.childNodes[0].remove()
 			btn.self.setIcon(btn.iconRun)
+			
+			window.removeEventListener("keydown")
 			return map.play = null
 		}
 		
@@ -336,7 +356,7 @@ run = (map,btn) =>{
 		map.setPaintProperty(id, 'line-gradient', ['step', ['line-progress'], '#fff', animationPhase, 'rgba(255, 0, 0, 0)'])
 			
 		map.setCenter(lngLat)
-		const rotation = animationPhase * 500 * cfg.circle + map.runrotate
+		const rotation = animationPhase * 100 * cfg.circle + map.runrotate
 		
 		map.setBearing(rotation % 360)
 		
@@ -655,6 +675,7 @@ setKml = (m,pms,line,point,gon,act=1)=>{
 },
 
 on = async(map) => {
+	if(map.play) return
 	let center = map.getCenter(),
 		k = comm.nearst([center.lng,center.lat]),
 		zoom = math(map.getZoom(),0),

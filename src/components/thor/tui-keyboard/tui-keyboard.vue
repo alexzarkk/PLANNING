@@ -229,13 +229,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 2.4rem;
+		font-size: 48rpx;
 		height: 60rpx;
 		color: #000;
 	}
 
 	.tui-fontsize-32 {
-		font-size: 1.6rem;
+		font-size: 32rpx;
 		color: #333 !important;
 	}
 </style>

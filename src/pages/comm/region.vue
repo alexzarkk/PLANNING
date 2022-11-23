@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">地区选择</block>
@@ -47,21 +47,20 @@
 
 <script>
 export default {
-	data() {
-	    return {
-			activeCity:330100, // 当前激活的城市
-	        targetCityId: 'city330100',
-	        StatusBar: this.StatusBar,
-	        CustomBar: this.CustomBar,
-	        regionListStyle: {},
-	        dict: uni.getStorageSync('sys_dict'),
-	        currentTitle: 0,
-	        titleList: ['市', '县（市，区）', '乡镇街道'],
-	        cityList: []
-	    };
-	},
+    data() {
+        return {
+            activeCity: 330100, // 当前激活的城市
+            targetCityId: 'city330100',
+            StatusBar: this.StatusBar,
+            CustomBar: this.CustomBar,
+            regionListStyle: {},
+            dict: uni.getStorageSync('sys_dict'),
+            currentTitle: 0,
+            titleList: ['市', '县（市，区）', '乡镇街道'],
+            cityList: []
+        };
+    },
     onLoad() {
-        
         const codes = Object.keys(this.dict.deps);
         let cityList = [],
             regionList = [];
@@ -90,7 +89,7 @@ export default {
         const query = uni.createSelectorQuery().in(this);
         let height1 = 0,
             height2 = 0;
-			
+
         // query.select('#location').boundingClientRect((data) => { height1 = data.height }).exec()
 
         query.select('#city').boundingClientRect((data) => { height2 = data.height }).exec()
@@ -99,23 +98,24 @@ export default {
         height = height + height1 * 2 + height2 * 2 - 20;
         this.regionListStyle = { height: `calc(100vh - ${height}rpx)` }
     },
-    
+
     methods: {
-        async selectRegion(d){
-        	uni.setStorageSync('cur_deptId', d.id+'')
-        	uni.showLoading({ mask:true })
-        	await this.zz.setDept()
-        	uni.navigateBack()
+        async selectRegion(d) {
+            uni.setStorageSync('cur_deptId', d.id + '')
+            uni.showLoading({ mask: true })
+            await this.zz.setDept()
+            uni.hideLoading()
+            uni.reLaunch({ url: '/pages/share?deptId='+ d.id })
         },
         cityClick(item) {
-			this.activeCity = item.id
+            this.activeCity = item.id
             this.targetCityId = 'city' + item.id;
         },
         titleChange({ index }) {
             this.currentTitle = index;
         },
         // 地区点击
-        regionClick({ index }) {}
+        regionClick({ index }) { }
     }
 };
 </script>
@@ -139,8 +139,8 @@ body {
     // row-gap: 20rpx;
     // column-gap: 20rpx;
     .city-tag {
-		margin-bottom: 20rpx;
-        font-size: 1.2rem;
+        margin-bottom: 20rpx;
+        font-size: 24rpx;
         width: 210rpx;
         height: 60rpx;
         line-height: 60rpx;
@@ -149,9 +149,9 @@ body {
         border-radius: 20rpx;
         margin-right: 21rpx;
     }
-	
-	.city-active{
-		border:2px solid $zts-green;
-	}
+
+    .city-active {
+        border: 2px solid $zts-green;
+    }
 }
 </style>

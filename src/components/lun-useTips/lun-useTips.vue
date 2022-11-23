@@ -197,11 +197,11 @@
 			text-align: center;
 
 			.content-info {
-				font-size: 1.8rem;
+				font-size: 36rpx;
 			}
 
 			.content-next {
-				font-size: 1.8rem;
+				font-size: 36rpx;
 				width: 160rpx;
 				border: 2rpx solid #fff;
 				border-radius: 8rpx;

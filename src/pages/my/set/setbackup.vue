@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
   <view>
     <cu-custom bgColor="bg-ztsblue" :isBack="true">
       <block slot="backText"></block>
@@ -39,7 +39,7 @@
           <view class="title"><span>*</span>头像</view>
           <view class="img" @tap="upclo">
             <image v-if="data.ava" :src="data.ava"></image>
-            <view v-else style="color: #999999; font-size: 2rem">+</view>
+            <view v-else style="color: #999999; font-size: 40rpx">+</view>
           </view>
         </view>
         <picker mode="date" :value="data.birthday" @change="bindbirthdayChange">
@@ -281,7 +281,7 @@ page {
   }
   .certification {
     background-color: #0081ff;
-    font-size: 1.4rem;
+    font-size: 28rpx;
     width: 120rpx;
     margin-left: 20rpx;
     color: #fff;

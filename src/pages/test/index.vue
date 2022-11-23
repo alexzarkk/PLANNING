@@ -1,5 +1,5 @@
 <template name="basics">
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bgColor="bg-ftblue" :isBack="true">
             <block slot="backText"></block>
@@ -17,7 +17,7 @@
             </view>
         </view>
 		<zz-upload-image :imgs="[]" @add="addImage" @del="delImage"></zz-upload-image>
-        <view @click="showShare">APP分享</view>
+        <!-- <view @click="showShare">分享</view> -->
         <view class="flex flex-direction padding" style="row-gap: 20rpx">
             <button class="cu-btn round" @click="list_rec">list_rec</button>
             <button class="cu-btn round" @click="del_rec('631ea8c9a874f0000167ecd7')">删除rec</button>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
+// import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
 
 export default {
     data() {
@@ -82,8 +82,8 @@ export default {
                     url: '/pages/share?path=/pages/comm/kml&_id=15'
                 },
                 {
-                    name: '台州市域',
-                    url: '/pages/share?path=/pages/comm/kml&_id=62b9409268cebc00011fdb23'
+                    name: '省域',
+                    url: '/pages/share?path=/pages/comm/kml&_id=62ce8e889d207000016316f6'
                 },
                 {
                     name: '推荐路线',
@@ -226,7 +226,7 @@ export default {
 			let keep = [
 				'__LAST_DCLOUD_APPID', '__ETAG__CNA__ID__', '__DC_STAT_UUID', '__package_info__',
 				'getui_appid', 'getui_cid', 'getui_session', 'getui_api_time', 'getui_regid', 'getui_deviceid',
-				'210B33A_token', '210B33A_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
+				'3AB0063_token', '3AB0063_acc', 'sysInfo', 'clientInfo', 'cur_deptId', 'sys_dept', 'mbStyle',
 				'sys_nav_cps', 'user_scan_log', 'sync_task', 'sync_files', 'tempfiles', 'nav_local_rec'
 				]
 			

@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+    
     <!-- APP 版本以及帮助信息 -->
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">

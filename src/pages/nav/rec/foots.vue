@@ -1,16 +1,16 @@
 <template>
-	<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bg-color="bg-ztsgreen" :is-back="true">
             <block slot="content">我的足迹</block>
         </cu-custom>
-		<template v-if="area">
+        <!-- <template v-if="area">
 			<zz-map :cur="cur" :line="area.children" :winH="mapHeight"></zz-map>
-		</template>
-		
-		<image @click="controltap(1)" :src="'../../../static/'+(mapHeight!=winH?'un':'')+'fold.png'" class="back-img" :style="'top:'+(stH+60)+'px;'"></image>
-		
-		<!-- <block v-if="mapHeight!=winH">
+		</template> -->
+
+        <!-- <image @click="controltap(1)" :src="'../../../static/'+(mapHeight!=winH?'un':'')+'fold.png'" class="back-img" :style="'top:'+(stH+60)+'px;'"></image> -->
+
+        <!-- <block v-if="mapHeight!=winH">
 			<view :style="{ height: (winH - mapHeight - (navHeight)) + 'px' }">
 				<scroll-view id="tab-bar" class="tab-bar" :scroll-x="true" :show-scrollbar="false">
 					<view style="flex-direction: column;">
@@ -30,161 +30,159 @@
 				<view class="tab-bar-line"></view>
 			</view>
 		</block> -->
-		
-		<view class="sticky-box bg-cyan margin-top" :style="[{ top: customBar + 'px' }]">
-		    <scroll-view class="nav text-center" scroll-x scroll-with-animation>
-		        <view v-for="(item, idx) in tabList" :id="item.id" :key="idx" class="cu-item" :class="tabIdx==idx ? 'cur text-bold text-red' : ''" @tap="tabChg">
-		            {{ item.name }}
-		        </view>
-		    </scroll-view>
-		</view>
-		
-		<zz-page-status :length="list.length" :total="page.total"></zz-page-status>
+        <!--uni-app-->
+        <view class="tui-title">2021年上半年月份商品营业额（单位：w）</view>
+        <view class="tui-charts-box">
+            <tui-charts-area ref="tui_area_1" tooltip :xAxis="chart.xAxis" :dataset="chart.dataset" :max="chart.max" :splitNumber="chart.splitNumber" @click="dotClick"></tui-charts-area>
+        </view>
+        <!-- <zz-page-status :length="list.length" :total="page.total"></zz-page-status> -->
     </view>
 </template>
 
 <script>
 import icon from '@/comm/libs/icon'
 import { dist } from '@/comm/geotools'
+
 export default {
     data() {
         return {
-			icon,
-			area: null,
-			
-			stH:0,
-			winH: 0,
-			//swiper
-			
-			tabIdx: 0,
-			scrollLeft: 0,
-			tabHeight: 45,
-			navHeight: 74,
-			mapHeight: 0,
-			
-			page: {
-			    page: 1,
-			    size: 10,
-			    total: -1,
-			    my: 1,
-			},
-			list: [],
-			
-			scrolled: 0,
-			loading: true,
-			
+            icon,
+            area: null,
+
+
+            chart: {
+                xAxis: ['一月', '二月', '三月', '四月', '五月', '六月'],
+                dataset: [{
+                    name: '营业额',
+                    color: 'rgba(86, 119, 252, 0.6)',
+                    source: [380, 210, 320, 160, 300, 200]
+                }],
+                max: 600,
+                splitNumber: 100
+            },
+
+
+            stH: 0,
+            winH: 0,
+            //swiper
+
+            tabIdx: 0,
+            scrollLeft: 0,
+            tabHeight: 45,
+            navHeight: 74,
+            mapHeight: 0,
+
+            page: {
+                page: 1,
+                size: 10,
+                total: -1,
+                my: 1,
+            },
+            list: [],
+
+            scrolled: 0,
+            loading: true,
+
             customBar: this.CustomBar,
             bd: this.bd, // APP相关信息
             dict: uni.getStorageSync('sys_dict'),
-            tabList: [  // 可操作列表
-                {
-                    name: '历史足迹',
-                    icon: 'appreciate',
-                    t: 30
-                },
-                {
-                    name: '年度足迹',
-                    icon: 'comment',
-                    t: 1000
-                },
-                {
-                    name: '频次排名',
-                    icon: 'favor',
-					k:'isFavor',
-					v:'favor',
-                    t: 40
-                }
-            ],
-			current: -1,
-			cur: {}
+
+
+            current: -1,
+            cur: {}
         };
     },
     onLoad() {
-		let sysInfo = uni.getStorageSync('sysInfo')
-		this.winH = sysInfo.windowHeight
-		this.stH = sysInfo.statusBarHeight
-		this.mapHeight = this.winH/3
-        let {deptId} = this.zz.getDept()
-		this.zz.req({$url:'/public/zz/geoGon', code:deptId}).then(e=>{
-			this.area = e
-		})
-		this.loadData()
+
+        console.log("foots====")
+
+        let sysInfo = uni.getStorageSync('sysInfo')
+        this.winH = sysInfo.windowHeight
+        this.stH = sysInfo.statusBarHeight
+        this.mapHeight = this.winH / 3
+
+        this.zz.req({ $url: '/user/scan/foots' }).then(e => {
+            console.log(e);
+        })
+
+        this.loadData()
+    },
+    onReady() {
+        this.$refs.tui_area_1.draw(this.chart.dataset)
     },
     methods: {
         loadData() {
-			this.loading = true
-            this.zz.req({$url: '/user/scan/foots', ...this.page}).then(e => {
-				this.loading = false
-				console.log(e);
-				e.pagination.page++
-				Object.assign(this.page,e.pagination)
-				this.tabs[0].ls = this.tabs[0].ls.concat(e.list)
+            this.loading = true
+            this.zz.req({ $url: '/user/scan/page', ...this.page }).then(e => {
+                this.loading = false
+                console.log(e);
+                e.pagination.page++
+                Object.assign(this.page, e.pagination)
             })
         },
-		tabChg(e) {
-			let idx = e.detail.current||e.currentTarget.dataset.id||0
-			if(this.tabIdx != idx) {
-				this.tabIdx = idx
-				this.scrollLeft = (idx - 1) * 60
-			}
-		},
-		controltap(){
-			let h = this.winH
-			this.mapHeight = this.mapHeight == h ? h/3:h
-		},
-		viewImg(p,i) { if(p&&p.length) this.zz.viewIMG(p,i) },
-		change3(e) {this.current = this.current == e.index ? -1 : e.index },
-		active(e,idx) {
-			this.cur = e
-			if(idx!=undefined) {
-				this.zz.href('/pages/comm/point',{kml:{...this.rec, t1:this.line,t2:this.point}, idx})
-			}
-		},
-		
+        dotClick() {
+
+        },
+        tabChg(e) {
+            let idx = e.detail.current || e.currentTarget.dataset.id || 0
+            if (this.tabIdx != idx) {
+                this.tabIdx = idx
+                this.scrollLeft = (idx - 1) * 60
+            }
+        },
+        controltap() {
+            let h = this.winH
+            this.mapHeight = this.mapHeight == h ? h / 3 : h
+        },
+        viewImg(p, i) { if (p && p.length) this.zz.viewIMG(p, i) },
+        change3(e) { this.current = this.current == e.index ? -1 : e.index },
+        active(e, idx) {
+            this.cur = e
+            if (idx != undefined) {
+                this.zz.href('/pages/comm/point', { kml: { ...this.rec, t1: this.line, t2: this.point }, idx })
+            }
+        },
+
     },
-	onPageScroll(e) {
-		if(!this.isTabTap) {
-			this.scrolled = e.scrollTop
-			if (e.scrollTop <= 160) {
-				this.headOpacity = e.scrollTop / 160
-			} else if (e.scrollTop > 160) {
-				this.headOpacity = 1
-			}
-		}
-	}
+    onPageScroll(e) {
+        if (!this.isTabTap) {
+            this.scrolled = e.scrollTop
+            if (e.scrollTop <= 160) {
+                this.headOpacity = e.scrollTop / 160
+            } else if (e.scrollTop > 160) {
+                this.headOpacity = 1
+            }
+        }
+    }
 };
 </script>
 
 <style lang="scss">
-	
 page {
     background-color: #ffffff;
 }
 </style>
 
 <style lang="scss" scoped>
-
-
 .back-img {
-	position: fixed;
-	left: 10px;
-	width: 42px;
-	height: 42px;
+    position: fixed;
+    left: 10px;
+    width: 42px;
+    height: 42px;
 }
 
 .record {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	padding: 8rpx;
-	background: linear-gradient(to bottom, #000000 90%, rgba(255, 255, 255, 0.2) 50%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 8rpx;
+    background: linear-gradient(to bottom, #000000 90%, rgba(255, 255, 255, 0.2) 50%);
 }
 
 .record-title {
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
-
 </style>

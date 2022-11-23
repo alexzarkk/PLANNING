@@ -113,10 +113,22 @@ toDist = (cs, poi, cds) => {
 }
 
 
-async function scan(cd,e){
-	if(!e) e = await zz.scan()
+async function scan(cd,e,cp){
+	if(!e) {
+		let begin = Date.now()
+		try{
+			e = await zz.scan()
+		}catch(e){
+			//超时未扫码成功
+			if((Date.now()-begin) > 8000 && cp) {
+				zz.toast('打卡点位置校验成功！')
+				e = {text:'https://z.szs.run?o='+cp._id }
+			}
+		}
+	}
+	
 	if(e) {
-		let res = e.result || e.text
+		let res = e.resp_result || e.text || e.result
 		if(res.startsWith('https://z.szs.run')) {
 			if(!cd) {
 				let { coord } = await getLocation()
@@ -135,6 +147,7 @@ async function scan(cd,e){
 				cps[sn] = {_id: sn, t2: x.t2, coord: x.coord}
 				comm.setStorage('sys_nav_cps', cps)
 			}
+			
 			if(dist(cps[sn].coord, cd)>160) {
 				return zz.modal('错误：超出距离范围！（请确认手机定位功能已开启，并在【'+sn+'】柱子附近）')
 			}
@@ -147,17 +160,17 @@ async function scan(cd,e){
 				}
 			}
 			
-			if(comm.hadNet()) {
-				await zz.req({ $url: 'user/scan/add', ...code }, true).then(x=>{
-					zz.toast('足迹打卡成功！')
-				}).catch(e=>{
-					return
-				})
-			}else{
+			//同步服务器
+			try{
+				await zz.req({ $url: 'user/scan/add', ...code }, true)
+			}catch(e){
 				log.temp.push(code)
 			}
 			
+			zz.toast('足迹打卡成功！')
+			
 			log[sn].push(zz.date2Time(code.tim))
+			
 			uni.setStorageSync('user_scan_log', log)
 			return {
 				...code,

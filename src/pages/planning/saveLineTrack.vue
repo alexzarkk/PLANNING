@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<!-- 
 			@name:保存线路轨迹信息
 			@desc：
@@ -411,7 +411,7 @@ body {
 
 		&-title {
 			margin-bottom: 12rpx;
-			font-size: 1.2rem;
+			font-size: 24rpx;
 			color: #999999;
 		}
 	}
@@ -434,7 +434,7 @@ body {
 		padding: 16rpx;
 
 		// .sport-type-icon{
-		// 	font-size: 1rem;
+		// 	font-size: 20rpx;
 		// }
 
 		&-image {
@@ -445,7 +445,7 @@ body {
 
 	&-title {
 		color: #525252;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 	}
 }
 
@@ -454,7 +454,7 @@ body {
 }
 
 .current-level {
-	font-size: 1.4rem;
+	font-size: 28rpx;
 	color: #222222;
 }
 

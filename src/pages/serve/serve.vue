@@ -1,5 +1,5 @@
 <template name="basics">
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
 		<!-- <view class="fixed">
 		    <cu-custom :isBack="true" bgColor=" bg-orange">
@@ -107,9 +107,6 @@ export default {
                     icon: 'around',
                     color: 'blue',
                     // url: 'around',
-                    // #ifdef H5-ZLB
-                    // url: 'amapAround',
-                    // #endif
                     prefix: 'zzIcon-'
                 },
                 {
@@ -188,7 +185,7 @@ page {
 
 .color {
     color: #333333;
-    font-size: 1.4rem;
+    font-size: 28rpx;
     margin-top: 16rpx;
 }
 
@@ -204,7 +201,7 @@ page {
     align-items: center;
     background-color: rgba(255, 255, 255, 0.3);
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 20rpx;
     padding: 4rpx 10rpx;
     border-radius: 20rpx;
     margin-right: 20rpx;
@@ -275,17 +272,17 @@ page {
 }
 
 .nav-title {
-    font-size: 1.6rem;
+    font-size: 32rpx;
     font-weight: 300;
 }
 
 .nav-title::first-letter {
-    font-size: 2rem;
+    font-size: 40rpx;
     margin-right: 4rpx;
 }
 
 .nav-name {
-    font-size: 1.4rem;
+    font-size: 28rpx;
     text-transform: Capitalize;
     margin-top: 20rpx;
     position: relative;
@@ -317,7 +314,7 @@ page {
 
 .nav-name::first-letter {
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 36rpx;
     margin-right: 1px;
 }
 
@@ -367,7 +364,7 @@ page {
 .tui-btn-back {
     width: 88rpx;
     height: 88rpx;
-    font-size: 1.3rem;
+    font-size: 26rpx;
     display: flex;
     align-items: center;
     justify-content: center;

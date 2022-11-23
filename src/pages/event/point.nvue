@@ -10,7 +10,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<view class="status-bar" :style="{ height: statusBarHeight + 'rpx' }"></view>
 		<view class="header-bar" :style="{ height: headerBarHeight + 'rpx' }"><text class="header-bar-title">人气打卡点</text></view>
@@ -176,7 +176,7 @@ export default {
 
 			&-value {
 				color: #252525;
-				font-size: 1.6rem;
+				font-size: 32rpx;
 			}
 		}
 	}
@@ -193,7 +193,7 @@ export default {
 			.line-title {
 				width: 320rpx;
 				color: #222222;
-				font-size: 1.6rem;
+				font-size: 32rpx;
 				overflow: hidden;
 				text-overflow: ellipsis; /* 超出部分省略号 */
 				lines: 1; //NVUE下要用这个属性，来让文字超出隐藏变省略号L
@@ -202,7 +202,7 @@ export default {
 
 			.line-name {
 				color: #555555;
-				font-size: 1.4rem;
+				font-size: 28rpx;
 				width: 420rpx;
 				overflow: hidden;
 				// word-break: break-all; /* break-all(允许在单词内换行。) */
@@ -231,7 +231,7 @@ export default {
 
 				&-value {
 					color: #252525;
-					font-size: 1.6rem;
+					font-size: 32rpx;
 				}
 			}
 		}
@@ -250,7 +250,7 @@ export default {
 
 			&-text {
 				text-align: center;
-				font-size: 1.2rem;
+				font-size: 24rpx;
 				color: #ffffff;
 			}
 		}

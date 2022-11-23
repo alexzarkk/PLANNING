@@ -1,5 +1,5 @@
 <template>
-	<page-meta root-font-size="10px"></page-meta>
+	
     <view>
         <cu-custom bgColor="bg-ztsgreen" :isBack="true">
             <block slot="content">更新记录</block>
@@ -73,7 +73,7 @@
 			    								<view class="text-cut">
 			    									<text class="cuIcon-info text-grey margin-right-xs"></text>
 			    									{{ tele[t2.t3].label }}
-												</view>
+			    								</view>
 			    							</view>
 			    						</view>
 			    						<view class="action" @click="active(t2, idx)">
@@ -298,7 +298,7 @@ export default {
 		let { kml, line, point } = this.zz.getParam(v),
 			dict = this.dict
 		
-		this.tele = Object.assign(dict.trail_element,dict.trail_serverPoi,dict.trail_otherPoi)		
+		this.tele = Object.assign(dict.trail_element,dict.trail_serverPoi,dict.trail_otherPoi)	
 		this.kml = kml
 		this.line = line
 		this.point = point
@@ -340,7 +340,7 @@ export default {
 			this.idx = i+'_'+j
 			this.pt = p
 			this.kml.type = p.value
-		    uni.setStorageSync('selected_sport_type', p.value)
+			
 		    setTimeout(() => {
 				this.t3 = p.value
 		    }, 300)
@@ -357,7 +357,7 @@ export default {
 		active(e,idx) {
 			this.cur = e
 			if(idx!=undefined) {
-				this.zz.href('/pages/nav/editPoi', this.point.find(x=>x._id==e._id), 1, 'slide-in-right')
+				this.zz.href('/pages/nav/rec/editPoi', this.point.find(x=>x._id==e._id), 1, 'slide-in-right')
 			}
 		},
         rateChange(e) {
@@ -401,7 +401,7 @@ export default {
 				
 			})
         	if(e.confirm) {
-				await this.zz.req({$fn: 'sync', $url:'/user/rec/delete', _id: this.kml._id},true)
+				await this.zz.req({$fn: 'sync0', $url:'/user/rec/delete', _id: this.kml._id},true)
 				try{
 					let pages = getCurrentPages(),
 						pp = pages[pages.length - 3]
@@ -431,7 +431,7 @@ export default {
 			}
 			
 			let {_id,name,desc,type,ip,ele,pub,imgs} = this.kml
-			await this.zz.req({$fn: 'sync', $url:'/user/rec/update', _id,name,desc,type,ip,ele,pub,imgs})
+			await this.zz.req({$fn: 'sync0', $url:'/user/rec/update', _id,name,desc,type,ip,ele,pub,imgs})
 			uni.hideLoading()
 			
 			try{
@@ -462,7 +462,7 @@ export default {
 
 	&-title {
 		margin-bottom: 12rpx;
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #999999;
 	}
 }

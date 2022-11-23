@@ -490,7 +490,7 @@
 		/* #ifdef H5 */
 		cursor: pointer;
 		/* #endif */
-		font-size: 1.5rem;
+		font-size: 30rpx;
 		font-weight: normal;
 		text-align: center;
 	}

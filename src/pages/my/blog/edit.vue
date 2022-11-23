@@ -1,5 +1,5 @@
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+
     <view>
         <!-- 发送评论 -->
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
@@ -62,7 +62,7 @@ export default {
             video: null,
             content: '', // 评论内容
             qr: {}, // 上一个页面传过来的参数
-            tid: '' // 当前评论回复的内容的id
+            tid: '', // 当前评论回复的内容的id
         };
     },
     onLoad(qr) {
@@ -94,6 +94,7 @@ export default {
                 $url: '/user/blog/add',
                 content: this.content,
                 tid: this.qr.tid,
+                tt: Number(this.qr.tt),  // 评论目标类型的type
                 pid: this.qr.pid,
                 imgs: []
             };
@@ -109,9 +110,7 @@ export default {
             // }
             this.zz.req(requestParams).then(() => {
                 this.loading = false;
-                let eventName = 'newComment' + this.qr.tid
-                console.info("留言刷新---", eventName)
-                uni.$emit(eventName, {})
+                uni.$emit('newComment' + this.qr.tid, {})
                 setTimeout(() => {
                     uni.navigateBack();
                 }, 100);

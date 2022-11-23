@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<cu-custom bgColor="bg-black" :isBack="true">
 			<block slot="backText"></block>
@@ -9,7 +9,7 @@
 			<view class="cu-bar justify-start bg-white margin-top">
 				<view class="action border-title">
 					<text class="text-xl text-bold">{{content.title}}</text>
-					<text class="bg-grey" style="width:2rem"></text>
+					<text class="bg-grey" style="width:40rpx"></text>
 					<!-- 底部样式 last-child选择器-->
 				</view>
 			</view>

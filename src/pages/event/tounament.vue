@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view>
         <cu-custom bg-color="bg-ztsblue" :is-back="true">
             <block slot="backText" />

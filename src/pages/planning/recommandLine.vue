@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <!-- 
 			@name:行程套餐
 			@desc：用于创建新页面
@@ -176,14 +176,14 @@ page {
 
             .re-grid-title {
                 color: #ffffff;
-                font-size: 1.8rem;
+                font-size: 36rpx;
                 margin-bottom: 10rpx;
             }
 
             .re-grid-sub-title {
                 color: #efefef;
 				
-                font-size: 1.2rem;
+                font-size: 24rpx;
             }
         }
 

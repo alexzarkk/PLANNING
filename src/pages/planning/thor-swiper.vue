@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <view class="container">
         <tui-waterfall :listData="listData" :type="2" :pageSize="10">
             <!-- #ifdef MP -->

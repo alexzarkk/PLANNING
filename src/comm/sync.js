@@ -1,8 +1,9 @@
-import { api, isDev } from '@/comm/bd'
-import { rndInt, upload, removeFile } from '@/comm/zz'
-import { req, hadNet } from '@/comm/comm'
+import { rndInt, req, upload, removeFile } from '@/comm/zz'
+import { hadNet } from '@/comm/comm'
 
 const sync = {
+	sleep: false,
+	tim: null,
 	removeFile,
 	upload,
 	req,
@@ -21,9 +22,9 @@ const sync = {
 		f[k] = v
 		uni.setStorageSync('sync_files', f)
 	},
-	
+	stop(){clearTimeout(this.tim)},
 	async go(){
-		if(hadNet()) {
+		if(!this.sleep&&hadNet()) {
 			let tk = this.get(),
 				now = Date.now()
 				
@@ -41,10 +42,12 @@ const sync = {
 					
 					await this[q.k](q.o,0).then(x=>{v=x}).catch(e=>{r=e})
 					
+					// console.log(v,r,'////////////');
+					
 					if(r||!v) {
 						if(q.k=='req') q.o.$url = u
 						this.set(tk)
-						return setTimeout(()=>{this.go()}, 20001)
+						return this.tim = setTimeout(()=>{this.go()}, 20001)
 					}
 					
 					if(v){

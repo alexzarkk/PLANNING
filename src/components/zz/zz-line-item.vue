@@ -67,7 +67,7 @@ export default {
         } catch (error) {}
     },
     mounted() {
-		console.log(this.lineData);
+		// console.log(this.lineData);
 	},
     methods: {
         openDetails() {
@@ -115,7 +115,7 @@ export default {
             background-color: #ffffff;
             border-radius: 50%;
             .icon {
-                font-size: 2rem;
+                font-size: 40rpx;
             }
         }
 
@@ -125,7 +125,7 @@ export default {
             align-items: center;
 
             .title {
-                font-size: 1.6rem;
+                font-size: 32rpx;
                 // font-weight: 600;
             }
         }

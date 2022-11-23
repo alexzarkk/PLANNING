@@ -76,7 +76,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 1.4rem;
+		font-size: 28rpx;
 	}
 
 	.tui-link {
@@ -108,7 +108,7 @@
 	}
 
 	.tui-footer-copyright {
-		font-size: 1.2rem;
+		font-size: 24rpx;
 		color: #A7A7A7;
 		line-height: 1;
 		text-align: center;

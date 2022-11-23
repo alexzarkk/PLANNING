@@ -27,11 +27,11 @@ const comm = {
 			
 			x.open('POST', api[isDev]+(fn||'app'), true)
 			x.setRequestHeader("Content-type","application/json")
-			x.setRequestHeader("authorization", comm.getStorage('210B33A_token'))
+			x.setRequestHeader("authorization", comm.getStorage('3AB0063_token'))
 			x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
 			x.send(param)
 			
-			// console.log('Ajax ------------------->', q)
+			console.log('Ajax ------------------->', q)
 			
 			x.onreadystatechange = ()=>{
 				if (x.readyState === 4) {
@@ -53,7 +53,7 @@ const comm = {
 			t = setTimeout(()=>{
 				x.abort()
 				reject('timedout')
-			},9999)
+			},9900)
 		})
 	},
 	// #endif
@@ -152,7 +152,7 @@ const comm = {
 				})
 			}
 		}
-		// console.log('comm.around ..............', c)
+		console.log('comm.around ..............', c)
 		return arr.sort(comm.compare('dist'))
 	},
 	

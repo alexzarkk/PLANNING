@@ -256,7 +256,7 @@ export default {
 
 .tui-badge {
 	position: absolute;
-	font-size: 1.2rem;
+	font-size: 24rpx;
 	height: 32rpx;
 	min-width: 20rpx;
 	padding: 0 6rpx;

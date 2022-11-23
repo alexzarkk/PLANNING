@@ -472,7 +472,7 @@
 	}
 
 	.uni-calendar__weeks-day-text {
-		font-size: 1.4rem;
+		font-size: 28rpx;
 	}
 
 	.uni-calendar__box {

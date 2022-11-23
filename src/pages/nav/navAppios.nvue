@@ -1,0 +1,1220 @@
+<template>
+
+	<view>
+		<map id="amap"
+			:style="{width: '750rpx', height: winH + 'px' }"
+			:show-location="true"
+			:longitude="center[0]"
+			:latitude="center[1]"
+			:scale="scale"
+			
+			:min-scale="3"
+			:enable-satellite="true"
+			:enable-rotate="false"
+			:enable-overlooking="false"
+			
+			:polyline="[...lines]"
+			:markers="points"
+			
+			@regionchange="onchg"
+			@markertap="markertap"
+			@tap="mapTap"
+		></map>
+		
+		<image @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
+		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
+		
+		<block v-if="!onRec">
+			<image @click="controltap('back')" src="@/static/back.png" class="back-img" :style="'top:'+(stH+20)+'px;'"></image>
+			<view class="start-f">
+				<view class="start-btn" @click="start(0)">
+					<text class="start-btn-name">开始记录</text>
+				</view>
+			</view>
+		</block>
+		<block v-else>
+			<!-- <block v-if="!puase"> -->
+				
+				<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
+				<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
+			<!-- </block> -->
+			<!-- <fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" @changeMap="changeMap" @share="share" @tbl="_2bl"/> -->
+			
+			
+			
+			
+			<view class="record" :style="recordStyle">
+				<view class="record-title" style="height:44px;">
+					
+					<!-- #ifdef APP-PLUS -->
+					<!-- <button class="cu-btn bg-gray" type="default" @click="tools"><text>工具</text></button> -->
+					<!-- #endif -->
+					
+					<view style="display: flex;flex-direction: row; justify-content: center; ">
+						<text style="width: 250rpx; text-align: center; color: #55ff00; font-weight: bold;">{{ (tim.H > 9 ? tim.H : '0' + tim.H) + ':' + (tim.M > 9 ? tim.M : '0' + tim.M) + ':' + (tim.S > 9 ? tim.S : '0' + tim.S) }}</text>
+						<text v-if="isShow" style="text-align: center; color: #ff0000; font-weight: bold;">已暂停</text>
+					</view>
+					<button class="cu-btn bg-gray" @click="info"><text>数据统计</text></button>
+				</view>
+				<view v-if="isShow && process"><progress :percent="process" activeColor="#ff0000" /></view>
+			</view>
+			
+			<view class="uni-cursor-point">
+				<view class="uni-fab uni-fab--leftBottom" :style="{ opacity: isShow ? 1 : 0 }">
+					<view class="uni-fab__content--left uni-fab__content">
+						<view class="uni-fab__item uni-fab__item--first" />
+						<view v-if="isShow" v-for="(item, index) in content" :key="index" class="uni-fab__item uni-fab__item--active" @touchend="end(index, item)" @touchstart.stop="onStartTouch(index, item)" @click="_onItemClick(index, item)">
+							<image :src="item.active ? item.selectedIconPath : item.iconPath" class="uni-fab__item-image" mode="aspectFit" />
+							<text class="uni-fab__item-text" :style="{ color: item.textColor }">{{ item.text }}</text>
+						</view>
+					</view>
+				</view>
+				<view class="uni-fab__circle uni-fab__circle--leftBottom" :style="{ opacity: isShow ? 1 : 0.5 }" @click="_onClick">
+					<!-- #ifdef APP-PLUS -->
+					<uni-icons class="fab-circle-icon" type="circle-filled" color="#ff0000" size="42"></uni-icons>
+					<!-- #endif -->
+					<!-- #ifndef APP-PLUS -->
+					<text class="cuIcon-radioboxfill text-red" style="font-size:42px"></text>
+					<!-- #endif -->
+				</view>
+			</view>
+			
+			<!-- <uni-drawer ref="showRight" mode="right">
+				<view :style="recordStyle">
+					<view class="padding">
+						<button type="default" plain="true" @click="changeMap">切换地图</button>
+					</view>
+					<view class="padding">
+						<button type="default" plain="true" @click="share">共享实时位置</button>
+					</view>
+					<view class="padding">
+						<button :type="tbl?'primary':''" :plain="tbl" @click="_2bl">{{tbl?'关闭':'开启'}}路网</button>
+					</view>
+				</view>
+			</uni-drawer> -->
+			
+		</block>
+		
+	</view>
+</template>
+
+<script>
+// const locationModule = uni.requireNativePlugin('XM_Alive_Location')
+import permision from '@/comm/permission.js'
+const KeepAliveModule = uni.requireNativePlugin("yh-alive")
+const tts = uni.requireNativePlugin("nrb-tts-plugin")
+tts && tts.init({ "lang":"ZH", "country":"CN" })
+
+import { uniqId, bearing, getDist,dist, getLocation, calData, clone, trans, fixNum } from '@/comm/geotools'
+import { createEle, toDist, scan, on } from '@/comm/nav'
+import icon from '@/comm/libs/icon'
+import comm from '@/comm/comm'
+import sync from '@/comm/sync'
+import zz from '@/comm/zz'
+
+// import fab from './components/fab'
+
+
+const d_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAA',
+	play = d_ + 'BERJREFUWEe9V12IG1UU/s5kU+pP9UVZ9Elt6YLUTGhXWJNJ60Lpg7qCaAXBHxC0D+pu7q4/WJDNoigKu7O7VbT6ZoVCrSj+QdeHVmeSim41E6vYVWsfpFWqD/5uNMkcuZOZOJmdJJNs8cI8zLnn57vnnnvPdwldDN1IXs/gW4hwHYBL3U96OCs/Zhwl0JsiUzwS1S11UtQXt1xmL1d2KUR3ANjYSd+dX7KZ9yvnxfeKwWNn2tm0BaDnE5PEdD8Dl0cM3KRGwGkmflmkS1Ot7FsC0E31IwCZZkNeJCgLzPjABp+uUvnMciXG569R+mPU16/Y9jYAIwDJLfIPQ2jW1jAQoQB0Qz0LwiU+A4OI57Lp0htRMjGbT9zKTGNNC2D8LDKWrJtglpoFuql+D+AKT2ozT01kSrkogYM600YipxBN+uSnhGZd6ddryoCeVw+AsfNcBPd86Hn1ITDmG0EJr4u0dbv33wAQRLualQczMWdcs8UmZTFsYQ4AedSoXF30qv1cBveCzhbUm9jGO/LfOR1r+wblEa0DyCcmweTtc8uKlbozpnpIKdfuzm4//lO3daHn1VfBuMuxI87J41kHYKrfAbjKkRPf1q7adVNlqceEp8bT1hPdgJj5UN1BMRxybU4KzVpP02byBgX8Xl1IJaEV1XZOPQCuzl8g5R6R/vxgVCC6mbQATkh9G3Qj6ab6EoBdroMXhGY92AUAT/WI0mc/PDb0xbFOQHRTfR7AA67eXgngEwDXOgKm4U6NJJCBYLw9y+W/p3Zv//qXVkBkQwPxYXf+UwmgcfHYjIGJjLXUQwb+M2HUmPDIuGbpYX6mDXWjQjjhzp2SAP4AcIEU/IPyRY9pJ35fFQDXmAGLFMqJVPEtv79nzYF1a7D2N1f2ZxOAXyuVdbnhrySglqPDFvjtvgQpuWCB5g5ffeHF8bi3SAdAYwsqVNvwaPq4PJI9AyBQjcFTQrOeDHPyXH7T+jjHvvVvQaMIbYXSE6lioWcATPspXhXZodaX1HQhmVJszjeKcMZQ54gwWhfwbqGVnukBQBFMotMJkn51M/E4QE870Rjz1Hws+KjQSqmoAAgos83jYmvpxXY2/jndTBQahIVp2LuK5bFw+F7Uq5gI89m0JUlH5BG4ipeEZg04AAKtuG0z0k11IdbH944OlX6IHNlV9Dcjr+P+f+3YSO5k4gNOloPtOCQLUmtUpK093a4yTH+msHkD2bVvvDk/32imZAEmrLA9OJbp3GDagZz9eFM/V2M/+nSatngFKw4yYlIwkk1Z7/aSiUDRASHMOJyWB5gxCPu4itfGt1kLUYA4gftwZ4P91I1WMGK3HsJdBhlyXYtKABtgOhj2MInZPMKEHWBsbvIaYML+ubZPM3k8Y0T3reZpVmN+pd27opvHqSSTDm+MME7azPtW/TgNBnL5482Ak+IVz3MAn9mgtye04vsRQDoq/wKJWwo9X2L8owAAAABJRU5ErkJggg==',
+	stop = d_ + 'AndJREFUWEfNlz9oU1EUxr9z09wUBNd2qC8GlPdiRQQHR3VQ8Q84KK4ddHDRwcGCDraDRR3TxaEOXcWpVAUnwUVBQdD0JbQQ89qhXQtCc5O8I/clLzSveU1qam7feu873++cc8+55xIMf7RXfXds6LxIiIvwacQnHtX/C6Z1CN6o1XlhfK36dS82ewIopIczzP6EAG4xMN5F4DsDi0Ri3ilvlbrB7AqwbMkTPvgegyYAHI4YUwQsM+ADsAHIyPomgecF6NVxTy3FgcQCNMTxJvSYgRUG5oiwMsRwo0YLmZSNGmwQOwx+SKARLUpAXgC34yA6AuwU59lhIWcyv/+sdwupXg9g6pwDcKkbxA6AqDgRXbXLlQ+9CEf3FCz5CMCL3SDaAKLijqfT3P9XsCTHQbQJFK1kjkH3m5KTjqde9i8PFNOpK8z8vgHBs7ZXfRDabQHoUgP7P5qn/aPjqcv7IR7acK1kjhrObYLE6bBEWwCuJacIeMrgDUqIc06pUtxPgNLRQ6NbfvUzAccImLI9Nd1MS0OmYMlvAM4AiA29huwFKuupjvuWLDkpgOe6NG1PnWwB5MeSZxOCvgTGmW44q5WFTkJhlHaDYGA6DsBNy5vEeBvI+P6F7FrtU5CCYlo+Y8bjwHCCnLjw9wugq6wO5APPCTN2WT1pABxJzTHxHQDK8VQqzsN+AZqprui2TUyv7dXK3QDAteQiAdcA/HQ8dep/AhQt+Uu3dwbeZT11/WAAGE+B8UNovAyNN6JmJQysFW9vVgfnMgoaksnrWAMYH0g6QQx0JAtbsNGhNB5igGN5O4Shh8n2G9HY06zjVGTicdrLHPive/4CfIfnMFwwuEwAAAAASUVORK5CYII=';
+
+export default {
+	// components: { fab },
+	data() {
+		return {
+			wid: null,
+			sysInfo: uni.getStorageSync('sysInfo'),
+			winH: 0,
+			stH: 0,
+			kml: {children:[]},
+			tmt: 0,
+			tbl: false,
+			cps: [],
+			way: {},
+			minDist: 60,
+			
+			amap: null,
+			mapHeight: 0,
+			center: [121,30],  //121.53537, 29.64611
+			scale: 15,
+			point: [],
+			line: [],
+			onRec: false,
+			puase: false,
+			tim: {H:0, M:0, S:0, MS:0},
+			nav: {line:[], point:[]}, // 基础
+			rec: {point:[],coord:[],t:{},info:{}},
+			rLine: [{width:8,arrowLine:true,points:[]}],
+			
+			timer: null,
+			lock: false,
+			
+			//fab
+			process: 0,
+			rightDrawer: false,
+			
+			isShow: false,
+			
+			content: [
+				{
+					iconPath: play,
+					selectedIconPath: play,
+					text: '继续',
+					textColor: '#8fc42f',
+					active: false,
+					type: 'continue'
+				},
+				{
+					iconPath: stop,
+					selectedIconPath: stop,
+					text: '长按结束',
+					textColor: '#f9081f',
+					active: false,
+					type: 'end'
+				}
+			]
+		}
+	},
+	computed: {
+		lines() {
+			return [...this.nav.line, ...this.line, ...this.rLine]
+		},
+		points() {
+			return [...this.nav.point, ...this.point]
+		},
+		
+		
+		recordStyle() {
+			if (this.isShow && this.process) {
+				this.CustomBar = this.sysInfo.statusBarHeight + 50
+			} else {
+				this.CustomBar = this.sysInfo.statusBarHeight + 44
+			}
+			let style = {
+				paddingTop: this.sysInfo.statusBarHeight + 'px',
+				height: this.CustomBar + 'px'
+			};
+			return style
+		}
+	},
+	async onLoad({v}) {
+		
+		this.winH = this.sysInfo.windowHeight
+		this.stH = this.sysInfo.statusBarHeight
+		this.mapHeight = this.winH
+		
+		if(v) {
+			let { kml, keepRec=0, tmt=0 } = zz.getParam(v)
+			this.kml = kml
+			this.tmt = tmt
+			for (let s of kml.children) {
+				if(s.t1==1) {
+					this.way = s
+					this.line.push(createEle(s,1))
+				}
+				if(s.t1==2) {
+					if(tmt) this.cps.push(s)
+					this.point.push(createEle(s,1))
+				}
+			}
+			
+			//设定地图center
+			if(this.point.length || this.line.length) {
+				let p = this.point[0]
+				if(!p) p = this.line[0].points[0]
+				this.center = [p.longitude, p.latitude]
+			}
+			
+			if(keepRec) {
+				return this.start(1)
+			}
+		} else {
+			let {coord} = await getLocation('gcj02')
+			this.center = coord
+		}
+		//是否赛事
+		if(this.tmt) {
+			// this.start()
+		}else{
+			zz.req({$fn:'sync'+ zz.rndInt(), $url:'/user/rec/sync',get:1}).then(e=>{
+				if(e&&(e.rec.point.length||e.rec.coord.length)&&!uni.getStorageSync('nav_rec'+this.tmt)) {
+					uni.setStorageSync('nav_rec'+this.tmt, e.rec)
+					uni.setStorageSync('nav_T_tim'+this.tmt, [e.tim.MS, e.tim.S, e.tim.M, e.tim.H])
+				}
+			})
+		}
+		await this.around(this.center)
+	},
+	onReady() {
+		this.amap = uni.createMapContext('amap', this)
+	},
+	async onShow() {
+		let poi = uni.getStorageSync('nav_poi')
+		if (poi) {
+			uni.removeStorageSync('nav_poi')
+			let idx = this.rec.point.findIndex(e=>e._id==poi._id)
+			if(idx==-1) {
+				this.rec.point.push(poi)
+				this.point.push(createEle(poi))
+				this.fly(poi.coord)
+			} else {
+				this.rec.point.splice(idx,1,poi)
+				this.point.splice(this.point.findIndex(e=>e.id==poi._id),1,createEle(poi))
+			}
+			this.setRec()
+			sync.go()
+		}else{
+			sync.sleep = false
+			sync.stop()
+		}
+		this.checkPermission()
+	},
+	onHide() { 
+		// sync.sleep = true
+		sync.stop()
+		// clearInterval(this.timer)
+	},
+	onBackPress() { return this.onRec },
+	methods: {
+		async onchg(e){ this.lock = false; on.call(this) },
+		async around(c){
+			if(!this.tmt) {
+				this.cps = await comm.around(c)
+			}
+		},
+		async onLoc(ct,c){
+			if(!c){
+				uni.showLoading()
+				let {coord} = await getLocation('gcj02')
+				uni.hideLoading()
+				c = coord
+				uni.setStorageSync('cur_loc_gcj02', c)
+			}
+			if(ct) this.fly(c)
+			this.lock = true
+		},
+		fly(c,z=17){
+			try{
+				this.amap.moveToLocation({
+					longitude: c[0],
+					latitude: c[1],
+					success: (e)=>{
+						setTimeout(()=>{
+							this.scale = z
+						}, 333)
+					}
+				})
+			}catch(e){
+				//TODO handle the exception
+				console.error('fly.err', e);
+			}
+		},
+		
+		stop(){
+			clearInterval(this.timer)
+			let rec = this.rec
+			
+			rec.info = calData(rec.coord)
+			this.setRec()
+			
+			// locationModule.stopLocation()
+			plus.geolocation.clearWatch(this.wid)
+			if (this.sysInfo.platform == 'android') {
+				KeepAliveModule.stopKeepAlive({})
+			}
+			
+			if (rec.coord.length<10 && !rec.point.length) {
+				this.onRec = false
+				this.$scope.$getAppWebview().setStyle({'popGesture':'close'})
+				return zz.modal('本次记录太短了！')
+			}
+			
+			sync.stop()
+			uni.showLoading({
+				title:'正在保存 ...',
+				mask:true
+			})
+			setTimeout(()=> {
+				uni.hideLoading()
+				// uni.redirectTo({ url: `/pages/nav/save?v=${encodeURI(JSON.stringify({tmt: this.tmt, rec}))}` })
+				// zz.href('/pages/nav/save',{tmt: this.tmt, rec}, 1, null, 'redirectTo')
+				zz.href('/pages/nav/save',{tmt: this.tmt, rec})
+			}, 3333)
+		},
+		
+		clock(){
+			let tim = this.tim
+			this.timer = setInterval(()=>{
+			  tim.MS += 1000
+			   if(tim.MS >= 1000) {
+					tim.MS = 0
+					tim.S += 1
+			   }
+			   if(tim.S >= 60) {
+					tim.S = 0
+					tim.M += 1
+			   }
+			   if(tim.M >= 60) {
+					tim.M = 0
+					tim.H += 1
+			   }
+			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
+			}, 1000)
+		},
+		async start(keepRec=0){
+			let pt = (e) => { return {longitude: e[0], latitude: e[1]} },
+				init = () => {
+					uni.removeStorageSync('nav_rec'+this.tmt)
+					sync.add({$url:'/user/rec/sync',init:1,startTime:rec.startTime})
+				},
+				tim = {H:0, M:0, S:0, MS:0},
+				rec = {
+					ct: 'gcj02',
+					startTime: zz.now(),
+					stopTime: 0,
+					endTime: 0,
+					t: {},
+					point:[],
+					coord:[]
+				},
+				say = () => {
+					if (tim.H && !rec.t['t'+tim.H]) {
+						rec.t['t'+tim.H] = 1
+						delete rec.t['t'+(tim.H-1)]
+						tts.speak('您已运动' + tim.H + '小时，累计距离'+(rec.info.len<1000?rec.info.len+'米':rec.info.len/1000+'公里')+'，上升' + rec.info.up + '米，下降' + rec.info.down + '米')
+					}
+					if (rec.info.len > 980) {
+						for (var i = 0; i < 12; i++) {
+							let g = i + rec.info.len
+							if (g % 1000 == 0 && !rec.t['l'+g]) {
+								rec.t['l'+g] = 1
+								delete rec.t['l'+(g-1)]
+								let d = calData(rec.point)
+								tts.speak('您已运动' + (g / 1000) + '公里，累计爬升' + rec.info.up + '米，下降' + rec.info.down + '米')
+								break
+							}
+						}
+					}
+				}
+			
+			// 安卓设备需要主动开启后台定位
+			if (this.sysInfo.platform == 'android') {
+				if(!KeepAliveModule.isNotificationEnabled()) {
+					const [_, ask] = await uni.showModal({
+						title: '提示',
+						content: '确保轨迹持续记录，请开启系统通知！',
+						confirmText: '去设置',
+						showCancel: false
+					})
+					return KeepAliveModule.openNotifySetting()
+				}
+				
+				KeepAliveModule.inBatteryWhiteList((ret) => {
+					modal.toast({
+						message: ret,
+						duration: 1.5
+					});
+				})
+				
+				let enblebk = uni.getStorageSync('enableBatteryBackground')||0
+				if(enblebk<3) {
+					const [_, ask] = await uni.showModal({
+						title: '提示',
+						content: '使用轨迹持续记录，请开启应用耗电管理设置中的"允许完全后台行为"',
+						confirmText: '去设置',
+						cancelText: '我已设置' + (enblebk>3?',不再提示':'')
+					})
+					enblebk++ 
+					uni.setStorageSync('enableBatteryBackground',enblebk)
+					if (ask.confirm) {
+						KeepAliveModule.jumpBatterySetting({})
+					}
+				}
+				
+				KeepAliveModule.startKeepAlive({
+					showNotification:true,
+					notificationTitle:"轨迹持续记录中",
+					notificationText:"后台运行中",
+					runModel:1,//0-省电模式,1-流氓模式
+					intervalTime: 5000,
+				})
+			}
+			
+			// 查询本地是否有未完成的轨迹记录
+			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
+			if (nav_rec) {
+				const keepGoing = ()=>{
+					Object.assign(rec, nav_rec)
+					
+					if(rec.ct == 'wgs84') {
+						for (let s of rec.point) { s.coord = trans(s.coord) }
+						rec.coord = trans(rec.coord)
+						rec.ct = 'gcj02'
+						this.setRec()
+					}
+					for (let s of rec.point) {
+						this.point.push(createEle(s))
+					}
+					for (let s of rec.coord) {
+						this.rLine[0].points.push(pt(s))
+					}
+					
+					let T = uni.getStorageSync('nav_T_tim'+this.tmt)
+					tim.MS = T[0]
+					tim.S = T[1]
+					tim.M = T[2]
+					tim.H = T[3]
+				}
+				
+				if(keepRec){
+					keepGoing()
+				} else {
+					if(zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
+						init()
+					}else{
+						const [_, res] = await uni.showModal({
+							title: "是否继续上次轨迹记录?",
+							content: "取消后，上次记录将会被删除！"
+						})
+						if (res.confirm) {
+							keepGoing()
+						} else { //删除缓存和数据库
+							init()
+						}
+					}
+				}
+			} else { //新建
+				init()
+			}
+			
+			if(this.cps.length && !this.rLine[1]) {
+				this.rLine[1] = {
+								weight: 1,
+								color: '#00ff7f',
+								dottedLine: true,
+								points: []
+							}
+							// pt(trans(this.cps[0].coord))
+			}
+			
+			rec.kmlId = this.kml._id || 0
+			rec.tmt = this.tmt
+			this.tim = tim
+			this.rec = rec
+			this.clock()
+			this.onRec = true
+			
+			if(this.sysInfo.platform == 'ios') this.$scope.$getAppWebview().setStyle({'popGesture':'none'}) //ios有效
+			
+			if(!rec.t['0'] && !keepRec) {
+				rec.t['0'] = 1
+				tts.speak('轨迹记录已开始')
+			}
+			
+			
+			this.wid = plus.geolocation.watchPosition(_p=>{
+				// console.log(sync.sleep,'watchPosition====>', _p)
+				let cd = [_p.coords.longitude, _p.coords.latitude, _p.coords.altitude||0],
+					c1 = [...trans(cd), _p.timestamp || zz.now(), fixNum(_p.coords.speed||0,2)],
+					line = this.rLine[0],
+					size = rec.coord.length
+				
+				if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
+				uni.setStorageSync('cur_loc_gcj02', c1)
+				if(keepRec||!size) { this.onLoc(true,c1) }
+				
+				//保持地图中心
+				if (this.lock) {
+					this.fly(c1,18+(size%1==0?0:0.01))
+				}
+				
+				if (!this.puase) {
+					const keepSync = (len) =>{
+						
+						// 刷新附近cps
+						if((!len||len%77==0) && !rec.t['y'+len]) {
+							rec.t['y'+len] = 1
+							delete rec.t['y'+(len-77)]
+							comm.on(cd)
+						}
+						// 更新打卡点距离
+						if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
+							rec.t['x'+len] = 1
+							delete rec.t['x'+(len-55)]
+							this.around(cd)
+						}
+						// console.log('keepSync', len);
+						// 打卡提醒
+						let cps = this.cps
+						if((!len||len%9==0) && !rec.t[len] && cps.length) {
+							rec.t[len] = 1
+							delete rec.t[len-9]
+							
+							toDist(cd, cps, this.tmt? this.way.coord:null)
+							cps.sort(zz.compare('dist'))
+							
+							//找未扫过的最近的一个
+							const getUnscaned=(log,i=0)=>{
+								let scaned = log[cps[i]._id]
+								if (!scaned || (zz.now() - scaned[scaned.length-1]) > 1000*60*60*24) {
+									return cps[i]
+								} else {
+									i++
+									if(i<cps.length) return getUnscaned(log,i)
+								}
+							}
+							
+							let p = getUnscaned(uni.getStorageSync('user_scan_log')||{temp:[]})
+							
+							// console.log(p,'checkcps .............',cps,p)
+							if(p) {
+								this.cp = p
+								if(p.dist <= 500) {
+									this.rLine[1].points[1] = pt(trans(p.coord))
+								} else {
+									if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
+								}
+								
+								//显示附件打卡点
+								if(p.dist <= this.minDist) {
+									this.point.push(createEle(p,1, icon[90]))
+									if(!rec.t[p._id]) {
+										rec.t[p._id] = true
+										tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
+									}
+								}
+							}
+							
+							// 超出距离删除打卡点
+							for (let i = 0; i < this.point.length; i++) {
+								let x = this.point[i].s
+								if((x.t2==28 || x.t2==29) && dist(cd,x.coord)>500) {
+									this.point.splice(i,1)
+									break
+								}
+							}
+						}
+						
+						// 同步服务器数据
+						if(len&&len%10==0&&!rec.t['z'+len]) {
+							rec.t['z'+len] = 1
+							delete rec.t['z'+(len-10)]
+							let task = {$url: '/user/rec/sync', coord:[], len, ct: rec.type, tim: this.tim, stopTime: rec.stopTime}
+							for (var i = (len-10); i < len; i++) {
+								task.coord.push(rec.coord[i])
+							}
+							sync.add(task)
+						}
+					}
+					
+					
+					
+					if (!size) {
+						rec.coord.push(c1)
+						line.points.push(pt(c1))
+						keepSync(0)
+					}else{
+						let c2 = rec.coord[size-1],
+							len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
+						
+						//大于6m 小于60m/每秒 判断有效
+						if(len>=6 && (len/((c1[3]-c2[3])*1000) < 60)) {
+							rec.coord.push(c1)
+							line.points.push(pt(c1))
+							
+							// 去除漂移点
+							if (size > 2) {
+								let r1 = rec.coord[size - 3],
+									r2 = rec.coord[size - 2],
+									r3 = rec.coord[size - 1],
+									
+									b1 = bearing(r2, r1),
+									b2 = bearing(r2, r3)
+													
+								if (~~Math.abs(b1 - b2) < 15) {
+									rec.coord.splice(size - 2, 1)
+									line.points.splice(size - 2, 1)
+								}
+								// console.info('去除漂移------1',b1,b2, ~~Math.abs((b1-b2)))
+							}
+						}
+						keepSync(rec.coord.length)
+					}
+					rec.info = calData(rec.coord)
+					say()
+					this.setRec()
+					// console.info(rec)
+				}
+			}, e =>{
+				console.log('watchPosition.err',e);
+				zz.toast('GPS定位失败，信号弱！')
+			},{
+				provider: 'system',
+				coordsType: 'wgs84',
+				geocode: false,
+				maximumAge: 10000,
+				enableHighAccuracy: true
+			})
+			
+			// locationModule.startLocation({
+			// 		locationMode: 'Device_Sensors',
+			// 		intervalTime: 5000,
+			// 		distanceFilter: 5,
+			// 		notifyTip: '轨迹记录中',
+			// 		notifyTitle: '环浙步道',
+			// 		sysName: '环浙步道'
+			// 	}, (xiaoming)=>{
+			// 		console.log('xiaoming ------------————————>',xiaoming);
+			// 		if (xiaoming.success) {
+			// 			let _p = xiaoming.data,
+			// 				c1 = [fixNum(_p.longitude), fixNum(_p.latitude), ~~_p.altitude||0, _p.timestamp || zz.now(), fixNum(_p.speed||0,2)],
+			// 				line = this.rLine[0],
+			// 				size = rec.coord.length
+							
+			// 			if(this.rLine[1]) this.rLine[1].points[0] = pt(c1)
+			// 			uni.setStorageSync('cur_loc_gcj02', c1)
+			// 			if(keepRec||!size) { this.onLoc(true,c1) }
+						
+			// 			//保持地图中心
+			// 			if (this.lock) {
+			// 				this.fly(c1,18+(size%1==0?0:0.01))
+			// 			}
+						
+			// 			//保持地图中心
+			// 			if (this.lock) this.amap.moveToLocation({ longitude: c1[0], latitude: c1[1] })
+			// 			if (!this.puase) {
+			// 				const keepSync = (len) =>{
+								
+			// 					// 刷新附近cps
+			// 					if((!len||len%77==0) && !rec.t['y'+len]) {
+			// 						rec.t['y'+len] = 1
+			// 						delete rec.t['y'+(len-77)]
+			// 						comm.on(trans(c1, 'gcj02towgs84'))
+			// 					}
+			// 					// 更新打卡点距离
+			// 					if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
+			// 						rec.t['x'+len] = 1
+			// 						delete rec.t['x'+(len-55)]
+			// 						this.around(trans(c1, 'gcj02towgs84'))
+			// 					}
+			// 					console.log('keepSync', len);
+			// 					// 打卡提醒
+			// 					let cps = this.cps
+			// 					if((!len||len%9==0) && !rec.t[len] &&cps.length) {
+			// 						rec.t[len] = 1
+			// 						delete rec.t[len-9]
+									
+			// 						toDist(trans(c1, 'gcj02towgs84'), cps, this.tmt? this.way.coord:null)
+			// 						cps.sort(zz.compare('dist'))
+									
+			// 						//找未扫过的最近的一个
+			// 						const getUnscaned=(log,i=0)=>{
+			// 							let scaned = log[cps[i]._id]
+			// 							if (!scaned || (zz.now() - scaned[scaned.length-1]) > 1000*60*60*24) {
+			// 								return cps[i]
+			// 							} else {
+			// 								i++
+			// 								if(i<cps.length) return getUnscaned(log,i)
+			// 							}
+			// 						}
+									
+			// 						let p = getUnscaned(uni.getStorageSync('user_scan_log')||{temp:[]})
+									
+			// 						console.log(p,'checkcps .............',cps,p)
+			// 						if(p) {
+			// 							this.cp = p
+			// 							if(p.dist <= 500) {
+			// 								this.rLine[1].points[1] = pt(trans(p.coord))
+			// 							} else {
+			// 								if(this.rLine[1].points[1]) this.rLine[1].points[1].splice(1,1)
+			// 							}
+			// 							if(p.dist <= this.minDist) {
+			// 								//显示打卡点
+			// 								this.point.push(createEle(p,1, icon[90]))
+											
+			// 								if(!rec.t[p._id]) {
+			// 									rec.t[p._id] = true
+			// 									tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
+			// 								}
+			// 							}
+			// 						}
+			// 						// 超出距离删除打卡点
+			// 						for (let i = 0; i < this.point.length; i++) {
+			// 							let x = this.point[i].s
+			// 							if((x.t2==28 || x.t2==29) && dist(cd,x.coord)>500) {
+			// 								this.point.splice(i,1)
+			// 								break
+			// 							}
+			// 						}
+			// 					}
+								
+			// 					// 同步服务器数据
+			// 					if(len&&len%10==0&&!rec.t['z'+len]) {
+			// 						rec.t['z'+len] = 1
+			// 						delete rec.t['z'+(len-10)]
+			// 						let task = {$url: '/user/rec/sync', coord:[], len, tim: this.tim, stopTime: rec.stopTime}
+			// 						for (var i = (len-10); i < len; i++) {
+			// 							task.coord.push(rec.coord[i])
+			// 						}
+			// 						sync.add(task)
+			// 					}
+			// 				}
+							
+			// 				if (!size) {
+			// 					this.onLoc(true,c1)
+			// 					rec.coord.push(c1)
+			// 					line.points.push(pt(c1))
+			// 					keepSync(0)
+			// 				}else{
+			// 					let c2 = rec.coord[size-1],
+			// 						len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
+								
+			// 					//大于6m 小于60m/每秒 判断有效
+			// 					if(len>=6 && (len/((c1[3]-c2[3])*1000) < 60)) {
+			// 						rec.coord.push(c1)
+			// 						line.points.push(pt(c1))
+									
+			// 						// 去除漂移点
+			// 						if (size > 2) {
+			// 							let r1 = rec.coord[size - 3],
+			// 								r2 = rec.coord[size - 2],
+			// 								r3 = rec.coord[size - 1],
+											
+			// 								b1 = bearing(r2, r1),
+			// 								b2 = bearing(r2, r3)
+															
+			// 							if (~~Math.abs(b1 - b2) < 15) {
+			// 								rec.coord.splice(size - 2, 1)
+			// 								line.points.splice(size - 2, 1)
+			// 							}
+			// 							console.info('去除漂移------1',b1,b2, ~~Math.abs((b1-b2)))
+			// 						}
+			// 					}
+			// 					keepSync(rec.coord.length)
+			// 				}
+			// 				rec.info = calData(rec.coord)
+			// 				say()
+			// 				this.setRec()
+			// 				console.info(rec)
+			// 			}
+			// 		} else {
+			// 			zz.toast('GPS定位失败，信号弱！')
+			// 		}
+			// 	}
+			// )
+		},
+		
+		async controltap(t) {
+			if(t=='back') {
+				uni.navigateBack()
+				
+			}
+			if(t=='scan') {
+				let p = await scan()
+				if(p) {
+					if(this.rLine[1]) this.rLine.splice(1,1)
+					
+					this.rec.t[p._id] = 1
+					this.point.splice(this.point.findIndex(x => x.id == p._id), 1)
+					this.point.push(createEle(p,1))
+					this.fly(trans(p.coord))
+				}
+			}
+			if(t=='position') {
+				this.onLoc(1)
+			}
+			if(t=='v' || t=='camera') {
+				let e = t=='v'? await zz.chooseVideo({}) : await zz.chooseImage({})
+				if(e) {
+					uni.showLoading()
+					let {coord} = await getLocation('gcj02')
+					uni.hideLoading()
+					
+					let	poi = {
+								_id: uniqId(),
+								name: '',
+								t1: 2,
+								t2: t=='v'? 60:50,
+								coord,
+								desc: '',
+								time: zz.time2Date(),
+								imgs: t=='v'? []:e,
+								video: t=='v'? e:null
+							}
+					zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
+				}
+			}
+		},
+		async markertap(e) {
+			let rec = this.rec,
+				point = this.point,
+				idx = rec.point.findIndex(x => x._id == e.detail.markerId)
+				
+			if(idx!=-1) {
+				let poi = rec.point[idx]
+				const [_,r] = await uni.showActionSheet({ itemList: ['编辑', '删除'] })
+				if(r) {
+					// 编辑
+					if (r.tapIndex == 0) {
+						zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
+					}
+					
+					//删除
+					if (r.tapIndex == 1) {
+						const [_,m] = await uni.showModal({
+							title: '确认要删除吗？',
+							content: '删除将无法恢复！'
+						})
+						if (m.confirm) {
+							for (let filePath of poi.imgs) {
+								zz.removeFile(filePath)
+							}
+							if(poi.video) {
+								zz.removeFile(poi.video.tempFilePath)
+							}
+							rec.point.splice(idx, 1)
+							point.splice(point.findIndex(x => x.id == e.detail.markerId), 1)
+							this.setRec()
+							sync.add({$url:'/user/rec/sync',xp:[poi._id]})
+						}
+					}
+				}
+			}else{
+				//非采集坐标
+			}
+		},
+		mapTap(e) {
+			this.lock = false
+		},
+		onPuase(e){
+			this.puase = e
+			let r = this.rec
+			if(e){
+				r.name = zz.time2Date()
+				r.endTime = zz.now()
+				clearInterval(this.timer)
+				tts.speak('记录已暂停')
+			} else {
+				r.stopTime += zz.now() - r.endTime
+				this.clock()
+				tts.speak('记录已恢复')
+			}
+			this.setRec()
+		},
+		changeMap(e) {
+			// locationModule.stopLocation()
+			plus.geolocation.clearWatch(this.wid)
+			if (this.sysInfo.platform == 'android') {KeepAliveModule.stopKeepAlive({})}
+			this.setRec()
+			zz.href('/pages/nav/nav'+(this.amap?'H5':'APP'), {keepRec:1, kml:this.kml}, 0, null, 'redirectTo')
+		},
+		_2bl(e){
+			this.tbl = e
+		},
+		share(e) {
+			
+		},
+		info() {
+			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
+		},
+		setRec(){
+			uni.setStorageSync('nav_rec'+this.tmt, this.rec)
+		},
+		async checkPermission() {
+			let isIos = permision.isIOS,
+				status
+			
+			if(isIos) {
+				status = await permision.requestIOS('location')
+				if (status == 3) {
+					console.log("手机系统的定位已经打开")
+				} else {   
+					console.log("手机系统的定位没有打开");  
+					uni.showModal({
+						content: "“环浙步道”在记录轨迹时需要使用后台持续定位功能\n请将位置访问设为“始终”模式",
+						confirmText: '去设置',
+						// showCancel: false,
+						success(res) {
+							if (res.confirm) {
+								permision.gotoAppSetting()
+							}
+						}
+					})
+				}
+			} else {
+				status = await permision.requestAndroid('android.permission.ACCESS_FINE_LOCATION');
+				
+				if (status === null || status === 1) {
+					status = 1;
+				} else if (status === 2) {
+					uni.showModal({
+						content: '请开启手机定位功能!',
+						confirmText: '去设置',
+						// showCancel: false,
+						success(res) {
+							if (res.confirm) {
+								KeepAliveModule.toOpenGps()
+							}
+						}
+					})
+				} else if (status.code) {
+					uni.showModal({
+						content: status.message
+					});
+				} else {
+					uni.showModal({
+						content: '请开启“环浙步道”需要定位权限',
+						confirmText: '去设置',
+						success(res) {
+							if (res.confirm) {
+								permision.gotoAppSetting();
+							}
+						}
+					});
+				}
+			}
+			return status
+		},
+		
+		
+		
+		
+		
+		
+		
+		_onClick() {
+			this.isShow = !this.isShow;
+			this.onPuase(this.isShow);
+		},
+		onStartTouch(index, item) {
+			if (index == 1) {
+				this.touch = setInterval(() => {
+					// sync.sleep = true
+					this.process += 2
+					if (this.process >= 102) {
+						clearInterval(this.touch)
+						this.isShow = false
+						this.process = 0
+						this.stop()
+					}
+				}, 33)
+			} else {
+				this.end()
+			}
+		},
+		close() {
+			this.isShow = false;
+			this.onPuase(this.isShow);
+			this.end();
+		},
+		/**
+		 * 按钮点击事件
+		 */
+		_onItemClick(index, item) {
+			if (index == 0) this.isShow = false;
+			this.onPuase(this.isShow);
+			this.end();
+		},
+		end() {
+			sync.sleep = false
+			this.process = 0
+			clearInterval(this.touch)
+		},
+		// tools() { 
+		// 	this.$refs.showRight.open()
+		// },
+		// closeDrawer(){ this.$refs.showRight.close() },
+		// changeMap(){ this.$emit('changeMap') },
+		// share(){ this.$emit('share') },
+		// _2bl(){ this.tbl=!this.tbl; this.$emit('tbl', this.tbl) },
+		
+	}
+};
+</script>
+
+
+<style lang="scss">
+	.start-f {
+		position: fixed;
+		bottom: 80rpx;
+		left: 0;
+		right: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		background-color: rgba(255, 255, 255, 0);
+		z-index: 1;
+	}
+	
+	.start-btn-name {
+		font-size: 14px;
+		font-weight: 500;
+		color: #ffffff;
+	}
+	.start-btn {
+		width: 400rpx;
+		height: 80rpx;
+		background-color: #0081ff;
+		box-shadow: 0 30upx 20upx rgba(0, 0, 0, 0.2);
+		display: flex;
+		border-radius: 40rpx;
+		align-items: center;
+		justify-content: center;
+		flex-direction: row;
+	}
+		
+	.back-img {
+		position: fixed;
+		left: 6px;
+		width: 42px;
+		height: 42px;
+	}
+	
+$uni-shadow-base: 0 1px 5px 2px
+	rgba(
+		$color: #000000,
+		$alpha: 0.3
+	) !default;
+
+.uni-fab {
+	position: fixed;
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	justify-content: flex-start;
+	align-items: flex-start;
+	z-index: 10;
+	border-radius: 10px;
+	// box-shadow: $uni-shadow-base;
+	// width: 220px;
+}
+
+.uni-cursor-point {
+	/* #ifdef H5 */
+	cursor: pointer;
+	/* #endif */
+}
+
+.uni-fab--leftBottom {
+	left: 0px;
+	bottom: 90px;
+	// bottom: 30px;
+	/* #ifdef H5 */
+	left: calc(15px + var(--window-left));
+	bottom: calc(30px + var(--window-bottom));
+	/* #endif */
+	// padding: 10px;
+}
+
+.uni-fab__circle {
+	position: fixed;
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	justify-content: center;
+	align-items: center;
+	width: 55px;
+	height: 55px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	z-index: 11;
+	// opacity: 0.5;
+	// box-shadow: $uni-shadow-base;
+}
+
+.uni-fab__circle--leftBottom {
+	left: 0px;
+	bottom: 90px;
+	/* #ifdef H5 */
+	left: calc(0px + var(--window-left));
+	bottom: calc(30px + var(--window-bottom));
+	/* #endif */
+}
+
+.fab-circle-icon {
+	transform: rotate(0deg);
+	transition: transform 0.33s;
+	font-weight: 200;
+}
+
+.uni-fab__content {
+	/* #ifndef APP-NVUE */
+	box-sizing: border-box;
+	display: flex;
+	/* #endif */
+	flex-direction: row;
+	border-radius: 10px;
+
+	overflow: hidden;
+	transition-property: width, height;
+	transition-duration: 0.33s;
+	width: 95px;
+	// border-color: #dddddd;
+	width: 420rpx;
+	background-color: #ffffff;
+}
+.uni-fab__content--left {
+	justify-content: flex-start;
+}
+
+.uni-fab__item {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 160rpx;
+	height: 55px;
+	opacity: 0;
+	transition: opacity 0.33s;
+	border-left: 3upx solid #eee;
+}
+
+.uni-fab__item--active {
+	opacity: 1;
+}
+
+.uni-fab__item-image {
+	width: 20px;
+	height: 20px;
+	margin-bottom: 4px;
+}
+
+.uni-fab__item-text {
+	color: #ffffff;
+	font-size: 12px;
+	line-height: 12px;
+	margin-top: 2px;
+}
+
+.uni-fab__item--first {
+	width: 110rpx;
+}
+
+.record {
+	width: 750rpx;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	padding: 24rpx 0rpx 16rpx 0rpx;
+	// background-color:#000000;
+	// background: linear-gradient(to bottom, #000000 90%, rgba(255, 255, 255, 0.2) 60%);
+	background-image: linear-gradient(to bottom, #3a5ba4, rgba(255, 255, 255, 0.01));
+}
+
+.record-title {
+	padding: 0rpx 12rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.padding{
+	padding: 10px 20px;
+} 
+</style>
+

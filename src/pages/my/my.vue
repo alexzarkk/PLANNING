@@ -1,5 +1,5 @@
 <template name="basics">
-<page-meta root-font-size="10px"></page-meta>
+
 	<view>
 		<view class="UCenter-bg">
 			<!--用户信息-->
@@ -8,15 +8,7 @@
 					<view class="margin-top-xs flex align-center padding-xl content" @tap="href('./wxLogin')">
 						<view class="cu-avatar radius"><text class="cuIcon-people"></text></view>
 						<view class="padding-left">
-							 <!-- #ifndef H5-ZLB -->
-                            <!-- #ifdef APP-PLUS || H5 -->
                             <text>注册/登录</text>
-                            <!-- #endif -->
-                            <!-- #endif -->
-
-                            <!-- #ifdef H5-ZLB -->
-                            <text>授权/登录</text>
-                            <!-- #endif -->
 						</view>
 						<view class="margin-left-xs cuIcon-right"></view>
 					</view>
@@ -80,11 +72,11 @@
 		</view>
 
 		<view class="bg-white" style="margin: 20rpx; padding: 28rpx 28rpx 40rpx;border-radius:8rpx ;">
-			<view style="color: #999999;font-size: 1.4rem;">常用功能</view>
+			<view style="color: #999999;font-size: 28rpx;">常用功能</view>
 			<view style="display: flex;align-items: center;flex-wrap: wrap;">
 				<view v-for="(item, index) in chydata" :key="index" style="width: 25%; text-align: center;margin: 32rpx 0 0;" @click="todetails(index)">
 					<view :class="item.icon" style="color: #0477B3;font-size: 50rpx;"></view>
-					<view style="color: #666666;font-size: 1.3rem;margin-top: 16rpx;">{{ item.name }}</view>
+					<view style="color: #666666;font-size: 26rpx;margin-top: 16rpx;">{{ item.name }}</view>
 				</view>
 			</view>
 		</view>
@@ -93,14 +85,14 @@
 			<view class="cu-list menu shadow-lg radius solid">
 				<view class="cu-item arrow" @tap="href('/pages/my/doc/privacy')">
 					<view class="content">
-						<text class="cuIcon-edit" style="color: #0477B3;font-size: 1.5rem;"></text>
-						<text class="text-grey" style="color: #666666; font-size: 1.3rem;">隐私政策</text>
+						<text class="cuIcon-edit" style="color: #0477B3;font-size: 30rpx;"></text>
+						<text class="text-grey" style="color: #666666; font-size: 26rpx;">隐私政策</text>
 					</view>
 				</view>
 				<view class="cu-item arrow" @tap="href('/pages/my/doc/protocol')">
 					<view class="content">
-						<text class="cuIcon-evaluate" style="color: #0477B3;font-size: 1.5rem;"></text>
-						<text class="text-grey" style="color: #666666;font-size: 1.3rem;">服务协议</text>
+						<text class="cuIcon-evaluate" style="color: #0477B3;font-size: 30rpx;"></text>
+						<text class="text-grey" style="color: #666666;font-size: 26rpx;">服务协议</text>
 					</view>
 				</view>
 			</view>
@@ -247,7 +239,7 @@ page {
 
 .color {
 	color: #333333;
-	font-size: 1.4rem;
+	font-size: 28rpx;
 	margin-top: 16rpx;
 }
 
@@ -263,7 +255,7 @@ page {
 	align-items: center;
 	background-color: rgba(255, 255, 255, 0.3);
 	justify-content: space-between;
-	font-size: 1rem;
+	font-size: 20rpx;
 	padding: 4rpx 10rpx;
 	border-radius: 20rpx;
 	margin-right: 20rpx;
@@ -331,17 +323,17 @@ page {
 }
 
 .nav-title {
-	font-size: 1.6rem;
+	font-size: 32rpx;
 	font-weight: 300;
 }
 
 .nav-title::first-letter {
-	font-size: 2rem;
+	font-size: 40rpx;
 	margin-right: 4rpx;
 }
 
 .nav-name {
-	font-size: 1.4rem;
+	font-size: 28rpx;
 	text-transform: Capitalize;
 	margin-top: 20rpx;
 	position: relative;
@@ -373,7 +365,7 @@ page {
 
 .nav-name::first-letter {
 	font-weight: bold;
-	font-size: 1.8rem;
+	font-size: 36rpx;
 	margin-right: 1px;
 }
 

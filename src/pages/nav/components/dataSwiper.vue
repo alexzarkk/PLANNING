@@ -72,7 +72,7 @@ export default {
             align-items: center;
             .title {
                 margin: 20rpx 0 20rpx 0;
-                font-size: 1.6rem;
+                font-size: 32rpx;
                 color: #222222;
             }
 
@@ -96,7 +96,7 @@ export default {
                     margin-bottom: 50rpx;
                 }
                 .copy {
-                    font-size: 2.4rem;
+                    font-size: 48rpx;
                     margin-bottom: 10rpx;
                     margin-left: 20rpx;
                 }

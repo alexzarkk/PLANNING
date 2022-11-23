@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+
     <!-- 急救救援信息 -->
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">救援信息</block></cu-custom>

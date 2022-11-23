@@ -9,7 +9,7 @@
  * 
 -->
 <template>
-    <page-meta root-font-size="10px"></page-meta>
+    
     <!-- <cu-custom bgColor="bg-ztsblue" :isBack="true"><block slot="content">个人主页</block></cu-custom> -->
     <view class="container">
         <!-- 顶部 -->
@@ -93,7 +93,7 @@
 
         <!-- <view class="bg-white solid-bottom" @click="openPage('/pages/my/social/pushDetails')">
                 <view class="flex align-end padding-left">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">28</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">28</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm padding-left"><text class="round bg-gray padding-lr margin-left text-bold">08:30:59</text></view>
@@ -108,7 +108,7 @@
 
             <view class="bg-white padding solid-bottom">
                 <view class="flex align-end">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">20</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">20</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm"><text class="round bg-gray padding-lr margin-left text-bold">15:30:59</text></view>
@@ -122,7 +122,7 @@
 
             <view class="bg-white padding solid-bottom">
                 <view class="flex align-end padding">
-                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 2.4rem; letter-spacing: 2px">20</text>
+                    <text class="text-xxl margin-right-xs text-bold" style="font-size: 48rpx; letter-spacing: 2px">20</text>
                     <text>2月</text>
                 </view>
                 <view class="margin-top-sm"><text class="round bg-gray padding-lr margin-left text-bold">15:30:59</text></view>
@@ -371,7 +371,6 @@ body {
         background-color: #ffffff;
         .background-image {
             position: relative;
-            // background-image: url('https://fhty.976m.org/bdfh/img/0%20(5).JPG');
             background-image: url('https://zts.5618.co/repo/bg/myBG.jpeg');
             background-size: 100% 100%;
             height: 420rpx;
@@ -388,7 +387,7 @@ body {
                 padding: 0 20rpx;
                 color: #ffffff;
                 z-index: 20;
-                font-size: 1.8rem;
+                font-size: 36rpx;
             }
 
             .name-box {
@@ -434,7 +433,7 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     .bottom-btn {
         // width: 300rpx;
-        font-size: 1.8rem;
+        font-size: 36rpx;
     }
 
     .send {

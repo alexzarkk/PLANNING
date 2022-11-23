@@ -30,7 +30,7 @@
 							<view class="progress-box flex-column" v-if="downloading">
 								<progress class="progress" border-radius="35" :percent="downLoadPercent"
 									activeColor="#3DA7FF" show-info stroke-width="10" />
-								<view style="width:100%;font-size: 1.4rem;display: flex;justify-content: space-around;">
+								<view style="width:100%;font-size: 28rpx;display: flex;justify-content: space-around;">
 									<text>{{downLoadingText}}</text>
 									<text>({{downloadedSize}}/{{packageFileSize}}M)</text>
 								</view>
@@ -467,7 +467,7 @@
 	}
 
 	.box-des {
-		font-size: 1.3rem;
+		font-size: 26rpx;
 		color: #000000;
 		line-height: 50rpx;
 	}
@@ -494,7 +494,7 @@
 	.content-button {
 		text-align: center;
 		flex: 1;
-		font-size: 1.5rem;
+		font-size: 30rpx;
 		font-weight: 400;
 		color: #FFFFFF;
 		border-radius: 40rpx;
