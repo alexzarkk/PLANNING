@@ -1,35 +1,34 @@
 <template>
     <view>
-		<home ref="home" v-if="hotList" v-show="PageCur == 'home'" :deptId="deptId" :hotList="hotList" :scrollTop="scrollTop" :user="user" @homeDone="homeDone"></home>
-        <planning ref="planning" v-if="trailData" v-show="PageCur == 'planning'" :deptId="deptId" :indexTrailData="trailData" :scrollTop="scrollTop" :user="user"></planning>
-        <planning-pub v-else ref="planningPub" :home="true" v-show="PageCur == 'planning'"></planning-pub>
+        <home ref="home" v-if="hotList" v-show="PageCur == 'home'" :deptId="deptId" :hotList="hotList" :scrollTop="pageScroll[0]" :user="user" @homeDone="homeDone"></home>
+        <planning ref="planning" v-if="trailData" v-show="PageCur == 'planning'" :deptId="deptId" :indexTrailData="trailData" :scrollTop="pageScroll[1]" :user="user"></planning>
+        <planning-pub v-else ref="planningPub" :home="true" v-show="PageCur == 'planning'" :scrollTop="pageScroll[1]"></planning-pub>
         <event ref="event" v-show="PageCur == 'event'" :user="user" :person="person" @personInfo="personInfo"></event>
         <me ref="me" v-show="PageCur == 'me'" :user="user" :person="person"></me>
-
         <view class="cu-bar tabbar bg-white shadow foot ">
 
-            <view class="action" @click="NavChange" data-cur="home">
+            <view class="action" @click="NavChange" data-cur="home" data-index="0">
                 <view class="cuIcon-cu-image">
                     <image :src="'/static/bar/discover' + [PageCur == 'home'? '' : '_'] + '.png'"></image>
                 </view>
                 <view :class="PageCur == 'home' ? 'text-ztsblue' : 'text-gray'">发现</view>
             </view>
 
-            <view class="action" @click="NavChange" data-cur="planning">
+            <view class="action" @click="NavChange" data-cur="planning" data-index="1">
                 <view class="cuIcon-cu-image">
                     <image :src="'/static/bar/nav' + [PageCur == 'planning'? '' : '_'] + '.png'"></image>
                 </view>
                 <view :class="PageCur == 'planning' ? 'text-ztsblue' : 'text-gray'">行程</view>
             </view>
 
-            <view class="action" @click="NavChange" data-cur="event">
+            <view class="action" @click="NavChange" data-cur="event" data-index="2">
                 <view class="cuIcon-cu-image">
                     <image :src="'/static/bar/event' + [PageCur == 'event'? '' : '_'] + '.png'"></image>
                 </view>
                 <view :class="PageCur == 'event' ? 'text-ztsblue' : 'text-gray'">活动</view>
             </view>
 
-            <view class="action" @click="NavChange" data-cur="me">
+            <view class="action" @click="NavChange" data-cur="me" data-index="3">
                 <view class="cuIcon-cu-image">
                     <image :src="'/static/bar/me' + [PageCur == 'me'? '' : '_'] + '.png'"></image>
                 </view>
@@ -37,9 +36,7 @@
             </view>
 
         </view>
-
-        <tui-scroll-top :scrollTop="scrollTop"></tui-scroll-top>
-
+        <tui-scroll-top :scrollTop="pageScroll[curTab]"></tui-scroll-top>
         <!-- <view class="load-progress" :class="loadProgress != 0 ? 'show' : 'hide'" :style="[{ top: CustomBar + 'px' }]">
 			<view class="load-progress-bar bg-green" :style="[{ transform: 'translate3d(-' + (100 - loadProgress) + '%, 0px, 0px)' }]"></view>
 			<view class="load-progress-spinner text-green"></view>
@@ -66,32 +63,31 @@ export default {
     },
     data() {
         return {
-            scrollTop:0,
+            scrollTop: 0,
             sysInfo: uni.getStorageSync('sysInfo'),
             enableReach: true, // 是否开启下拉刷新
             CustomBar: this.CustomBar,
             loadProgress: 0,
-
             PageCur: 'home',
-            // scrolled: 0,
-
+            curTab: 0,
             load: false,
             loadmore: false,
             nomore: false,
 
             data: [[], [], [], []],
             page: [{}, {}, {}, {}],
+            pageScroll: [0, 0, 0, 0],
 
-			
+
             deptId: '330213',  // 部门|地区id
             hotList: [],  // 首页数据
             trailData: null,  // planning页面使用的数据
 
 
             tab: '', //页面传参过来的
-           
-			user: {},
-			person: null,
+
+            user: {},
+            person: null,
         };
     },
     onLoad({ tab }) {
@@ -116,14 +112,14 @@ export default {
         this.personInfo()
     },
     methods: {
-		personInfo() {
-		    if (this.user) {
-				this.person = null
-		        this.zz.req({ $url: '/user/person/info' }).then(e => {
-		            this.person = e
-		        })
-		    }
-		},
+        personInfo() {
+            if (this.user) {
+                this.person = null
+                this.zz.req({ $url: '/user/person/info' }).then(e => {
+                    this.person = e
+                })
+            }
+        },
         async loadData(init) {
             let { deptId, region } = this.zz.getDept()
             if (init || this.deptId != deptId) {
@@ -147,7 +143,7 @@ export default {
                     regionData = [],
                     hotList = [],
                     tabIndex = 0
-					
+
                 await this.zz.req({ $url: 'public/trail/list', deptId: [deptId], status: 10, type: 60 }).then(list => {
                     for (let s of tStyle) { s.list = [] }
                     for (let k in region) {
@@ -170,7 +166,7 @@ export default {
                     this.$refs.home.dataLoaded()
                     if (list && list.length > 0) {
                         this.trailData = { trailData: list, regionData, hotList, tStyle }
-                        console.log("首页加载了trailData=================", this.trailData)
+                        // console.log("首页加载了trailData=================", this.trailData)
                         setTimeout(() => {
                             this.$refs.planning.loadData('init')
                         }, 500)
@@ -183,8 +179,22 @@ export default {
         homeDone() {
             // this.$refs.planning.loadData('init')
         },
+        // 切换页面
         NavChange(e) {
+            // console.log("切换页面=====", e)
+            this.curTab = Number(e.currentTarget.dataset.index)
             this.PageCur = e.currentTarget.dataset.cur
+            this.$nextTick(() => {
+                uni.pageScrollTo({
+                    scrollTop: this.pageScroll[this.curTab],
+                    duration: 1,
+                    success: (res) => {
+                        // console.log("滚动成功", res)
+                    },
+                    fail: () => {
+                    }
+                })
+            })
         },
         loading(e) {
             this.loadProgress += 3;
@@ -200,6 +210,10 @@ export default {
     },
     onBackPress() { return true }, //安卓有效
     onPageScroll: function (e) {
+        this.pageScroll[this.curTab] = e.scrollTop
+        this.$set(this.pageScroll, this.curTab, e.scrollTop)
+        // console.log("pageScroll==========", e)
+        // console.log("this.pageScroll[this.curTab]=======",this.pageScroll)
         this.scrollTop = e.scrollTop;
         // this.scrolled = e.scrollTop;
         // let _this = this;

@@ -3,10 +3,9 @@
 	"pages": [
 		{"path": "pages/share" },   //页面总入口
 		{"path": "pages/index"},
-		{"path": "pages/index/planningPub", "style":{ "enablePullDownRefresh": true, "backgroundColorTop": "#1d50a2" }},
-		
+		{"path": "pages/index/planningPub", "style":{ "enablePullDownRefresh": true, "backgroundColorTop": "#1d50a2" }}
 		// #ifdef APP-PLUS
-		{
+		,{  // pages数组禁止用逗号结尾，不然会报错
 			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
 			"style": {
 				"disableScroll": true,
@@ -24,7 +23,7 @@
 		// #endif
 	],
 	
-	"subPackages": [ 
+	"subPackages": [
 		//记录
 		{
 			"root": "pages/nav/",

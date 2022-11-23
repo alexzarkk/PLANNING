@@ -105,11 +105,13 @@ export default {
             immediate: true
         },
         scrollTop(newVal) {
+            // console.log(newVal, this.topHeight)
             if (newVal >= this.topHeight) {
                 setTimeout(() => {
                     this.isCanScroll = true
                 }, 100)
             } else {
+
                 this.isCanScroll = false
             }
         }
@@ -130,7 +132,7 @@ export default {
         resetHeight() {
             if (this.showMore) {
                 const len = this.stickyHeight.length
-                this.stickyHeightNumber = Number(this.stickyHeight.slice(0, len - 2))
+                this.stickyHeightNumber = Number(this.stickyHeight.slice(0, len))
                 // console.log("吸顶栏高度===",this.stickyHeightNumber)  138
                 const sysInfo = uni.getStorageSync('sysInfo')
                 uni.createSelectorQuery()

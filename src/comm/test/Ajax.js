@@ -29,7 +29,7 @@ export default function Ajax(data={},u='app',t=9999) {
 				
 			x.open('POST',api[u],true)
 			x.setRequestHeader("Content-type","application/json")
-			x.setRequestHeader("authorization", comm.getStorage('3AB0063_token'))
+			x.setRequestHeader("authorization", comm.getStorage('210B33A_token'))
 			x.setRequestHeader("clientinfo", JSON.stringify(comm.getStorage('clientInfo')))
 			x.send(JSON.stringify(data))
 			

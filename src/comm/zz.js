@@ -646,16 +646,16 @@ const zz = {
 
 	now() { return Date.now() },
 	setAcc(u) {
-		uni.setStorageSync('3AB0063_acc', u)
+		uni.setStorageSync('210B33A_acc', u)
 	},
-	getAcc() { return uni.getStorageSync('3AB0063_acc') },
+	getAcc() { return uni.getStorageSync('210B33A_acc') },
 	setToken(token) {
-		uni.setStorageSync('3AB0063_token', token)
+		uni.setStorageSync('210B33A_token', token)
 	},
-	getToken() { return uni.getStorageSync('3AB0063_token') },
+	getToken() { return uni.getStorageSync('210B33A_token') },
 	logOut() {
-		uni.removeStorageSync('3AB0063_acc')
-		uni.removeStorageSync('3AB0063_token')
+		uni.removeStorageSync('210B33A_acc')
+		uni.removeStorageSync('210B33A_token')
 	},
 	async setDept() {
 		let { deptId, dept } = this.getDept()

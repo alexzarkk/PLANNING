@@ -27,7 +27,7 @@ const comm = {
 			
 			x.open('POST', api[isDev]+(fn||'app'), true)
 			x.setRequestHeader("Content-type","application/json")
-			x.setRequestHeader("authorization", comm.getStorage('3AB0063_token'))
+			x.setRequestHeader("authorization", comm.getStorage('210B33A_token'))
 			x.setRequestHeader("clientInfo", JSON.stringify(comm.getStorage('clientInfo')))
 			x.send(param)
 			

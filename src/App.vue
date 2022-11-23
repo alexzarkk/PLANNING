@@ -59,7 +59,7 @@ export default {
                 comm.setStorage('clientInfo', {
                     OS: e.osName,
                     PLATFORM: e.uniPlatform || e.platform,
-                    APPID: e.appId || '__UNI__3AB0063',
+                    APPID: e.appId || '__UNI__210B33A',
                     deviceId: e.deviceId,
                     deviceModel: e.model
                 })
