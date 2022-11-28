@@ -10,7 +10,7 @@
                     <!-- 导航栏 -->
                     <view class="nav-bar" :style="{ paddingTop: statusBar * 2 + 'rpx', height: statusBar * 2 + 100 + 'rpx' }" :class="isNavActive ? 'bg-ztsblue' : ''">
                         <view class="flex align-center" @click="backPage">
-                            <text class="cuIcon-back"></text>
+                            <!-- <text class="cuIcon-back"></text> -->
                             <view v-if="userInfo&&isNavActive" class="margin-left">{{ userInfo.nickName }}</view>
                         </view>
                     </view>
