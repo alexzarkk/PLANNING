@@ -13,7 +13,7 @@
 					</view>
 				</view>
 		
-				<view class="action" @tap="openLocation(e)">
+				<!-- <view class="action" @tap="openLocation(e)">
 					<view class="flex flex-direction padding-tb-sm">
 						<button class="cu-btn round bg-red shadow sm">
 							<text class="cuIcon-forward margin-right-xs"></text>
@@ -21,7 +21,7 @@
 						</button>
 						<text class="text-gray text-xs margin-top-xs">地图查看/导航</text>
 					</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</view>

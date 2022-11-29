@@ -544,7 +544,10 @@
 					}
 				},
 				{
-					"path": "point"
+					"path": "point",
+					"pageMeta": {
+						"title": "兴趣点"
+					}
 				},
 				{
 					"path": "account/login"

@@ -32,7 +32,8 @@
 
             <view class="padding">
                 <!-- <text>【{{sys.name}}】</text> -->
-                环浙步道服务应用是由浙江省体育局指导，宁波市奉化区文化和广电旅游体育局建设，面向公众提供建设步道数据服务，提供步道线路查询、步道动态检索、步道周边信息查询、运动轨迹记录、步道标距柱打卡等个性化服务。
+                <!-- 环浙步道服务应用是由浙江省体育局指导，宁波市奉化区文化和广电旅游体育局建设，面向公众提供建设步道数据服务，提供步道线路查询、步道动态检索、步道周边信息查询、运动轨迹记录、步道标距柱打卡等个性化服务。 -->
+                环浙步道是宁波市奉化区文化和广电旅游体育局提供的健身步道服务平台，面向公众提供健身步道线路查询、步道动态、周边兴趣点查询及运动轨迹记录、步道打卡等服务。
                 <!-- 是一款健身步道相关户外工具APP，提供浙江省范围的健身步道信息服务，及相关的自然人文、体育旅游等资源信息；提供户外轨迹导航和GPS记录轨迹记录功能。 -->
             </view>
 
@@ -99,11 +100,18 @@ export default {
             window.open('https://zts.5618.co/repo/zts_run.html', "_blank")
         },
         call() {
-            uni.makePhoneCall({
-                phoneNumber: bd.sys.tel,
-                success: (res) => { },
-                fail: (err) => { }
+            ZWJSBridge.phoneCall({
+                "corpId": bd.sys.tel
+            }).then(res => {
+                console.log("调用电话成功============", res)
+            }).catch(err => {
+                console.log("调用电话失败============", err)
             })
+            // uni.makePhoneCall({
+            //     phoneNumber: bd.sys.tel,
+            //     success: (res) => { },
+            //     fail: (err) => { }
+            // })
         }
     }
 };

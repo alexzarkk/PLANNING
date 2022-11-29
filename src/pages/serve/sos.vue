@@ -1,13 +1,13 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <view class="fixed">
             <cu-custom :isBack="true" bgColor=" bg-orange" :home="false">
                 <block slot="content">环浙步道-救援求助</block>
             </cu-custom>
         </view>
-		
-		<zz-kml-nav v-if="coord" :coord="[coord]" class="solid" @addr="addrInfo"></zz-kml-nav>
+
+        <zz-kml-nav v-if="coord" :coord="[coord]" class="solid" @addr="addrInfo"></zz-kml-nav>
         <view class="bg-black padding">
             <view class="flex flex-direction align-center">
                 <view v-if="pm" class="text-lg">
@@ -15,23 +15,23 @@
                         当前柱号：{{ pm.sn }}
                     </text>
                 </view>
-				<view class="text-df margin-top-xs">
-				    <text class="text-center" v-if="pm">
-				        {{loc.altitude?'海拔：'+(~~loc.altitude)+'m':''}} {{loc.accuracy?'位置精度：'+(~~loc.accuracy)+'m 位柱距：≈'+ qr.dist +'m':''}}
-				    </text>
-				</view>
+                <view class="text-df margin-top-xs">
+                    <text class="text-center" v-if="pm">
+                        {{loc.altitude?'海拔：'+(~~loc.altitude)+'m':''}} {{loc.accuracy?'位置精度：'+(~~loc.accuracy)+'m 位柱距：≈'+ qr.dist +'m':''}}
+                    </text>
+                </view>
             </view>
             <view class="flex flex-direction align-center margin-top">
                 <view class="text-lg" v-if="coord">
                     <text class="text-center">
                         经纬度：
-						<text class="text-df text-yellow">
-							{{'(wgs84) '+coord[0]+','+coord[1]}}
-							<text @click="copyLoc" class="padding-left-xs cuIcon-copy text-green"></text>
-						</text>
+                        <text class="text-df text-yellow">
+                            {{'(wgs84) '+coord[0]+','+coord[1]}}
+                            <text @click="copyLoc" class="padding-left-xs cuIcon-copy text-green"></text>
+                        </text>
                     </text>
                 </view>
-				
+
             </view>
             <block v-if="qr.wather">
                 <view class="flex flex-direction align-center margin-top text-sm">
@@ -135,10 +135,10 @@ export default {
             liveData: {},
             addr: {},
             qr: { dist: 0 },
-			
-			pm: null,
-			coord: null,
-			
+
+            pm: null,
+            coord: null,
+
             desc: "",
             mobile: null,
             loc: null,
@@ -155,55 +155,64 @@ export default {
         }
     },
     async onLoad(qr) {
-		Object.assign(this.qr, qr)
-		
-		let { coord, p } = await getLocation()
-		this.loc = p
-		
-		if(qr.coord) {
-			let c = qr.coord.split(',')
-			this.coord = [c[0]*1,c[1]*1]
-		}
+        Object.assign(this.qr, qr)
+
+        let { coord, p } = await getLocation()
+        this.loc = p
+
+        if (qr.coord) {
+            let c = qr.coord.split(',')
+            this.coord = [c[0] * 1, c[1] * 1]
+        }
         if (qr.sn) {
             this.pm = await this.zz.req({ $url: '/public/zz/scan', sn: qr.sn })
-			this.coord = this.pm.coord
-        } 
-		if(!this.coord) {
-			this.coord = coord
-		}
-		this.qr.dist = dist(this.coord, coord)
+            this.coord = this.pm.coord
+        }
+        if (!this.coord) {
+            this.coord = coord
+        }
+        this.qr.dist = dist(this.coord, coord)
     },
     onUnload() { clearInterval(this.timer) },
 
     methods: {
-		addrInfo(e){ 
-			this.qr.addr = e.formatted_address
-			this.zz.weatherInfo(e.addressComponent.adcode,'').then(e => {
-				if (e.info == 'OK') {
-					this.qr.wather = e.lives[0]
-				}
-			})
-		},
-		copyLoc() {
-		    uni.setClipboardData({
-		        data: JSON.stringify(this.coord),
-				showToast:true,
-		        success: ()=>{
-					this.zz.toast('复制成功~')
-		        }
-		    })
-		},
-		
+        addrInfo(e) {
+            this.qr.addr = e.formatted_address
+            this.zz.weatherInfo(e.addressComponent.adcode, '').then(e => {
+                if (e.info == 'OK') {
+                    this.qr.wather = e.lives[0]
+                }
+            })
+        },
+        copyLoc() {
+            uni.setClipboardData({
+                data: JSON.stringify(this.coord),
+                showToast: true,
+                success: () => {
+                    this.zz.toast('复制成功~')
+                }
+            })
+        },
+
         show9() { this.modal9 = true },
         hide9() { this.modal9 = false },
         checkMobile() { this.mobileTip = (!this.mobile || (this.mobile && _isMobile(this.mobile))) ? '' : '手机号输入有误' },
         allowProtocol(e) { this.isAllow = e.checked },
         nCALL(n) {
-            uni.makePhoneCall({
-                phoneNumber: '110',
-                success: (res) => { },
-                fail: (err) => { }
+
+            ZWJSBridge.phoneCall({
+                "corpId": '110'
+            }).then(res => {
+                console.log("调用电话成功============", res)
+            }).catch(err => {
+                console.log("调用电话失败============", err)
             })
+
+            // uni.makePhoneCall({
+            //     phoneNumber: '110',
+            //     success: (res) => { },
+            //     fail: (err) => { }
+            // })
         },
         sendSos() {
             this.hide9()
@@ -211,8 +220,8 @@ export default {
         },
         async submit() {
             uni.showLoading({ mask: true })
-			
-			
+
+
             if (this.mobile) {
                 let formData = {
                     obj: this.qr,
@@ -234,7 +243,7 @@ export default {
             }
             uni.hideLoading()
         },
-		
+
     }
 }
 </script>

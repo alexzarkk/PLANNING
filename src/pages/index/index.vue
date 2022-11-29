@@ -405,6 +405,31 @@ export default {
         }
     },
     async onLoad() {
+        console.error("开始监听onpageshow================")
+        console.error("window.history========", window.history)
+        window.onpageshow = (event) => {
+            // event.persisted  表示网页是否是来自缓存。
+            // 
+            console.error("onPageShow========", event)
+            console.error("nav type=====", window.performance)
+            // console.log("nav type=====", window.performance.navigator.type)
+            /**
+             * TYPE_NAVIGATE (0)
+当前页面是通过点击链接，书签和表单提交，或者脚本操作，或者在 url 中直接输入地址，type 值为 0
+
+TYPE_RELOAD (1)
+点击刷新页面按钮或者通过Location.reload()方法显示的页面，type 值为 1
+
+TYPE_BACK_FORWARD (2)
+页面通过历史记录和前进后退访问时。type 值为 2
+
+TYPE_RESERVED (255)
+任何其他方式，type 值为 255
+             */
+            if (event.persisted || (window.performance && window.performance.navigator.type == 2)) {
+                ZWJSBridge.close()
+            }
+        }
         // 安卓键盘使用resize方案
         // window.onresize=()=>{
         //     console.log("android resize------")
@@ -430,12 +455,13 @@ export default {
         // } else { // 没有用户，去走单点
         let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
         if (ticket) {  // 有票据直接后台登录
+            console.error("当前有ticket==============")
             await this.loginSys(ticket)
         } else { // 没有票据去获取票据
             return this.loginZlb()  // 去单点登录 （或者微信的登录流程
         }
         // }
-		console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev])
+        console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev])
         // #endif
         uni.$on("pushChange", () => {  // 文章动态发生改变
             this.refreshNewsHome()
@@ -458,7 +484,7 @@ export default {
         // #ifdef H5-ZLB
         this.addZwlog()
         // #endif
-        
+
         this.loadData()
         this.refreshNewsHome()
         // this.t0 = Date.now()
@@ -495,9 +521,9 @@ export default {
         // return: user:用户
         async loginSys(ticket, ticketId) {
             let { user, token } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
-			
-			console.info('loginSys------------------:', user);
-			
+
+            console.info('loginSys------------------:', user);
+
             this.zz.setAcc(user) // 用户载入到缓存
             this.zz.setToken(token) // token 载入到缓存
             console.info("单点登录成功，去埋点")

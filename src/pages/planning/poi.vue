@@ -166,9 +166,16 @@ export default {
             this.zz.toast('功能尚未启用！')
         },
         call_() {
-            uni.makePhoneCall({
-                phoneNumber: this.poi.contact.mobile
+            ZWJSBridge.phoneCall({
+                "corpId": this.poi.contact.mobile
+            }).then(res => {
+                console.log("调用电话成功============", res)
+            }).catch(err => {
+                console.log("调用电话失败============", err)
             })
+            // uni.makePhoneCall({
+            //     phoneNumber: this.poi.contact.mobile
+            // })
         },
         userEvent(t) {
             console.log(this.poi);
