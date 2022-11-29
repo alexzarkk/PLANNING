@@ -19,9 +19,9 @@
                             <text class="cuIcon-people" />
                         </view>
                         <view class="padding-left">
-                           <!-- #ifndef H5-ZLB -->
-                           <text>注册/登录</text>
-                           <!-- #endif -->
+                            <!-- #ifndef H5-ZLB -->
+                            <text>注册/登录</text>
+                            <!-- #endif -->
                         </view>
                         <view class="margin-left-xs cuIcon-right" />
                     </view>
@@ -98,21 +98,30 @@
             <text class="zzIcon-sport-110 margin-lr-xxs"></text>
             <text class="text-sm">用脚步丈量步道，用激情登顶山峰</text>
         </view>
-
+        <zz-tabbar class="tabbar-box" :list="navList" active-color="#1D1D1F"></zz-tabbar>
         <!-- </scroll-view> -->
     </view>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { uniqId, getLocation, trans, isSame } from '@/comm/geotools'
 import comm from '@/comm/comm'
 import sync from '@/comm/sync'
 export default {
+    computed:{
+        ...mapState({
+            navList: (state) => {
+                console.log("state====",state)
+                return state.tabbar.navList
+            }
+        }),
+    },
     data() {
         return {
             tNum: 99999,
             num: {
-				scan: 0, //扫码
+                scan: 0, //扫码
                 event: 0, //  赛事
                 top: 0, //  登顶
                 rec: 0,  // 轨迹
@@ -152,9 +161,9 @@ export default {
             menu: [
                 {
                     name: '足迹',
-					// #ifdef APP-PLUS
-					url: '/pages/nav/navApp',
-					// #endif
+                    // #ifdef APP-PLUS
+                    url: '/pages/nav/navApp',
+                    // #endif
                     // #ifndef APP-PLUS
                     url: '/pages/nav/navH5',
                     // #endif

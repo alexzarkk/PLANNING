@@ -11,11 +11,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
-
+import tabbar from './modules/tabbar'
 // console.log("引入的模块====",lineTrack)
 
 const store = new Vuex.Store({
     modules: {
+        tabbar
     }
 });
 export default store;

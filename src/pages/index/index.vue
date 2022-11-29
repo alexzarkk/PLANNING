@@ -206,6 +206,9 @@
             </view>
         </view>
         <zz-footer />
+        <zz-tabbar class="tabbar-box" :list="navList" :text-style="{
+            'font-size':'1.6rem'
+        }" active-color="#1D1D1F"></zz-tabbar>
     </view>
 </template>
 <script>
@@ -214,7 +217,7 @@ import news from './component/news.vue';
 import card from './component/card.vue';
 import newsHome from '@/components/news/news-home.vue'
 import newsPage from '../station/news.vue';
-
+import { mapState } from 'vuex'
 // #ifdef H5-ZLB
 import zwLogUtils from '@/comm/zwLogUtils'
 
@@ -230,6 +233,12 @@ export default {
         newsHome
     },
     computed: {
+        ...mapState({
+            navList: (state) => {
+                console.log("state====",state)
+                return state.tabbar.navList
+            }
+        }),
         getStickyHeight() {
             return (this.customBar || 0) + (this.searchBarHeight || 0) + 'px';
         },

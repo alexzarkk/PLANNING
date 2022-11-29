@@ -129,11 +129,21 @@
         </view>
         <view class="cu-bar"></view>
         <zz-footer />
+        <zz-tabbar class="tabbar-box" :list="navList" active-color="#1D1D1F"></zz-tabbar>
     </view>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+    computed:{
+        ...mapState({
+            navList: (state) => {
+                console.log("state====",state)
+                return state.tabbar.navList
+            }
+        }),
+    },
     data() {
         return {
             modalName: '',

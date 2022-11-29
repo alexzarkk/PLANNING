@@ -70,11 +70,21 @@
             </tui-no-data>
         </view>
         <tui-scroll-top ref="top" :scrollTop="scrolled"></tui-scroll-top>
+        <zz-tabbar class="tabbar-box" :list="navList" active-color="#1D1D1F"></zz-tabbar>
     </view>
 </template>
 <script>
 // import tabsData from '@/comm/test/json/line.json';
+import { mapState } from 'vuex'
 export default {
+    computed:{
+        ...mapState({
+            navList: (state) => {
+                console.log("state====",state)
+                return state.tabbar.navList
+            }
+        }),
+    },
     data() {
         return {
             timer: new Date().getTime(),
