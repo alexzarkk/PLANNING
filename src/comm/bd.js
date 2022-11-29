@@ -5,7 +5,7 @@ const bd = {
 	ZLB_ADDR: [
 		'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html',  // 正式地址
 		// https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html?vconsole=true
-		// 'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.1/index.html?debug=true', //irs线上调试
+		// 'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.2/index.html?debug=true', //irs线上调试
 		// 'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html?debug=true', //irs线上调试
 		'http://localhost:8080', //政务中台调试
 		// 'http://localhost:8081', //政务中台调试

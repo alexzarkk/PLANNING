@@ -164,7 +164,7 @@ function addZwLogPage({
 
             console.error("数据采集完毕==============================", zwlogPageMap, zwlog)
 
-            zwlog.onReady(function () {
+            // zwlog.onReady(function () {
                 console.error("zwlog================onReady=============================")
                 console.warn("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
                     "\n查看NetWork - All(不进行筛选)-m.gif?xxxxxx\n",
@@ -180,7 +180,7 @@ function addZwLogPage({
                 zwlog.sendPV(pvParams)
                 // if (getApp().globalData.ZlBRelease) {}
                 delete zwlogPageMap[path]
-            })
+            // })
         }
     }
 }
