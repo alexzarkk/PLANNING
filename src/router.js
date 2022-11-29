@@ -8,33 +8,34 @@ const router = createRouter({
 });
 //全局路由前置守卫
 router.beforeEach((to, from, next) => {
-	// console.log("路由前置_-------", to, from)
+	console.log("路由前置_-------", to, from)
 	//添加页面进入和页面离开的埋点
 	// 进入时间
 	// #ifdef H5-ZLB
+	// if (to.path !== from.path) {  // 非首次进入程序，记录埋点
 
-
-	if (to.path !== from.path) {  // 非首次进入程序，记录埋点
-
-		try {
-			if (to.pageMeta && to.pageMeta.title) {
-				zwLogUtils.addZwLogPage({
-					title: to.pageMeta.title,
-					pagePath: to.path,  // 进入的页面
-					enterPageTime: new Date()  // 页面进入的时间
-				})
-				// 离开时间
-				zwLogUtils.addZwLogPage({
-					title: from.pageMeta.title || '',
-					pagePath: from.path,  // 离开的页面
-					leavePageTime: new Date()  // 页面离开的时间
-				})
+	try {
+		if (to.pageMeta && to.pageMeta.title) {
+			let inPage = {
+				title: to.pageMeta.title,
+				pagePath: to.path,  // 进入的页面
+				enterPageTime: new Date()  // 页面进入的时间
 			}
-		} catch (error) {
-			console.error("加载title以及进入离开时间失败-----", error)
+			zwLogUtils.addZwLogPage(inPage)
+			// 离开时间
+			let outPage = {
+				title: from.pageMeta.title || '',
+				pagePath: from.path,  // 离开的页面
+				leavePageTime: new Date()  // 页面离开的时间
+			}
+			zwLogUtils.addZwLogPage(outPage)
+			// console.error("采集进入页面的===============时间和离开的时间=======================", inPage, outPage)
 		}
-
+	} catch (error) {
+		console.error("加载title以及进入离开时间失败-----", error)
 	}
+
+	// }
 	// #endif
 	next();
 });

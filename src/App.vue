@@ -133,7 +133,8 @@ export default {
                 uni.setStorageSync('sysInfo', e)
                 comm.setStorage('clientInfo', {
                     OS: e.osName,
-                    PLATFORM: e.uniPlatform || e.platform,
+                    // PLATFORM: e.uniPlatform || e.platform,
+                    PLATFORM: 'ZLB',
                     APPID: e.appId || '__UNI__210B33A',
                     deviceId: e.deviceId,
                     deviceModel: e.model

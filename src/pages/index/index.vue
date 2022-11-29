@@ -405,13 +405,13 @@ export default {
         }
     },
     async onLoad() {
-        console.error("开始监听onpageshow================")
-        console.error("window.history========", window.history)
+        // console.error("开始监听onpageshow================")
+        // console.error("window.history========", window.history)
         window.onpageshow = (event) => {
             // event.persisted  表示网页是否是来自缓存。
             // 
-            console.error("onPageShow========", event)
-            console.error("nav type=====", window.performance)
+            // console.error("onPageShow========", event)
+            // console.error("nav type=====", window.performance)
             // console.log("nav type=====", window.performance.navigator.type)
             /**
              * TYPE_NAVIGATE (0)
@@ -426,7 +426,7 @@ TYPE_BACK_FORWARD (2)
 TYPE_RESERVED (255)
 任何其他方式，type 值为 255
              */
-            if (event.persisted || (window.performance && window.performance.navigator.type == 2)) {
+            if (event.persisted || (window.performance && window.performance.navigator && window.performance.navigator.type == 2)) {
                 ZWJSBridge.close()
             }
         }
@@ -455,7 +455,7 @@ TYPE_RESERVED (255)
         // } else { // 没有用户，去走单点
         let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
         if (ticket) {  // 有票据直接后台登录
-            console.error("当前有ticket==============")
+            // console.error("当前有ticket==============")
             await this.loginSys(ticket)
         } else { // 没有票据去获取票据
             return this.loginZlb()  // 去单点登录 （或者微信的登录流程
@@ -520,17 +520,21 @@ TYPE_RESERVED (255)
         // 去登录系统，使用ticket  
         // return: user:用户
         async loginSys(ticket, ticketId) {
-            let { user, token } = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
-
-            console.info('loginSys------------------:', user);
-
-            this.zz.setAcc(user) // 用户载入到缓存
-            this.zz.setToken(token) // token 载入到缓存
-            console.info("单点登录成功，去埋点")
-            // this.addLoginQuene()  // 添加登录埋点
-            zwLogUtils.initZwLog() // 新版埋点
-            return user
-        },
+            let res = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
+            console.error("loginSys====================", res)
+            if (res) {
+                const { user, token } = res
+                if (user) {
+                    // console.error('单点登录成功------------------:', user);
+                    this.zz.setAcc(user) // 用户载入到缓存
+                    this.zz.setToken(token) // token 载入到缓存
+                    console.info("单点登录成功，去埋点")
+                    // this.addLoginQuene()  // 添加登录埋点
+                    zwLogUtils.initZwLog() // 新版埋点
+                    return user
+                }
+            }
+          },
         // 登录浙里办
         async loginZlb() {
             const sUserAgent = window.navigator.userAgent.toLowerCase()

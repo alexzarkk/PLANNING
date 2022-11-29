@@ -20,17 +20,26 @@ const Min_Page_Stay_Duration = 0.5
 // 不参加埋点的白名单
 const White_List = [
     // 埋点跳过
-    'pages/index/index'
+    // 'pages/index/index'
 ]
 
 // 进行初始化zwLog
 function initZwLog() {
     let user = zz.getAcc()
+    // console.error("单点登录，用户信息埋点========", user)
     if (zwlog == null && user != null) {
         zwlog = new ZwLog({
             _user_id: user.zlb_id,
             _user_nick: user.zlb_name
         });
+
+
+        // zwlog.onReady(() => {
+        //     console.error("zwlog初始化=======================")
+        //     zwlog.record('114514', 'CLK', {
+        //         Test1: '测试参数1',
+        //     });
+        // })
     }
     return zwlog
 }
@@ -59,11 +68,27 @@ function addZwLogPage({
     responseTime = null,
     title = null
 } = {}) {
-    let path = _this ? _this.$route.path : pagePath
-    if (initZwLog() && (_this || path)) {
+
+    // if (_this) {
+    // console.error("_this.$route.meta.pagePath==========================", _this.$route.meta.pagePath)
+    // }
+
+    // if (_this && _this.$route) {
+    // console.log("_this.$route=============================", _this.$route)
+    // }
+    // console.error("route===========path", _this.$route.path, pagePath)
+    // console.error('addZwLogPage==========', pagePath, enterPageTime, leavePageTime)
+    // let path = pagePath ? pagePath : _this.$route.meta.pagePath
+
+    // console.error("path=======,title============", path, title)
+    if (initZwLog() && (_this || pagePath)) {
+        let path = _this ? '/' + _this.$route.meta.pagePath : pagePath
+        // console.error("**************************************************采集使用的Id====", path)
         // 获取匹配的页面
         // 移除测试页面带来的埋点干扰项
-        if (White_List.indexOf(path) != -1) return
+        if (White_List.indexOf(path) != -1) {
+            return
+        }
         // 如果不存在当前页面的数据，那么就开始初始化
         if (!zwlogPageMap.hasOwnProperty(path)) {
             zwlogPageMap[path] = {
@@ -84,9 +109,11 @@ function addZwLogPage({
             zwlogPageMap[path].title = title
         }
         if (enterPageTime) {
+            // console.error("写入进入时间===================", enterPageTime, path)
             zwlogPageMap[path].enterPageTime = enterPageTime
         }
         if (leavePageTime) {
+            // console.error("写入离开时间===================", leavePageTime, path)
             zwlogPageMap[path].leavePageTime = leavePageTime
         }
         if (loadTime) {
@@ -95,7 +122,7 @@ function addZwLogPage({
         if (responseTime) {
             zwlogPageMap[path].responseTime = responseTime
         }
-        console.log("收集的数据", zwlogPageMap)
+
         // 如果当前页面的数据全部收集完毕
         if (zwlogPageMap[path].path &&
             zwlogPageMap[path].title &&
@@ -103,6 +130,8 @@ function addZwLogPage({
             zwlogPageMap[path].leavePageTime &&
             zwlogPageMap[path].loadTime &&
             zwlogPageMap[path].responseTime) {
+            console.error("数据收集完成", zwlogPageMap[path])
+
 
             // 页面浏览时长  离开时间 - 进入时间
             let Page_duration = (zwlogPageMap[path].leavePageTime.getTime() - zwlogPageMap[path].enterPageTime
@@ -122,7 +151,8 @@ function addZwLogPage({
                 t2: t2,
                 t0: t0,
                 pageId: zwlogPageMap[path].path,
-                pageName: zwlogPageMap[path].title
+                pageName: zwlogPageMap[path].title,
+                userType: '个人'
             }
             if (Page_duration < Min_Page_Stay_Duration) {
                 console.log('\n\n提交埋点数据-删除数据',
@@ -131,7 +161,11 @@ function addZwLogPage({
                 delete zwlogPageMap[path]
                 return
             }
+
+            console.error("数据采集完毕==============================", zwlogPageMap, zwlog)
+
             zwlog.onReady(function () {
+                console.error("zwlog================onReady=============================")
                 console.warn("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
                     "\n查看NetWork - All(不进行筛选)-m.gif?xxxxxx\n",
                     `\n miniAppId（IRS服务侧应用appId） = ${pvParams.miniAppId}
@@ -142,6 +176,7 @@ function addZwLogPage({
                     \n Page_duration（页面浏览时长） = ${pvParams.Page_duration}
                     \n t2（页面加载时间，启动到开始加载） = ${pvParams.t2}
                     \n t0（页面响应时间，启动到加载完毕） = ${pvParams.t0} \n\n `);
+                console.error("提交埋点数据=========", pvParams)
                 zwlog.sendPV(pvParams)
                 // if (getApp().globalData.ZlBRelease) {}
                 delete zwlogPageMap[path]
