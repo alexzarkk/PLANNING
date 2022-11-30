@@ -108,15 +108,18 @@ export default {
             type: Boolean,
             default: true
         },
-        textStyle:{
-            type:Object,
-            default:()=>{
-                return {}
-            }
-        }
+        // textStyle: {
+        //     type: Object,
+        //     default: () => {
+        //         return {}
+        //     }
+        // }
     },
     data() {
         return {
+            textStyle: {
+                'fontSize': '1.2rem'
+            },
             // 由于安卓太菜了，通过css居中凸起按钮的外层元素有误差，故通过js计算将其居中
             midButtonLeft: '50%',
             pageUrl: '', // 当前页面URL
@@ -141,8 +144,10 @@ export default {
                 // 这两个方案对处理tabbar item的激活与否方式不一样
                 if (pagePath) {
                     if (pagePath == this.pageUrl || pagePath == '/' + this.pageUrl) {
+                        console.error(this.list[index].selectedIconPath)
                         return this.list[index].selectedIconPath;
                     } else {
+                        console.error(this.list[index].iconPath)
                         return this.list[index].iconPath;
                     }
                 } else {
