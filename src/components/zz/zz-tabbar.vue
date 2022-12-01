@@ -232,6 +232,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import 'uview-ui/index.scss';
+
 // 定义混入指令，用于在非nvue环境下的flex定义，因为nvue没有display属性，会报错
 @mixin vue-flex($direction: row) {
     /* #ifndef APP-NVUE */

@@ -247,7 +247,6 @@ export default {
 <style lang="scss">
 /*每个页面公共css */
 /* #ifndef APP-PLUS-NVUE */
-@import "uview-ui/index.scss";
 @import '@/comm/colorui/main.css';
 @import '@/comm/colorui/icon.css';
 @import '@/comm/colorui/animation.css';
