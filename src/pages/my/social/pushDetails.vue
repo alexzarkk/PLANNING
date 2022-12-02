@@ -190,10 +190,10 @@ export default {
                     title: '收藏',
                     iconName: 'favor'
                 },
-                {
-                    title: '分享',
-                    iconName: 'share'
-                }
+                // {
+                //     title: '分享',
+                //     iconName: 'share'
+                // }
             ],
             title: '',
             isMyMenuShow: false,

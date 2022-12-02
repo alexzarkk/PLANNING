@@ -1,5 +1,5 @@
 <template>
-<page-meta root-font-size="10px"></page-meta>
+    <page-meta root-font-size="10px"></page-meta>
     <view>
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">意见反馈</block>
@@ -11,7 +11,7 @@
                 <radio-group class="flex justify-center" @change="RadioChange">
                     <view class="padding-lr">
                         <radio class="margin-right-xs" :class="radio == 'A' ? 'checked' : ''" :checked="radio == 'A' ? true : false" value="A"></radio>
-                        <text class="margin-left-xs">APP异常</text>
+                        <text class="margin-left-xs">应用异常</text>
                     </view>
                     <view class="padding-lr">
                         <radio class="margin-right-xs" :class="radio == 'B' ? 'checked' : ''" :checked="radio == 'B' ? true : false" value="B"></radio>
@@ -25,7 +25,7 @@
             </view>
             <view v-if="radio === 'A'" class="margin-top">
                 <!-- APP异常  上传日志 -->
-            <!--    <view class="padding bg-white flex align-center justify-between">
+                <!--    <view class="padding bg-white flex align-center justify-between">
                     <text>是否上传错误日志:</text>
                     <view>
                         <switch @change="switchChange" :class="switchA ? 'checked' : ''" :checked="switchA ? true : false" class="green" color="#39b54a"></switch>
@@ -38,7 +38,7 @@
                 </view>
                 <!-- 图片上传 （如有） -->
                 <view class="padding bg-white">
-				   <zz-upload-image :title="'上传图片（如有）'" :imgs="imgs" @add="addImage" @del="delImage"></zz-upload-image>
+                    <zz-upload-image :title="'上传图片（如有）'" :imgs="imgs" @add="addImage" @del="delImage"></zz-upload-image>
                 </view>
             </view>
             <view v-if="radio === 'B'" class="padding bg-white">
@@ -70,62 +70,62 @@ export default {
             radio: 'A',  // 反馈类型切换
             // switchA: false,
             imgs: [],  // 图片
-			video: null,
+            video: null,
             desc: '', // 功能建议
-			contact: '',  // 联系方式
+            contact: '',  // 联系方式
         };
     },
-	onBackPress() {
-		for (let s of this.imgs) {
-			this.zz.removeFile(s)
-		}
-	},
+    onBackPress() {
+        for (let s of this.imgs) {
+            this.zz.removeFile(s)
+        }
+    },
     methods: {
         switchChange() { },
-		RadioChange(event) {
-		    this.radio = event.detail.value;
-		},
+        RadioChange(event) {
+            this.radio = event.detail.value;
+        },
         // 图片上传
-		addImage(e) {
-			this.imgs = this.imgs.concat(e)
-		},
+        addImage(e) {
+            this.imgs = this.imgs.concat(e)
+        },
         // 删除图片
-		delImage(i) {
-			this.zz.removeFile(this.imgs[i])
-			this.imgs.splice(i,1)
-		},
-		addVideo(e) {
-			this.video = e
-		},
-		delVideo(e) {
-			this.zz.removeFile(this.video.tempFilePath)
-			this.video = null
-		},
-        
-	 	async save(){
-			if(!this.desc) return this.zz.toast('请输入反馈内容~')
-			if(!this.contact) return this.zz.toast('请输入联系方式~')
-			let args = {
-					$url:'/admin/comm/feedback', 
-					desc: xss(this.desc),
-					contact: xss(this.contact), 
-					// video: this.video,
-					type: this.radio,
-					imgs: []
-				}
-			uni.showLoading({ mask:true })
-			for (let s of this.imgs) {
-				args.imgs.push(await this.zz.upload(s,true))
-			}
-			uni.hideLoading()
-			this.zz.req(args).then(e=>{
-					this.zz.modal('递交成功,感谢您的反馈!')
-					this.radio = 'A'
-					this.imgs = []
-					this.desc = ''
-					this.contact = ''
-				})
-		}
+        delImage(i) {
+            this.zz.removeFile(this.imgs[i])
+            this.imgs.splice(i, 1)
+        },
+        addVideo(e) {
+            this.video = e
+        },
+        delVideo(e) {
+            this.zz.removeFile(this.video.tempFilePath)
+            this.video = null
+        },
+
+        async save() {
+            if (!this.desc) return this.zz.toast('请输入反馈内容~')
+            if (!this.contact) return this.zz.toast('请输入联系方式~')
+            let args = {
+                $url: '/admin/comm/feedback',
+                desc: xss(this.desc),
+                contact: xss(this.contact),
+                // video: this.video,
+                type: this.radio,
+                imgs: []
+            }
+            uni.showLoading({ mask: true })
+            for (let s of this.imgs) {
+                args.imgs.push(await this.zz.upload(s, true))
+            }
+            uni.hideLoading()
+            this.zz.req(args).then(e => {
+                this.zz.modal('递交成功,感谢您的反馈!')
+                this.radio = 'A'
+                this.imgs = []
+                this.desc = ''
+                this.contact = ''
+            })
+        }
     }
 };
 </script>

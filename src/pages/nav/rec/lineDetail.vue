@@ -98,12 +98,12 @@
     		                        编辑
     		                    </view>
     		                </view>
-    		                <view class="line-operation  radius square" @click="showShareModal">
+    		                <!-- <view class="line-operation  radius square" @click="showShareModal">
     		                    <view class="operation-icon cuIcon-share"></view>
     		                    <view class="operation-title">
     		                        分享
     		                    </view>
-    		                </view>
+    		                </view> -->
     		            </view>
     		        </view>
     		    </view>
@@ -199,7 +199,7 @@
     	
     	
         <!-- 分享窗口 -->
-        <view class="cu-modal" :class="modalName == 'shareModal' ? 'show' : ''" @tap="hideModal">
+        <!-- <view class="cu-modal" :class="modalName == 'shareModal' ? 'show' : ''" @tap="hideModal">
             <view class="cu-dialog" @tap.stop="">
                 <view class="share-method-box">
                     <view class="share-title-box">
@@ -218,7 +218,7 @@
                     </view>
                 </view>
             </view>
-        </view>
+        </view> -->
     	
     	<tui-scroll-top :scroll-top="scrolled" />
         <!-- 页面底部应用信息 -->
