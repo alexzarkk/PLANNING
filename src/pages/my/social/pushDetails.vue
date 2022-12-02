@@ -119,11 +119,11 @@
                             <view class="operation-title">{{ item.title }}</view>
                         </view>
                     </view> -->
-                    <!-- #ifdef H5-ZLB -->
+                    <!-- #ifdef H5 -->
                     <zz-blog v-if="details._id" ref="blogComment" :tid="details._id" :is-can-reply="false" />
                     <!-- #endif -->
                     <!-- #ifdef APP -->
-                    <zz-comment v-if="details._id" ref="comment" :tid="details._id" :details="details" @commentChange="commentChange" @userEvent="commentEvent"></zz-comment>
+                    <!-- <zz-comment v-if="details._id" ref="comment" :tid="details._id" :details="details" @commentChange="commentChange" @userEvent="commentEvent"></zz-comment> -->
                     <!-- #endif -->
 
                 </view>
@@ -227,7 +227,7 @@ export default {
         });
         // #endif
 
-        // #ifdef H5-ZLB
+        // #ifdef H5
         let newCommentEvent = 'newComment' + id
         // console.warn("监听评论事件", newCommentEvent)
         uni.$on(newCommentEvent, (params) => {
@@ -357,10 +357,10 @@ export default {
         commentEvent(params) {
             this.zz.userEvent(params.t, params.tt, this.details)
         },
-    },
-    onPageScroll() {
-        this.$refs.comment.hideKeyboard(); // 页面滚动时
     }
+    // onPageScroll() {
+        // this.$refs.comment.hideKeyboard(); // 页面滚动时
+    // }
 };
 </script>
 
