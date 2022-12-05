@@ -758,37 +758,6 @@ const zz = {
 			}
 		})
 	},
-	// #ifdef H5-ZLB
-	// 浙里办PV 埋点  跳转页面埋点
-	sendZlbPV() {
-		const sdk = window.ZWJSBridge
-		const getLocation = sdk.getLocation()
-		const getUserType = sdk.getUserType()
-
-		Promise.all([getUserType, getLocation]).then(([userTypeData, locationData]) => {
-			// console.log("定位和用户类型-------", userTypeData, locationData)
-			const { userType } = userTypeData
-			const { longitude, latitude } = locationData
-			const params = {
-				action: 'aplus.sendPV',
-				arguments: [
-					{
-						is_auto: false
-					},
-					{
-						miniAppId: appid,
-						miniAppName: '环浙步道',
-						long: longitude,
-						lati: latitude,
-						userType
-					}
-				]
-			}
-			// console.log("浙里办PV埋点-------", params)
-			window.aplus_queue.push(params)
-		})
-	},
-	// #endif
 
 	/**
 	 * 
@@ -817,11 +786,6 @@ const zz = {
 				url,
 				animationType,
 				success: (res) => {
-					// #ifdef H5-ZLB
-					// console.log("页面跳转完成---------------------------", res)
-					// 添加pv埋点
-					zz.sendZlbPV()
-					// #endif
 				},
 				fail: (err) => {
 					console.error('路由跳转失败===', err)

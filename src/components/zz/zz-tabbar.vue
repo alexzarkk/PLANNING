@@ -120,9 +120,12 @@ export default {
             // 由于安卓太菜了，通过css居中凸起按钮的外层元素有误差，故通过js计算将其居中
             midButtonLeft: '50%',
             pageUrl: '', // 当前页面URL
+            uiStyle:'', // 浙里办的UIStyle
         }
     },
     created() {
+        this.uiStyle = uni.getStorageSync('uiStyle')
+        console.log("tabbar获取到的uiStyle",this.uiStyle)
         // 是否隐藏原生tabbar
         if (this.hideTabBar) uni.hideTabBar();
         // 获取引入了u-tabbar页面的路由地址，该地址没有路径前面的"/"

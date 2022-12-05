@@ -30,6 +30,7 @@ export default {
             })
             // console.info('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
+                uni.setStorageSync("uiStyle",uiStyle)
                 // console.log("获取到的当前的style======", uiStyle)
                 // uiStyle = 'elder'
                 let fontSize = '10px'
