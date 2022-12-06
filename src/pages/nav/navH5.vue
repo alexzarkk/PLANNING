@@ -163,7 +163,7 @@ export default {
 				// #endif
 				 
 				// #ifdef H5
-				geolocation
+				// geolocation
 				// #endif
 			})
 			
@@ -330,47 +330,48 @@ export default {
 }
 </script>
 <template>
-<page-meta root-font-size="10px"></page-meta>
-	<view>
-		<view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
-		
-		<!-- #ifndef H5-ZLB -->
-		<view class="cu-modal" :class="video ? 'show' : ''">
-			<view class="cu-dialog">
-				<view class="cu-bar bg-white justify-end">
-					<view class="content">短视频</view>
-					<view class="action" @tap="video=null"><text class="cuIcon-close text-red"></text></view>
-				</view>
-			   <video v-if="video" id="myVideo" :src="video" controls></video>
-			</view>
-		</view>
-		<!-- #endif -->
+    <page-meta root-font-size="10px"></page-meta>
+    <view>
+        <view id="mbContainer" :style="{ height: sysInfo.windowHeight + 'px', width: '100%' }" :prop="mb" :change:prop="_mapbox.updateData"></view>
 
-		<image v-if="locating" class="back-img loading" :style="'top:'+(stH+312)+'px;'"></image>
-		<image v-else @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
-		<image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
-		
-		<block v-if="!onRec">
-			<image @click="controltap('back')" src="@/static/back.png" class="back-img" :style="'top:'+(stH+20)+'px;'"></image>
-			<view class="start-f" v-if="mdone">
-				<view class="start-btn" @click="start">
-					<text class="start-btn-name">开始记录</text>
-				</view>
-			</view>
-		</block>
-		<block v-else>
-			<image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
-			<!-- #ifndef H5-ZLB -->
-			<image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
-			<!-- #endif -->
-			<fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" @changeMap="changeMap" @share="share" />
-		</block>
-		
-	</view>
+        <!-- #ifndef H5-ZLB -->
+        <view class="cu-modal" :class="video ? 'show' : ''">
+            <view class="cu-dialog">
+                <view class="cu-bar bg-white justify-end">
+                    <view class="content">短视频</view>
+                    <view class="action" @tap="video=null"><text class="cuIcon-close text-red"></text></view>
+                </view>
+                <video v-if="video" id="myVideo" :src="video" controls></video>
+            </view>
+        </view>
+        <!-- #endif -->
+
+        <image v-if="locating" class="back-img loading" :style="'top:'+(stH+312)+'px;'"></image>
+        <image v-else @click="controltap('position')" src="@/static/position.png" class="back-img" :style="'top:'+(stH+310)+'px;'"></image>
+        <image @click="controltap('scan')" src="@/static/scan.png" class="back-img" :style="'top:'+(stH+(onRec?60:100))+'px;'"></image>
+
+        <block v-if="!onRec">
+            <!-- 浙里办去掉返回按钮 -->
+            <!-- <image @click="controltap('back')" src="@/static/back.png" class="back-img" :style="'top:'+(stH+20)+'px;'"></image> -->
+            <view class="start-f" v-if="mdone">
+                <view class="start-btn" @click="start">
+                    <text class="start-btn-name">开始记录</text>
+                </view>
+            </view>
+        </block>
+        <block v-else>
+            <image @click="controltap('camera')" src="@/static/camera.png" class="back-img" :style="'top:'+(stH+130)+'px;'"></image>
+            <!-- #ifndef H5-ZLB -->
+            <image @click="controltap('v')" src="@/static/video.png" class="back-img" :style="'top:'+(stH+200)+'px;'"></image>
+            <!-- #endif -->
+            <fab :tim="tim" @info="info" @stop="stop" @onPuase="onPuase" @changeMap="changeMap" @share="share" />
+        </block>
+
+    </view>
 </template>
 
 <script>
-const tts = {speak(){}}
+const tts = { speak() { } }
 import { uniqId, bearing, getDist, trans, getLocation, calData, fixNum } from '@/comm/geotools'
 import { toDist, scan } from '@/comm/nav'
 
@@ -381,595 +382,595 @@ import sync from '@/comm/sync'
 import fab from './components/fab'
 
 export default {
-	components: { fab },
-	data() {
-		return {
-			sysInfo: uni.getStorageSync('sysInfo'),
-			winH: 0,
-			stH: 0,
-			kml: {children:[]},
-			tmt: 0,
-			cp: {},
-			cps: [],
-			way: {},
-			minDist: 60,
-			
-			mapHeight: 0,
-			center: [121,30],  //121.53537, 29.64611
-			scale: 15,
-			point: [],
-			line: [],
-			keepRec: false,
-			onRec: false,
-			puase: false,
-			tim: {H:0, M:0, S:0, MS:0},
-			rec: {},
-			
-			timer: null,
-			lock: false,
-			
-			// isConn: true,
-			locating:false,
-			mdone: false,
-			mb: {},
-			ver: 0,
-			video: null
-		}
-	},
-	
-	async onLoad({v}) {
-		this.stH = this.sysInfo.statusBarHeight + 60
-		this.mapHeight = this.winH
-		uni.removeStorageSync('cur_loc_wgs84')
-		
-		if(v) {
-			let { kml, keepRec=0, tmt=0 } = this.zz.getParam(v)
-			
-			this.kml = kml
-			this.tmt = tmt
-			for (let s of kml.children) {
-				if(s.t1==1) {
-					this.way = s
-					s.t2 = 199
-				}
-				if(s.t1==2) {
-					if(tmt) this.cps.push(s)
-					s.t2 = 201
-				}
-			}
-			
-			//设定地图center
-			// let p = this.point[0]
-			// if(!p) p = this.way.coord[0]
-			if(this.way.coord) this.center = this.way.coord[0]
-			this.keepRec = keepRec
-		} else {
-			await this.getLoc(true)
-		}
-		
-		//是否赛事
-		if(this.tmt) {
-			// this.start()
-		}else{
-			this.zz.req({$fn:'sync' + this.zz.rndInt(0,4), $url:'/user/rec/sync',get:1}).then(e=>{
-				console.log(e);
-				if(e&&(e.rec.point.length||e.rec.coord.length)&&!uni.getStorageSync('nav_rec'+this.tmt)) {
-					uni.setStorageSync('nav_rec'+this.tmt, e.rec)
-					uni.setStorageSync('nav_T_tim'+this.tmt, [e.tim.MS, e.tim.S, e.tim.M, e.tim.H])
-				}
-			})
-		}
-		
-		await this.around(this.center)
-		console.log(this.cps.length)
-	},
-	async onShow() {
-		let poi = uni.getStorageSync('nav_poi')
-		if (poi) {
-			uni.removeStorageSync('nav_poi')
-			let idx = this.rec.point.findIndex(e=>e._id==poi._id)
-			if(idx==-1) {
-				this.rec.point.push(poi)
-				this.fly(poi.coord)
-			}else{
-				this.rec.point.splice(idx,1,poi)
-			}
-			poi.editble = 1
-			this.exec({m:'setPoi', e:{add:[poi]} })
-			this.setRec()
-			sync.go()
-		}
-		let qr = uni.getStorageSync('scanCode')
-		if(qr) {
-			uni.removeStorageSync('scanCode')
-			let p = await scan(uni.getStorageSync('cur_loc_wgs84'),{text:qr})
-			this.scaned(p)
-		}
-	},
-	onBackPress() { return this.onRec },
-	mounted() { this.setProp() },
-	methods: {
-		setProp() {
-			if(this.mdone) {
-				this.mb = {
-					ver: this.ver++,
-				    center: this.center,
-					pms: this.kml.children
-				}
-			} else {
-				this.mb = {
-				    sysInfo: this.sysInfo,
-				    center: this.center,
-				}
-			}
-		},
-		exec({m,e}){ this.mb = {exec:{m,e}} },
-		mapDone(e) {
-			this.mdone = e
-			this.setProp()
-			if(this.keepRec) this.start(1)
-		},
-		mapDo(e) {
-			// console.log('mapDo ------ >', e)
-			switch (e.act){
-				case 'loading':
-					uni.showLoading({ mask:true })
-					break;
-				case 'hideloading':
-					uni.hideLoading()
-					break;
-				case 'viewImg':
-					this.zz.viewIMG(e.imgs,e.idx)
-					break;
-				case 'viewVideo':
-					this.video = e.url
-					break;
-				case 'chgStyle':
-					this.zz.toast(e.e)
-					this.setProp()
-					if(this.onRec) {
-						setTimeout(()=> {
-							this.exec({m:'setPoi', e:{add:this.rec.point} })
-						}, 200)
-					}
-					break
-				default:
-					this.markertap(e)
-					break;
-			}
-		},
-		mbEvent(e) { this.lock = false },
-		async around(c){
-			if(!this.tmt) {
-				this.cps = await comm.around(c)
-			}
-		},
-		async getLoc(ct,c){
-			if(!c){
-				this.locating = true
-				let {coord} = await getLocation()
-				this.locating = false
-				c = coord
-			}
-			if(ct) this.fly(c)
-			this.lock = true
-		},
-		fly(c){ this.exec({m:'fly2', e:{coord:c}}) },
-		stop(){
-			let rec = this.rec
-			this.onRec = false
-			this.exec({m:'trigger', e:0})
-			uni.removeStorageSync('cur_loc_wgs84')
-			if(rec.coord.length<10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
-			
-			rec.info = calData(rec.coord)
-			this.setRec()
-			this.zz.href('/pages/nav/save',{tmt: this.tmt}, 1, null, 'redirectTo')
-		},
-		clock(){
-			let tim = this.tim
-			this.timer = setInterval(()=>{
-			  tim.MS += 1000
-			   if(tim.MS >= 1000) {
-					tim.MS = 0
-					tim.S += 1
-			   }
-			   if(tim.S >= 60) {
-					tim.S = 0
-					tim.M += 1
-			   }
-			   if(tim.M >= 60) {
-					tim.M = 0
-					tim.H += 1
-			   }
-			   uni.setStorageSync('nav_T_tim'+this.tmt, [tim.MS, tim.S, tim.M, tim.H])
-			}, 1000)
-		},
-		async start(keepRec){
-			// #ifndef H5-ZLB
-				//提示下载app
-				// const [_, ask] = await uni.showModal({
-				// 	title: '提示',
-				// 	content: '环浙步道app！',
-				// 	cancelText: '去设置',
-				// 	confirmText: '不再提醒'
-				// })
-				// if (ask.cancel) {
-				// 	return locationModule.gotoNativePage()
-				// } else {
-				// 	uni.setStorageSync('dontAskAndroid',1)
-				// }
-			// #endif
-			
-			let init = () => {
-					uni.removeStorageSync('nav_rec'+this.tmt)
-					sync.add({$url:'/user/rec/sync',init:1,startTime:rec.startTime})
-				},
-				tim = {H:0, M:0, S:0, MS:0},
-				rec = {
-					ct: 'wgs84',
-					startTime: this.zz.now(),
-					stopTime: 0,
-					endTime: 0,
-					t: {},
-					point:[],
-					coord:[],
-					line: []
-				}
-				
-			
-			// #ifndef APP-PLUS
-			// H5提示
-			const [_, ask] = await uni.showModal({
-				title: '提示',
-				content: '为确保轨迹正常记录，请勿退出页面或关闭屏幕！',
-				confirmText: '知道了'
-			})
-			// #endif
-			
-			// 查询本地是否有未完成的轨迹记录
-			let nav_rec = uni.getStorageSync('nav_rec'+this.tmt)
-			if (nav_rec) {
-				const keepGoing = ()=>{
-					Object.assign(rec, nav_rec)
-					if(rec.ct == 'gcj02') {
-						for (let s of rec.point) { s.coord = trans(s.coord,'gcj02towgs84') }
-						rec.coord = trans(rec.coord,'gcj02towgs84')
-						rec.ct = 'wgs84'
-						this.setRec()
-					}
-					
-					let T = uni.getStorageSync('nav_T_tim'+this.tmt)
-					tim.MS = T[0]
-					tim.S = T[1]
-					tim.M = T[2]
-					tim.H = T[3]
-				}
-				if(keepRec){
-					keepGoing()
-				} else {
-					if(this.zz.now() > (nav_rec.startTime + 1000*60*60*24 * 89)){
-						init()
-					}else{
-						const [_, res] = await uni.showModal({
-							title: "是否继续上次轨迹记录?",
-							content: "取消后，上次记录将会被删除！"
-						})
-						if (res.confirm) {
-							keepGoing()
-						} else { //删除缓存和数据库
-							init()
-						}
-					}
-				}
-			} else { //新建
-				init()
-			}
-			
-			rec.kmlId = this.kml._id || 0
-			rec.tmt = this.tmt
-			this.tim = tim
-			this.rec = rec
-			this.onRec = true
-			this.clock()
-			this.exec({m:'setPoi', e:{add:rec.point} })
-			setTimeout(()=>{this.exec({m:'trigger',e:1})}, 100)
-		},
-		onLocating(c1){
-			uni.setStorageSync('cur_loc_wgs84', c1)
-			console.log('onLocating ---------->', c1)
-			//保持地图中心
-			if (this.lock) this.fly(c1)
-			
-			if(this.onRec&&!this.puase) {
-				let	rec = this.rec,
-					tim = this.tim,
-					cps = this.cps,
-					size = rec.coord.length,
-					say = () => {
-						if (tim.H && !rec.t['t'+tim.H]) {
-							rec.t['t'+tim.H] = 1
-							delete rec.t['t'+(tim.H-1)]
-							tts.speak('您已运动' + tim.H + '小时，累计距离' + rec.info.len + '米，爬升' + rec.info.up + '米，下降' + rec.info.down + '米')
-						}
-						if (rec.info.len > 980) {
-							for (var i = 0; i < 12; i++) {
-								let g = i + rec.info.len
-								if (g % 1000 == 0 && !rec.t['l'+g]) {
-									rec.t['l'+g] = 1
-									delete rec.t['l'+(g-1)]
-									let d = calData(rec.point)
-									tts.speak('您已运动' + (g / 1000) + '公里，累计爬升' + rec.info.up + '米，下降' + rec.info.down + '米')
-									break
-								}
-							}
-						}
-					},
-					keepSync = (len)=>{
-						// 刷新附近cps
-						if((!len||len%77==0) && !rec.t['y'+len]) {
-							rec.t['y'+len] = 1
-							delete rec.t['y'+(len-77)]
-							comm.on(c1)
-						}
-						// 更新打卡点距离
-						if(!this.tmt && (!len||len%55==0) && !rec.t['x'+len]) {
-							rec.t['x'+len] = 1
-							delete rec.t['x'+(len-55)]
-							this.around(c1)
-						}
-						
-						// 打卡提醒 
-						if((!len||len%6==0) && !rec.t[len] &&cps.length) {
-							rec.t[len] = 1
-							delete rec.t[len-6]
-							
-							toDist(c1, cps, this.tmt? this.way.coord:null)
-							cps.sort(this.zz.compare('dist'))
-							
-							//找未扫过的最近的一个
-							const getUnscaned=(log,i=0)=>{
-								let scaned = log[cps[i]._id]
-								if (!scaned || (this.zz.now() - scaned[scaned.length-1]) > 1000*60*60*24) {
-									return cps[i]
-								} else {
-									i++
-									if(i<cps.length) return getUnscaned(log,i)
-								}
-							}
-							
-							let p = getUnscaned(uni.getStorageSync('user_scan_log')||{temp:[]})
-							
-							// console.log(p,'checkcps .............',cps,rec.line);
-							if(p) {
-								this.cp = p
-								if(p.dist <= 500) {
-									rec.line[1] = p.coord
-								} else {
-									if(rec.line[1]) rec.line[1].splice(1,1)
-									// setTimeout(()=>{
-									// 	this.exec({m:'setPoi', e:{del:this.cp._id } })
-									// }, 50);
-								}
-								if(p.dist <= this.minDist) {
-									//显示打卡点
-									setTimeout(()=>{ 
-										this.exec({m:'setPoi', e:{ add:[{ ...p,name: p._id, t2:90 }] } })
-									}, 100)
-									
-									if(!rec.t[p._id]) {
-										rec.t[p._id] = true
-										tts.speak('您已到达'+(p.sn||p.name||p._id)+'附近，'+(this.tmt?'请扫码步道柱二维码完成打卡':'您可以扫码步道柱二维码完成足迹打卡'))
-									}
-								}
-							}
-						}
-						
-						// 同步服务器数据
-						if(len&&len%10==0&&!rec.t['z'+len]) {
-							rec.t['z'+len] = 1
-							delete rec.t['z'+(len-10)]
-							let task = {$url: '/user/rec/sync', coord:[], len, ct: rec.ct, tim: this.tim, stopTime: rec.stopTime}
-							for (var i = (len-10); i < len; i++) {
-								task.coord.push(rec.coord[i])
-							}
-							sync.add(task)
-						}
-					}
-				
-				rec.line[0] = c1
-				
-				if (!size) {
-					rec.coord.push(c1)
-					keepSync(0)
-				}else{
-					let c2 = rec.coord[size-1],
-						len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
-					
-					//大于6m 小于60m/每秒 判断有效
-					if(len>=6 && (len/((c1[3]-c2[3])*1000) < 60)) {
-						rec.coord.push(c1)
-						
-						// 去除漂移点
-						if (size > 2) {
-							let r1 = rec.coord[size - 3],
-								r2 = rec.coord[size - 2],
-								r3 = rec.coord[size - 1],
-								
-								b1 = bearing(r2, r1),
-								b2 = bearing(r2, r3)
-												
-							if (~~Math.abs(b1 - b2) < 15) {
-								rec.coord.splice(size - 2, 1)
-								console.info('去除漂移------1',b1,b2, ~~Math.abs((b1-b2)))
-							}
-						}
-					}
-					keepSync(rec.coord.length)
-				}
-				rec.info = calData(rec.coord)
-				say()
-				this.setRec()
-				this.exec({m:'setLine', e:{coord:rec.coord,line:rec.line}})
-				// console.info(rec)
-			}
-		},
-		async controltap(t) {
-			if(t=='back') {
-				uni.navigateBack()
-			}
-			if(t=='scan') {
-				// #ifdef H5-ZLB || APP-PLUS
-				let p = await scan()
-				return this.scaned(p)
-				// #endif
-				uni.navigateTo({ url:'/pages/nav/scan', animationType:"slide-in-bottom" })
-			}
-			if(t=='position') {
-				this.getLoc(1)
-			}
-			if(t=='v' || t=='camera') {
-				let e = t=='v'? await this.zz.chooseVideo({}) : await this.zz.chooseImage({})
-				if(e) {
-					let poi = {
-							_id: uniqId(),
-							name: '',
-							t1: 2,
-							t2: t=='v'? 60:50,
-							coord: uni.getStorageSync('cur_loc_wgs84'),
-							desc: '',
-							time: this.zz.time2Date(),
-							imgs: t=='v'? []:e,
-							video: t=='v'? e:null
-						}
-					this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
-				}
-			}
-		},
-		scaned(p){
-			if(p) {
-				if(this.rec.line[1]) this.rec.line.splice(1,1)
-				this.rec.t[p._id] = 1
-				this.fly(p.coord)
-				this.exec({m:'setPoi', e:{del: this.cp._id, add:[p]} })
-			}
-		},
-		
-		
-		
-		async markertap(e) {
-			let rec = this.rec,
-				idx = rec.point.findIndex(x => x._id == e.id)
-				
-			if(idx!=-1) {
-				let poi = rec.point[idx]
-				// 编辑
-				if (e.act == 'edit') {
-					this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
-				}
-				
-				//删除
-				if (e.act == 'del') {
-					const [_, m] = await uni.showModal({
-						title: '确认要删除吗？',
-						content: '删除将无法恢复！'
-					})
-					if (m.confirm) {
-						for (let filePath of poi.imgs) {
-							this.zz.removeFile(filePath)
-						}
-						if(poi.video) {
-							this.zz.removeFile(poi.video.tempFilePath)
-						}
-						rec.point.splice(idx, 1)
-						this.setRec()
-						sync.add({$url:'/user/rec/sync',xp:[poi._id]})
-						this.exec({m:'setPoi', e:{del: e.id} })
-					}
-				}
-			}else{
-				//非采集坐标
-			}
-		},
-		onPuase(e){
-			console.log('onPuase', e);
-			this.puase = e
-			let r = this.rec
-			if(e){
-				r.name = this.zz.time2Date()
-				r.endTime = this.zz.now()
-				clearInterval(this.timer)
-			} else {
-				r.stopTime += this.zz.now() - r.endTime
-				this.clock()
-			}
-			this.setRec()
-		},
-		changeMap(e) {
-			this.setRec(1)
-			this.zz.href('/pages/nav/nav'+(this.amap?'H5':'App'), {keepRec:1, kml:this.kml})
-		},
-		share(e) {
-			
-		},
-		info() {
-			if(this.rec.info) uni.navigateTo({ url:'/pages/nav/info', animationType:"slide-in-top" })
-		},
-		setRec(tr){
-			let rec = this.rec
-			// if(tr) {
-			// 	rec.ct = 'gcj02'
-			// 	for (let s of rec.point) {
-			// 		s.coord = trans(s.coord)
-			// 	}
-			// 	rec.coord = trans(rec.coord)
-			// }
-			uni.setStorageSync('nav_rec'+this.tmt, rec)
-		}
-	}
+    components: { fab },
+    data() {
+        return {
+            sysInfo: uni.getStorageSync('sysInfo'),
+            winH: 0,
+            stH: 0,
+            kml: { children: [] },
+            tmt: 0,
+            cp: {},
+            cps: [],
+            way: {},
+            minDist: 60,
+
+            mapHeight: 0,
+            center: [121, 30],  //121.53537, 29.64611
+            scale: 15,
+            point: [],
+            line: [],
+            keepRec: false,
+            onRec: false,
+            puase: false,
+            tim: { H: 0, M: 0, S: 0, MS: 0 },
+            rec: {},
+
+            timer: null,
+            lock: false,
+
+            // isConn: true,
+            locating: false,
+            mdone: false,
+            mb: {},
+            ver: 0,
+            video: null
+        }
+    },
+
+    async onLoad({ v }) {
+        this.stH = this.sysInfo.statusBarHeight + 60
+        this.mapHeight = this.winH
+        uni.removeStorageSync('cur_loc_wgs84')
+
+        if (v) {
+            let { kml, keepRec = 0, tmt = 0 } = this.zz.getParam(v)
+
+            this.kml = kml
+            this.tmt = tmt
+            for (let s of kml.children) {
+                if (s.t1 == 1) {
+                    this.way = s
+                    s.t2 = 199
+                }
+                if (s.t1 == 2) {
+                    if (tmt) this.cps.push(s)
+                    s.t2 = 201
+                }
+            }
+
+            //设定地图center
+            // let p = this.point[0]
+            // if(!p) p = this.way.coord[0]
+            if (this.way.coord) this.center = this.way.coord[0]
+            this.keepRec = keepRec
+        } else {
+            await this.getLoc(true)
+        }
+
+        //是否赛事
+        if (this.tmt) {
+            // this.start()
+        } else {
+            this.zz.req({ $fn: 'sync' + this.zz.rndInt(0, 4), $url: '/user/rec/sync', get: 1 }).then(e => {
+                console.log(e);
+                if (e && (e.rec.point.length || e.rec.coord.length) && !uni.getStorageSync('nav_rec' + this.tmt)) {
+                    uni.setStorageSync('nav_rec' + this.tmt, e.rec)
+                    uni.setStorageSync('nav_T_tim' + this.tmt, [e.tim.MS, e.tim.S, e.tim.M, e.tim.H])
+                }
+            })
+        }
+
+        await this.around(this.center)
+        console.log(this.cps.length)
+    },
+    async onShow() {
+        let poi = uni.getStorageSync('nav_poi')
+        if (poi) {
+            uni.removeStorageSync('nav_poi')
+            let idx = this.rec.point.findIndex(e => e._id == poi._id)
+            if (idx == -1) {
+                this.rec.point.push(poi)
+                this.fly(poi.coord)
+            } else {
+                this.rec.point.splice(idx, 1, poi)
+            }
+            poi.editble = 1
+            this.exec({ m: 'setPoi', e: { add: [poi] } })
+            this.setRec()
+            sync.go()
+        }
+        let qr = uni.getStorageSync('scanCode')
+        if (qr) {
+            uni.removeStorageSync('scanCode')
+            let p = await scan(uni.getStorageSync('cur_loc_wgs84'), { text: qr })
+            this.scaned(p)
+        }
+    },
+    onBackPress() { return this.onRec },
+    mounted() { this.setProp() },
+    methods: {
+        setProp() {
+            if (this.mdone) {
+                this.mb = {
+                    ver: this.ver++,
+                    center: this.center,
+                    pms: this.kml.children
+                }
+            } else {
+                this.mb = {
+                    sysInfo: this.sysInfo,
+                    center: this.center,
+                }
+            }
+        },
+        exec({ m, e }) { this.mb = { exec: { m, e } } },
+        mapDone(e) {
+            this.mdone = e
+            this.setProp()
+            if (this.keepRec) this.start(1)
+        },
+        mapDo(e) {
+            // console.log('mapDo ------ >', e)
+            switch (e.act) {
+                case 'loading':
+                    uni.showLoading({ mask: true })
+                    break;
+                case 'hideloading':
+                    uni.hideLoading()
+                    break;
+                case 'viewImg':
+                    this.zz.viewIMG(e.imgs, e.idx)
+                    break;
+                case 'viewVideo':
+                    this.video = e.url
+                    break;
+                case 'chgStyle':
+                    this.zz.toast(e.e)
+                    this.setProp()
+                    if (this.onRec) {
+                        setTimeout(() => {
+                            this.exec({ m: 'setPoi', e: { add: this.rec.point } })
+                        }, 200)
+                    }
+                    break
+                default:
+                    this.markertap(e)
+                    break;
+            }
+        },
+        mbEvent(e) { this.lock = false },
+        async around(c) {
+            if (!this.tmt) {
+                this.cps = await comm.around(c)
+            }
+        },
+        async getLoc(ct, c) {
+            if (!c) {
+                this.locating = true
+                let { coord } = await getLocation()
+                this.locating = false
+                c = coord
+            }
+            if (ct) this.fly(c)
+            this.lock = true
+        },
+        fly(c) { this.exec({ m: 'fly2', e: { coord: c } }) },
+        stop() {
+            let rec = this.rec
+            this.onRec = false
+            this.exec({ m: 'trigger', e: 0 })
+            uni.removeStorageSync('cur_loc_wgs84')
+            if (rec.coord.length < 10 && !rec.point.length) return this.zz.modal('本次记录太短了！')
+
+            rec.info = calData(rec.coord)
+            this.setRec()
+            this.zz.href('/pages/nav/save', { tmt: this.tmt }, 1, null, 'redirectTo')
+        },
+        clock() {
+            let tim = this.tim
+            this.timer = setInterval(() => {
+                tim.MS += 1000
+                if (tim.MS >= 1000) {
+                    tim.MS = 0
+                    tim.S += 1
+                }
+                if (tim.S >= 60) {
+                    tim.S = 0
+                    tim.M += 1
+                }
+                if (tim.M >= 60) {
+                    tim.M = 0
+                    tim.H += 1
+                }
+                uni.setStorageSync('nav_T_tim' + this.tmt, [tim.MS, tim.S, tim.M, tim.H])
+            }, 1000)
+        },
+        async start(keepRec) {
+            // #ifndef H5-ZLB
+            //提示下载app
+            // const [_, ask] = await uni.showModal({
+            // 	title: '提示',
+            // 	content: '环浙步道app！',
+            // 	cancelText: '去设置',
+            // 	confirmText: '不再提醒'
+            // })
+            // if (ask.cancel) {
+            // 	return locationModule.gotoNativePage()
+            // } else {
+            // 	uni.setStorageSync('dontAskAndroid',1)
+            // }
+            // #endif
+
+            let init = () => {
+                uni.removeStorageSync('nav_rec' + this.tmt)
+                sync.add({ $url: '/user/rec/sync', init: 1, startTime: rec.startTime })
+            },
+                tim = { H: 0, M: 0, S: 0, MS: 0 },
+                rec = {
+                    ct: 'wgs84',
+                    startTime: this.zz.now(),
+                    stopTime: 0,
+                    endTime: 0,
+                    t: {},
+                    point: [],
+                    coord: [],
+                    line: []
+                }
+
+
+            // #ifndef APP-PLUS
+            // H5提示
+            const [_, ask] = await uni.showModal({
+                title: '提示',
+                content: '为确保轨迹正常记录，请勿退出页面或关闭屏幕！',
+                confirmText: '知道了'
+            })
+            // #endif
+
+            // 查询本地是否有未完成的轨迹记录
+            let nav_rec = uni.getStorageSync('nav_rec' + this.tmt)
+            if (nav_rec) {
+                const keepGoing = () => {
+                    Object.assign(rec, nav_rec)
+                    if (rec.ct == 'gcj02') {
+                        for (let s of rec.point) { s.coord = trans(s.coord, 'gcj02towgs84') }
+                        rec.coord = trans(rec.coord, 'gcj02towgs84')
+                        rec.ct = 'wgs84'
+                        this.setRec()
+                    }
+
+                    let T = uni.getStorageSync('nav_T_tim' + this.tmt)
+                    tim.MS = T[0]
+                    tim.S = T[1]
+                    tim.M = T[2]
+                    tim.H = T[3]
+                }
+                if (keepRec) {
+                    keepGoing()
+                } else {
+                    if (this.zz.now() > (nav_rec.startTime + 1000 * 60 * 60 * 24 * 89)) {
+                        init()
+                    } else {
+                        const [_, res] = await uni.showModal({
+                            title: "是否继续上次轨迹记录?",
+                            content: "取消后，上次记录将会被删除！"
+                        })
+                        if (res.confirm) {
+                            keepGoing()
+                        } else { //删除缓存和数据库
+                            init()
+                        }
+                    }
+                }
+            } else { //新建
+                init()
+            }
+
+            rec.kmlId = this.kml._id || 0
+            rec.tmt = this.tmt
+            this.tim = tim
+            this.rec = rec
+            this.onRec = true
+            this.clock()
+            this.exec({ m: 'setPoi', e: { add: rec.point } })
+            setTimeout(() => { this.exec({ m: 'trigger', e: 1 }) }, 100)
+        },
+        onLocating(c1) {
+            uni.setStorageSync('cur_loc_wgs84', c1)
+            console.log('onLocating ---------->', c1)
+            //保持地图中心
+            if (this.lock) this.fly(c1)
+
+            if (this.onRec && !this.puase) {
+                let rec = this.rec,
+                    tim = this.tim,
+                    cps = this.cps,
+                    size = rec.coord.length,
+                    say = () => {
+                        if (tim.H && !rec.t['t' + tim.H]) {
+                            rec.t['t' + tim.H] = 1
+                            delete rec.t['t' + (tim.H - 1)]
+                            tts.speak('您已运动' + tim.H + '小时，累计距离' + rec.info.len + '米，爬升' + rec.info.up + '米，下降' + rec.info.down + '米')
+                        }
+                        if (rec.info.len > 980) {
+                            for (var i = 0; i < 12; i++) {
+                                let g = i + rec.info.len
+                                if (g % 1000 == 0 && !rec.t['l' + g]) {
+                                    rec.t['l' + g] = 1
+                                    delete rec.t['l' + (g - 1)]
+                                    let d = calData(rec.point)
+                                    tts.speak('您已运动' + (g / 1000) + '公里，累计爬升' + rec.info.up + '米，下降' + rec.info.down + '米')
+                                    break
+                                }
+                            }
+                        }
+                    },
+                    keepSync = (len) => {
+                        // 刷新附近cps
+                        if ((!len || len % 77 == 0) && !rec.t['y' + len]) {
+                            rec.t['y' + len] = 1
+                            delete rec.t['y' + (len - 77)]
+                            comm.on(c1)
+                        }
+                        // 更新打卡点距离
+                        if (!this.tmt && (!len || len % 55 == 0) && !rec.t['x' + len]) {
+                            rec.t['x' + len] = 1
+                            delete rec.t['x' + (len - 55)]
+                            this.around(c1)
+                        }
+
+                        // 打卡提醒 
+                        if ((!len || len % 6 == 0) && !rec.t[len] && cps.length) {
+                            rec.t[len] = 1
+                            delete rec.t[len - 6]
+
+                            toDist(c1, cps, this.tmt ? this.way.coord : null)
+                            cps.sort(this.zz.compare('dist'))
+
+                            //找未扫过的最近的一个
+                            const getUnscaned = (log, i = 0) => {
+                                let scaned = log[cps[i]._id]
+                                if (!scaned || (this.zz.now() - scaned[scaned.length - 1]) > 1000 * 60 * 60 * 24) {
+                                    return cps[i]
+                                } else {
+                                    i++
+                                    if (i < cps.length) return getUnscaned(log, i)
+                                }
+                            }
+
+                            let p = getUnscaned(uni.getStorageSync('user_scan_log') || { temp: [] })
+
+                            // console.log(p,'checkcps .............',cps,rec.line);
+                            if (p) {
+                                this.cp = p
+                                if (p.dist <= 500) {
+                                    rec.line[1] = p.coord
+                                } else {
+                                    if (rec.line[1]) rec.line[1].splice(1, 1)
+                                    // setTimeout(()=>{
+                                    // 	this.exec({m:'setPoi', e:{del:this.cp._id } })
+                                    // }, 50);
+                                }
+                                if (p.dist <= this.minDist) {
+                                    //显示打卡点
+                                    setTimeout(() => {
+                                        this.exec({ m: 'setPoi', e: { add: [{ ...p, name: p._id, t2: 90 }] } })
+                                    }, 100)
+
+                                    if (!rec.t[p._id]) {
+                                        rec.t[p._id] = true
+                                        tts.speak('您已到达' + (p.sn || p.name || p._id) + '附近，' + (this.tmt ? '请扫码步道柱二维码完成打卡' : '您可以扫码步道柱二维码完成足迹打卡'))
+                                    }
+                                }
+                            }
+                        }
+
+                        // 同步服务器数据
+                        if (len && len % 10 == 0 && !rec.t['z' + len]) {
+                            rec.t['z' + len] = 1
+                            delete rec.t['z' + (len - 10)]
+                            let task = { $url: '/user/rec/sync', coord: [], len, ct: rec.ct, tim: this.tim, stopTime: rec.stopTime }
+                            for (var i = (len - 10); i < len; i++) {
+                                task.coord.push(rec.coord[i])
+                            }
+                            sync.add(task)
+                        }
+                    }
+
+                rec.line[0] = c1
+
+                if (!size) {
+                    rec.coord.push(c1)
+                    keepSync(0)
+                } else {
+                    let c2 = rec.coord[size - 1],
+                        len = getDist(c1[0], c1[1], c2[0], c2[1], c1[2], c2[2])
+
+                    //大于6m 小于60m/每秒 判断有效
+                    if (len >= 6 && (len / ((c1[3] - c2[3]) * 1000) < 60)) {
+                        rec.coord.push(c1)
+
+                        // 去除漂移点
+                        if (size > 2) {
+                            let r1 = rec.coord[size - 3],
+                                r2 = rec.coord[size - 2],
+                                r3 = rec.coord[size - 1],
+
+                                b1 = bearing(r2, r1),
+                                b2 = bearing(r2, r3)
+
+                            if (~~Math.abs(b1 - b2) < 15) {
+                                rec.coord.splice(size - 2, 1)
+                                console.info('去除漂移------1', b1, b2, ~~Math.abs((b1 - b2)))
+                            }
+                        }
+                    }
+                    keepSync(rec.coord.length)
+                }
+                rec.info = calData(rec.coord)
+                say()
+                this.setRec()
+                this.exec({ m: 'setLine', e: { coord: rec.coord, line: rec.line } })
+                // console.info(rec)
+            }
+        },
+        async controltap(t) {
+            if (t == 'back') {
+                uni.navigateBack()
+            }
+            if (t == 'scan') {
+                // #ifdef H5-ZLB || APP-PLUS
+                let p = await scan()
+                return this.scaned(p)
+                // #endif
+                uni.navigateTo({ url: '/pages/nav/scan', animationType: "slide-in-bottom" })
+            }
+            if (t == 'position') {
+                this.getLoc(1)
+            }
+            if (t == 'v' || t == 'camera') {
+                let e = t == 'v' ? await this.zz.chooseVideo({}) : await this.zz.chooseImage({})
+                if (e) {
+                    let poi = {
+                        _id: uniqId(),
+                        name: '',
+                        t1: 2,
+                        t2: t == 'v' ? 60 : 50,
+                        coord: uni.getStorageSync('cur_loc_wgs84'),
+                        desc: '',
+                        time: this.zz.time2Date(),
+                        imgs: t == 'v' ? [] : e,
+                        video: t == 'v' ? e : null
+                    }
+                    this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
+                }
+            }
+        },
+        scaned(p) {
+            if (p) {
+                if (this.rec.line[1]) this.rec.line.splice(1, 1)
+                this.rec.t[p._id] = 1
+                this.fly(p.coord)
+                this.exec({ m: 'setPoi', e: { del: this.cp._id, add: [p] } })
+            }
+        },
+
+
+
+        async markertap(e) {
+            let rec = this.rec,
+                idx = rec.point.findIndex(x => x._id == e.id)
+
+            if (idx != -1) {
+                let poi = rec.point[idx]
+                // 编辑
+                if (e.act == 'edit') {
+                    this.zz.href('/pages/nav/point', poi, 1, 'slide-in-right')
+                }
+
+                //删除
+                if (e.act == 'del') {
+                    const [_, m] = await uni.showModal({
+                        title: '确认要删除吗？',
+                        content: '删除将无法恢复！'
+                    })
+                    if (m.confirm) {
+                        for (let filePath of poi.imgs) {
+                            this.zz.removeFile(filePath)
+                        }
+                        if (poi.video) {
+                            this.zz.removeFile(poi.video.tempFilePath)
+                        }
+                        rec.point.splice(idx, 1)
+                        this.setRec()
+                        sync.add({ $url: '/user/rec/sync', xp: [poi._id] })
+                        this.exec({ m: 'setPoi', e: { del: e.id } })
+                    }
+                }
+            } else {
+                //非采集坐标
+            }
+        },
+        onPuase(e) {
+            console.log('onPuase', e);
+            this.puase = e
+            let r = this.rec
+            if (e) {
+                r.name = this.zz.time2Date()
+                r.endTime = this.zz.now()
+                clearInterval(this.timer)
+            } else {
+                r.stopTime += this.zz.now() - r.endTime
+                this.clock()
+            }
+            this.setRec()
+        },
+        changeMap(e) {
+            this.setRec(1)
+            this.zz.href('/pages/nav/nav' + (this.amap ? 'H5' : 'App'), { keepRec: 1, kml: this.kml })
+        },
+        share(e) {
+
+        },
+        info() {
+            if (this.rec.info) uni.navigateTo({ url: '/pages/nav/info', animationType: "slide-in-top" })
+        },
+        setRec(tr) {
+            let rec = this.rec
+            // if(tr) {
+            // 	rec.ct = 'gcj02'
+            // 	for (let s of rec.point) {
+            // 		s.coord = trans(s.coord)
+            // 	}
+            // 	rec.coord = trans(rec.coord)
+            // }
+            uni.setStorageSync('nav_rec' + this.tmt, rec)
+        }
+    }
 };
 
 </script>
 <style>
 .start-f {
-	position: fixed;
-	bottom: 100rpx;
-	left: 0;
-	right: 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	background-color: rgba(255, 255, 255, 0);
-	z-index: 1;
+    position: fixed;
+    bottom: 100rpx;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 1;
 }
 
 .start-btn-name {
-	font-size: 14px;
-	font-weight: 500;
-	color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
 }
 .start-btn {
-	width: 400rpx;
-	height: 80rpx;
-	background-color: #0081ff;
-	box-shadow: 0 30upx 20upx rgba(0, 0, 0, 0.2);
-	display: flex;
-	border-radius: 40rpx;
-	align-items: center;
-	justify-content: center;
-	flex-direction: row;
+    width: 400rpx;
+    height: 80rpx;
+    background-color: #0081ff;
+    box-shadow: 0 30upx 20upx rgba(0, 0, 0, 0.2);
+    display: flex;
+    border-radius: 40rpx;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
 }
-	
+
 .back-img {
-	position: fixed;
-	left: 6px;
-	width: 42px;
-	height: 42px;
-	border-radius: 50%;
+    position: fixed;
+    left: 6px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
 }
 .loading {
-	width: 38px;
-	height: 38px;
-	left: 8px;
+    width: 38px;
+    height: 38px;
+    left: 8px;
 }
 </style>

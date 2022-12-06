@@ -147,10 +147,10 @@ export default {
                 // 这两个方案对处理tabbar item的激活与否方式不一样
                 if (pagePath) {
                     if (pagePath == this.pageUrl || pagePath == '/' + this.pageUrl) {
-                        console.error(this.list[index].selectedIconPath)
+                        // console.error(this.list[index].selectedIconPath)
                         return this.list[index].selectedIconPath;
                     } else {
-                        console.error(this.list[index].iconPath)
+                        // console.error(this.list[index].iconPath)
                         return this.list[index].iconPath;
                     }
                 } else {

@@ -18,12 +18,12 @@
                                         位置：
                                         <text class="margin-lr-sm">{{ t1.addr }}</text>
                                     </view>
-                                    <view class="text-orange text-sm" @tap="goLocation(i1)">
+                                    <!-- <view class="text-orange text-sm" @tap="goLocation(i1)">
                                         <button class="cu-btn round bg-orange shadow sm">
                                             <text class="cuIcon-forward margin-right-xs"></text>
                                             地图
                                         </button>
-                                    </view>
+                                    </view> -->
                                 </view>
                             </view>
                         </view>

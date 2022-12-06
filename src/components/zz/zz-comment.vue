@@ -105,9 +105,9 @@
                     <text v-else class="cuIcon-favor text-grey margin-rgiht-xs"></text>
                     <text>{{ details.favor }}</text>
                 </view>
-                <view class="action text-df" @click="shareActive">
+                <!-- <view class="action text-df" @click="shareActive">
                     <text class="cuIcon-share text-grey"></text>
-                </view>
+                </view> -->
             </view>
         </view>
         <!--  -->

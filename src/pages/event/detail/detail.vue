@@ -492,10 +492,10 @@
 						<view class="cuIcon-favorfill"></view>
 						已收藏
 					</view>
-					<view class="action">
+					<!-- <view class="action">
 						<view class="cuIcon-share"><view class="cu-tag badge"></view></view>
 						分享
-					</view>
+					</view> -->
 					<view class="bg-red submit" @tap="showModal" data-target="enroll">一键报名</view>
 				</view>
 

@@ -71,10 +71,17 @@ export default {
         async loadData() {
             let d = uni.getStorageSync('sys_dict')
 
-            this.tagList = this.zz.toArr(d.article).filter(e => e.pub).map(tag => {
-                tag.active = false
+            this.tagList = this.zz.toArr(d.article).filter(e => e.pub).map((tag, index) => {
+                if (tag.label === '动态' && tag.value === 30) {
+                    tag.active = true
+                } else {
+                    tag.active = false
+                }
+
                 return tag
             })
+
+            console.log('加载的tagList', this.tagList);
         },
         // 发布
         async sendPush() {
@@ -110,7 +117,8 @@ export default {
             this.zz.req(req1).then((res) => {
                 let pages = getCurrentPages(); //当前页面栈  
                 if (pages.length > 1) {
-                    let beforePage = pages[pages.length - 2]; //获取上一个页面实例对象  
+                    let beforePage = pages[pages.length - 2]; //获取上一个页面实例对象 
+                    console.log("上一个页面=========", beforePage)
                     beforePage.$vm.refreshNewsHome(); //触发父页面中的方法change()  
                 }
                 setTimeout(() => {
@@ -127,6 +135,16 @@ export default {
             this.selectedTopic.splice(index, 1);
         },
         selectTag(index) {
+            let activeNum = this.tagList.reduce((acc, val) => {  // 计算
+                if (val.active) {
+                    acc = acc + 1
+                }
+                return acc
+            }, 0)
+            if (activeNum === 1 && this.tagList[index].active === true) {
+                this.zz.toast("至少选择一个标签~")
+                return
+            }
             this.tagList[index].active = !this.tagList[index].active;
         },
         addImage(e) {
@@ -180,6 +198,6 @@ export default {
     column-gap: 40rpx;
     background-color: #ffffff;
     padding-left: 30rpx;
-    font-size: 1.8rem;
+    font-size: 36rpx;
 }
 </style>
