@@ -68,7 +68,7 @@ function addZwLogPage({
     _this = null,
     pagePath = null,
     enterPageTime = null,
-    leavePageTime = null,
+    // leavePageTime = null,
     loadTime = null,
     responseTime = null,
     title = null
@@ -100,7 +100,7 @@ function addZwLogPage({
                 pagePath: null,
                 title: null,
                 enterPageTime: null,
-                leavePageTime: null,
+                // leavePageTime: null,
                 loadTime: null,
                 responseTime: null
             }
@@ -117,10 +117,9 @@ function addZwLogPage({
             // console.error("写入进入时间===================", enterPageTime, path)
             zwlogPageMap[path].enterPageTime = enterPageTime
         }
-        if (leavePageTime) {
-            // console.error("写入离开时间===================", leavePageTime, path)
-            zwlogPageMap[path].leavePageTime = leavePageTime
-        }
+        // if (leavePageTime) {
+        //     zwlogPageMap[path].leavePageTime = leavePageTime
+        // }
         if (loadTime) {
             zwlogPageMap[path].loadTime = loadTime
         }
@@ -132,15 +131,14 @@ function addZwLogPage({
         if (zwlogPageMap[path].path &&
             zwlogPageMap[path].title &&
             zwlogPageMap[path].enterPageTime &&
-            zwlogPageMap[path].leavePageTime &&
+            // zwlogPageMap[path].leavePageTime &&
             zwlogPageMap[path].loadTime &&
             zwlogPageMap[path].responseTime) {
-            // console.error("数据收集完成", zwlogPageMap[path])
+            console.error("数据收集完成", zwlogPageMap[path])
 
 
             // 页面浏览时长  离开时间 - 进入时间
-            let Page_duration = (zwlogPageMap[path].leavePageTime.getTime() - zwlogPageMap[path].enterPageTime
-                .getTime()) / 1000
+            // let Page_duration = (zwlogPageMap[path].leavePageTime.getTime() - zwlogPageMap[path].enterPageTime.getTime()) / 1000
             // 页面加载时间
             let t2 = (zwlogPageMap[path].loadTime.getTime() - zwlogPageMap[path].enterPageTime.getTime()) / 1000
             // 页面相应时间
@@ -149,9 +147,8 @@ function addZwLogPage({
             let pvParams = {
                 miniAppId: bd.appid,
                 miniAppName: bd.sys.name,
-                userType: '1',
+                // userType: 'person',
                 log_status: '02',
-                Page_duration: Page_duration,
                 t2: t2,
                 t0: t0,
                 pageId: zwlogPageMap[path].path,
@@ -159,18 +156,18 @@ function addZwLogPage({
             }
 
             // console.error("提交埋点数据========init======================", pvParams)
-            if (Page_duration < Min_Page_Stay_Duration) {
-                console.log('\n\n提交埋点数据-删除数据',
-                    `${path}浏览时长小于${Min_Page_Stay_Duration}秒`,
-                    `我们认为当前页面的停留时间过短，可能是快速返回造成，不需要`)
-                delete zwlogPageMap[path]
-                zwlogPageMap = omit(zwlogPageMap, path)
-                return
-            }
+            // if (Page_duration < Min_Page_Stay_Duration) {
+            //     console.log('\n\n提交埋点数据-删除数据',
+            //         `${path}浏览时长小于${Min_Page_Stay_Duration}秒`,
+            //         `我们认为当前页面的停留时间过短，可能是快速返回造成，不需要`)
+            //     delete zwlogPageMap[path]
+            //     zwlogPageMap = omit(zwlogPageMap, path)
+            //     return
+            // }
 
             console.error("数据采集完毕==============================", zwlogPageMap)
 
-            zwlog.onReady(function () {
+            // zwlog.onReady(function () {
                 console.error("zwlog================onReady=============================")
                 console.warn("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
                     "\n查看NetWork - All(不进行筛选)-m.gif?xxxxxx\n",
@@ -179,7 +176,6 @@ function addZwLogPage({
                     \n pageId（页面Id，自定义，这里使用路径） = ${pvParams.pageId}
                     \n pageName（页面名称） = ${pvParams.pageName}
                     \n log_status（登录状态‘01’未登录 ‘02’已登陆） = ${pvParams.log_status}
-                    \n Page_duration（页面浏览时长） = ${pvParams.Page_duration}
                     \n t2（页面加载时间，启动到开始加载） = ${pvParams.t2}
                     \n t0（页面响应时间，启动到加载完毕） = ${pvParams.t0} \n\n `);
                 // pvParams.userType = '个人'
@@ -187,7 +183,7 @@ function addZwLogPage({
                 zwlog.sendPV(pvParams)
                 // if (getApp().globalData.ZlBRelease) {}
                 zwlogPageMap = omit(zwlogPageMap, path)
-            })
+            // })
         }
     }
 }
