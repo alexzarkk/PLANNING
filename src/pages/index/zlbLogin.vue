@@ -18,6 +18,9 @@ export default {
     data() {
         return {};
     },
+    onShow() {
+
+    },
     async onLoad() {
         uni.showLoading({
             title: '登录中...',
@@ -42,10 +45,8 @@ export default {
             if (res) {
                 const { user, token } = res
                 if (user) {
-                    // console.error('单点登录成功------------------:', user);
                     this.zz.setAcc(user) // 用户载入到缓存
                     this.zz.setToken(token) // token 载入到缓存
-                    console.error("单点登录成功，去埋点")
                     zwLogUtils.initZwLog() // 新版埋点
                     this.$Router.push({
                         path: '/pages/index/index'

@@ -414,29 +414,7 @@ export default {
         }
     },
     async onLoad() {
-        window.onpageshow = (event) => {
-            // event.persisted  表示网页是否是来自缓存。
-            // 
-            // console.error("onPageShow========", event)
-            // console.error("nav type=====", window.performance)
-            // console.log("nav type=====", window.performance.navigator.type)
-            /**
-             * TYPE_NAVIGATE (0)
-                当前页面是通过点击链接，书签和表单提交，或者脚本操作，或者在 url 中直接输入地址，type 值为 0
-
-                TYPE_RELOAD (1)
-                点击刷新页面按钮或者通过Location.reload()方法显示的页面，type 值为 1
-
-                TYPE_BACK_FORWARD (2)
-                页面通过历史记录和前进后退访问时。type 值为 2
-
-                TYPE_RESERVED (255)
-                任何其他方式，type 值为 255
-             */
-            if (event.persisted || (window.performance && window.performance.navigator && window.performance.navigator.type == 2)) {
-                ZWJSBridge.close()
-            }
-        }
+     
         // #endif
         uni.$on("pushChange", () => {  // 文章动态发生改变
             this.refreshNewsHome()

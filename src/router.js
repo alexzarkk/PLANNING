@@ -9,6 +9,12 @@ const router = createRouter({
 //全局路由前置守卫
 router.beforeEach((to, from, next) => {
 	console.log("路由前置_-------", to, from)
+
+	// 二次回退，回退到登录页面的话，则退出应用
+	if (to.path === '/pages/index/zlbLogin' && from.path === '/pages/index/index') {
+		console.error("关闭应用======================")
+		ZWJSBridge.close()
+	}
 	//添加页面进入和页面离开的埋点
 	// 进入时间
 	// #ifdef H5-ZLB
@@ -29,7 +35,7 @@ router.beforeEach((to, from, next) => {
 				leavePageTime: new Date()  // 页面离开的时间
 			}
 			zwLogUtils.addZwLogPage(outPage)
-			console.error("采集进入页面的===============时间和离开的时间=======================", inPage, outPage)
+			// console.error("采集进入页面的===============时间和离开的时间=======================", inPage, outPage)
 		}
 	} catch (error) {
 		console.error("加载title以及进入离开时间失败-----", error)
