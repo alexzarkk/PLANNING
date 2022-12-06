@@ -19,10 +19,10 @@ export default {
 
     },
     async onLoad() {
-        uni.showLoading({
-            title: '登录中...',
-            mask: true
-        })
+        // uni.showLoading({
+        //     title: '加载中...',
+        //     mask: true
+        // })
         let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
         if (ticket) {  // 有票据直接后台登录
             await this.loginSys(ticket)
@@ -45,14 +45,14 @@ export default {
                     this.zz.setAcc(user) // 用户载入到缓存
                     this.zz.setToken(token) // token 载入到缓存
                     zwLogUtils.initZwLog() // 新版埋点
-                    uni.hideLoading()
+                    // uni.hideLoading()
                     this.$Router.push({
                         path: '/pages/index/index'
                     })
 
                 }
             }
-            uni.hideLoading()
+            // uni.hideLoading()
         },
         // 登录浙里办
         async loginZlb() {
