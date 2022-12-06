@@ -51,42 +51,6 @@
 	</noscript>
 	<div id="app"></div>
 	<div id="global-menu"></div>
-	<% if (process.env.VUE_APP_ENV==='zlb' ) { %>
-		<script>
-
-			// 新版埋点
-			// const zwlog = new ZwLog({
-
-			// })
-
-
-				(function (w, d, s, q, i) {
-					w[q] = w[q] || [];
-					var f = d.getElementsByTagName(s)[0],
-						j = d.createElement(s);
-					j.async = true;
-					j.id = 'beacon-aplus';
-					j.src = 'https://d.alicdn.com/alilog/mlog/aplus.js?id=202951085';
-					f.parentNode.insertBefore(j, f);
-				})(window, document, 'script', 'aplus_queue');
-			// 添加埋点的js
-
-			aplus_queue.push({
-				action: 'aplus.setMetaInfo',
-				arguments: ['aplus-rhost-v', 'alog.zjzwfw.gov.cn']
-			});
-			aplus_queue.push({
-				action: 'aplus.setMetaInfo',
-				arguments: ['aplus-rhost-g', 'alog.zjzwfw.gov.cn']
-			});
-
-			aplus_queue.push({
-				action: 'aplus.setMetaInfo',
-				arguments: ['appId', '2002281722']  // 这里修改app id
-			});
-			const homeList = ['#/pages/index/index', '#/pages/index/planning', '#/pages/index/event', '#/pages/index/postStation', '#/pages/index/me']
-		</script>
-		<% } %>
 </body>
 
 </html>

@@ -11,6 +11,12 @@
 	},
 	"pages": [
 		{
+			"path": "pages/index/zlbLogin",
+			"pageMeta": {
+				"title": "登录中..."
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"app-plus": {
 				"bounce": "none" //关闭窗口回弹效果

@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
 				leavePageTime: new Date()  // 页面离开的时间
 			}
 			zwLogUtils.addZwLogPage(outPage)
-			// console.error("采集进入页面的===============时间和离开的时间=======================", inPage, outPage)
+			console.error("采集进入页面的===============时间和离开的时间=======================", inPage, outPage)
 		}
 	} catch (error) {
 		console.error("加载title以及进入离开时间失败-----", error)

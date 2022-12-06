@@ -1,154 +1,50 @@
 <template>
-    <!-- 新闻资讯的swiper组件，首页以及驿站调用 -->
-    <!-- <cu-custom bgColor="bg-ztsblue" :isBack="true">
-            <block slot="content">资讯</block>
-        </cu-custom> -->
-
-    <!-- \
-        article = [
-	{label:"资讯", value:10 },
-	// {label:"", value:20},
-	{label:"游记", value:40, pub:true, color:'green'},
-	{label:"视频", value:35, pub:true },
-	{label:"动态", value:30, pub:true, color:'blue'},
-	{label:"文化", value:50 },
-	{label:"科普", value:60, pub:true, color:'orange'},
-	// {label:"廉政", value:99},
-],
-         -->
-    <view class="container">
-        <!-- tab切换。 -->
-        <scroll-view id="tabNav" scroll-x class="bg-white nav news-sticky-box" :style="showMore?{ top: stickyHeight,height:'100rpx' }:{position:'fixed'}">
-            <view v-if="articleTabs && articleTabs.length > 0" class="flex text-center">
-                <!--  -->
-                <view v-for="(item, index) in articleTabs" :key="index" class="cu-item flex-sub" :class="index == currentTab ? 'text-orange cur text-bold' : ''" :data-id="index" @tap="tabSelect">
-                    {{ item.label }}
+    <view class="container-wrapper">
+        <view id="tabNav" class="container">
+            <scroll-view scroll-x class="bg-white nav news-sticky-box" :style="showMore?{ top: stickyHeight,height:'100rpx' }:{position:'fixed'}">
+                <view v-if="articleTabs && articleTabs.length > 0" class="flex text-center">
+                    <view v-for="(item, index) in articleTabs" :key="index" class="cu-item flex-sub" :class="index === currentTab ? 'text-orange cur text-bold' : ''" :data-id="index" @tap="tabSelect">
+                        {{ item.label }}
+                    </view>
                 </view>
-            </view>
-        </scroll-view>
-        <view v-if="!showMore" style="width:750rpx;height:100rpx;"></view>
-        <!-- class="news-swiper" -->
-        <swiper v-if="articleTabs && articleTabs.length>0" :style="listHeight" :current="swiperCurrent" :disable-touch="swiperTouch" @change="swiperChange">
-            <!-- 资讯 -->
-            <swiper-item v-for="(item,index) in articleTabs" :key="index" class="news-swiper-item">
-                <scroll-view :scroll-y="isCanScroll || !showMore" class="scroll-view-box" :style="listHeight" @scroll="listScroll" @scrolltolower="loadMore">
-                    <view v-if="item&&item.list&&item.list.length > 0">
+            </scroll-view>
+            <view v-if="!showMore" style="width:750rpx;height:100rpx;"></view>
+            <view v-for="(item,index) in articleTabs" :key="index">
+                <view>
+                    <view v-if="item.total===-1">
+                        <view v-if="index===currentTab" :style="listHeight">
+                            <tui-loadmore text="加载中..."></tui-loadmore>
+                        </view>
+                    </view>
+                    <view v-if="item&&item.list && item.list.total !== 0 && index===currentTab" v-show="index===currentTab">
                         <view v-for="(article) in item.list" :key="article._id">
                             <article-card v-if="!article.title" :details="article"></article-card>
                             <push-card v-else :details="article"></push-card>
                         </view>
-                        <view v-if="showMore && item.list.length > 4" class="response padding bg-white" @click="href('/pages/station/news',{tab:index})">
+                        <view v-if="showMore && item.list.length > 4" class="response padding bg-white border-bottom" @click="href('/pages/station/news',{tab:index})">
                             <view class="text-center text-blue">查看更多</view>
-                            <!-- <button class="cu-btn lg bg-ztsblue radius response">查看更多</button> -->
                         </view>
-                        <view v-else class="padding-tb-sm bg-white">
+                        <view v-if="showMore && item.list.length <= 4 && item.list.length > 0" class="padding-tb-sm bg-white">
                             <tui-nomore text="没有更多了"></tui-nomore>
+                        </view>
+                        <!-- <view style="height:136rpx"></view> -->
+                        <view v-if="item.total===0" :style="listHeight">
+                            <tui-no-data :imgWidth="500" :imgHeight="500" :fixed="false" :imgUrl="bd.imgs.nodata">
+                            </tui-no-data>
                         </view>
                         <zz-page-status v-if="!showMore" :loading="loading" :length="item.list.length" :total="item.total"></zz-page-status>
                     </view>
-                    <!-- <view v-if="showMore" class="tabbar-box"></view> -->
-                    <view v-if="item.total===0">
-                        <tui-no-data :imgWidth="500" :imgHeight="500" :fixed="true" :imgUrl="bd.imgs.nodata">
-                        </tui-no-data>
-                    </view>
-                </scroll-view>
-            </swiper-item>
-            <!-- 游记 -->
-            <!-- <swiper-item class="news-swiper-item">
-                <view>
-                    <scroll-view scroll-y="true" class="scroll-view-box">
-                        <view>
-                            <view v-for="(item, index) in momentList" :key="index">
-                                <recommand :details="item"></recommand>
-                            </view>
-                            <view v-if="showMore && " @click="href('/pages/station/news',{tab:1})" class="response padding solid-top line-blue margin-bottom-xs solid-bottom bg-white">
-                                <view class="text-center text-blue">查看更多</view>
-                            </view>
-                            <zz-page-status :loading="loading" :length="articleTabs[1].length" :total="articleTabs[1].total"></zz-page-status>
-                        </view>
-                        <view v-if="showMore" class="tabbar-box"></view>
-                    </scroll-view>
                 </view>
-            </swiper-item> -->
-            <!-- 视频 -->
-            <!-- <swiper-item class="news-swiper-item">
-                <view>
-                    <scroll-view scroll-y="true" class="scroll-view-box">
-                        <view>
-                            <view v-for="(item, index) in momentList" :key="index">
-                                <recommand :details="item"></recommand>
-                            </view>
-                            <view v-if="showMore" @click="href('/pages/station/news',{tab:2})" class="response padding solid-top line-blue margin-bottom-xs solid-bottom bg-white">
-                                <view class="text-center text-blue">查看更多</view>
-                            </view>
-                            <zz-page-status :loading="loading" :length="articleTabs[2].length" :total="articleTabs[2].total"></zz-page-status>
-                        </view>
-                        <view v-if="showMore" class="tabbar-box"></view>
-                    </scroll-view>
-                </view>
-            </swiper-item> -->
-            <!-- 动态 -->
-            <!-- <swiper-item>
-                <scroll-view scroll-y="true" class="scroll-view-box">
-                    <view>
-                        <view v-for="(item, index) in momentList" :key="index">
-                            <recommand :details="item"></recommand>
-                        </view>
-                        <view v-if="showMore" @click="href('/pages/station/news',{tab:3})" class="response padding solid-top line-blue margin-bottom-xs solid-bottom bg-white">
-                            <view class="text-center text-blue">查看更多</view>
-                        </view>
-                        <zz-page-status v-else :loading="loading" :length="articleTabs[3].length" :total="articleTabs[3].total"></zz-page-status>
-                    </view>
-                    <view v-if="showMore" class="tabbar-box"></view>
-                </scroll-view>
-            </swiper-item> -->
-            <!-- 文化 -->
-            <!-- <swiper-item class="news-swiper-item">
-                <scroll-view scroll-y="true" class="scroll-view-box">
-                    <view v-if="articleTabs && articleTabs[4] && articleTabs[4].list">
-                        <view v-for="(item, index) in articleTabs[4].list" :key="item._id">
-                            <article-card :details="item"></article-card>
-                        </view>
-                        <view v-if="showMore" @click="href('/pages/station/news',{tab:4})" class="response padding solid-top line-blue margin-bottom-xs solid-bottom bg-white">
-                            <view class="text-center text-blue">查看更多</view>
-                        </view>
-                        <zz-page-status v-else :loading="loading" :length="articleTabs[4].length" :total="articleTabs[4].total"></zz-page-status>
-                    </view>
-                    <view v-if="showMore" class="tabbar-box"></view>
-                </scroll-view>
-            </swiper-item> -->
-            <!-- 科普 -->
-            <!-- <swiper-item class="news-swiper-item">
-                <scroll-view scroll-y="true" class="scroll-view-box" @scrolltolower="loadMore">
-                    <view v-if="articleTabs && articleTabs[5] && articleTabs[5].list">
-                        <view v-for="(item, index) in articleTabs[5].list" :key="item._id">
-                            <article-card :details="item"></article-card>
-                        </view>
-                        <view v-if="showMore" @click="href('/pages/station/news',{tab:5})" class="response padding solid-top line-blue margin-bottom-xs solid-bottom bg-white">
-                            <view class="text-center text-blue">查看更多</view>
-                        </view>
-                        <zz-page-status v-else :loading="loading" :length="articleTabs[5].list.length" :total="articleTabs[5].total"></zz-page-status>
-                    </view>
-                    <view v-if="showMore" class="tabbar-box"></view>
-                </scroll-view>
-            </swiper-item> -->
-        </swiper>
+            </view>
+        </view>
     </view>
 </template>
 
 <script>
-// import recommand from './recommand.vue';
 import articleCard from './article-card.vue'
 import pushCard from './push-card.vue'
-// import news from './news.vue';
-// import topic from './topic.vue';
-// import newSwiper from './news-swiper.vue'
 export default {
     components: {
-        // recommand,
-        // topic,
-        // news,
-        // newSwiper,
         articleCard,
         pushCard
     },
@@ -157,7 +53,7 @@ export default {
             type: Number,
             default: 0
         },
-        showMore: {
+        showMore: {  // true:来自首页加载 false:单独页面
             type: Boolean,
             default: false
         },
@@ -179,20 +75,26 @@ export default {
             customBar: this.CustomBar,
             statusBar: this.StatusBar,
             loading: false,  // 加载状态
-            // dict_tag: [],  // 文章标签
             currentTab: 0,  // 激活的tab
             swiperCurrent: 0, // 激活的swiper
             articleTabs: [],  // tabs 列表
-            momentList: [],
             topHeight: 0,  // 吸顶tab栏 与顶部的距离
-            isCanScroll: false
+            scrollList: [0, 0, 0, 0, 0, 0],
+            inTabChange: false, // 是否正在切换tab
+            inTop: false  // 是否吸顶
         };
     },
     computed: {
         // 列表scroll-view的高度
         listHeight() {
-            const height = this.customBar + this.statusBar + 50
-            return `height:calc(100vh - ${height}px)`  // android
+            // const sysInfo = uni.getStorageSync('sysInfo')
+            // 状态栏 + cu-customeBar 高度 + 搜索栏(100rpx) + tabbar高度
+            // const height = this.customBar + this.statusBar + sysInfo.safeAreaInsets.bottom
+            // const height = this.stickyHeightNumber + 50
+            // const height = this.customBar + this.statusBar + 100
+            // return `height:calc(100vh - ${height}px)`  // android
+            const len = this.stickyHeight.length
+            return `height:calc(100vh - ${Number(this.stickyHeight.slice(0, len - 2)) + 50}px)`
         },
         headerHeight() {
             return `${this.customBar + this.statusBar}px`
@@ -203,21 +105,17 @@ export default {
             async handler(newVal) {
                 this.currentTab = newVal
                 this.swiperCurrent = newVal
-                // setTimeout(async ()=>{
-                //     await this.loadTag()
-                // this.loadData()
-                // },500)
             },
             deep: true,
             immediate: true
         },
         scrollTop(newVal) {
-            if (newVal > (this.topHeight - 10)) {
-                // console.log("可滑动=========")
-                this.isCanScroll = true
+            if (newVal >= (this.topHeight - 5) && !this.inTabChange) {
+                this.scrollList[this.currentTab] = newVal
+                this.inTop = true
+                console.log("吸顶了===========================")
             } else {
-
-                this.isCanScroll = false
+                this.inTop = false
             }
         }
     },
@@ -232,26 +130,33 @@ export default {
         })
         this.loadData('init');
         this.resetHeight()
-        // const timestamp = this.zz.date2Time("2022-08-15 14:57:15")
-        // const time = this.zz.timeFrom(timestamp)  // 个性化显示时间
     },
     methods: {
         resetHeight() {
             if (this.showMore) {
                 const len = this.stickyHeight.length
+                // console.log("高度======", this.stickyHeight)
                 this.stickyHeightNumber = Number(this.stickyHeight.slice(0, len - 2))
+                // console.log("吸顶栏高度===", this.stickyHeightNumber) //  138
                 const sysInfo = uni.getStorageSync('sysInfo')
                 uni.createSelectorQuery()
                     .select('#tabNav')
                     .boundingClientRect((data) => {
-                        this.topHeight = data.top - this.stickyHeightNumber - sysInfo.statusBarHeight
+                        // console.log("tabNav===================", data)
+                        this.topHeight = data.top - this.stickyHeightNumber
+                        // console.log("topheight", this.topHeight)
+                        this.scrollList = this.scrollList.map(res => {
+                            return this.topHeight
+                        })
+                        // console.log("this.scrollList========", this.scrollList)
+                        // console.log("this.topHeight======", this.topHeight)
+                        // - sysInfo.statusBarHeight
                     })
                     .exec();
             }
         },
         async loadData(type) {
-            // console.log("news-home-----------",type)
-            if (type === 'init') {
+            if (type === 'init' || type === 'pullDown') {
                 this.articleTabs[this.currentTab].list = []
                 this.articleTabs[this.currentTab].page = 1
                 this.articleTabs[this.currentTab].total = -1
@@ -266,7 +171,7 @@ export default {
                 $url: '/public/article/page',
                 page: cur.page,
                 size: cur.size,
-                ui:true,  // 带上个人信息
+                ui: true,  // 带上个人信息
                 type: [cur.value]  // 科普
             };
             this.zz.req(req1).then(({ pagination, list }) => {
@@ -286,14 +191,22 @@ export default {
                 });
                 cur.page++
                 cur.list = cur.list.concat(list)
-                // console.log("新list", cur)
                 this.$set(this.articleTabs, this.currentTab, cur)
-                // console.log('科普========', this.articleTabs[5].list);
-                // console.log('this.articleTabs', JSON.parse(JSON.stringify(this.articleTabs)));
+                if (type === 'pullDown') {
+                    uni.stopPullDownRefresh()
+                    this.zz.toast("刷新成功")
+                }
+                if (this.showMore && type === 'tab' && this.inTop) {
+                    uni.pageScrollTo({
+                        scrollTop: this.topHeight,
+                        duration: 0
+                    });
+                }
             }).finally(() => {
                 this.loading = false
             })
         },
+
         loadMore() {
             if (!this.showMore) {
                 this.loadData()
@@ -303,11 +216,29 @@ export default {
             this.zz.href(url, query)
         },
         tabSelect(event) {
+            // console.log("切换之前=======", this.scrollList[this.currentTab])
+            this.inTabChange = true
+            setTimeout(() => {
+                this.inTabChange = false
+            }, 50)
             this.currentTab = event.currentTarget.dataset.id;
             this.swiperCurrent = event.currentTarget.dataset.id;
+            // console.log("切换tab以后的total", this.articleTabs[this.currentTab].total)
             if (this.articleTabs[this.currentTab].total === -1) {
-                this.loadData()
+                // console.log("重新加载，loadData(tab)")
+                this.loadData('tab')
             }
+            // console.log('this.inTop========',this.inTop);
+            if (this.inTop) {
+                this.$nextTick(() => {
+                    // console.log("滚动至指定位置=========", this.scrollList[this.currentTab])
+                    uni.pageScrollTo({
+                        scrollTop: this.scrollList[this.currentTab],
+                        duration: 50
+                    });
+                })
+            }
+            this.$emit("tabChange")
         },
         swiperChange(event) {
             this.currentTab = event.detail.current;
@@ -327,9 +258,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-    background-color: #ffffff;
-}
+// .container {
+// background-color: antiquewhite;
+// padding-bottom: 100px;
+// }
 
 .news-sticky-box {
     position: sticky;
@@ -337,9 +269,17 @@ export default {
 }
 // .news-swiper {
 // }
-.scroll-view-box {
-    height: calc(100vh - 150px);
-}
+
+// .news-swiper-item {
+// padding-bottom: 50px;
+// }
+
+// .scroll-view-box {
+// background-color: red;
+// height: calc(100vh - 400px);
+// padding-top: 100px;
+// padding-bottom: 100px;
+// }
 
 .tabbar-box {
     // #ifdef APP-PLUS
@@ -348,8 +288,10 @@ export default {
     // #ifndef APP-PLUS
     height: var(--window-bottom);
     // #endif
-
     width: 750rpx;
 }
+
+.vis-hide {
+    visibility: hidden;
+}
 </style>
-`

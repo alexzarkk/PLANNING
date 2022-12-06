@@ -235,7 +235,7 @@ export default {
     computed: {
         ...mapState({
             navList: (state) => {
-                console.log("state====",state)
+                console.log("state====", state)
                 return state.tabbar.navList
             }
         }),
@@ -414,8 +414,6 @@ export default {
         }
     },
     async onLoad() {
-        // console.error("开始监听onpageshow================")
-        // console.error("window.history========", window.history)
         window.onpageshow = (event) => {
             // event.persisted  表示网页是否是来自缓存。
             // 
@@ -439,59 +437,18 @@ export default {
                 ZWJSBridge.close()
             }
         }
-        // 安卓键盘使用resize方案
-        // window.onresize=()=>{
-        //     console.log("android resize------")
-        //     this.zz.toast("resize",500)
-        // }
-        // uni.hideTabBar()
-        // ios h5键盘使用事件监听方案
-        // document.body.addEventListener('focusin', () => {
-        //     this.zz.toast("键盘弹起")
-        // })
-        // document.body.addEventListener('focusout', () => {
-        //     this.zz.toast("键盘收回")
-        //     this.showText = false
-        // })
-
-        // #ifdef H5-ZLB
-        // let user = this.zz.getAcc()
-        // if (user) {  // 有用户，去判断是否失效
-        //     if ((Date.now() - user.t) > 1000 * 60 * 60 * 5) {
-        //         this.zz.logOut()
-        //         return this.loginZlb()
-        //     }
-        // } else { // 没有用户，去走单点
-        let ticket = this.zz.getQueryParam(window.location.search, 'ticket')
-        if (ticket) {  // 有票据直接后台登录
-            // console.error("当前有ticket==============")
-            await this.loginSys(ticket)
-        } else { // 没有票据去获取票据
-            return this.loginZlb()  // 去单点登录 （或者微信的登录流程
-        }
-        // }
-        console.info(this.bd.isDev, this.bd.ZLB_ADDR[this.bd.isDev])
         // #endif
         uni.$on("pushChange", () => {  // 文章动态发生改变
             this.refreshNewsHome()
         })
     },
-    // onUnload() {
-    //     document.body.removeEventListener('focusin', () => {
-    //         console.info('卸载键盘弹起监听器')
-    //     })
-
-    //     document.body.removeEventListener('focusout', () => {
-    //         console.info('卸载键盘收回监听器')
-    //     })
-    // },
     onReady() {
         this.cal()
         this.refreshNewsHome()
     },
     onShow() {
         // #ifdef H5-ZLB
-        this.addZwlog()
+        // this.addZwlog()
         // #endif
 
         this.loadData()
@@ -512,74 +469,7 @@ export default {
                 this.$refs.newsHome.loadData('init')
             }
         },
-        // #ifdef H5-ZLB
-        // 添加登录埋点
-        addLoginQuene() {
-            zwLogUtils.initZwLog() // 新版埋点
-            // const { zlb_id, zlb_name } = user
-            // 登录埋点
-            // window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'BLOCK'] })
-            // window.ZWJSBridge.getUUID().then(({ uuid }) => {
-            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_nick', zlb_name] }) // 浙里办的loginname
-            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_user_id', zlb_id] }) // 浙里办的userid
-            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_dev_id', uuid] })
-            //     window.aplus_queue.push({ action: 'aplus.setMetaInfo', arguments: ['_hold', 'START'] })
-            // })
-        },
-        // 去登录系统，使用ticket  
-        // return: user:用户
-        async loginSys(ticket, ticketId) {
-            let res = await this.zz.req({ $url: '/admin/comm/loginGov', ticket, ticketId })
-            console.error("loginSys====================", res)
-            if (res) {
-                const { user, token } = res
-                if (user) {
-                    // console.error('单点登录成功------------------:', user);
-                    this.zz.setAcc(user) // 用户载入到缓存
-                    this.zz.setToken(token) // token 载入到缓存
-                    console.info("单点登录成功，去埋点")
-                    // this.addLoginQuene()  // 添加登录埋点
-                    zwLogUtils.initZwLog() // 新版埋点
-                    return user
-                }
-            }
-        },
-        // 登录浙里办
-        async loginZlb() {
-            const sUserAgent = window.navigator.userAgent.toLowerCase()
-            // 浙里办APP
-            const bIsDtDreamApp = sUserAgent.indexOf('dtdreamweb') > -1
-            // 浙里办支付宝小程序
-            const bIsAlipayMini = sUserAgent.indexOf('miniprogram') > -1 && sUserAgent.indexOf('alipay') > -1
-            //微信小程序
-            const weChartApply = sUserAgent.indexOf("micromessenger") > -1;
-            const { AccessKey, ZLB_ADDR, isDev } = this.bd
-            console.info("ZLB_ADDR-----------------", ZLB_ADDR)
-            let url = ''
-            if (bIsAlipayMini || weChartApply) { // 支付宝小程序或者 微信小程序
-                url = `https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
-            } else { // 浙里办APP
-                url = `https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1&servicecode=${AccessKey}&redirectUrl=${ZLB_ADDR[isDev]}`
-            }
-            if (weChartApply) {
-                console.log("微信端，不跳转地址----------", window.location.search)
-                if (ZWJSBridge.ssoTicket) {
-                    const ssoFlag = await ZWJSBridge.ssoTicket({})
-                    if (ssoFlag && ssoFlag.result === true) {
-                        if (ssoFlag.ticketId) {
-                            console.info("微信单点登录", ssoFlag)
-                            this.loginSys(null, ssoFlag.ticketId)
-                        } else {
-                            ZWJSBridge.openLink({ type: "reload" }).then(res => { res.ticketId })
-                        }
-                    }
-                }
-            } else {
-                console.info('回调地址', url);
-                window.location.replace(url)
-            }
-        },
-        // #endif
+
         async loadData(init) {
             let { deptId, region } = this.zz.getDept(),
                 dict = uni.getStorageSync('sys_dict')

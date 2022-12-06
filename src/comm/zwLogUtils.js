@@ -20,12 +20,13 @@ const Min_Page_Stay_Duration = 0.5
 // 不参加埋点的白名单
 const White_List = [
     // 埋点跳过
-    // 'pages/index/index'
+    "/pages/index/zlbLogin"
 ]
 
 // 进行初始化zwLog
 function initZwLog() {
     let user = zz.getAcc()
+    // console.error('初始化日志工具=======登录信息====******************=============',user);
     if (zwlog == null && user != null) {
         zwlog = new ZwLog({
             _user_id: user.zlb_id,
@@ -135,8 +136,8 @@ function addZwLogPage({
             let pvParams = {
                 miniAppId: bd.appid,
                 miniAppName: bd.sys.name,
+                userType:'1',
                 log_status: '02',
-                usertype: '个人',
                 Page_duration: Page_duration,
                 t2: t2,
                 t0: t0,
@@ -156,26 +157,22 @@ function addZwLogPage({
             console.error("数据采集完毕==============================", zwlogPageMap, zwlog)
 
             // zwlog.onReady(function () {
-            console.error("zwlog================onReady=============================")
-            console.warn("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
-                "\n查看NetWork - All(不进行筛选)-m.gif?xxxxxx\n",
-                `\n miniAppId（IRS服务侧应用appId） = ${pvParams.miniAppId}
+                console.error("zwlog================onReady=============================")
+                console.warn("\n提交埋点数据 zwlog.sendPV(pvParams)\n",
+                    "\n查看NetWork - All(不进行筛选)-m.gif?xxxxxx\n",
+                    `\n miniAppId（IRS服务侧应用appId） = ${pvParams.miniAppId}
                     \n miniAppName（IRS服务侧应用名称） = ${pvParams.miniAppName}
                     \n pageId（页面Id，自定义，这里使用路径） = ${pvParams.pageId}
                     \n pageName（页面名称） = ${pvParams.pageName}
                     \n log_status（登录状态‘01’未登录 ‘02’已登陆） = ${pvParams.log_status}
                     \n Page_duration（页面浏览时长） = ${pvParams.Page_duration}
-                    \n usertype 当前用户类型===== = ${pvParams.usertype}
                     \n t2（页面加载时间，启动到开始加载） = ${pvParams.t2}
                     \n t0（页面响应时间，启动到加载完毕） = ${pvParams.t0} \n\n `);
-            pvParams.usertype = '个人'
-            console.error("提交埋点数据=========", pvParams)
-            zwlog.sendPV({
-                ...pvParams,
-                usertype: '个人'
-            })
-            // if (getApp().globalData.ZlBRelease) {}
-            delete zwlogPageMap[path]
+                    // pvParams.userType = '个人'
+                console.error("提交埋点数据=========", pvParams)
+                zwlog.sendPV(pvParams)
+                // if (getApp().globalData.ZlBRelease) {}
+                delete zwlogPageMap[path]
             // })
         }
     }

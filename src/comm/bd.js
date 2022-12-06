@@ -7,7 +7,7 @@ const bd = {
 		// https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html?vconsole=true
 		// 'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/1.0.2/index.html?debug=true', //irs线上调试
 		// 'https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002281722/lastTest/index.html?debug=true', //irs线上调试
-		'http://localhost:8080', //政务中台调试
+		'http://localhost:8080/', //政务中台调试
 		// 'http://localhost:8081', //政务中台调试
 		// 'http://192.168.0.254:8080/', //本机手机调试
 	],
