@@ -9,9 +9,6 @@
 
 // #ifdef H5-ZLB
 import zwLogUtils from '@/comm/zwLogUtils'
-
-console.log("引入浙里办日志工具", zwLogUtils)
-
 // #endif
 
 export default {
@@ -48,12 +45,14 @@ export default {
                     this.zz.setAcc(user) // 用户载入到缓存
                     this.zz.setToken(token) // token 载入到缓存
                     zwLogUtils.initZwLog() // 新版埋点
+                    uni.hideLoading()
                     this.$Router.push({
                         path: '/pages/index/index'
                     })
-                    uni.hideLoading()
+
                 }
             }
+            uni.hideLoading()
         },
         // 登录浙里办
         async loginZlb() {
