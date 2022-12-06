@@ -117,8 +117,9 @@ export default {
             for (let s of this.imgs) {
                 args.imgs.push(await this.zz.upload(s, true))
             }
-            uni.hideLoading()
+            
             this.zz.req(args).then(e => {
+				uni.hideLoading()
                 this.zz.modal('递交成功,感谢您的反馈!')
                 this.radio = 'A'
                 this.imgs = []
