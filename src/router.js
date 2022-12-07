@@ -7,7 +7,7 @@ const router = createRouter({
 	routes: [...ROUTES]
 });
 //全局路由前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 	console.log("路由前置_-------", to, from)
 
 	// 二次回退，回退到登录页面的话，则退出应用
@@ -18,8 +18,6 @@ router.beforeEach((to, from, next) => {
 	//添加页面进入和页面离开的埋点
 	// 进入时间
 	// #ifdef H5-ZLB
-	// if (to.path !== from.path) {  // 非首次进入程序，记录埋点
-
 	try {
 		if (to.pageMeta && to.pageMeta.title) {
 			let inPage = {
@@ -35,13 +33,31 @@ router.beforeEach((to, from, next) => {
 				leavePageTime: new Date()  // 页面离开的时间
 			}
 			zwLogUtils.addZwLogPage(outPage)
-			// console.error("采集进入页面的===============时间和离开的时间=======================", inPage, outPage)
+
+			if (to.pageMeta.title && ZWJSBridge) {
+				await ZWJSBridge.onReady(async () => {
+					await ZWJSBridge.setTitle({
+						"title": to.pageMeta.title || '详情'
+					}).then(res => {
+						console.log("修改当前页面的标题成功---", res)
+					}).catch(err => {
+						console.error("修改当前页面的标题失败---", err)
+					})
+				})
+				// uni.setNavigationBarTitle({
+				// 	title: to.pageMeta.title || '详情',
+				// 	success: (res) => {
+				// 		console.error("修改标题成功==========", res)
+				// 	},
+				// 	fail: (err) => {
+				// 		console.error("修改标题失败=======", err)
+				// 	}
+				// })
+			}
 		}
 	} catch (error) {
 		console.error("加载title以及进入离开时间失败-----", error)
 	}
-
-	// }
 	// #endif
 	next();
 });
@@ -49,21 +65,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
 	// console.log("路由后置！！！_-------", to, from)
 	// 这里加入埋点
-	// #ifdef H5-ZLB
-	if (to.pageMeta.title && ZWJSBridge) {
-		// console.log('settitle---------');
-		ZWJSBridge.onReady(() => {
-			ZWJSBridge.setTitle({
-				"title": to.pageMeta.title
-			}).then(res => {
-				// console.log("修改当前页面的标题成功---", res)
-			}).catch(err => {
-				// console.error("修改当前页面的标题失败---", err)
-			})
-		})
 
-	}
-	// #endif
 })
 
 export {
