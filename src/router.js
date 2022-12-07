@@ -10,8 +10,15 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
 	console.log("路由前置_-------", to, from)
 
+	let backList = [
+		'/pages/index/planning',
+		'/pages/index/index',
+		'/pages/index/event',
+		'/pages/index/me'
+	]
+
 	// 二次回退，回退到登录页面的话，则退出应用
-	if (to.path === '/pages/index/zlbLogin' && from.path === '/pages/index/index') {
+	if (to.path === '/pages/index/zlbLogin' && backList.includes(from.path)) {
 		console.error("关闭应用======================")
 		ZWJSBridge.close()
 	}
@@ -34,26 +41,7 @@ router.beforeEach(async (to, from, next) => {
 			}
 			zwLogUtils.addZwLogPage(outPage)
 
-			if (to.pageMeta.title && ZWJSBridge) {
-				await ZWJSBridge.onReady(async () => {
-					await ZWJSBridge.setTitle({
-						"title": to.pageMeta.title || '详情'
-					}).then(res => {
-						console.log("修改当前页面的标题成功---", res)
-					}).catch(err => {
-						console.error("修改当前页面的标题失败---", err)
-					})
-				})
-				// uni.setNavigationBarTitle({
-				// 	title: to.pageMeta.title || '详情',
-				// 	success: (res) => {
-				// 		console.error("修改标题成功==========", res)
-				// 	},
-				// 	fail: (err) => {
-				// 		console.error("修改标题失败=======", err)
-				// 	}
-				// })
-			}
+
 		}
 	} catch (error) {
 		console.error("加载title以及进入离开时间失败-----", error)
@@ -63,8 +51,31 @@ router.beforeEach(async (to, from, next) => {
 });
 // 全局路由后置守卫
 router.afterEach((to, from) => {
-	// console.log("路由后置！！！_-------", to, from)
+	console.log("路由后置！！！_-------", to, from)
 	// 这里加入埋点
+	if (to.pageMeta.title && ZWJSBridge) {
+		ZWJSBridge.onReady(() => {
+			ZWJSBridge.setTitle({
+				"title": to.pageMeta.title || '详情'
+			}).then(res => {
+				console.log("修改的标题=============", to.pageMeta.title)
+				console.log("修改当前页面的标题成功---", res)
+			}).catch(err => {
+				console.error("修改当前页面的标题失败---", err)
+			})
+		})
+	}
+
+	setTimeout(() => {
+		ZWJSBridge.setTitle({
+			"title": to.pageMeta.title || '详情'
+		}).then(res => {
+			console.log("setTitle=============", to.pageMeta.title)
+			console.log("setTitle---", res)
+		}).catch(err => {
+			console.error("setTitle---", err)
+		})
+	}, 100)
 
 })
 

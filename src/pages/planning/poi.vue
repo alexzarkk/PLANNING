@@ -53,7 +53,8 @@
 
                 <view class="cu-item shadow">
                     <view class="padding-lr-sm padding-top-sm solid-top">
-                        <wxParse :content="poi.content"></wxParse>
+                        <!-- <wxParse :content="poi.content"></wxParse> -->
+                        <u-parse :content="poi.content"></u-parse>
                     </view>
                 </view>
             </view>
@@ -111,8 +112,11 @@
 
 <script>
 import { trans } from '@/comm/geotools'
-
+import uParse from '@/components/u-parse/u-parse.vue'
 export default {
+    components: {
+        uParse
+    },
     data() {
         return {
             qr: {},

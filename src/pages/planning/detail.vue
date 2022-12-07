@@ -228,7 +228,8 @@
                     </view>
                 </view>
                 <view class="padding-lr-sm padding-top-sm solid-top">
-                    <wxParse :content="trail.content" />
+                    <!-- <wxParse :content="trail.content" /> -->
+                    <u-parse :content="trail.content"></u-parse>
                 </view>
             </view>
             <view id="tabto2">
@@ -286,11 +287,13 @@
 // import backToLineTrack from '@/components/backToLineTrack.vue'
 // import { comm } from '@/comm/libs/mapbox/mbtool'
 
+import uParse from '@/components/u-parse/u-parse.vue'
+
 import appShare, { closeShare } from '@/uni_modules/zhouWei-APPshare/js_sdk/appShare';
 
 export default {
     components: {
-        // backToLineTrack
+        uParse
     },
 
     data() {

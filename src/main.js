@@ -4,8 +4,8 @@ import zz from './comm/zz'
 import bd from './comm/bd'
 import cuCustom from './comm/colorui/components/cu-custom.vue'
 Vue.component('cu-custom', cuCustom)
-import wxParse from "./components/uParse/src/wxParse.vue"
-Vue.component('wxParse', wxParse)
+// import uParse from '@/components/u-parse/u-parse.vue'
+// Vue.component('uParse', uParse)
 import store from './store'
 
 import { router, RouterMount } from './router.js'  //路径换成自己的

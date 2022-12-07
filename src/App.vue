@@ -30,7 +30,7 @@ export default {
             })
             // console.info('浙里办初始化完成，执行bridge方法')
             ZWJSBridge.getUiStyle().then(({ uiStyle }) => {  // 获取style,适老化配置
-                uni.setStorageSync("uiStyle",uiStyle)
+                uni.setStorageSync("uiStyle", uiStyle)
                 // console.log("获取到的当前的style======", uiStyle)
                 // uiStyle = 'elder'
                 let fontSize = '10px'
@@ -253,7 +253,8 @@ export default {
 @import '@/comm/colorui/animation.css';
 @import '@/comm/css/app.css';
 @import '@/comm/css/zzIcon.css'; // 远程
-@import '@/components/uParse/src/wxParse.css';
+// @import '@/components/uParse/src/wxParse.css';
+@import '@/components/u-parse/u-parse.css';
 
 // view {
 //     font-size: 1.6rem;

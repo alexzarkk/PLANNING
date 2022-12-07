@@ -67,7 +67,8 @@
             </view>
             <view class="cu-item shadow">
                 <view class="padding-lr-sm padding-top-sm solid-top">
-                    <wxParse class="richText" :content="article.content"></wxParse>
+                    <!-- <wxParse class="richText" :content="article.content"></wxParse> -->
+                    <u-parse :content="article.content"></u-parse>
                 </view>
             </view>
             <!-- #ifdef APP -->
@@ -84,7 +85,12 @@
 
 <script>
 
+import uParse from '@/components/u-parse/u-parse.vue'
+
 export default {
+    components: {
+        uParse
+    },
     data() {
         return {
             bd: this.bd,
@@ -108,11 +114,22 @@ export default {
         setTimeout(() => {
             this.zz.userEvent(20, 10, this.article)
         }, 100)
+
+        ZWJSBridge.onReady(() => {
+            ZWJSBridge.setTitle({
+                "title": "文章详情"
+            }).then(res => {
+                // console.log("修改当前页面的标题成功---", res)
+            }).catch(err => {
+                // console.error("修改当前页面的标题失败---", err)
+            })
+        })
+
     },
-    onReady(){
+    onReady() {
         console.log("article-----------onReady============")
     },
-    onShow(){
+    onShow() {
         console.log('onshow---------------');
     },
     onHide() {

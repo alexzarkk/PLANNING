@@ -46,7 +46,7 @@ export default {
                     this.zz.setToken(token) // token 载入到缓存
                     zwLogUtils.initZwLog() // 新版埋点
                     // uni.hideLoading()
-                    this.$Router.push({
+                    this.$Router.pushTab({
                         path: '/pages/index/index'
                     })
 

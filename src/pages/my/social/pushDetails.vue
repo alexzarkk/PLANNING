@@ -62,7 +62,8 @@
                     <!-- <view class="padding-top"> -->
                     <view v-if="details && details.type && details.type.includes(60)" class="cu-item shadow">
                         <view class="padding-lr-sm padding-top-sm solid-top">
-                            <wxParse class="richText" :content="details.content"></wxParse>
+                            <!-- <wxParse class="richText" :content="details.content"></wxParse> -->
+                            <u-parse :content="details.content"></u-parse>
                         </view>
                     </view>
                     <view v-else class="text-content">
@@ -163,7 +164,13 @@
 <script>
 // import zzBlog from '../../../components/zz/zz-blog.vue';
 // import ZzComment from '../../../components/zz/zz-comment.vue';
+
+import uParse from '@/components/u-parse/u-parse.vue'
+
 export default {
+    components: {
+        uParse
+    },
     // components: { zzBlog, ZzComment },
     data() {
         return {
@@ -315,7 +322,7 @@ export default {
         },
         handleComment() {
             // #ifdef H5-ZLB
-            this.zz.href('/pages/my/blog/edit?tid=' + this.details._id,null,1);
+            this.zz.href('/pages/my/blog/edit?tid=' + this.details._id, null, 1);
             // #endif
             // #ifndef H5-ZLB
             this.$refs.comment.contentComment(); // 切换到对内容的评论
@@ -359,7 +366,7 @@ export default {
         },
     }
     // onPageScroll() {
-        // this.$refs.comment.hideKeyboard(); // 页面滚动时
+    // this.$refs.comment.hideKeyboard(); // 页面滚动时
     // }
 };
 </script>

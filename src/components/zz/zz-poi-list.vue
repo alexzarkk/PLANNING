@@ -91,7 +91,8 @@
                     </view>
 
                     <view class="bg-white padding-lr-sm padding-top-sm solid-top">
-                        <wxParse :content="poi.content"></wxParse>
+                        <!-- <wxParse :content="poi.content"></wxParse> -->
+                        <u-parse :content="poi.content"></u-parse>
                     </view>
 
                     <view class="cu-progress margin-top xs bg-gray"></view>
@@ -102,8 +103,14 @@
 </template>
 
 <script>
+
+import uParse from '@/components/u-parse/u-parse.vue'
+
 export default {
     name: 'poiList',
+     components: {
+        uParse
+    },
     data() {
         return {
             dict: uni.getStorageSync('sys_dict')
