@@ -17,37 +17,47 @@ router.beforeEach(async (to, from, next) => {
 		'/pages/index/me'
 	]
 
+	let isInBackList = backList.find(res => {
+		return res === from.path
+	})
+
+	console.error("在tabbar页面中=======", isInBackList)
+
 	// 二次回退，回退到登录页面的话，则退出应用
-	if (to.path === '/pages/index/zlbLogin' && backList.includes(from.path)) {
+	if (to.path == '/pages/index/zlbLogin' && (isInBackList || from.path == "/pages/index/index")) {
 		console.error("关闭应用======================")
-		ZWJSBridge.close()
-	}
-	//添加页面进入和页面离开的埋点
-	// 进入时间
-	// #ifdef H5-ZLB
-	try {
-		if (to.pageMeta && to.pageMeta.title) {
-			let inPage = {
-				title: to.pageMeta.title,
-				pagePath: to.path,  // 进入的页面
-				enterPageTime: new Date()  // 页面进入的时间
-			}
-			zwLogUtils.addZwLogPage(inPage)
-			// 离开时间
-			let outPage = {
-				title: from.pageMeta.title || '',
-				pagePath: from.path,  // 离开的页面
-				leavePageTime: new Date()  // 页面离开的时间
-			}
-			zwLogUtils.addZwLogPage(outPage)
+		ZWJSBridge.onReady(() => {
+			ZWJSBridge.close().then(res => {
+				console.error("关闭应用成功================")
+			}).catch(err => {
+				console.error("关闭应用失败==================")
+			})
+		})
+	} else {
+		try {
+			if (to.pageMeta && to.pageMeta.title) {
+				let inPage = {
+					title: to.pageMeta.title,
+					pagePath: to.path,  // 进入的页面
+					enterPageTime: new Date()  // 页面进入的时间
+				}
+				zwLogUtils.addZwLogPage(inPage)
+				// 离开时间
+				let outPage = {
+					title: from.pageMeta.title || '',
+					pagePath: from.path,  // 离开的页面
+					leavePageTime: new Date()  // 页面离开的时间
+				}
+				zwLogUtils.addZwLogPage(outPage)
 
 
+			}
+		} catch (error) {
+			console.error("加载title以及进入离开时间失败-----", error)
 		}
-	} catch (error) {
-		console.error("加载title以及进入离开时间失败-----", error)
+		next();
 	}
-	// #endif
-	next();
+
 });
 // 全局路由后置守卫
 router.afterEach((to, from) => {

@@ -14,7 +14,7 @@
         <cu-custom bgColor="bg-ztsblue" :isBack="true">
             <block slot="content">资讯</block>
         </cu-custom>
-        <news-home ref="news" :tab="tab"></news-home>
+        <news-home ref="news" :tab="tab" :scrollTop="scrollTop" :showMore="false"></news-home>
     </view>
 </template>
 
@@ -26,6 +26,7 @@ export default {
     },
     data() {
         return {
+            scrollTop: 0,
             customBar: this.CustomBar,
             statusBar: this.StatusBar,
             tab: 0
@@ -43,6 +44,12 @@ export default {
         // this.$refs.news.loadData()
     },
     methods: {
+    },
+    onPageScroll(e) {
+        this.scrollTop = e.scrollTop;
+    },
+    onReachBottom() {
+        this.$refs.news.loadData('add')
     }
 };
 </script>

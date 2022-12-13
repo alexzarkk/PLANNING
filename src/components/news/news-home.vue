@@ -94,7 +94,7 @@ export default {
             // const height = this.customBar + this.statusBar + 100
             // return `height:calc(100vh - ${height}px)`  // android
             const len = this.stickyHeight.length
-            return `height:calc(100vh - ${Number(this.stickyHeight.slice(0, len - 2)) + 50}px)`
+            return `height:calc(100vh - ${Number(this.stickyHeight.slice(0, len - 2))}px)`
         },
         headerHeight() {
             return `${this.customBar + this.statusBar}px`
@@ -110,10 +110,10 @@ export default {
             immediate: true
         },
         scrollTop(newVal) {
-            if (newVal >= (this.topHeight - 5) && !this.inTabChange) {
+            if (newVal >= (this.topHeight) && !this.inTabChange) {
                 this.scrollList[this.currentTab] = newVal
                 this.inTop = true
-                console.log("吸顶了===========================")
+                // console.log("吸顶了===========================")
             } else {
                 this.inTop = false
             }
