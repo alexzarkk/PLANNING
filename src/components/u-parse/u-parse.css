@@ -12,7 +12,7 @@
 .wxParse {
   width: 100%;
   font-family: Helvetica, sans-serif;
-  font-size: 30upx;
+  font-size: 1.5rem;
   color: #666;
   line-height: 1.8;
 }
@@ -90,9 +90,9 @@
 .wxParse .pre {
   overflow: auto;
   background: #f5f5f5;
-  padding: 16upx;
+  padding: 0.8rem;
   white-space: pre;
-  margin: 1em 0upx;
+  margin: 1em 0rem;
 }
 .wxParse .code {
   display: inline;
@@ -133,7 +133,7 @@
 
 .wxParse .video {
   text-align: center;
-  margin: 22upx 0;
+  margin: 1.1rem 0;
 }
 
 .wxParse .video-video {
@@ -149,11 +149,11 @@
 }
 
 .wxParse .blockquote {
-  margin: 10upx 0;
-  padding: 22upx 0 22upx 22upx;
+  margin: 0.5rem 0;
+  padding: 1.1rem 0 1.1rem 1.1rem;
   font-family: Courier, Calibri, "宋体";
   background: #f5f5f5;
-  border-left: 6upx solid #dbdbdb;
+  border-left: 0.3rem solid #dbdbdb;
 }
 .wxParse .blockquote .p {
   margin: 0;
@@ -162,7 +162,7 @@
 .wxParse .ul, .wxParse .ol {
   display: block;
   margin: 1em 0;
-  padding-left: 33upx;
+  padding-left: 1.6rem;
 }
 .wxParse .ol {
   list-style-type: disc;
@@ -211,22 +211,22 @@
 .wxParse .tr {
   width:100%;
   display: flex;
-  border-right: 2upx solid #e0e0e0;
-  border-bottom: 2upx solid #e0e0e0;
+  border-right: 0.1rem solid #e0e0e0;
+  border-bottom: 0.1rem solid #e0e0e0;
 }
 .wxParse .th,
 .wxParse .td {
   display: flex;
-  width: 1276upx;
+  width: 63.8rem;
   overflow: auto;
   flex: 1;
-  padding: 11upx;
-  border-left: 2upx solid #e0e0e0;
+  padding: 0.6rem;
+  border-left: 0.1rem solid #e0e0e0;
 }
 .wxParse .td:last {
-  border-top: 2upx solid #e0e0e0;
+  border-top: 0.1rem solid #e0e0e0;
 }
 .wxParse .th {
   background: #f0f0f0;
-  border-top: 2upx solid #e0e0e0;
+  border-top: 0.1rem solid #e0e0e0;
 }

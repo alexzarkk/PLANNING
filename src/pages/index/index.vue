@@ -414,8 +414,6 @@ export default {
         }
     },
     async onLoad() {
-     
-        // #endif
         uni.$on("pushChange", () => {  // 文章动态发生改变
             this.refreshNewsHome()
         })
@@ -425,10 +423,6 @@ export default {
         this.refreshNewsHome()
     },
     onShow() {
-        // #ifdef H5-ZLB
-        // this.addZwlog()
-        // #endif
-
         this.loadData()
         this.refreshNewsHome()
         // this.t0 = Date.now()

@@ -240,7 +240,8 @@ body {
         background-color: #ffffff;
         .background-image {
             position: relative;
-            background-image: url('https://fhty.976m.org/bdfh/img/0%20(5).JPG');
+            // background-image: url('https://fhty.976m.org/bdfh/img/0%20(5).JPG');
+            background-image: url('https://zts.5618.co/repo/bg/myBG.jpeg');
             background-size: 100% 100%;
             height: 420rpx;
             .nav-bar {

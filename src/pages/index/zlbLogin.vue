@@ -30,10 +30,8 @@ export default {
             return this.loginZlb()  // 去单点登录 （或者微信的登录流程
         }
         // }
-        // #endif
     },
     methods: {
-        // #ifdef H5-ZLB
         // 去登录系统，使用ticket  
         // return: user:用户
         async loginSys(ticket, ticketId) {
@@ -89,7 +87,6 @@ export default {
                 window.location.replace(url)
             }
         },
-        // #endif
     }
 };
 </script>
